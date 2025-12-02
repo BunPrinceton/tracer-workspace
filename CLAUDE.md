@@ -5,10 +5,25 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Repository Overview
 
 This is a **unified neuroscience tracer workspace** containing:
+- **index.html** - Princeton Tracer Master Guide (comprehensive training documentation)
 - **tracer_tools/** - Python library for connectomics data (CAVE/Neuroglancer integration)
 - **tampermonkey-scripts/** - WebKnossos browser userscripts
-- **scripts/** - Utility scripts (Google Drive doc downloader)
-- **Training docs** - Protocol documentation in Office formats (Eyewire, Omni, Ground Truth)
+- **scripts/** - Utility scripts (Google Drive doc downloader, HTML text extractor)
+- **drive_docs_output/** - Downloaded Google Docs (HTML format, readable by Claude)
+
+## Live Documentation Site
+
+**GitHub Pages**: https://bunprinceton.github.io/tracer-workspace/
+**Custom Domain**: https://www.borkbook.com (when DNS propagates)
+
+The `index.html` is the master training guide consolidating all protocols, containing:
+- Tommy Macrina's Ground Truth protocols (Aug-Sep 2025)
+- Synapse identification (4 indicators, 5 synapse types)
+- Vesicle tracing procedures
+- VAST and Omni legacy documentation
+- WebKnossos/Neuroglancer workflows
+
+To update the live site: edit `index.html`, commit, push. GitHub Pages auto-deploys.
 
 ## tracer_tools
 
@@ -112,71 +127,34 @@ All scripts log to console with `[WK ...]` prefix. Open DevTools (F12) to see de
 
 ## Training Documentation
 
-### Readable HTML Versions
+### Downloaded & Readable
 
-**`New Documentation Styles-Templates-Files/HTML Versions/`** contains readable versions:
-- `Ground_Truth_Protocol_Clarifications_GDOC.html` - Tommy Macrina's GT directives (Aug-Sep 2025)
-- `tommy_macrina_FINAL.html` - Same content with interactive navigation
+All Google Docs have been downloaded to `drive_docs_output/` as HTML files (readable by Claude):
 
-### Unparseable Files (Binary Office Formats)
+| Folder | Contents |
+|--------|----------|
+| `Ground-Truth-Protocol-History/` | GT protocols, verification procedures, checklists |
+| `Ground-Truth-Training/` | Fly Synapses, Vesicle tracing, VAST guide, Synapse Stuff |
+| `Omni/` | How to Omni, Exporting Omni, keyboard commands |
+| `Misc/` | Semantic segmentation, Neuroglancer Synapses, file naming |
+| `New Documentation Styles/.../Ground Truth/` | Current GT SOP and Protocol Guidelines |
 
-**Claude cannot read these directly. Total: 21 Office docs + 17 media files.**
+### Reading Large HTML Files
 
-| Folder | `.docx` | `.pptx` | `.xlsx` | Images | Videos |
-|--------|---------|---------|---------|--------|--------|
-| `Eyewire/` | 1 | 1 | 0 | 0 | 0 |
-| `Ground-Truth-Protocol-History/` | 4 | 0 | 0 | 10 | 0 |
-| `Ground-Truth-Training/` | 4 | 0 | 0 | 3 | 4 |
-| `Omni/` | 2 | 1 | 1 | 0 | 0 |
-| `Misc/` | 4 | 1 | 0 | 0 | 0 |
-| `New Documentation.../` | 3 | 0 | 0 | 10 | 0 |
-| **TOTAL** | **18** | **3** | **1** | **23** | **4** |
-
-### Document Inventory
-
-**Eyewire/** (deprecated tool)
-- `How-to_ Eyewire.docx` - Eyewire neuron tracing guide
-- `Eyewire Visual Aid.pptx` - Visual training aid
-
-**Ground-Truth-Protocol-History/** (historical protocols)
-- `Copy of Ground Truth Protocol Guidelines Revised.docx`
-- `Copy of How to verify ground truth tasks.docx`
-- `Copy of Standard Operating Procedure_ Ground Truth (GT) Task Handling.docx`
-- `Copy of Updated Ground Truth Checklist.docx`
-- `Copy of Ground Truth Protocol_ Tommy Macrina Reference Set/` - 10 reference images
-
-**Ground-Truth-Training/** (synapse identification)
-- `Copy of Fly Synapses.docx`
-- `Copy of How to Vesicle.docx`
-- `Copy of Synapse Stuff.docx`
-- `How-to_ VAST.docx` - VAST tool guide (deprecated?)
-- `synapse training videos/` - 4 .webm videos + 3 .png examples (t-bars, PSDs)
-
-**Omni/** (deprecated tool)
-- `How to Omni.docx` - Main guide
-- `Copy of Exporting Omni.docx`
-- `Omni Visual Aid.pptx`
-- `Copy of Omni keyboard and mouse commands (alpha).xlsx`
-
-**Misc/**
-- `Copy of Focused Annotation_ How to.docx`
-- `Copy of How to semantic segmentation.docx`
-- `Copy of How to Set up VirtualBox.docx`
-- `Copy of Neuroglancer Link Ressurection.pptx`
-- `Copy of Neuroglancer Synapses.docx`
-- `Copy of Protocols for naming files.docx`
-
-### To Read These Files
-
-Use the Google Drive download script:
+Some exported docs are too large to read directly. Use the extraction script:
 
 ```bash
-# Install dependencies
+# Extract text content from large HTML files
+python scripts/extract_html_text.py "drive_docs_output/path/to/file.html" 0 15000
+# Args: file_path, start_char, length
+```
+
+### Refreshing Documentation from Google Drive
+
+```bash
 cd scripts
 pip install -r requirements.txt
-
-# Download all docs from Drive folder (requires credentials.json - see SETUP_DRIVE_API.md)
-python download_drive_docs.py --folder "0B3x8mikIsqYkcG9PcjJfZ1BaRDQ" --output ./docs_output
+python download_drive_docs.py --folder "0B3x8mikIsqYkcG9PcjJfZ1BaRDQ" --output ../drive_docs_output
 ```
 
 Setup: See `scripts/SETUP_DRIVE_API.md` for Google Cloud Console configuration.
