@@ -1,0 +1,13 @@
+# API keys - never commit
+api_keys.env
+*.env
+google_credentials.json
+credentials.json
+token.json
+token.pickle
+
+# Python
+__pycache__/
+*.pyc
+.eggs/
+*.egg-info/

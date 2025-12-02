@@ -1,0 +1,38 @@
+WK Quick Rename - Keyboard Shortcuts Success Note
+================================================
+
+Date: 2025-11-21
+Status: ✅ TESTED AND WORKING
+
+Version History:
+- v1.1-STABLE: Fixed keybinds (1-9, Q, W, E)
+- v1.2-STABLE: User-customizable keybind remapping
+
+v1.2 New Features (CONFIRMED WORKING):
+- Right-click keyboard hint badges to rebind
+- Visual feedback (orange pulsing → green flash)
+- Saves to localStorage (persists across sessions)
+- Reset button at bottom of menu
+- All functionality tested and confirmed by user
+
+User Testing Results:
+- ✅ Rebinding works perfectly
+- ✅ Visual feedback clear and intuitive
+- ✅ Persistence across sessions confirmed
+- ✅ No conflicts with other scripts
+- ✅ Reset functionality working
+
+Both versions now stable and production-ready in DO_NOT_TOUCH folder.
+
+Files:
+- wk-quick-rename-keyboard-shortcuts-v1.1-STABLE.user.js (4.0 KB)
+- wk-quick-rename-keyboard-shortcuts-v1.2-STABLE.user.js (9.9 KB)
+
+Dependencies:
+- Requires: WK Quick Rename v2.4.0 (provides context menu)
+- Works with: WK Volume Opacity Toggle v1.0.0 (no conflicts)
+
+Next Steps:
+- Continue using v1.2 in production
+- Monitor for any edge cases
+- v1.1 remains as fallback if needed
