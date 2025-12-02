@@ -111,15 +111,57 @@ All scripts log to console with `[WK ...]` prefix. Open DevTools (F12) to see de
 
 ## Training Documentation
 
-Office documents (`.docx`, `.pptx`, `.xlsx`) - Claude cannot read these directly.
+### Unparseable Files (Binary Office Formats)
 
-| Folder | Content |
-|--------|---------|
-| `Eyewire/` | Eyewire neuron tracing guides |
-| `Ground-Truth-Protocol-History/` | GT annotation protocols and SOPs |
-| `Ground-Truth-Training/` | Synapse identification (vesicles, t-bars, PSDs) + training videos |
-| `Omni/` | Omni segmentation tool guides |
-| `Misc/` | Neuroglancer, VirtualBox, semantic segmentation |
+**Claude cannot read these directly. Total: 21 Office docs + 17 media files.**
+
+| Folder | `.docx` | `.pptx` | `.xlsx` | Images | Videos | Files |
+|--------|---------|---------|---------|--------|--------|-------|
+| `Eyewire/` | 1 | 1 | 0 | 0 | 0 | How-to: Eyewire, Visual Aid |
+| `Ground-Truth-Protocol-History/` | 4 | 0 | 0 | 10 | 0 | GT Protocol Guidelines, How to verify GT tasks, SOP: GT Task Handling, Updated GT Checklist, Tommy Macrina Reference Set (10 images) |
+| `Ground-Truth-Training/` | 4 | 0 | 0 | 3 | 4 | Fly Synapses, How to Vesicle, Synapse Stuff, How-to: VAST, synapse training videos (4 .webm + 3 .png) |
+| `Omni/` | 2 | 1 | 1 | 0 | 0 | Exporting Omni, How to Omni, Visual Aid, keyboard/mouse commands |
+| `Misc/` | 4 | 1 | 0 | 0 | 0 | Focused Annotation, semantic segmentation, VirtualBox setup, Neuroglancer Link Resurrection, Neuroglancer Synapses, file naming protocols |
+| **TOTAL** | **17** | **3** | **1** | **13** | **4** | |
+
+### Document Inventory
+
+**Eyewire/** (deprecated tool)
+- `How-to_ Eyewire.docx` - Eyewire neuron tracing guide
+- `Eyewire Visual Aid.pptx` - Visual training aid
+
+**Ground-Truth-Protocol-History/** (historical protocols)
+- `Copy of Ground Truth Protocol Guidelines Revised.docx`
+- `Copy of How to verify ground truth tasks.docx`
+- `Copy of Standard Operating Procedure_ Ground Truth (GT) Task Handling.docx`
+- `Copy of Updated Ground Truth Checklist.docx`
+- `Copy of Ground Truth Protocol_ Tommy Macrina Reference Set/` - 10 reference images
+
+**Ground-Truth-Training/** (synapse identification)
+- `Copy of Fly Synapses.docx`
+- `Copy of How to Vesicle.docx`
+- `Copy of Synapse Stuff.docx`
+- `How-to_ VAST.docx` - VAST tool guide (deprecated?)
+- `synapse training videos/` - 4 .webm videos + 3 .png examples (t-bars, PSDs)
+
+**Omni/** (deprecated tool)
+- `How to Omni.docx` - Main guide
+- `Copy of Exporting Omni.docx`
+- `Omni Visual Aid.pptx`
+- `Copy of Omni keyboard and mouse commands (alpha).xlsx`
+
+**Misc/**
+- `Copy of Focused Annotation_ How to.docx`
+- `Copy of How to semantic segmentation.docx`
+- `Copy of How to Set up VirtualBox.docx`
+- `Copy of Neuroglancer Link Ressurection.pptx`
+- `Copy of Neuroglancer Synapses.docx`
+- `Copy of Protocols for naming files.docx`
+
+### To Read These Files
+
+Option 1: Export from Google Drive as `.txt` or `.html`
+Option 2: Use Google Docs API script (see `tracer_tools/scripts/`)
 
 ## Testing
 
@@ -139,3 +181,37 @@ python -c "from tracer_tools.utils import coords_to_root; print(coords_to_root([
 ## Upstream
 
 tracer_tools is a fork of https://github.com/jaybgager/tracer_tools with added functions: `root_to_coords`, `update_root_ids`, `root_ids_to_coords_table`, plus CLI scripts.
+
+## Automation Systems
+
+### Auto-Commit System
+Automatically commits changes every 10 minutes via Task Scheduler:
+- Enable: `D:\1337\setup-auto-commit.bat`
+- Logs: `D:\1337\dev-journal\auto-commit.log`
+- Check status: `schtasks /query /tn "DevJournal_AutoCommit"`
+
+### Auto-Push System
+Pushes commits to GitHub every 30 minutes:
+- Enable: `D:\1337\setup-auto-push.bat`
+- Only pushes when unpushed commits exist
+- Safe for offline work
+
+### Session Chronicles
+Context preservation system in `D:\1337\dev-journal\chronicles\`:
+- Created every 30-60 minutes during active coding
+- Captures decisions, conversations, and ideas
+- Auto-committed with code changes
+
+## Working with Claude Code
+
+### Multi-Project Workspace
+- This is one of 29 projects at `D:\1337`
+- Always verify your current directory before running commands
+- Each project has its own git repository
+
+### Claude Enhancements
+Launch parallel Claude instances for 3x speedup:
+```bash
+cd D:/1337/claude-enhancements
+./start_parallel_claudes.sh
+```
