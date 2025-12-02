@@ -769,46 +769,96 @@ python scripts/sheets_coords_oauth.py --sheet "SHEET_ID" --update-ids</code></pr
 
     <div id="gt-protocols">
         <h3>Protocol Guidelines <span class="badge badge-current">Current</span></h3>
+        <p class="meta">Source: Tommy Macrina's Directives (August - September 2025) via #putracers Slack</p>
 
-        <details>
+        <details open>
             <summary>Mitochondria Segmentation</summary>
             <div class="content">
-                <ul>
-                    <li><strong>Individual Segmentation Required:</strong> Each mitochondrion must have a separate segment ID</li>
-                    <li><strong>Oversegmentation:</strong> Ignore any instructions saying "do NOT oversegment" - this was incorrect</li>
-                    <li><strong>Membrane Handling:</strong> Do NOT paint mitochondrial membranes. Leave visible border/gap around each mitochondrion</li>
-                </ul>
+                <h4>1.1 Individual Segmentation Required</h4>
+                <p>Each mitochondrion must be assigned a <strong>separate segment ID and color</strong>. Do not paint all mitochondria with the same segment.</p>
+
+                <h4>1.2 Oversegmentation Directive</h4>
+                <p>The original task description stating "do NOT oversegment mitochondria" was <strong>incorrect and should be disregarded</strong>. Mitochondria must be oversegmented individually.</p>
+
+                <h4>1.3 Membrane Handling</h4>
+                <p>Do NOT paint mitochondrial membranes. Leave a <strong>visible border/gap</strong> around each mitochondrion to represent the membrane boundary.</p>
             </div>
         </details>
 
         <details>
             <summary>Myelin Segmentation</summary>
             <div class="content">
-                <ul>
-                    <li><strong>Inner Boundary:</strong> NO padding between myelin and the cell it ensheathes</li>
-                    <li><strong>Myelin-to-Myelin:</strong> NO padding between adjacent myelin segments</li>
-                    <li><strong>Outer Boundary:</strong> Myelin should approach but NOT touch neighboring cell membranes</li>
-                </ul>
+                <h4>2.1 Inner Boundary (Cell Interface)</h4>
+                <p><strong>No padding</strong> between myelin and the cell it ensheathes. The myelin segment should directly contact the inner cell.</p>
+
+                <h4>2.2 Myelin-to-Myelin Contact</h4>
+                <p><strong>No padding</strong> between adjacent myelin segments. Myelin segments may touch each other.</p>
+
+                <h4>2.3 Outer Boundary (Adjacent Cells)</h4>
+                <p>Myelin should <strong>approach but not touch</strong> the membranes of neighboring cells. Maintain a small gap between myelin exterior and other cell membranes.</p>
+
+                <div class="alert alert-info">
+                    <strong>Summary:</strong> Inner = touch cell, Middle = touch other myelin, Outer = gap from neighbors
+                </div>
             </div>
         </details>
 
         <details>
             <summary>Upsampled Image Handling</summary>
             <div class="content">
+                <h4>3.1 Two-Pass Labeling Approach</h4>
+                <p>Recommended workflow:</p>
+                <ol>
+                    <li><strong>First pass:</strong> Paint annotations on the original image (thicker sections)</li>
+                    <li><strong>Second pass:</strong> Copy labels onto the upsampled image and connect objects naturally</li>
+                </ol>
+
+                <h4>3.2 Multi-Resolution Viewing</h4>
+                <p>Working exclusively from upsampled images can be misleading. <strong>Always cross-reference with original image data.</strong></p>
+
+                <h4>3.3 Handling Artifacts ("Hallucinations")</h4>
+                <p>Artificial structures in upsampled data should be <strong>ignored</strong>. Focus on anatomically sensible structures. From spot checks, tracers have done well ignoring hallucinations.</p>
+            </div>
+        </details>
+
+        <details>
+            <summary>Ambiguous Cases & Edge Cases</summary>
+            <div class="content">
+                <h4>4.1 Uncertain Organelles</h4>
+                <p>When uncertain whether an object is a mitochondrion (vs. peroxisome, lysosome, etc.), <strong>segment it as a mitochondrion</strong>. Objects can be removed during review if needed.</p>
+
+                <h4>4.2 EM Damage Regions</h4>
+                <p>For EM damage handling:</p>
                 <ul>
-                    <li><strong>Two-Pass Labeling:</strong> 1) Paint on original image, 2) Copy labels to upsampled and connect naturally</li>
-                    <li><strong>Multi-Resolution Viewing:</strong> Always cross-reference with original image data</li>
-                    <li><strong>Hallucinations:</strong> Ignore artificial structures in upsampled data. Focus on anatomically sensible structures.</li>
+                    <li>If damage is <strong>inside the segment</strong>, label it as the segment it's in</li>
+                    <li>If damage is <strong>on the border</strong>, follow team consensus for handling</li>
                 </ul>
             </div>
         </details>
 
         <details>
-            <summary>Ambiguous Cases</summary>
+            <summary>WebKnossos Tools & Techniques</summary>
             <div class="content">
+                <h4>6.1 Interpolation Tool</h4>
+                <p>The volume interpolation feature is particularly useful for objects perpendicular to the sectioning plane in higher z-resolution data. May require manual cleanup. Works best with:</p>
                 <ul>
-                    <li><strong>Uncertain Organelles:</strong> When unsure if object is mitochondrion vs peroxisome/lysosome, segment it as mitochondrion. Can be removed during review.</li>
-                    <li><strong>EM Damage:</strong> Follow team consensus for handling. Document and flag for review.</li>
+                    <li>Large, simple round segments with minimal movement between slices</li>
+                    <li>2 slice gaps (5-6 slice gaps may cause confusion with size changes)</li>
+                </ul>
+
+                <h4>6.2 3D Mesh Visualization</h4>
+                <ul>
+                    <li><strong>Right-click</strong> on any segment to generate a 3D mesh</li>
+                    <li>Press <kbd>.</kbd> (period) to toggle between all views and view under cursor</li>
+                    <li>Useful for quality control and identifying errors</li>
+                </ul>
+
+                <h4>6.3 SAM2 AI Segmentation (Experimental)</h4>
+                <p>New AI-assisted segmentation available on experimental server (ranl.zetta.ai:9000):</p>
+                <ul>
+                    <li>Most effective for larger, convex cross-sections without many intercellular objects</li>
+                    <li>Adjust confidence threshold and erosion parameters for optimal results</li>
+                    <li>Can use existing segment annotations as hints for consistency</li>
                 </ul>
             </div>
         </details>
@@ -983,6 +1033,81 @@ python scripts/sheets_coords_oauth.py --sheet "SHEET_ID" --update-ids</code></pr
             <li>Use 3D mesh to verify connectivity</li>
         </ul>
 
+        <h4>The Four Synapse Indicators</h4>
+        <p>Synapses have 4 indicators, one of which is <strong>mandatory</strong>:</p>
+        <table>
+            <tr><th>Indicator</th><th>Required?</th><th>Description</th></tr>
+            <tr><td style="color: #e74c3c;"><strong>Dense cluster of vesicles</strong></td><td style="color: #e74c3c;"><strong>MANDATORY</strong></td><td>Primary indicator - must be present</td></tr>
+            <tr><td>PSD (Postsynaptic Density)</td><td>2 of 3 needed</td><td>Dark line on dendrite side</td></tr>
+            <tr><td>Synaptic cleft</td><td>2 of 3 needed</td><td>Gap between cells</td></tr>
+            <tr><td>T-bar</td><td>2 of 3 needed</td><td>Structure in fly synapses</td></tr>
+        </table>
+        <div class="alert alert-warning">
+            <strong>Rule:</strong> You need the primary indicator (vesicle cluster) + at least 2 of the 3 secondary indicators. Without these, do NOT annotate.
+        </div>
+
+        <h4>Synapse Types (Benjamin D. Silverman Classification)</h4>
+        <details>
+            <summary>Classic Synapse</summary>
+            <div class="content">
+                <p>Standard synapse structure with:</p>
+                <ul>
+                    <li><span style="color: #e74c3c;">Red</span> = PSD</li>
+                    <li><span style="color: #3498db;">Dark Blue</span> = Spine head/dendrite</li>
+                    <li><span style="color: #27ae60;">Green dots</span> = Vesicles</li>
+                    <li><span style="color: #9b59b6;">Light Purple</span> = Axon</li>
+                </ul>
+            </div>
+        </details>
+        <details>
+            <summary>Hand Type Synapse</summary>
+            <div class="content">
+                <p>Contiguous synapse where multiple PSDs share the same structure but are not continuous. <strong>All PSDs should be given the same segment ID</strong> if they connect to the same PSD within another slice.</p>
+            </div>
+        </details>
+        <details>
+            <summary>Little Straggler Synapse</summary>
+            <div class="content">
+                <p>No PSD visible due to how slices were cut. The PSD is not shown even though you can tell it's a synapse. <strong>Cannot label these</strong> - you'll encounter these often once you develop an eye for synapses.</p>
+            </div>
+        </details>
+        <details>
+            <summary>Pancake Synapse</summary>
+            <div class="content">
+                <p>Axon infiltrated by spine head - spine acts like a "hat" to the axon. PSD is squished and wider than normal. <strong>Annotate in a wide manner.</strong></p>
+            </div>
+        </details>
+        <details>
+            <summary>Slide Synapse</summary>
+            <div class="content">
+                <p>Axon synapsing with the shaft/trunk of a dendrite (not the spine). Even if PSD is split across slices, they are <strong>still one segment ID</strong>.</p>
+            </div>
+        </details>
+
+        <h4>PSD vs Surfacing Neuron Shadow</h4>
+        <p>PSDs and surfacing neuron shadows can look similar. Key differences:</p>
+        <ul>
+            <li>In a synapse, the darkened area is in the <strong>dendrite/postsynaptic body</strong>, not the axon</li>
+            <li>Surfacing neurons lack the mandatory vesicle cluster indicator</li>
+            <li>Check for synaptic cleft and T-bar to confirm</li>
+        </ul>
+
+        <h4>T-Bar Variations (Fly Synapses)</h4>
+        <ul>
+            <li><strong>Short T-Bars:</strong> Sometimes just dots</li>
+            <li><strong>Long T-Bars:</strong> Can "travel" across slices</li>
+            <li>Longer T-bars are easier to identify</li>
+        </ul>
+
+        <h4>Vesicle Types</h4>
+        <ul>
+            <li><strong>Dense vesicles:</strong> Loads of tightly packed vesicles</li>
+            <li><strong>Sparse vesicles:</strong> Few vesicles (1-6) usually near boundaries - keep keen eye out for these!</li>
+        </ul>
+
+        <h4>PSD Tracing Guidance</h4>
+        <p>When tracing a PSD, trace about <strong>halfway through to the boundary</strong>. Do not trace beyond the dark line cutting across like a "hamburger-style roll."</p>
+
         <div class="alert alert-info">
             <strong>Training images available:</strong> See <code>drive_docs_output/Ground-Truth-Training/synapse training videos/</code> for examples of t-bars and PSDs.
         </div>
@@ -991,23 +1116,27 @@ python scripts/sheets_coords_oauth.py --sheet "SHEET_ID" --update-ids</code></pr
     <div id="vesicles">
         <h3>Vesicle Tracing <span class="badge badge-training">Training</span></h3>
 
-        <h4>Vesicle Tracing Steps</h4>
+        <h4>Vesicle Tracing Procedure</h4>
         <ol>
-            <li>Open volume and create new segmentation</li>
-            <li>Enable auto-fill and conditional painting</li>
-            <li>Set conditional painting range: 0.00 - 0.34</li>
-            <li>Locate vesicle clouds and find associated synapse</li>
-            <li>If cloud has no synapse, skip it</li>
-            <li>Trace entire continuous cloud</li>
-            <li>Watch for boundaries and other organelles</li>
+            <li><strong>Setup:</strong> Open VAST, the EM you want, and create a new segmentation</li>
+            <li><strong>Enable tools:</strong> Set auto-fill (checkbox labeled "Fill") and conditional painting (both in right-side options)</li>
+            <li><strong>Set range:</strong> Good range for conditional painting is <code>0.00 - 0.34</code></li>
+            <li><strong>Find clouds:</strong> Look for vesicle clouds and find the associated synapse</li>
+            <li><strong>Skip orphans:</strong> If a cloud has no synapse, there is no need to trace it</li>
+            <li><strong>Trace completely:</strong> Trace the whole cloud as long as it's continuous</li>
+            <li><strong>Watch boundaries:</strong> Be careful of boundaries and other organelles that might get caught in conditional tracing</li>
         </ol>
 
-        <h4>Vesicle Reviewing</h4>
+        <h4>Vesicle Reviewing Procedure</h4>
         <ol>
-            <li>Open corresponding synapse segmentation</li>
-            <li>Compare synapse count to vesicle cloud count</li>
-            <li>If mismatch, locate missing cloud or cleft</li>
+            <li>Open the corresponding synapse segmentation for your EM volume</li>
+            <li>Check how many synapses have been traced vs how many vesicle clouds have been traced</li>
+            <li>If either segmentation has fewer segments, try to locate where you missed one (cloud or cleft)</li>
         </ol>
+
+        <div class="alert alert-info">
+            <strong>Key insight:</strong> A good method to find synapses is to find an axon and look for its vesicles. Some axons have sparse vesicles and some have loads of dense vesicles. In sparse axons, keep a keen eye out for little clusters of 1-6 vesicles usually near its boundaries.
+        </div>
     </div>
 
     <div id="semantic">
@@ -1060,12 +1189,15 @@ python scripts/sheets_coords_oauth.py --sheet "SHEET_ID" --update-ids</code></pr
 
         <div class="card">
             <h4>Tampermonkey Installation</h4>
-            <p>Install browser extension and import userscripts.</p>
+            <p>Install browser extension and import userscripts (~2 min).</p>
             <ol style="font-size: 0.9em; margin-top: 10px;">
-                <li>Install Tampermonkey</li>
-                <li>Import .user.js files</li>
-                <li>Reload WebKnossos</li>
+                <li><strong>Install:</strong> <a href="https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo">Chrome</a> | <a href="https://addons.mozilla.org/firefox/addon/tampermonkey/">Firefox</a> | <a href="https://microsoftedge.microsoft.com/addons/detail/tampermonkey/iikmkjmpaadaobahmlepeloendndfphd">Edge</a></li>
+                <li><strong>Dashboard:</strong> Click Tampermonkey icon → Dashboard</li>
+                <li><strong>Drag & Drop:</strong> Drag .user.js file onto Dashboard</li>
+                <li><strong>Install:</strong> Click "Install" on the script page</li>
+                <li><strong>Verify:</strong> Refresh WebKnossos, check Tampermonkey icon shows "1"</li>
             </ol>
+            <p style="font-size: 0.85em; margin-top: 8px;"><strong>Brave users:</strong> Enable Developer Mode AND "Allow User Scripts" in extension settings.</p>
         </div>
 
         <div class="card">
@@ -1088,28 +1220,184 @@ pip install caveclient</code></pre>
     <h2>Historical Tools & Documentation</h2>
 
     <div class="alert alert-warning">
-        <strong>Legacy Reference:</strong> These tools are no longer in primary use but documentation is preserved for reference.
+        <strong>Legacy Reference:</strong> These tools are no longer in primary use but documentation is preserved for reference and for understanding historical data.
     </div>
 
-    <div class="timeline">
+    <div id="vast-docs">
+        <h3>VAST <span class="badge badge-deprecated">Deprecated</span></h3>
+        <p>Volume Annotation Software Tool - earlier annotation tool used for vesicle tracing and segmentation.</p>
+
+        <details>
+            <summary>VAST Checklist</summary>
+            <div class="content">
+                <ol>
+                    <li>Save EM VAST file in root directory as <code>[root folder name].vsv</code> (e.g., Vol001_Raw.vsv)</li>
+                    <li>Save VAST annotation file as <code>[rootfoldername]_[annotation task type].vsseg</code></li>
+                    <li>Save your work as you go along</li>
+                    <li>Have your annotation reviewed (see verification policy)</li>
+                    <li>Export with properties: .TIF (uncomp.), 24bit/px RGB-encoded, check "collapse labels as in current view"</li>
+                    <li>Save images in directory named for annotation task type</li>
+                    <li>Notify project owner that annotation has been exported</li>
+                    <li>If cell segmentation, have project reviewed in Omni</li>
+                    <li>Correct any errors reviewer catches</li>
+                    <li>Re-export & re-omnify if necessary</li>
+                </ol>
+            </div>
+        </details>
+
+        <details>
+            <summary>VAST Workflow</summary>
+            <div class="content">
+                <h4>Import EM Images</h4>
+                <ol>
+                    <li>Go to File → Import EM Stack From Images</li>
+                    <li>Navigate to project folder and enter the Raw folder</li>
+                    <li>Select all .TIF images and hit Open</li>
+                    <li>Hit OK to the pop-up windows</li>
+                    <li>Save the EM file in the Raw folder with root folder name</li>
+                </ol>
+
+                <h4>Begin Segmentation</h4>
+                <p>With fresh EM imported, hit the pencil button under File dropdown. Hit OK. Begin painting.</p>
+
+                <h4>Welding and Collapsing Labels</h4>
+                <p>To combine segments with different IDs: Drag segment 6 and drop it into segment 112 (or vice versa). This creates a segment sub-tree. Right-click parent segment → "weld segment sub tree" OR weld at export phase.</p>
+
+                <h4>Exporting</h4>
+                <ol>
+                    <li>Go to File → Export</li>
+                    <li>Select .TIF (uncomp.) and 24bit/px RGB-encoded</li>
+                    <li>Check "collapse labels as in current view"</li>
+                    <li>Browse to the Segmentation folder and save</li>
+                </ol>
+            </div>
+        </details>
+
+        <details>
+            <summary>VAST Synapse Annotation & Review</summary>
+            <div class="content">
+                <h4>Annotation</h4>
+                <ol>
+                    <li>Begin new VAST project in desired dataset</li>
+                    <li>Click pencil icon to spawn 16 new segments</li>
+                    <li>Name segments for: cleft, axon/presynaptic site, dendrite/postsynaptic site, uncertain clefts</li>
+                    <li>Trace all synaptic clefts, denoting pre/postsynaptic sites</li>
+                </ol>
+
+                <h4>Review</h4>
+                <ol>
+                    <li>Open VAST project to review</li>
+                    <li>Check segment by segment</li>
+                    <li>Look for missed synapses using alpha adjustment</li>
+                    <li>Cross-reference with vesicle cloud annotations if available</li>
+                </ol>
+            </div>
+        </details>
+    </div>
+
+    <div id="omni-docs">
+        <h3>Omni <span class="badge badge-deprecated">Deprecated</span></h3>
+        <p>Desktop annotation and proofreading software for 3D neuron reconstruction.</p>
+
+        <details>
+            <summary>Omni Quick Start</summary>
+            <div class="content">
+                <ol>
+                    <li>Click the <strong>cursor</strong> button</li>
+                    <li>Click either "two rectangles" (2D+3D) or "multicolored square" (all views)</li>
+                    <li>Left-click <strong>segmentation1</strong> in the left panel</li>
+                    <li>Set <strong>Global Threshold</strong> (0.750-0.600 typical)</li>
+                    <li>Set <strong>Auto Spread Threshold</strong> (0.350-0.500 typical)</li>
+                    <li>Begin construction, joining, and validation of segments</li>
+                </ol>
+
+                <h4>Tracing Workflow</h4>
+                <ol>
+                    <li>Left-click segment with largest Total Size in Working Tab</li>
+                    <li>Press <kbd>C</kbd> to center on selected segment</li>
+                    <li>Look for missing branches, pieces, spines, nubs, dust, mergers</li>
+                    <li>Press <kbd>J</kbd> to Join All</li>
+                    <li>Press <kbd>V</kbd> to Validate and move to Valid Tab</li>
+                </ol>
+            </div>
+        </details>
+
+        <details>
+            <summary>Omni Key Controls</summary>
+            <div class="content">
+                <table>
+                    <tr><th>Action</th><th>Control</th></tr>
+                    <tr><td>Center on segment</td><td><kbd>C</kbd></td></tr>
+                    <tr><td>Join All</td><td><kbd>J</kbd></td></tr>
+                    <tr><td>Validate</td><td><kbd>V</kbd></td></tr>
+                    <tr><td>Undo</td><td><kbd>Ctrl</kbd>+<kbd>Z</kbd></td></tr>
+                    <tr><td>Deselect all except clicked</td><td><kbd>Ctrl</kbd>+Right-click</td></tr>
+                    <tr><td>Deselect only clicked</td><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+Right-click</td></tr>
+                </table>
+            </div>
+        </details>
+
+        <details>
+            <summary>Omni Troubleshooting</summary>
+            <div class="content">
+                <h4>Auto Save</h4>
+                <p>Omni saves what you "Join" and "Split". <strong>Periodically Join All</strong> to protect against crashes.</p>
+
+                <h4>Crashes & Freezes</h4>
+                <ul>
+                    <li>If Omni won't close conventionally, use <code>htop</code> command in terminal</li>
+                    <li>Find Omni in process list (look for red numbers in VIRT column)</li>
+                    <li>Press <kbd>F9</kbd> then Enter to kill</li>
+                </ul>
+
+                <h4>Common Issues</h4>
+                <ul>
+                    <li>If accidentally deselect everything: <kbd>Ctrl</kbd>+<kbd>Z</kbd> to undo</li>
+                    <li>Sometimes freezes resolve by waiting 1-2 minutes</li>
+                    <li>Moving/minimizing Omni window may unfreeze it</li>
+                </ul>
+            </div>
+        </details>
+
+        <details>
+            <summary>Omni Glossary</summary>
+            <div class="content">
+                <table>
+                    <tr><th>Term</th><th>Definition</th></tr>
+                    <tr><td>Dust</td><td>Little voxel bits inside large dendrites/axons that aren't essential</td></tr>
+                    <tr><td>Merger</td><td>AI mistake where it combined two non-connecting dendrites/axons</td></tr>
+                    <tr><td>Segment</td><td>A collection of supervoxels</td></tr>
+                    <tr><td>Supervoxel</td><td>Polyhedral part of 3D digital image, larger than normal voxel</td></tr>
+                    <tr><td>Spine</td><td>Small membranous protrusion from dendrite that receives axon input</td></tr>
+                    <tr><td>Unsplittable Merger</td><td>A merger that can't be corrected by a player</td></tr>
+                </table>
+            </div>
+        </details>
+    </div>
+
+    <div id="eyewire-docs">
+        <h3>Eyewire <span class="badge badge-deprecated">Deprecated</span></h3>
+        <p>Citizen science neuron tracing platform - browser-based game for neuron reconstruction. Replaced by professional annotation tools.</p>
+    </div>
+
+    <div class="timeline" style="margin-top: 30px;">
+        <h4>Tool Evolution Timeline</h4>
         <div class="timeline-item deprecated">
-            <h4>Eyewire <span class="badge badge-deprecated">Deprecated</span></h4>
-            <p class="date">Citizen science neuron tracing platform</p>
-            <p>Browser-based game for neuron reconstruction. Replaced by professional annotation tools.</p>
+            <h4>Eyewire Era</h4>
+            <p class="date">Citizen science approach</p>
+            <p>Browser-based gamified neuron reconstruction for public participation.</p>
         </div>
 
         <div class="timeline-item deprecated">
-            <h4>Omni <span class="badge badge-deprecated">Deprecated</span></h4>
-            <p class="date">Desktop annotation software</p>
-            <p>Volume annotation and proofreading tool. Replaced by WebKnossos and Neuroglancer.</p>
-            <p><a href="drive_docs_output/Omni/How to Omni.html">View Omni Documentation</a></p>
+            <h4>VAST + Omni Era</h4>
+            <p class="date">Professional desktop tools</p>
+            <p>VAST for annotation, Omni for 3D proofreading. Ubuntu-based workflow with mounted network storage.</p>
         </div>
 
-        <div class="timeline-item deprecated">
-            <h4>VAST <span class="badge badge-deprecated">Deprecated</span></h4>
-            <p class="date">Volume Annotation Software Tool</p>
-            <p>Earlier annotation tool used for vesicle tracing and segmentation. Replaced by modern platforms.</p>
-            <p><a href="drive_docs_output/Ground-Truth-Training/How-to VAST.html">View VAST Documentation</a></p>
+        <div class="timeline-item">
+            <h4>WebKnossos + Neuroglancer Era</h4>
+            <p class="date">Current</p>
+            <p>Web-based tools with collaborative features, AI assistance (SAM2), and CAVE integration.</p>
         </div>
     </div>
 </section>
