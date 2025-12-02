@@ -1,0 +1,311 @@
+Google Drive Download Index
+Generated: 2025-12-01T21:00:32.921828
+Folder ID: 0B3x8mikIsqYkcG9PcjJfZ1BaRDQ
+Total files: 52
+============================================================
+
+File: Copy of image-7.png
+  Path: Ground-Truth-Protocol-History/Copy of Ground Truth Protocol: Tommy Macrina Reference Set
+  Type: image/png
+  Status: downloaded_image
+  Output: ..\drive_docs_output\Ground-Truth-Protocol-History\Copy of Ground Truth Protocol- Tommy Macrina Reference Set\Copy of image-7.png
+
+File: Copy of image-4.png
+  Path: Ground-Truth-Protocol-History/Copy of Ground Truth Protocol: Tommy Macrina Reference Set
+  Type: image/png
+  Status: downloaded_image
+  Output: ..\drive_docs_output\Ground-Truth-Protocol-History\Copy of Ground Truth Protocol- Tommy Macrina Reference Set\Copy of image-4.png
+
+File: Copy of reopen_button.png
+  Path: Ground-Truth-Protocol-History/Copy of Ground Truth Protocol: Tommy Macrina Reference Set
+  Type: image/png
+  Status: downloaded_image
+  Output: ..\drive_docs_output\Ground-Truth-Protocol-History\Copy of Ground Truth Protocol- Tommy Macrina Reference Set\Copy of reopen_button.png
+
+File: Copy of image-5.png
+  Path: Ground-Truth-Protocol-History/Copy of Ground Truth Protocol: Tommy Macrina Reference Set
+  Type: image/png
+  Status: downloaded_image
+  Output: ..\drive_docs_output\Ground-Truth-Protocol-History\Copy of Ground Truth Protocol- Tommy Macrina Reference Set\Copy of image-5.png
+
+File: Copy of image-2.png
+  Path: Ground-Truth-Protocol-History/Copy of Ground Truth Protocol: Tommy Macrina Reference Set
+  Type: image/png
+  Status: downloaded_image
+  Output: ..\drive_docs_output\Ground-Truth-Protocol-History\Copy of Ground Truth Protocol- Tommy Macrina Reference Set\Copy of image-2.png
+
+File: Copy of image-8.png
+  Path: Ground-Truth-Protocol-History/Copy of Ground Truth Protocol: Tommy Macrina Reference Set
+  Type: image/png
+  Status: downloaded_image
+  Output: ..\drive_docs_output\Ground-Truth-Protocol-History\Copy of Ground Truth Protocol- Tommy Macrina Reference Set\Copy of image-8.png
+
+File: Copy of image-1.png
+  Path: Ground-Truth-Protocol-History/Copy of Ground Truth Protocol: Tommy Macrina Reference Set
+  Type: image/png
+  Status: downloaded_image
+  Output: ..\drive_docs_output\Ground-Truth-Protocol-History\Copy of Ground Truth Protocol- Tommy Macrina Reference Set\Copy of image-1.png
+
+File: Copy of image.png
+  Path: Ground-Truth-Protocol-History/Copy of Ground Truth Protocol: Tommy Macrina Reference Set
+  Type: image/png
+  Status: downloaded_image
+  Output: ..\drive_docs_output\Ground-Truth-Protocol-History\Copy of Ground Truth Protocol- Tommy Macrina Reference Set\Copy of image.png
+
+File: Copy of image-3.png
+  Path: Ground-Truth-Protocol-History/Copy of Ground Truth Protocol: Tommy Macrina Reference Set
+  Type: image/png
+  Status: downloaded_image
+  Output: ..\drive_docs_output\Ground-Truth-Protocol-History\Copy of Ground Truth Protocol- Tommy Macrina Reference Set\Copy of image-3.png
+
+File: Copy of image-6.png
+  Path: Ground-Truth-Protocol-History/Copy of Ground Truth Protocol: Tommy Macrina Reference Set
+  Type: image/png
+  Status: downloaded_image
+  Output: ..\drive_docs_output\Ground-Truth-Protocol-History\Copy of Ground Truth Protocol- Tommy Macrina Reference Set\Copy of image-6.png
+
+File: Copy of Ground Truth Protocol Guidelines Revised
+  Path: Ground-Truth-Protocol-History
+  Type: application/vnd.google-apps.document
+  Status: exported
+  Output: ..\drive_docs_output\Ground-Truth-Protocol-History\Copy of Ground Truth Protocol Guidelines Revised.html
+
+File: Copy of Standard Operating Procedure: Ground Truth (GT) Task Handling
+  Path: Ground-Truth-Protocol-History
+  Type: application/vnd.google-apps.document
+  Status: exported
+  Output: ..\drive_docs_output\Ground-Truth-Protocol-History\Copy of Standard Operating Procedure Ground Truth GT Task Handling.html
+
+File: Copy of Updated Ground Truth Checklist
+  Path: Ground-Truth-Protocol-History
+  Type: application/vnd.google-apps.document
+  Status: exported
+  Output: ..\drive_docs_output\Ground-Truth-Protocol-History\Copy of Updated Ground Truth Checklist.html
+
+File: Copy of How to verify ground truth tasks
+  Path: Ground-Truth-Protocol-History
+  Type: application/vnd.google-apps.document
+  Status: exported
+  Output: ..\drive_docs_output\Ground-Truth-Protocol-History\Copy of How to verify ground truth tasks.html
+
+File: bushell_of_synapses.webm
+  Path: Ground-Truth-Training/synapse training videos
+  Type: video/webm
+  Status: skipped
+
+File: PSD-gap_example.webm
+  Path: Ground-Truth-Training/synapse training videos
+  Type: video/webm
+  Status: skipped
+
+File: Diff.webm
+  Path: Ground-Truth-Training/synapse training videos
+  Type: video/webm
+  Status: skipped
+
+File: three_t-bars_smudge-shape.png
+  Path: Ground-Truth-Training/synapse training videos
+  Type: image/png
+  Status: downloaded_image
+  Output: ..\drive_docs_output\Ground-Truth-Training\synapse training videos\three_t-bars_smudge-shape.png
+
+File: top-down_synapse_example.webm
+  Path: Ground-Truth-Training/synapse training videos
+  Type: video/webm
+  Status: skipped
+
+File: t-bar_example.png
+  Path: Ground-Truth-Training/synapse training videos
+  Type: image/png
+  Status: downloaded_image
+  Output: ..\drive_docs_output\Ground-Truth-Training\synapse training videos\t-bar_example.png
+
+File: elongated_t-bar_example.png
+  Path: Ground-Truth-Training/synapse training videos
+  Type: image/png
+  Status: downloaded_image
+  Output: ..\drive_docs_output\Ground-Truth-Training\synapse training videos\elongated_t-bar_example.png
+
+File: Copy of How to Vesicle
+  Path: Ground-Truth-Training
+  Type: application/vnd.google-apps.document
+  Status: exported
+  Output: ..\drive_docs_output\Ground-Truth-Training\Copy of How to Vesicle.html
+
+File: Copy of Fly Synapses
+  Path: Ground-Truth-Training
+  Type: application/vnd.google-apps.document
+  Status: exported
+  Output: ..\drive_docs_output\Ground-Truth-Training\Copy of Fly Synapses.html
+
+File: How-to: VAST
+  Path: Ground-Truth-Training
+  Type: application/vnd.google-apps.document
+  Status: exported
+  Output: ..\drive_docs_output\Ground-Truth-Training\How-to VAST.html
+
+File: Copy of Synapse Stuff
+  Path: Ground-Truth-Training
+  Type: application/vnd.google-apps.document
+  Status: exported
+  Output: ..\drive_docs_output\Ground-Truth-Training\Copy of Synapse Stuff.html
+
+File: Copy of Neuroglancer Link Ressurection
+  Path: Misc
+  Type: application/vnd.google-apps.presentation
+  Status: exported
+  Output: ..\drive_docs_output\Misc\Copy of Neuroglancer Link Ressurection.txt
+
+File: Copy of Protocols for naming files
+  Path: Misc
+  Type: application/vnd.google-apps.document
+  Status: exported
+  Output: ..\drive_docs_output\Misc\Copy of Protocols for naming files.html
+
+File: Copy of Focused Annotation: How to
+  Path: Misc
+  Type: application/vnd.google-apps.document
+  Status: exported
+  Output: ..\drive_docs_output\Misc\Copy of Focused Annotation How to.html
+
+File: Copy of Neuroglancer Synapses
+  Path: Misc
+  Type: application/vnd.google-apps.document
+  Status: exported
+  Output: ..\drive_docs_output\Misc\Copy of Neuroglancer Synapses.html
+
+File: Copy of How to semantic segmentation
+  Path: Misc
+  Type: application/vnd.google-apps.document
+  Status: exported
+  Output: ..\drive_docs_output\Misc\Copy of How to semantic segmentation.html
+
+File: Copy of How to Set up VirtualBox
+  Path: Misc
+  Type: application/vnd.google-apps.document
+  Status: exported
+  Output: ..\drive_docs_output\Misc\Copy of How to Set up VirtualBox.html
+
+File: Eyewire Visual Aid
+  Path: Eyewire
+  Type: application/vnd.google-apps.presentation
+  Status: exported
+  Output: ..\drive_docs_output\Eyewire\Eyewire Visual Aid.txt
+
+File: How-to: Eyewire
+  Path: Eyewire
+  Type: application/vnd.google-apps.document
+  Status: error
+
+File: How to Omni
+  Path: Omni
+  Type: application/vnd.google-apps.document
+  Status: exported
+  Output: ..\drive_docs_output\Omni\How to Omni.html
+
+File: Omni Visual Aid
+  Path: Omni
+  Type: application/vnd.google-apps.presentation
+  Status: exported
+  Output: ..\drive_docs_output\Omni\Omni Visual Aid.txt
+
+File: Copy of Exporting Omni
+  Path: Omni
+  Type: application/vnd.google-apps.document
+  Status: exported
+  Output: ..\drive_docs_output\Omni\Copy of Exporting Omni.html
+
+File: Copy of Omni keyboard and mouse commands (alpha)
+  Path: Omni
+  Type: application/vnd.google-apps.spreadsheet
+  Status: exported
+  Output: ..\drive_docs_output\Omni\Copy of Omni keyboard and mouse commands alpha.csv
+
+File: Tampermonkey Installation & Troubleshooting Guide
+  Path: New Documentation Styles/Templates/Files
+  Type: application/vnd.google-apps.document
+  Status: exported
+  Output: ..\drive_docs_output\New Documentation Styles\Templates\Files\Tampermonkey Installation  Troubleshooting Guide.html
+
+File: Standard Operating Procedure: Ground Truth (GT) Task Handling
+  Path: New Documentation Styles/Templates/Files/Ground Truth
+  Type: application/vnd.google-apps.document
+  Status: exported
+  Output: ..\drive_docs_output\New Documentation Styles\Templates\Files\Ground Truth\Standard Operating Procedure Ground Truth GT Task Handling.html
+
+File: Ground Truth Protocol Guidelines Revised
+  Path: New Documentation Styles/Templates/Files/Ground Truth
+  Type: application/vnd.google-apps.document
+  Status: exported
+  Output: ..\drive_docs_output\New Documentation Styles\Templates\Files\Ground Truth\Ground Truth Protocol Guidelines Revised.html
+
+File: Ground_Truth_Protocol_Clarifications_GDOC.html
+  Path: New Documentation Styles/Templates/Files/HTML Versions
+  Type: text/html
+  Status: skipped
+
+File: tommy_macrina_FINAL.html
+  Path: New Documentation Styles/Templates/Files/HTML Versions
+  Type: text/html
+  Status: skipped
+
+File: image-8.png
+  Path: New Documentation Styles/Templates/Files/Protocol Reference Images/Ground Truth Protocol: Tommy Macrina Reference Set
+  Type: image/png
+  Status: downloaded_image
+  Output: ..\drive_docs_output\New Documentation Styles\Templates\Files\Protocol Reference Images\Ground Truth Protocol- Tommy Macrina Reference Set\image-8.png
+
+File: image-7.png
+  Path: New Documentation Styles/Templates/Files/Protocol Reference Images/Ground Truth Protocol: Tommy Macrina Reference Set
+  Type: image/png
+  Status: downloaded_image
+  Output: ..\drive_docs_output\New Documentation Styles\Templates\Files\Protocol Reference Images\Ground Truth Protocol- Tommy Macrina Reference Set\image-7.png
+
+File: image-6.png
+  Path: New Documentation Styles/Templates/Files/Protocol Reference Images/Ground Truth Protocol: Tommy Macrina Reference Set
+  Type: image/png
+  Status: downloaded_image
+  Output: ..\drive_docs_output\New Documentation Styles\Templates\Files\Protocol Reference Images\Ground Truth Protocol- Tommy Macrina Reference Set\image-6.png
+
+File: image-5.png
+  Path: New Documentation Styles/Templates/Files/Protocol Reference Images/Ground Truth Protocol: Tommy Macrina Reference Set
+  Type: image/png
+  Status: downloaded_image
+  Output: ..\drive_docs_output\New Documentation Styles\Templates\Files\Protocol Reference Images\Ground Truth Protocol- Tommy Macrina Reference Set\image-5.png
+
+File: image-4.png
+  Path: New Documentation Styles/Templates/Files/Protocol Reference Images/Ground Truth Protocol: Tommy Macrina Reference Set
+  Type: image/png
+  Status: downloaded_image
+  Output: ..\drive_docs_output\New Documentation Styles\Templates\Files\Protocol Reference Images\Ground Truth Protocol- Tommy Macrina Reference Set\image-4.png
+
+File: image-3.png
+  Path: New Documentation Styles/Templates/Files/Protocol Reference Images/Ground Truth Protocol: Tommy Macrina Reference Set
+  Type: image/png
+  Status: downloaded_image
+  Output: ..\drive_docs_output\New Documentation Styles\Templates\Files\Protocol Reference Images\Ground Truth Protocol- Tommy Macrina Reference Set\image-3.png
+
+File: image-2.png
+  Path: New Documentation Styles/Templates/Files/Protocol Reference Images/Ground Truth Protocol: Tommy Macrina Reference Set
+  Type: image/png
+  Status: downloaded_image
+  Output: ..\drive_docs_output\New Documentation Styles\Templates\Files\Protocol Reference Images\Ground Truth Protocol- Tommy Macrina Reference Set\image-2.png
+
+File: image-1.png
+  Path: New Documentation Styles/Templates/Files/Protocol Reference Images/Ground Truth Protocol: Tommy Macrina Reference Set
+  Type: image/png
+  Status: downloaded_image
+  Output: ..\drive_docs_output\New Documentation Styles\Templates\Files\Protocol Reference Images\Ground Truth Protocol- Tommy Macrina Reference Set\image-1.png
+
+File: image.png
+  Path: New Documentation Styles/Templates/Files/Protocol Reference Images/Ground Truth Protocol: Tommy Macrina Reference Set
+  Type: image/png
+  Status: downloaded_image
+  Output: ..\drive_docs_output\New Documentation Styles\Templates\Files\Protocol Reference Images\Ground Truth Protocol- Tommy Macrina Reference Set\image.png
+
+File: reopen_button.png
+  Path: New Documentation Styles/Templates/Files/Protocol Reference Images/Ground Truth Protocol: Tommy Macrina Reference Set
+  Type: image/png
+  Status: downloaded_image
+  Output: ..\drive_docs_output\New Documentation Styles\Templates\Files\Protocol Reference Images\Ground Truth Protocol- Tommy Macrina Reference Set\reopen_button.png
+

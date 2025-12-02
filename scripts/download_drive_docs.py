@@ -145,7 +145,7 @@ def get_credentials(creds_path: Path, token_path: Path):
             creds.refresh(Request())
         else:
             if not creds_path.exists():
-                print(f"\n❌ ERROR: credentials.json not found at {creds_path}")
+                print(f"\n[ERR] ERROR: credentials.json not found at {creds_path}")
                 print("\nTo set up Google Drive API:")
                 print("1. Go to: https://console.cloud.google.com/")
                 print("2. Create a project (or select existing)")
@@ -155,7 +155,7 @@ def get_credentials(creds_path: Path, token_path: Path):
                 print("6. Download JSON and save as 'credentials.json' here")
                 sys.exit(1)
 
-            print("\n🔐 Opening browser for Google authorization...")
+            print("\n[AUTH] Opening browser for Google authorization...")
             print("   (First time only - token will be saved for future runs)\n")
             flow = InstalledAppFlow.from_client_secrets_file(str(creds_path), SCOPES)
             creds = flow.run_local_server(port=0)
@@ -163,7 +163,7 @@ def get_credentials(creds_path: Path, token_path: Path):
         # Save token for next run
         with open(token_path, 'w') as f:
             f.write(creds.to_json())
-        print(f"  ✓ Token saved to {token_path}")
+        print(f"  [OK] Token saved to {token_path}")
 
     return creds
 
@@ -241,7 +241,7 @@ def list_folder_contents(service, folder_id: str, path: str = "") -> list:
             if item['mimeType'] == 'application/vnd.google-apps.folder':
                 # Recursively get subfolder contents
                 subfolder_path = f"{path}/{item['name']}" if path else item['name']
-                print(f"  📁 Scanning folder: {subfolder_path}")
+                print(f"  [DIR] Scanning folder: {subfolder_path}")
                 files.extend(list_folder_contents(service, item['id'], subfolder_path))
             else:
                 files.append(item)
@@ -269,9 +269,11 @@ def download_file(service, file_info: dict, output_dir: Path, format: str) -> di
         'content': None,
     }
 
-    # Create subfolder structure
+    # Create subfolder structure (sanitize path for Windows)
     if file_path:
-        output_subdir = output_dir / file_path
+        # Replace Windows-illegal characters in path
+        safe_path = file_path.replace(':', '-').replace('?', '').replace('"', '').replace('<', '').replace('>', '').replace('|', '')
+        output_subdir = output_dir / safe_path
         output_subdir.mkdir(parents=True, exist_ok=True)
     else:
         output_subdir = output_dir
@@ -417,12 +419,12 @@ def main():
     print("Step 1: Authenticating...")
     creds = get_credentials(creds_path, token_path)
     service = build('drive', 'v3', credentials=creds)
-    print("  ✓ Authenticated\n")
+    print("  [OK] Authenticated\n")
 
     # List folder contents
     print("Step 2: Scanning folder...")
     files = list_folder_contents(service, folder_id)
-    print(f"  ✓ Found {len(files)} files\n")
+    print(f"  [OK] Found {len(files)} files\n")
 
     # Categorize files
     categories = {
@@ -495,7 +497,7 @@ def main():
                 f.write(f"  Output: {r['output_file']}\n")
             f.write("\n")
 
-    print(f"\n✓ Index saved to: {index_file}")
+    print(f"\n[OK] Index saved to: {index_file}")
 
 
 if __name__ == '__main__':

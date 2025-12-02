@@ -1,0 +1,87 @@
+Neuroglancer Link Resurrection
+How to Bring Neurolancer Links Back From the Land of the Dead
+A Tutorial on How to Retrieve a Dead Link, Lost Link, or a Link That is too Long to Paste
+
+Enter You:
+“Oh gosh, my Neuroglancer link hath disappeared. Hark, what dreadful circumstance! What shall I doest to upend my sorrowful unfortunance?”
+
+
+
+
+Tutorial begins on slide 4, Enjoy.
+
+Enter: https://meyerweb.com/eric/tools/dencoder/
+“By the gods! This web page brings hope to the darkest hollows of plight. Could it be? Revival of my lost link!?”
+
+Enter Chrome History:
+Navigate to your browser history.
+For the sake of this example we used
+Chrome
+
+Right Click The Dead Link
+------------------------------------------------------->
+
+Copy HyperLink
+
+
+---------------------------------------------------->
+
+Navigate to: https://meyerweb.com/eric/tools/dencoder/
+Paste your link in the decoder
+Where it says: Paste Here--->
+
+
+Delete The Hyperlink
+Delete all the hyperlink stuff
+So all the “http:whatever!”
+Everything up until % after the !
+
+A well deleted Example
+What it looks like
+------------------->
+
+Time to Resurrect aka Decode
+
+
+
+Press “Decode”
+
+
+---------------------->
+
+Post Decode
+After decoding instantly
+The text changes
+
+Copy all this text ------>
+Ctrl + A is helpful
+
+Open a Dummy Neuroglancer Link
+Once link is open find the brackets button
+It’s in the top right
+
+After Bracket Button
+In this new window
+Select the guts
+And remove them
+------------------------>
+Ctrl + A helps
+
+Paste Your New Soul Here
+Paste Decoded
+Link
+--------->
+
+Should Look Like This
+
+
+
+Press Apply Changes
+Once you hit apply changes
+Your Neuroglancer Link will be
+REBORN!!!!!
+Thanks to Manuel for teaching me this necromancy.
+Credit where credit is due!
+
+Disclaimer: With Great power comes great responsibility. Use power wisely and never under the influence.
+
