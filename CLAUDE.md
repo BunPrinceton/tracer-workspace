@@ -121,6 +121,16 @@ Office documents (`.docx`, `.pptx`, `.xlsx`) - Claude cannot read these directly
 | `Omni/` | Omni segmentation tool guides |
 | `Misc/` | Neuroglancer, VirtualBox, semantic segmentation |
 
+## Testing
+
+Test notebooks in `tracer_tools/tests/` (Jupyter notebooks for manual testing - no pytest suite):
+- `jay_test_notebook.ipynb`, `kyle_test_notebook.ipynb`, `celia_test_notebook.ipynb`, `Ryan_test_notebook.ipynb`
+
+```bash
+# Interactive testing
+python -c "from tracer_tools.utils import coords_to_root; print(coords_to_root([[100000, 50000, 3000]], 'brain_and_nerve_cord'))"
+```
+
 ## Authentication
 
 - **CAVE**: `~/.cloudvolume/secrets/cave-secret.json`
