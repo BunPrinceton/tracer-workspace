@@ -1,0 +1,222 @@
+Omni
+Fun on a Bun
+
+Morphology
+Dendrites
+Glial Cell
+Axon
+Mergers
+Anatomical Clues
+Synapses
+Mitochondria
+Vesicles
+Bugs and problems
+Slide Damage
+Rendering Issues
+Misc
+
+Morphology
+Shape can be great
+
+Dendrites
+Spines are fine
+
+
+Here we have several spines
+
+
+Dendrites are usually larger than axons and have many protrusions called spines
+Spines almost always end in a synapse with an axon
+There are cases where spines can end synapsing in other ways
+Dendrites tend to branch out in acute angles
+
+Glial Cell
+
+Glial Cell
+
+Glial Cell
+
+
+Glial cells act as a support to other cells
+They can range in size shape and length, from very large to very slim, curvy and straight, lengthy and suddenly truncated
+They curve and cup dendrites and axons expanding in all directions
+We don’t trace Glia cells at this time
+If you are doing a task with a glial cell just send it to the Uncertain Tab (referred to on the Left Hand Side Buttons list)
+
+Axon
+Axon axoff
+
+Axon
+
+Axon
+
+Axon
+
+Axon
+
+Axon
+EM View
+The way this axon crosses the image is called 
+"parallel to the sectioning plane" or just "parallel to the plane"
+
+
+Perpendicular and parallel side by side
+
+Axons going in the same direction
+
+Axons going in the same direction
+
+Axons almost always exit a volume (cube)
+Axons can range in size from very thin to medium sized and even thicker than dendrites
+Axons can have clusters of dense vesicles
+Axons tend to flow together in groups going approximately the same direction
+Axons tend to branch in obtuse angles
+
+Mergers
+Those who merger together get purged together
+
+Here we observe a large merger between an axon and a spine of a dendrite
+
+Here we have an AI merger spilling outside its boundaries a bit
+
+Same AI Spill Merger
+Segmentation1 View
+
+EM View
+AI Spill Merger
+
+Here we have a long spine (circled in red) merged with a glial cell
+
+Here we have a yellow spine being cut off from its red                   stem
+
+Here we have a small merger attached to the stem of the spine
+
+Here we have a red spine that should end at the rounded part
+
+Two heavy duty dendrites merged together
+
+Anatomical Clues
+We got clues to use
+
+Synapses
+Synapse Crackle Pop
+
+Here we have some classic synapses
+
+We have a sneaky little mitochondria
+
+The dark part is called the synaptic cleft
+
+And tons of vesicles
+
+What can we assume from this picture during a tracing of these synapses?
+
+Bingo! It’s likely the (1s) are axons and (2s) are spines (dendrites)
+2
+1
+1
+2
+1
+2
+1
+2
+
+(1s) AKA Presynaptic site and (2s) AKA Postsynaptic site
+2
+1
+1
+2
+1
+2
+1
+2
+
+Mitochondria
+Their powerlevel is over 9000!
+
+Mitochondria and an exclusive MVB
+
+Synapse and Mitochondria
+
+Synapse plus Mitochondria
+
+More Mitochondria
+
+Mitochondria can appear in axons, glia, and dendrites
+Mitochondria have been seen located around synapses
+
+Vesicles
+You may need spectacles to view the vesicles
+
+Here we have a bunch of dense vesicles. They tend to cluster around synapses.
+
+Can you spot the vesicles!?
+
+You did it!
+
+Vesicles are little black, gray, and white circles that send/receive neurotransmitters
+Vesicles can most easily be found in dense clusters around the synapse in an axon
+Vesicles can be in axons, glia, and dendrites though typically we find them most often in axons
+
+Bugs and Problems
+What is this? A center for bugs? It needs to be at least three times as big!
+
+Slide Damage
+Damage? More like unknown advantage!
+
+I call this kind of error, a Cheese Pizza
+
+Because it looks like a Domino's Pizza!
+
+A friendly circle of damage
+
+Sometimes whole slides turn to the darkside - like this one here
+
+Sometimes slides will have a long dark line through them
+
+More slide damage
+Pew Pew Pew
+Shots fired! =D
+
+More slide damage
+
+
+Rendering Issues
+Ample examples
+
+Good
+
+Bad
+
+Good
+
+
+Bad
+
+
+Good
+
+Bad
+
+Are there more parallel plane or perpendicular plan axons!?
+Dendrites are big and have things called spines
+I do it fast. I do it slow. We do it together. Then you go.
+
+Misc
+
+A vector is a line, three together makes an axis.
+
+A weird synapse thing
+Double synapse or perhaps?
+
+
+
+
+
+
+
+
+
+
+
+
