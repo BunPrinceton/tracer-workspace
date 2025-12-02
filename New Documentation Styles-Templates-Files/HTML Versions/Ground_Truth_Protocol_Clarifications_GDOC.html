@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ground Truth Protocol Guidelines - Tommy Macrina</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background-color: #ffffff;
+            color: #333;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 40px;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 8px;
+        }
+        h3 {
+            color: #34495e;
+            margin-top: 30px;
+        }
+        h4 {
+            color: #555;
+            margin-top: 20px;
+        }
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2em;
+            margin-top: -10px;
+            margin-bottom: 30px;
+        }
+        .executive-summary {
+            padding: 20px 0;
+            border-left: 4px solid #3498db;
+            padding-left: 20px;
+            margin: 30px 0;
+        }
+        blockquote {
+            border-left: 4px solid #3498db;
+            padding: 10px 20px;
+            margin: 20px 0;
+            font-style: italic;
+        }
+        a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        hr {
+            border: none;
+            border-top: 2px solid #ecf0f1;
+            margin: 40px 0;
+        }
+        .message-box {
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .message-header {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .message-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        .message-content {
+            background-color: white;
+            padding: 15px;
+            border-radius: 3px;
+            border-left: 3px solid #3498db;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        .thread-message {
+            margin-left: 20px;
+            border-left: 2px solid #bdc3c7;
+            padding-left: 15px;
+            margin-top: 15px;
+        }
+        .index-item {
+            margin: 8px 0;
+        }
+        .section-number {
+            color: #3498db;
+            font-weight: bold;
+        }
+        ul {
+            line-height: 1.8;
+        }
+        ol {
+            line-height: 1.8;
+        }
+        .doc-info {
+            padding: 20px 0;
+            border-left: 4px solid #3498db;
+            padding-left: 20px;
+            margin-top: 40px;
+        }
+        code {
+            padding: 2px 6px;
+            font-family: 'Courier New', monospace;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Ground Truth Protocol Guidelines</h1>
+<p class="subtitle">Tommy Macrina's Directives (August - September 2025)</p>
+
+<hr>
+
+<div class="executive-summary">
+    <h2 style="margin-top: 0; border: none;">Executive Summary</h2>
+    <p>This document compiles protocol clarifications and best practices for ground truth segmentation tasks as directed by Tommy Macrina in the #putracers Slack channel between August 1 and September 3, 2025. All guidelines are referenced to specific Slack conversations for verification.</p>
+</div>
+
+<hr>
+
+<h2><span class="section-number">I.</span> Mitochondria Segmentation Protocol</h2>
+
+<h3>1.1 Individual Segmentation Required</h3>
+<p>Each mitochondrion must be assigned a separate segment ID and color. Do not paint all mitochondria with the same segment.</p>
+<blockquote><strong>Reference:</strong> <a href="#m10">Message m10</a></blockquote>
+
+<h3>1.2 Oversegmentation Directive</h3>
+<p>The original task description stating "do NOT oversegment mitochondria" was incorrect and should be disregarded. Mitochondria must be oversegmented individually.</p>
+<blockquote><strong>Reference:</strong> <a href="#m8">Message m8</a></blockquote>
+
+<h3>1.3 Membrane Handling</h3>
+<p>Do not paint mitochondrial membranes. Leave a visible border/gap around each mitochondrion to represent the membrane boundary.</p>
+<blockquote><strong>References:</strong> <a href="#m8">Message m8</a>, <a href="#m15">Message m15</a></blockquote>
+
+<hr>
+
+<h2><span class="section-number">II.</span> Myelin Segmentation Protocol</h2>
+
+<h3>2.1 Inner Boundary (Cell Interface)</h3>
+<p><strong>No padding</strong> between myelin and the cell it ensheathes. The myelin segment should directly contact the inner cell.</p>
+<blockquote><strong>Reference:</strong> <a href="#m15">Message m15</a></blockquote>
+
+<h3>2.2 Myelin-to-Myelin Contact</h3>
+<p><strong>No padding</strong> between adjacent myelin segments. Myelin segments may touch each other.</p>
+<blockquote><strong>Reference:</strong> <a href="#m15">Message m15</a></blockquote>
+
+<h3>2.3 Outer Boundary (Adjacent Cells)</h3>
+<p>Myelin should approach but <strong>not touch</strong> the membranes of neighboring cells. Maintain a small gap between myelin exterior and other cell membranes.</p>
+<blockquote><strong>Reference:</strong> <a href="#m15">Message m15</a></blockquote>
+
+<hr>
+
+<h2><span class="section-number">III.</span> Upsampled Image Best Practices</h2>
+
+<h3>3.1 Two-Pass Labeling Approach</h3>
+<p><strong>Recommended workflow:</strong></p>
+<ol>
+    <li>First pass: Paint annotations on the original image (thicker sections)</li>
+    <li>Second pass: Copy labels onto the upsampled image and connect objects naturally</li>
+</ol>
+<blockquote><strong>Reference:</strong> <a href="#m2">Message m2</a></blockquote>
+
+<h3>3.2 Multi-Resolution Viewing</h3>
+<p>Working exclusively from upsampled images can be misleading. Always cross-reference with original image data.</p>
+<blockquote><strong>References:</strong> <a href="#m3">Message m3</a>, <a href="#m4">Message m4</a><br>
+<strong>Visual Reference:</strong> <a href="https://spelunker.cave-explorer.org/#!middleauth+https://global.daf-apis.com/nglstate/api/v1/5712377138905088" target="_blank">Side-by-side comparison</a></blockquote>
+
+<h3>3.3 Handling Artifacts</h3>
+<p>"Hallucinations" (artificial structures in upsampled data) should be ignored. Focus on anatomically sensible structures.</p>
+<blockquote><strong>References:</strong> <a href="#m1">Message m1</a>, <a href="#m11">Message m11</a></blockquote>
+
+<hr>
+
+<h2><span class="section-number">IV.</span> Ambiguous Cases & Edge Cases</h2>
+
+<h3>4.1 Uncertain Organelles</h3>
+<p>When uncertain whether an object is a mitochondrion (vs. peroxisome, lysosome, etc.), segment it as a mitochondrion. Objects can be removed during review if needed.</p>
+<blockquote><strong>Reference:</strong> <a href="#m9">Message m9</a></blockquote>
+
+<h3>4.2 EM Damage Regions</h3>
+<p>Follow team consensus for handling EM damage. Specific protocols to be determined based on damage type.</p>
+<blockquote><strong>Reference:</strong> <a href="#m17">Message m17</a></blockquote>
+
+<hr>
+
+<h2><span class="section-number">V.</span> Workflow & Quality Assurance</h2>
+
+<h3>5.1 Mandatory Peer Review</h3>
+<p>Before marking tasks as finished, at least one other team member must inspect your work. Prioritize sharing areas where you struggled.</p>
+<blockquote><strong>Reference:</strong> <a href="#m13">Message m13</a></blockquote>
+
+<h3>5.2 Sharing Annotations for Review</h3>
+<p><strong>Correct procedure in WebKnossos:</strong></p>
+<ol>
+    <li>Navigate to Tasks</li>
+    <li>Search for tasks under the relevant project</li>
+    <li>Click the plus symbol (+) for the task</li>
+    <li>Select "Actions" button (right side)</li>
+    <li>Choose "View"</li>
+</ol>
+<blockquote><strong>References:</strong> <a href="#m13">Message m13</a>, <a href="#m14">Message m14</a></blockquote>
+
+<hr>
+
+<h2><span class="section-number">VI.</span> WebKnossos Tools & Techniques</h2>
+
+<h3>6.1 Interpolation Tool</h3>
+<p>The volume interpolation feature is particularly useful for objects perpendicular to the sectioning plane in higher z-resolution data. May require manual cleanup.</p>
+<blockquote><strong>Reference:</strong> <a href="#m7">Message m7</a><br>
+<strong>Documentation:</strong> <a href="https://docs.webknossos.org/webknossos/volume_annotation/tools.html#volume-interpolation" target="_blank">WebKnossos Interpolation Guide</a></blockquote>
+
+<h3>6.2 3D Mesh Visualization</h3>
+<ul>
+    <li>Right-click on any segment to generate a 3D mesh</li>
+    <li>Press <code>.</code> (period) to toggle between all views and the view under cursor</li>
+    <li>Useful for quality control and identifying errors</li>
+</ul>
+<blockquote><strong>Reference:</strong> <a href="#m12">Message m12</a><br>
+<strong>Documentation:</strong> <a href="https://docs.webknossos.org/webknossos/ui/keyboard_shortcuts.html" target="_blank">Keyboard Shortcuts</a></blockquote>
+
+<h3>6.3 SAM2 AI Segmentation (Experimental)</h3>
+<p>New AI-assisted segmentation tools available on experimental server:</p>
+<ul>
+    <li>Most effective for larger, convex cross-sections without many intercellular objects</li>
+    <li>Adjust confidence threshold and erosion parameters for optimal results</li>
+    <li>Can use existing segment annotations as hints for consistency</li>
+</ul>
+<blockquote><strong>Reference:</strong> <a href="#m18">Message m18</a></blockquote>
+
+<hr>
+
+<h2><span class="section-number">VII.</span> Additional Resources</h2>
+
+<h3>Key Discussion Threads</h3>
+<ul>
+    <li><strong>m8:</strong> Mitochondria oversegmentation clarification thread</li>
+    <li><strong>m15:</strong> Comprehensive myelin padding protocol discussion</li>
+    <li><strong>m18:</strong> SAM2 AI tool implementation and testing</li>
+</ul>
+
+<h3>External Links</h3>
+<ul>
+    <li><a href="https://spelunker.cave-explorer.org/#!middleauth+https://global.daf-apis.com/nglstate/api/v1/5712377138905088" target="_blank">Original vs Upsampled Image Comparison</a></li>
+    <li><a href="https://docs.webknossos.org/webknossos/volume_annotation/tools.html#volume-interpolation" target="_blank">WebKnossos Interpolation Documentation</a></li>
+    <li><a href="https://docs.webknossos.org/webknossos/ui/keyboard_shortcuts.html" target="_blank">WebKnossos Keyboard Shortcuts</a></li>
+</ul>
+
+<hr>
+
+<h1 style="margin-top: 60px;">Reference Messages</h1>
+<p style="color: #7f8c8d; font-style: italic;">Below are the complete Slack message threads referenced throughout this document.</p>
+
+<hr>
+
+<h2>Message & Thread Index</h2>
+
+<div class="index-item">• <strong><a href="#m1">m1</a></strong> — putracers — 2025-08-05 19:38 UTC — Hallucination handling directive</div>
+<div class="index-item">• <strong><a href="#m2">m2</a></strong> — putracers — 2025-08-05 19:41 UTC — Two-pass labeling approach</div>
+<div class="index-item">• <strong><a href="#m3">m3</a></strong> — putracers — 2025-08-05 19:41 UTC — Upsampled image caution</div>
+<div class="index-item">• <strong><a href="#m4">m4</a></strong> — putracers — 2025-08-05 20:18 UTC — Side-by-side comparison link</div>
+<div class="index-item">• <strong><a href="#m5">m5</a></strong> — putracers — 2025-08-05 20:41 UTC — Volume visibility troubleshooting</div>
+<div class="index-item">• <strong><a href="#m6">m6</a></strong> — putracers — 2025-08-05 20:41 UTC — Segmentation visibility confirmation</div>
+<div class="index-item">• <strong><a href="#m7">m7</a></strong> — Thread in putracers — 2025-08-01 13:34 UTC — Interpolation tool discussion</div>
+<div class="index-item">• <strong><a href="#m8">m8</a></strong> — Thread in putracers — 2025-08-01 15:25 UTC — Mitochondria oversegmentation clarification</div>
+<div class="index-item">• <strong><a href="#m9">m9</a></strong> — Thread in putracers — 2025-08-04 18:54 UTC — Ambiguous organelle decision</div>
+<div class="index-item">• <strong><a href="#m10">m10</a></strong> — Thread in putracers — 2025-08-05 14:31 UTC — Individual mitochondria segmentation</div>
+<div class="index-item">• <strong><a href="#m11">m11</a></strong> — Thread in putracers — 2025-08-05 19:38 UTC — Difficult hallucinations discussion</div>
+<div class="index-item">• <strong><a href="#m12">m12</a></strong> — Thread in putracers — 2025-08-05 20:03 UTC — 3D meshing usage</div>
+<div class="index-item">• <strong><a href="#m13">m13</a></strong> — Thread in putracers — 2025-08-05 20:20 UTC — Peer review requirement</div>
+<div class="index-item">• <strong><a href="#m14">m14</a></strong> — Thread in putracers — 2025-08-06 14:19 UTC — Task sharing troubleshooting</div>
+<div class="index-item">• <strong><a href="#m15">m15</a></strong> — Thread in putracers — 2025-08-06 15:17 UTC — Comprehensive protocol best practices</div>
+<div class="index-item">• <strong><a href="#m16">m16</a></strong> — Thread in putracers — 2025-08-14 17:58 UTC — Task transition and IP updates</div>
+<div class="index-item">• <strong><a href="#m17">m17</a></strong> — Thread in putracers — 2025-08-18 19:37 UTC — EM damage handling</div>
+<div class="index-item">• <strong><a href="#m18">m18</a></strong> — Thread in putracers — 2025-08-31 19:07 UTC — SAM2 AI tool deployment</div>
+
+<hr>
+
+<h2>Standalone Messages by Tommy Macrina</h2>
+
+<div class="message-box" id="m1">
+    <div class="message-header">m1 — Hallucination Handling</div>
+    <div class="message-meta">
+        <strong>Channel:</strong> putracers<br>
+        <strong>Date:</strong> 2025-08-05 19:38 UTC<br>
+        <strong>Author:</strong> Tommy Macrina<br>
+        <a href="https://eyewire.slack.com/archives/C0A4SQRT2/p1754422725536259" target="_blank">View in Slack</a>
+    </div>
+    <div class="message-content">From my spot checks, you've all done well: just ignore them.</div>
+    <p><strong>Context:</strong> Response regarding how to handle "hallucinations" in upsampled segmentation data.</p>
+</div>
+
+<div class="message-box" id="m2">
+    <div class="message-header">m2 — Two-Pass Labeling Strategy</div>
+    <div class="message-meta">
+        <strong>Channel:</strong> putracers<br>
+        <strong>Date:</strong> 2025-08-05 19:41 UTC<br>
+        <strong>Author:</strong> Tommy Macrina<br>
+        <a href="https://eyewire.slack.com/archives/C0A4SQRT2/p1754422861013289" target="_blank">View in Slack</a>
+    </div>
+    <div class="message-content">I realize now that we should probably handle labeling this data in two passes:
+1. paint the original image (thicker sections)
+2. copy those labels onto the upsampled image (computationally thinner sections),
+   and just connect the objects as "naturally" as possible</div>
+</div>
+
+<div class="message-box" id="m3">
+    <div class="message-header">m3 — Upsampled Image Warning</div>
+    <div class="message-meta">
+        <strong>Channel:</strong> putracers<br>
+        <strong>Date:</strong> 2025-08-05 19:41 UTC<br>
+        <strong>Author:</strong> Tommy Macrina<br>
+        <a href="https://eyewire.slack.com/archives/C0A4SQRT2/p1754422884121179" target="_blank">View in Slack</a>
+    </div>
+    <div class="message-content">I've found only working from the upsampled image to be misleading.</div>
+</div>
+
+<div class="message-box" id="m4">
+    <div class="message-header">m4 — Comparison Resource</div>
+    <div class="message-meta">
+        <strong>Channel:</strong> putracers<br>
+        <strong>Date:</strong> 2025-08-05 20:18 UTC<br>
+        <strong>Author:</strong> Tommy Macrina<br>
+        <a href="https://eyewire.slack.com/archives/C0A4SQRT2/p1754425113657009" target="_blank">View in Slack</a>
+    </div>
+    <div class="message-content">Here's a side-by-side of the original image and the upsampled image:
+https://spelunker.cave-explorer.org/#!middleauth+https://global.daf-apis.com/nglstate/api/v1/5712377138905088</div>
+</div>
+
+<div class="message-box" id="m5">
+    <div class="message-header">m5 — Troubleshooting Visibility</div>
+    <div class="message-meta">
+        <strong>Channel:</strong> putracers<br>
+        <strong>Date:</strong> 2025-08-05 20:41 UTC<br>
+        <strong>Author:</strong> Tommy Macrina<br>
+        <a href="https://eyewire.slack.com/archives/C0A4SQRT2/p1754426505981319" target="_blank">View in Slack</a>
+    </div>
+    <div class="message-content">Open left sidebar and see if "volume" is flipped on?</div>
+</div>
+
+<div class="message-box" id="m6">
+    <div class="message-header">m6 — Segmentation Confirmation</div>
+    <div class="message-meta">
+        <strong>Channel:</strong> putracers<br>
+        <strong>Date:</strong> 2025-08-05 20:41 UTC<br>
+        <strong>Author:</strong> Tommy Macrina<br>
+        <a href="https://eyewire.slack.com/archives/C0A4SQRT2/p1754426511664219" target="_blank">View in Slack</a>
+    </div>
+    <div class="message-content">I see your segmentation still.</div>
+</div>
+
+<hr>
+
+<h2>Threaded Discussions with Tommy Macrina</h2>
+
+<div class="message-box" id="m7">
+    <div class="message-header">m7 — Interpolation Tool Usage</div>
+    <div class="message-meta">
+        <strong>Channel:</strong> putracers<br>
+        <strong>Date:</strong> 2025-08-01 13:34 UTC<br>
+        <a href="https://eyewire.slack.com/archives/C0A4SQRT2/p1754055260305059?thread_ts=1754055260.305059&cid=C0A4SQRT2" target="_blank">View in Slack</a>
+    </div>
+    <p><strong>Thread Summary:</strong> Discussion of WebKnossos interpolation tool effectiveness</p>
+
+    <div class="thread-message">
+        <strong>Ryan</strong> (2025-08-01 13:34:20 UTC):
+        <div class="message-content">Oh that's what that does. That would be useful with the larger, simpler segments
+we typically start off with, but the smaller neurites need more guidance. I agree
+with Jay that it might require clean up but I'll give it a try</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-01 15:30:16 UTC):
+        <div class="message-content">Yeah, this has been our general experience, too.</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-01 15:31:38 UTC):
+        <div class="message-content">Because this image has a higher z-resolution, more objects that are perpendicular
+to the sectioning plane don't change that much. So you might find more objects
+where interpolation is useful.</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Ryan</strong> (2025-08-01 15:59:35 UTC):
+        <div class="message-content">Yea I tried it on a simple round segment with minimal movement between slices with
+a 2 slice gap and it was pretty perfect. But I tried 5-6 slices in between and it
+got a bit confused by the size change in the segment and under-colored. But I'm
+gonna keep playing with it and find the sweet spot</div>
+    </div>
+</div>
+
+<div class="message-box" id="m8">
+    <div class="message-header">m8 — Mitochondria Oversegmentation Clarification</div>
+    <div class="message-meta">
+        <strong>Channel:</strong> putracers<br>
+        <strong>Date:</strong> 2025-08-01 15:25 UTC<br>
+        <a href="https://eyewire.slack.com/archives/C0A4SQRT2/p1754061929515139?thread_ts=1754061929.515139&cid=C0A4SQRT2" target="_blank">View in Slack</a>
+    </div>
+    <p><strong>Thread Summary:</strong> Critical correction regarding mitochondria segmentation protocol</p>
+
+    <div class="thread-message">
+        <strong>Jay</strong> (2025-08-01 15:25:29 UTC):
+        <div class="message-content">@Tommy Macrina @Eric Are we definitely oversegmenting mitochondria?
+The task directions explicitly say not to.</div>
+        <p style="color: #7f8c8d; margin-top: 5px;">Attached: image.png</p>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-01 15:26:57 UTC):
+        <div class="message-content">Yes, it was a mistake to assign that task description.</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Jay</strong> (2025-08-01 15:27:16 UTC):
+        <div class="message-content">Ok, thanks for the confirmation, we'll oversegment!</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Eric</strong> (2025-08-01 15:27:41 UTC):
+        <div class="message-content">Sorry for the confusion, just was getting to this</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>bun</strong> (2025-08-01 15:27:46 UTC):
+        <div class="message-content">do we leave a border between mitos?</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>bun</strong> (2025-08-01 15:27:57 UTC):
+        <div class="message-content">for membrane</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-01 15:28:20 UTC):
+        <div class="message-content">Yes, try not to paint the mitochondria's membrane.</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>bun</strong> (2025-08-01 15:30:37 UTC):
+        <div class="message-content">is there a way we can get Kisuk's tool that expands or reduces the segments
+so we can make the membrane unpainted while still using the fill tools?</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-05 19:43:23 UTC):
+        <div class="message-content">> Kisuk's tool that expands or reduces the segments
+This is some post-processing he does. Handling it manually for now is the
+right call, until we have more experience with this data.</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-05 19:43:50 UTC):
+        <div class="message-content">It'd be nice if webknossos made it easy to extend their toolkit...</div>
+    </div>
+
+    <p style="color: #7f8c8d; font-style: italic; margin-top: 10px;">[Thread continues with discussion of shape deforming tools and interpolation - see full message archive for complete context]</p>
+</div>
+
+<div class="message-box" id="m9">
+    <div class="message-header">m9 — Ambiguous Organelle Segmentation</div>
+    <div class="message-meta">
+        <strong>Channel:</strong> putracers<br>
+        <strong>Date:</strong> 2025-08-04 18:54 UTC<br>
+        <a href="https://eyewire.slack.com/archives/C0A4SQRT2/p1754333644920899?thread_ts=1754333644.920899&cid=C0A4SQRT2" target="_blank">View in Slack</a>
+    </div>
+    <p><strong>Thread Summary:</strong> Guidance on handling uncertain organelle identification</p>
+
+    <div class="thread-message">
+        <strong>bun</strong> (2025-08-04 18:54:04 UTC):
+        <div class="message-content">should i over segment this object in the cell body? i'm not 100% sure its a
+mitochondria. it might be a peroxisome or lysosome or something else
+@Tommy Macrina @Eric</div>
+        <p style="color: #7f8c8d; margin-top: 5px;">Attached: image.png</p>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-05 19:33:04 UTC):
+        <div class="message-content">Link or location?</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-05 19:34:15 UTC):
+        <div class="message-content">It's not jumping out at me in your volume. I think your volume looks pretty good.</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>bun</strong> (2025-08-05 19:34:48 UTC):
+        <div class="message-content">295127, 258550, 3573</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>bun</strong> (2025-08-05 19:35:24 UTC):
+        <div class="message-content">i went ahead and segmented it. figured we could always get rid of it if we need to.</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-05 19:35:29 UTC):
+        <div class="message-content">Yeah, I think you make the right call to segment it.</div>
+    </div>
+</div>
+
+<div class="message-box" id="m10">
+    <div class="message-header">m10 — Individual Mitochondria Segmentation</div>
+    <div class="message-meta">
+        <strong>Channel:</strong> putracers<br>
+        <strong>Date:</strong> 2025-08-05 14:31 UTC<br>
+        <a href="https://eyewire.slack.com/archives/C0A4SQRT2/p1754404269671959?thread_ts=1754404269.671959&cid=C0A4SQRT2" target="_blank">View in Slack</a>
+    </div>
+    <p><strong>Thread Summary:</strong> Clarification on segment ID assignment for mitochondria</p>
+
+    <div class="thread-message">
+        <strong>Jay</strong> (2025-08-05 14:31:09 UTC):
+        <div class="message-content">@Eric @Tommy Macrina Point of clarification: should all mitochondria be segmented
+with the same segment/color, or should they each be given an individual segment/color?
+Sorry, it's been so many years since I've done one of these tasks that I don't
+remember what the correct protocol is</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-05 19:27:41 UTC):
+        <div class="message-content">Different segment for each mitochondria.</div>
+    </div>
+</div>
+
+<div class="message-box" id="m11">
+    <div class="message-header">m11 — Difficult Hallucinations</div>
+    <div class="message-meta">
+        <strong>Channel:</strong> putracers<br>
+        <strong>Date:</strong> 2025-08-05 19:38 UTC<br>
+        <a href="https://eyewire.slack.com/archives/C0A4SQRT2/p1754422707465349?thread_ts=1754422707.465349&cid=C0A4SQRT2" target="_blank">View in Slack</a>
+    </div>
+    <p><strong>Thread Summary:</strong> Discussion of challenging artifacts in upsampled data</p>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-05 19:38:27 UTC):
+        <div class="message-content">Does anyone have a "hallucination" that they found particularly difficult?</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>bun</strong> (2025-08-05 19:52:18 UTC):
+        <div class="message-content">294885, 258672, 3576,
+294908, 258553, 3589,
+295009, 258619, 3565</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>bun</strong> (2025-08-05 19:52:41 UTC):
+        <div class="message-content">just off the top of my head. these areas were a bit tricky</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Ryan</strong> (2025-08-06 15:09:27 UTC):
+        <div class="message-content">So far, because these slices are artificial, I've just done my best to annotate
+something that makes sense with the flow/movement and what makes sense with known
+morphology, even if it slightly goes against the shape/borders the up-sampling
+came up with</div>
+    </div>
+</div>
+
+<div class="message-box" id="m12">
+    <div class="message-header">m12 — 3D Mesh Viewing</div>
+    <div class="message-meta">
+        <strong>Channel:</strong> putracers<br>
+        <strong>Date:</strong> 2025-08-05 20:03 UTC<br>
+        <a href="https://eyewire.slack.com/archives/C0A4SQRT2/p1754424185515769?thread_ts=1754424185.515769&cid=C0A4SQRT2" target="_blank">View in Slack</a>
+    </div>
+    <p><strong>Thread Summary:</strong> Introduction to 3D visualization features in WebKnossos</p>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-05 20:03:05 UTC):
+        <div class="message-content">How much have you all used the ad hoc meshing in webknossos?</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Jay</strong> (2025-08-05 20:14:40 UTC):
+        <div class="message-content">The interpolation? I tried it out for a while, but I found it produced enough
+errors that I was spending just as much time cleaning it up as I would be
+tracing the slices myself so I stopped using it</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-05 20:17:36 UTC):
+        <div class="message-content">No. If you right-click on a segment, you can generate a 3D mesh.</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Jay</strong> (2025-08-05 20:24:52 UTC):
+        <div class="message-content">I didn't even realize there was a 3D view. How do you access it? I don't see
+any menu options, and the "keyboard shortcuts" help option is just a 404 error</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-05 20:46:19 UTC):
+        <div class="message-content">Hit "." to toggle between all views and the view you hover over.</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-05 20:46:28 UTC):
+        <div class="message-content">Docs for webknossos are online, too</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-05 20:46:29 UTC):
+        <div class="message-content">https://docs.webknossos.org/webknossos/ui/keyboard_shortcuts.html</div>
+    </div>
+</div>
+
+<div class="message-box" id="m13">
+    <div class="message-header">m13 — Peer Review Requirement</div>
+    <div class="message-meta">
+        <strong>Channel:</strong> putracers<br>
+        <strong>Date:</strong> 2025-08-05 20:20 UTC<br>
+        <a href="https://eyewire.slack.com/archives/C0A4SQRT2/p1754425214623609?thread_ts=1754425214623609&cid=C0A4SQRT2" target="_blank">View in Slack</a>
+    </div>
+    <p><strong>Thread Summary:</strong> Mandatory quality control process</p>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-05 20:20:14 UTC):
+        <div class="message-content">Before calling these tasks finished, would you mind having at least one other
+team member inspect your work? You might share the places where you struggled
+the most.</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>bun</strong> (2025-08-05 20:39:13 UTC):
+        <div class="message-content">can you remind us how to do that in webknosses. i can't seem to "View" other
+peoples tasks</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-05 20:45:02 UTC):
+        <div class="message-content">Go to tasks, search for tasks under project `mec_cutout_0_upsampled`, click on
+plus symbol for any task, go to `actions` button on the right side, select `View`.</div>
+        <p style="color: #7f8c8d; margin-top: 5px;">Attached: image.png</p>
+    </div>
+
+    <div class="thread-message">
+        <strong>bun</strong> (2025-08-05 20:48:52 UTC):
+        <div class="message-content">thanks!</div>
+    </div>
+</div>
+
+<div class="message-box" id="m14">
+    <div class="message-header">m14 — Task Sharing Troubleshooting</div>
+    <div class="message-meta">
+        <strong>Channel:</strong> putracers<br>
+        <strong>Date:</strong> 2025-08-06 14:19 UTC<br>
+        <a href="https://eyewire.slack.com/archives/C0A4SQRT2/p1754489969395779?thread_ts=1754489969.395779&cid=C0A4SQRT2" target="_blank">View in Slack</a>
+    </div>
+    <p><strong>Thread Summary:</strong> Technical issues with viewing shared annotations</p>
+    <p style="color: #7f8c8d; font-style: italic;">[Extended thread discussing WebKnossos UI challenges and annotation sharing - abbreviated for brevity]</p>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-06 15:22:36 UTC):
+        <div class="message-content">No idea how that link doesn't want to load the image data.</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-06 15:22:57 UTC):
+        <div class="message-content">If you work through tasks > actions > view, it shows up:
+http://wk.zetta.ai:9000/annotations/688a4519010000db0079097b#295030,259728,3539,0,0.35</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-06 15:40:04 UTC):
+        <div class="message-content">Hit `.`</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-06 15:40:59 UTC):
+        <div class="message-content">Ohhh... maybe Austin copied the task to his own account. That could explain
+the missing image.</div>
+    </div>
+</div>
+
+<div class="message-box" id="m15">
+    <div class="message-header">m15 — Comprehensive Protocol Best Practices</div>
+    <div class="message-meta">
+        <strong>Channel:</strong> putracers<br>
+        <strong>Date:</strong> 2025-08-06 15:17 UTC<br>
+        <a href="https://eyewire.slack.com/archives/C0A4SQRT2/p1754493432896639?thread_ts=1754493432.896639&cid=C0A4SQRT2" target="_blank">View in Slack</a>
+    </div>
+    <p><strong>Thread Summary:</strong> Comprehensive discussion of segmentation best practices</p>
+
+    <div class="thread-message">
+        <strong>bun</strong> (2025-08-06 15:17:12 UTC):
+        <div class="message-content">As for the GT best practices I know Tommy mentioned the cutouts shouldn't have
+had that description applied: "Segment all cells. Segment myelin as a separate
+object, without padding between the myelin and neighboring objects. Pay special
+attention to segment any invaginations, or invagination-like structures. Do NOT
+oversegment mitochondria. Leave extracellular space unsegmented."
+
+I think the most up to date ground truth best practice would be this: "Segment
+all cells. Segment myelin as a separate object, *without padding between* the
+myelin and neighboring objects. Pay special attention to segment any invaginations,
+or invagination-like structures. Segment mitochondria *without membrane painted*.
+Segment extracellular space."
+
+@Tommy Macrina Is that fair to say?</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Ryan</strong> (2025-08-06 15:29:49 UTC):
+        <div class="message-content">I think we're supposed to avoid the mitochondria's border/membrane:
+[link to earlier message]</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Jay</strong> (2025-08-06 15:30:26 UTC):
+        <div class="message-content">Yeah to clarify, I think the following schema should be correct for myelin:
+1. No padding between myelin and the cell it surrounds
+2. No padding between myelin and other myelin
+3. Myelin should butt up against the cell membranes of other cells, but not
+   touch the actual segment</div>
+        <p style="color: #7f8c8d; margin-top: 5px;">Attached: image.png</p>
+    </div>
+
+    <div class="thread-message">
+        <strong>bun</strong> (2025-08-06 15:35:06 UTC):
+        <div class="message-content">Yes I think this is mostly correct. The outside of myelin shouldn't touch other
+cells/membranes, but it might be the case that it can touch other myelin. Not
+100% about that though. The inside should touch the cell it is myelinating like
+shown. @Tommy Macrina</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>bun</strong> (2025-08-06 15:35:41 UTC):
+        <div class="message-content">@Ryan yes, "Segment mitochondria *without membrane painted*."</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Ryan</strong> (2025-08-06 15:36:34 UTC):
+        <div class="message-content">Oh yes I definitely misread that!</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-06 15:39:49 UTC):
+        <div class="message-content">Yeah, that's right, @bun</div>
+    </div>
+</div>
+
+<div class="message-box" id="m16">
+    <div class="message-header">m16 — Task Transitions and IP Updates</div>
+    <div class="message-meta">
+        <strong>Channel:</strong> putracers<br>
+        <strong>Date:</strong> 2025-08-14 17:58 UTC<br>
+        <a href="https://eyewire.slack.com/archives/C0A4SQRT2/p1755194286129079?thread_ts=1755194286.129079&cid=C0A4SQRT2" target="_blank">View in Slack</a>
+    </div>
+    <p><strong>Thread Summary:</strong> Project management and technical access</p>
+
+    <div class="thread-message">
+        <strong>Jay</strong> (2025-08-14 17:58:06 UTC):
+        <div class="message-content">@Austin.Burke @bun @twister @wileykit @Ryan This round of GTs are up; if y'all haven't been invited to the project yet LMK & I'll get that taken care of</div>
+    </div>
+
+    <p style="color: #7f8c8d; font-style: italic;">[Thread primarily regarding task scheduling and IP whitelist updates]</p>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-14 21:30:22 UTC):
+        <div class="message-content">@bun yeah, if your IP address changes, it needs to be updated.</div>
+    </div>
+</div>
+
+<div class="message-box" id="m17">
+    <div class="message-header">m17 — EM Damage Protocol</div>
+    <div class="message-meta">
+        <strong>Channel:</strong> putracers<br>
+        <strong>Date:</strong> 2025-08-18 19:37 UTC<br>
+        <a href="https://eyewire.slack.com/archives/C0A4SQRT2/p1755545854526699?thread_ts=1755545854.526699&cid=C0A4SQRT2" target="_blank">View in Slack</a>
+    </div>
+    <p><strong>Thread Summary:</strong> Handling electron microscopy damage in segmentation</p>
+
+    <div class="thread-message">
+        <strong>Austin.Burke</strong> (2025-08-18 19:37:34 UTC):
+        <div class="message-content">@Tommy Macrina What would be the protocol for EM damage like this? Should it be
+left alone as is or segmented as the same segID or a separate one?</div>
+        <p style="color: #7f8c8d; margin-top: 5px;">Attached: image.png</p>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-08-20 13:16:58 UTC):
+        <div class="message-content">Agree with @bun below</div>
+    </div>
+
+    <p style="color: #7f8c8d; font-style: italic; margin-top: 10px;">[Note: bun's recommendation not included in Tommy's message; refer to full thread for context]</p>
+</div>
+
+<div class="message-box" id="m18">
+    <div class="message-header">m18 — SAM2 AI Tool Deployment</div>
+    <div class="message-meta">
+        <strong>Channel:</strong> putracers<br>
+        <strong>Date:</strong> 2025-08-31 19:07 UTC<br>
+        <a href="https://eyewire.slack.com/archives/C0A4SQRT2/p1756667267885919?thread_ts=1756667267.885919&cid=C0A4SQRT2" target="_blank">View in Slack</a>
+    </div>
+    <p><strong>Thread Summary:</strong> New AI-assisted segmentation capabilities</p>
+
+    <div class="thread-message">
+        <strong>ranl</strong> (2025-08-31 19:07:47 UTC):
+        <div class="message-content">@channel, I deployed a experimental webknossos server at http://ranl.zetta.ai:9000/,
+upgraded to the new 25.09 release and include new features like SAM2. The new
+server does not contain any old data, so you have to register again. Migrate the
+database might be difficult so we probably switch after the current tracing tasks
+are finished, meanwhile you can give it a try and report if there are any issues.</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-09-02 10:38:04 UTC):
+        <div class="message-content">@ranl Can you give me access?</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>ranl</strong> (2025-09-02 12:49:03 UTC):
+        <div class="message-content">done</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-09-02 13:56:33 UTC):
+        <div class="message-content">Thanks!</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-09-02 14:06:09 UTC):
+        <div class="message-content">Pretty good at bigger convex cross sections without many intercellular objects. Cool!</div>
+    </div>
+
+    <div class="thread-message">
+        <strong>Tommy Macrina</strong> (2025-09-02 14:06:29 UTC):
+        <div class="message-content">Got it working on some objects for 20 sections just pointing & clicking.</div>
+    </div>
+
+    <p style="color: #7f8c8d; font-style: italic; margin-top: 10px;">[Thread continues with technical discussion of SAM2 parameters and performance - see full archive for complete details]</p>
+</div>
+
+<hr>
+
+<div class="doc-info">
+    <h2 style="margin-top: 0;">Document Information</h2>
+    <p><strong>Source:</strong> Slack workspace (#putracers channel)<br>
+    <strong>Date Range:</strong> August 1 - September 3, 2025<br>
+    <strong>Primary Subject Matter Expert:</strong> Tommy Macrina<br>
+    <strong>Compilation Date:</strong> November 6, 2025<br>
+    <strong>Total Messages Referenced:</strong> 18 (6 standalone + 12 threaded discussions)</p>
+
+    <p><strong>Images:</strong> Referenced images are stored in <code>tommy_macrina_images/</code> directory</p>
+
+    <p style="font-style: italic; margin-top: 20px;">This document was automatically generated from Slack message exports and formatted for professional distribution. This Google Docs-ready version has been optimized for copy/paste into Google Docs with simplified styling and no interactive JavaScript features.</p>
+</div>
+
+<hr>
+
+<div style="padding: 20px 0; border-left: 4px solid #3498db; padding-left: 20px; margin: 30px 0;">
+    <h3 style="margin-top: 0; color: #2c3e50;">Document Control</h3>
+    <p><strong>Created:</strong> November 6, 2025<br>
+    <strong>Last Updated:</strong> November 6, 2025<br>
+    <strong>Owner:</strong> Benjamin Silverman<br>
+    <strong>Review Frequency:</strong> As needed when processes change</p>
+</div>
+
+</body>
+</html>

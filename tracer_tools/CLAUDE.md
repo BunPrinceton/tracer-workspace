@@ -324,3 +324,37 @@ git remote add upstream https://github.com/jaybgager/tracer_tools.git
 git fetch upstream
 git merge upstream/main
 ```
+
+## Automation Systems
+
+### Auto-Commit System
+Automatically commits changes every 10 minutes via Task Scheduler:
+- Enable: `D:\1337\setup-auto-commit.bat`
+- Logs: `D:\1337\dev-journal\auto-commit.log`
+- Check status: `schtasks /query /tn "DevJournal_AutoCommit"`
+
+### Auto-Push System
+Pushes commits to GitHub every 30 minutes:
+- Enable: `D:\1337\setup-auto-push.bat`
+- Only pushes when unpushed commits exist
+- Safe for offline work
+
+### Session Chronicles
+Context preservation system in `D:\1337\dev-journal\chronicles\`:
+- Created every 30-60 minutes during active coding
+- Captures decisions, conversations, and ideas
+- Auto-committed with code changes
+
+## Working with Claude Code
+
+### Multi-Project Workspace
+- This is one of 29 projects at `D:\1337`
+- Always verify your current directory before running commands
+- Each project has its own git repository
+
+### Claude Enhancements
+Launch parallel Claude instances for 3x speedup:
+```bash
+cd D:/1337/claude-enhancements
+./start_parallel_claudes.sh
+```

@@ -7,6 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This is a **unified neuroscience tracer workspace** containing:
 - **tracer_tools/** - Python library for connectomics data (CAVE/Neuroglancer integration)
 - **tampermonkey-scripts/** - WebKnossos browser userscripts
+- **scripts/** - Utility scripts (Google Drive doc downloader)
 - **Training docs** - Protocol documentation in Office formats (Eyewire, Omni, Ground Truth)
 
 ## tracer_tools
@@ -111,18 +112,25 @@ All scripts log to console with `[WK ...]` prefix. Open DevTools (F12) to see de
 
 ## Training Documentation
 
+### Readable HTML Versions
+
+**`New Documentation Styles-Templates-Files/HTML Versions/`** contains readable versions:
+- `Ground_Truth_Protocol_Clarifications_GDOC.html` - Tommy Macrina's GT directives (Aug-Sep 2025)
+- `tommy_macrina_FINAL.html` - Same content with interactive navigation
+
 ### Unparseable Files (Binary Office Formats)
 
 **Claude cannot read these directly. Total: 21 Office docs + 17 media files.**
 
-| Folder | `.docx` | `.pptx` | `.xlsx` | Images | Videos | Files |
-|--------|---------|---------|---------|--------|--------|-------|
-| `Eyewire/` | 1 | 1 | 0 | 0 | 0 | How-to: Eyewire, Visual Aid |
-| `Ground-Truth-Protocol-History/` | 4 | 0 | 0 | 10 | 0 | GT Protocol Guidelines, How to verify GT tasks, SOP: GT Task Handling, Updated GT Checklist, Tommy Macrina Reference Set (10 images) |
-| `Ground-Truth-Training/` | 4 | 0 | 0 | 3 | 4 | Fly Synapses, How to Vesicle, Synapse Stuff, How-to: VAST, synapse training videos (4 .webm + 3 .png) |
-| `Omni/` | 2 | 1 | 1 | 0 | 0 | Exporting Omni, How to Omni, Visual Aid, keyboard/mouse commands |
-| `Misc/` | 4 | 1 | 0 | 0 | 0 | Focused Annotation, semantic segmentation, VirtualBox setup, Neuroglancer Link Resurrection, Neuroglancer Synapses, file naming protocols |
-| **TOTAL** | **17** | **3** | **1** | **13** | **4** | |
+| Folder | `.docx` | `.pptx` | `.xlsx` | Images | Videos |
+|--------|---------|---------|---------|--------|--------|
+| `Eyewire/` | 1 | 1 | 0 | 0 | 0 |
+| `Ground-Truth-Protocol-History/` | 4 | 0 | 0 | 10 | 0 |
+| `Ground-Truth-Training/` | 4 | 0 | 0 | 3 | 4 |
+| `Omni/` | 2 | 1 | 1 | 0 | 0 |
+| `Misc/` | 4 | 1 | 0 | 0 | 0 |
+| `New Documentation.../` | 3 | 0 | 0 | 10 | 0 |
+| **TOTAL** | **18** | **3** | **1** | **23** | **4** |
 
 ### Document Inventory
 
@@ -160,8 +168,18 @@ All scripts log to console with `[WK ...]` prefix. Open DevTools (F12) to see de
 
 ### To Read These Files
 
-Option 1: Export from Google Drive as `.txt` or `.html`
-Option 2: Use Google Docs API script (see `tracer_tools/scripts/`)
+Use the Google Drive download script:
+
+```bash
+# Install dependencies
+cd scripts
+pip install -r requirements.txt
+
+# Download all docs from Drive folder (requires credentials.json - see SETUP_DRIVE_API.md)
+python download_drive_docs.py --folder "0B3x8mikIsqYkcG9PcjJfZ1BaRDQ" --output ./docs_output
+```
+
+Setup: See `scripts/SETUP_DRIVE_API.md` for Google Cloud Console configuration.
 
 ## Testing
 
