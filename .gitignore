@@ -85,3 +85,4 @@ logs/
 # Local settings
 # ===================
 .claude/settings.local.json
+scripts/drive_token_write.json
