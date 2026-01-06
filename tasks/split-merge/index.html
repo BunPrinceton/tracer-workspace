@@ -4,16 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Split/Merge Resolution - Tasks - Princeton Tracer</title>
+    <!-- ============================================================
+         TASK PAGE TEMPLATE - Split/Merge Resolution (TASK-04)
+         See semantic-segmentation/index.html for full template documentation
+         ============================================================ -->
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { font-size: 18px; line-height: 1.6; }
-        body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f5; color: #1a1a1a; min-height: 100vh; }
+        body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background-color: #f5f5f5; color: #1a1a1a; min-height: 100vh; }
 
-        nav { background: #1a1a1a; padding: 0.75rem 1.5rem; }
+        nav { background-color: #1a1a1a; padding: 0.75rem 1.5rem; }
         nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; max-width: 1200px; margin: 0 auto; }
-        nav a { color: #e5e5e5; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0; }
-        nav a:hover, nav a:focus { text-decoration: underline; }
-        nav a[aria-current="page"] { color: #fff; font-weight: 600; }
+        nav a { color: #e5e5e5; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0; display: inline-block; }
+        nav a:hover, nav a:focus { text-decoration: underline; text-underline-offset: 4px; }
+        nav a[aria-current="page"] { color: #ffffff; font-weight: 600; }
 
         main { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 
@@ -22,25 +26,73 @@
         .breadcrumb a:hover { text-decoration: underline; }
 
         .page-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #d4d4d4; }
-        .page-header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem; }
-        .page-header .task-id { font-size: 0.875rem; font-weight: 600; color: #2563eb; background: #eff6ff; padding: 0.25rem 0.625rem; border-radius: 4px; }
-        .page-header p { color: #525252; font-size: 1.0625rem; }
+        .page-header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+        .task-id { font-size: 0.875rem; font-weight: 600; color: #2563eb; background-color: #eff6ff; padding: 0.25rem 0.625rem; border-radius: 4px; }
+        .page-header > p { color: #525252; font-size: 1.0625rem; }
 
-        .placeholder { background: #fff; border: 2px dashed #d4d4d4; border-radius: 8px; padding: 3rem 2rem; text-align: center; margin-bottom: 2rem; }
-        .placeholder h2 { font-size: 1.25rem; color: #525252; margin-bottom: 0.5rem; }
-        .placeholder p { color: #737373; font-size: 0.9375rem; }
+        .section { background-color: #ffffff; border: 2px solid #d4d4d4; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .section h2 { font-size: 1.125rem; font-weight: 600; color: #1a1a1a; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e5e5e5; }
+        .section h3 { font-size: 1rem; font-weight: 600; color: #1a1a1a; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .section h3:first-child { margin-top: 0; }
+        .section p { margin-bottom: 1rem; color: #525252; }
+        .section p:last-child { margin-bottom: 0; }
+        .section ul, .section ol { margin-left: 1.25rem; margin-bottom: 1rem; }
+        .section li { padding: 0.25rem 0; }
+        .section a { color: #2563eb; text-decoration: none; }
+        .section a:hover, .section a:focus { text-decoration: underline; }
 
-        section { margin-bottom: 2rem; }
-        section h2 { font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #d4d4d4; }
-        section ul { list-style: none; }
-        section li { padding: 0.375rem 0; }
-        section a { color: #2563eb; text-decoration: none; }
-        section a:hover { text-decoration: underline; }
+        .sop-current { background-color: #eff6ff; border-color: #2563eb; }
+        .sop-badge { display: inline-block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.25rem 0.5rem; border-radius: 3px; margin-left: 0.5rem; vertical-align: middle; }
+        .sop-badge--current { background-color: #2563eb; color: #ffffff; }
+        .sop-badge--archived { background-color: #737373; color: #ffffff; }
+
+        details { background-color: #fafafa; border: 2px solid #e5e5e5; border-radius: 8px; margin-bottom: 1.5rem; }
+        summary { padding: 1rem 1.5rem; cursor: pointer; font-weight: 600; color: #525252; list-style: none; display: flex; align-items: center; gap: 0.5rem; }
+        summary::-webkit-details-marker { display: none; }
+        summary::before { content: "▶"; font-size: 0.75rem; transition: transform 0.2s; }
+        details[open] summary::before { transform: rotate(90deg); }
+        summary:hover { background-color: #f5f5f5; }
+        details .details-content { padding: 0 1.5rem 1.5rem; border-top: 1px solid #e5e5e5; }
+
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+        .tool-card { background-color: #f5f5f5; border-radius: 6px; padding: 1rem; }
+        .tool-card h4 { font-size: 0.9375rem; font-weight: 600; margin-bottom: 0.25rem; }
+        .tool-card p { font-size: 0.875rem; color: #525252; margin: 0; }
+
+        .failure-modes { list-style: none; margin: 0; }
+        .failure-modes li { background-color: #f5f5f5; border-left: 4px solid #d4d4d4; padding: 0.75rem 1rem; margin-bottom: 0.5rem; border-radius: 0 6px 6px 0; }
+        .failure-modes strong { display: block; margin-bottom: 0.25rem; }
+        .failure-modes span { font-size: 0.875rem; color: #525252; }
+
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background-color: #1a1a1a; border-radius: 8px; margin-bottom: 1rem; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .video-placeholder { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #737373; text-align: center; padding: 1rem; }
+        .video-placeholder-icon { font-size: 3rem; margin-bottom: 0.5rem; }
+        .video-list { list-style: none; margin: 0; }
+        .video-list li { padding: 0.5rem 0; border-bottom: 1px solid #e5e5e5; }
+        .video-list li:last-child { border-bottom: none; }
+
+        .gallery-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; list-style: none; margin: 0; }
+        .gallery-links a { display: block; background-color: #f5f5f5; padding: 0.75rem 1rem; border-radius: 6px; text-align: center; font-size: 0.875rem; }
+        .gallery-links a:hover { background-color: #eff6ff; text-decoration: none; }
+
+        .publication-list { list-style: none; margin: 0; }
+        .publication-list li { padding: 0.75rem 0; border-bottom: 1px solid #e5e5e5; }
+        .publication-list li:last-child { border-bottom: none; }
+        .publication-title { font-weight: 600; margin-bottom: 0.25rem; }
+        .publication-meta { font-size: 0.875rem; color: #525252; }
+        .publication-links { font-size: 0.875rem; margin-top: 0.25rem; }
+        .publication-links a { margin-right: 1rem; }
+
+        .placeholder-notice { background-color: #fafafa; border: 2px dashed #d4d4d4; border-radius: 6px; padding: 1rem; text-align: center; color: #737373; font-size: 0.875rem; }
 
         footer { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; border-top: 1px solid #e5e5e5; font-size: 0.875rem; color: #737373; }
         footer a { color: #525252; }
+        footer a:hover { color: #1a1a1a; }
+        .footer-nav { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
 
-        @media (max-width: 600px) { html { font-size: 16px; } main { padding: 1.5rem 1rem; } }
+        @media (max-width: 600px) { html { font-size: 16px; } main { padding: 1.5rem 1rem; } .page-header h1 { font-size: 1.5rem; } .tools-grid { grid-template-columns: 1fr; } .gallery-links { grid-template-columns: 1fr 1fr; } }
+        @media print { nav, footer { display: none; } .section { break-inside: avoid; border: 1px solid #000; } }
     </style>
 </head>
 <body>
@@ -72,39 +124,276 @@
         <p>Correcting segmentation errors where neurons are incorrectly joined or divided.</p>
     </div>
 
-    <!-- ============================================================
-         PLACEHOLDER: Content to be added
-         ============================================================ -->
-    <div class="placeholder">
-        <h2>Content Coming Soon</h2>
-        <p>Training materials, protocols, and examples for this task type will be added here.</p>
-    </div>
 
-    <!-- ============================================================
-         SECTION: Planned Content
-         ============================================================ -->
-    <section>
-        <h2>Planned Content</h2>
+    <!-- SECTION 1: TASK OVERVIEW -->
+    <section class="section" id="overview">
+        <h2>Task Overview</h2>
+
+        <h3>What is Split/Merge Resolution?</h3>
+        <p>
+            Split/merge resolution is the targeted correction of specific segmentation errors.
+            A "false merger" occurs when the AI incorrectly joins two separate neurons into one
+            segment. A "false split" occurs when one neuron is incorrectly fragmented into
+            multiple segments. Resolution involves using specialized tools to separate merged
+            neurons or reconnect split fragments.
+        </p>
+
+        <h3>Why is it Important?</h3>
+        <p>
+            These errors directly corrupt the connectome. A false merger creates phantom
+            connections between neurons that don't actually touch. A false split breaks real
+            pathways and loses connectivity data. Accurate split/merge resolution is essential
+            for the scientific validity of any downstream analysis.
+        </p>
+
+        <h3>Key Objectives</h3>
         <ul>
-            <!-- TODO: Add training content for split/merge resolution -->
-            <li>Types of segmentation errors</li>
-            <li>Identifying false mergers</li>
-            <li>Identifying false splits</li>
-            <li>Split operation workflow</li>
-            <li>Merge operation workflow</li>
-            <li>Verification after correction</li>
-            <li>ID tracking through edits</li>
+            <li>Identify the exact location of segmentation errors</li>
+            <li>Determine whether the error is a split or merge</li>
+            <li>Apply the correct operation with minimal collateral changes</li>
+            <li>Verify the fix resolves the error without creating new ones</li>
+            <li>Track ID changes through the edit history</li>
         </ul>
     </section>
 
-    <!-- ============================================================
-         SECTION: Related Documentation
-         ============================================================ -->
-    <section>
+
+    <!-- SECTION 2: CURRENT SOP (AUTHORITATIVE) -->
+    <section class="section sop-current" id="current-sop">
+        <h2>
+            Current Standard Operating Procedure
+            <span class="sop-badge sop-badge--current">Authoritative</span>
+        </h2>
+
+        <h3>Split Operation Workflow</h3>
+        <p>Use when two neurons are incorrectly merged together:</p>
+        <ol>
+            <li>Navigate to the merge location (where the two neurons touch)</li>
+            <li>Identify the boundary between the two neurons in the EM</li>
+            <li>Select the split tool in WebKnossos/FlyWire</li>
+            <li>Place split points on either side of the boundary</li>
+            <li>Execute the split operation</li>
+            <li>Verify the two resulting segments are now separate</li>
+            <li>Check that no additional unintended splits occurred</li>
+        </ol>
+
+        <h3>Merge Operation Workflow</h3>
+        <p>Use when one neuron is incorrectly split into fragments:</p>
+        <ol>
+            <li>Identify the two (or more) fragments that belong together</li>
+            <li>Navigate to the gap location</li>
+            <li>Verify in the EM that continuity exists (same neuron)</li>
+            <li>Select the merge tool</li>
+            <li>Click on each fragment to select them</li>
+            <li>Execute the merge operation</li>
+            <li>Verify the resulting segment is continuous</li>
+        </ol>
+
+        <h3>ID Tracking</h3>
+        <p>
+            Every split/merge operation changes root IDs in the CAVE database. After any edit:
+        </p>
+        <ul>
+            <li>Record the old ID(s) and new ID(s)</li>
+            <li>Update any spreadsheets or tracking documents</li>
+            <li>Use the ID validation tool to verify changes propagated correctly</li>
+        </ul>
+
+        <h3>Quality Criteria</h3>
+        <ul>
+            <li>No residual connections between split neurons</li>
+            <li>No gaps in merged neuron reconstructions</li>
+            <li>ID changes properly tracked and documented</li>
+            <li>No unintended edits to neighboring structures</li>
+        </ul>
+    </section>
+
+
+    <!-- SECTION 3: HISTORICAL SOPS (COLLAPSED) -->
+    <details id="historical-sops">
+        <summary>
+            Historical SOPs
+            <span class="sop-badge sop-badge--archived">Archived</span>
+        </summary>
+        <div class="details-content">
+            <p>
+                Previous split/merge protocols are preserved here for reference.
+                Always use the Current SOP above.
+            </p>
+
+            <h3>Version History</h3>
+            <ul>
+                <li>
+                    <strong>v1.0 (Current)</strong> — 2025
+                    <br>Standard split/merge workflow for FlyWire and BANC
+                </li>
+            </ul>
+
+            <div class="placeholder-notice">
+                Historical documents will be linked here as they are migrated.
+            </div>
+        </div>
+    </details>
+
+
+    <!-- SECTION 4: VISUAL EXAMPLES -->
+    <section class="section" id="visual-examples">
+        <h2>Visual Examples</h2>
+
+        <p>
+            Reference images showing merge and split errors before and after correction.
+        </p>
+
+        <ul class="gallery-links">
+            <li><a href="../../gallery/">Visual Gallery</a></li>
+        </ul>
+
+        <h3>Error Identification Reference</h3>
+        <ul>
+            <li><strong>False Merger Signs</strong> — Sudden color change, anatomically impossible connection, process going "wrong direction"</li>
+            <li><strong>False Split Signs</strong> — Abrupt ending, nearby orphan fragment, process clearly continues in EM</li>
+        </ul>
+
+        <div class="placeholder-notice">
+            Before/after comparison images will be added to the gallery and linked here.
+        </div>
+    </section>
+
+
+    <!-- SECTION 5: COMMON FAILURE MODES -->
+    <section class="section" id="failure-modes">
+        <h2>Common Failure Modes</h2>
+
+        <ul class="failure-modes">
+            <li>
+                <strong>Splitting at wrong location</strong>
+                <span>
+                    Carefully identify the actual merge point in EM before splitting.
+                    Splitting too far from the error creates orphan fragments.
+                </span>
+            </li>
+            <li>
+                <strong>Merging non-continuous segments</strong>
+                <span>
+                    Always verify EM continuity before merging. Two nearby fragments
+                    aren't necessarily from the same neuron.
+                </span>
+            </li>
+            <li>
+                <strong>Creating new errors with fix</strong>
+                <span>
+                    A split can accidentally separate parts of the same neuron.
+                    Always verify the result after each operation.
+                </span>
+            </li>
+            <li>
+                <strong>Forgetting to track ID changes</strong>
+                <span>
+                    Every edit changes IDs. Document changes immediately or they'll
+                    be lost in the edit history.
+                </span>
+            </li>
+            <li>
+                <strong>Operating on stale data</strong>
+                <span>
+                    Refresh the view before editing. Another user may have already
+                    fixed the error or made conflicting changes.
+                </span>
+            </li>
+        </ul>
+    </section>
+
+
+    <!-- SECTION 6: TOOLS USED -->
+    <section class="section" id="tools">
+        <h2>Tools Used</h2>
+
+        <div class="tools-grid">
+            <div class="tool-card">
+                <h4>WebKnossos</h4>
+                <p>Primary split/merge interface with EM overlay</p>
+            </div>
+            <div class="tool-card">
+                <h4>FlyWire</h4>
+                <p>Collaborative editing with real-time sync</p>
+            </div>
+            <div class="tool-card">
+                <h4>CAVE</h4>
+                <p>Backend tracking all edits and ID changes</p>
+            </div>
+            <div class="tool-card">
+                <h4>Neuroglancer</h4>
+                <p>3D visualization for verification</p>
+            </div>
+        </div>
+
+        <h3>Key Commands</h3>
+        <ul>
+            <li><strong>Split tool</strong> — Select supervoxels to separate</li>
+            <li><strong>Merge tool</strong> — Select segments to join</li>
+            <li><strong>Undo</strong> — Revert last operation (time-limited)</li>
+            <li><strong>History</strong> — View edit log for a segment</li>
+        </ul>
+
+        <p>
+            <a href="../../pipeline/#proofreading">View pipeline proofreading stage →</a>
+        </p>
+    </section>
+
+
+    <!-- SECTION 7: TRAINING VIDEOS -->
+    <section class="section" id="training-videos">
+        <h2>Training Videos</h2>
+
+        <div class="video-container">
+            <div class="video-placeholder">
+                <div class="video-placeholder-icon">▶</div>
+                <div>Training video coming soon</div>
+                <div style="font-size: 0.75rem; margin-top: 0.5rem;">
+                    YouTube embed will be added here
+                </div>
+            </div>
+        </div>
+
+        <div class="placeholder-notice">
+            Split/merge tutorial videos will be embedded as they become available.
+        </div>
+    </section>
+
+
+    <!-- SECTION 8: RELATED PUBLICATIONS -->
+    <section class="section" id="publications">
+        <h2>Related Publications</h2>
+
+        <ul class="publication-list">
+            <li>
+                <div class="publication-title">
+                    FlyWire: Online community for whole-brain connectomics
+                </div>
+                <div class="publication-meta">
+                    Dorkenwald et al. • Nature Methods • 2022
+                </div>
+                <div class="publication-links">
+                    <a href="#">DOI</a>
+                </div>
+            </li>
+        </ul>
+
+        <div class="placeholder-notice">
+            Additional publication references will be added as the bibliography is compiled.
+        </div>
+
+        <p>
+            <a href="../../publications/">View all publications →</a>
+        </p>
+    </section>
+
+
+    <!-- SECTION 9: RELATED DOCUMENTATION -->
+    <section class="section" id="related">
         <h2>Related Documentation</h2>
         <ul>
             <li><a href="../../pipeline/#proofreading">Pipeline: Proofreading Stage</a></li>
-            <li><a href="../proofreading/">Proofreading</a></li>
+            <li><a href="../proofreading/">Task: Proofreading</a></li>
             <li><a href="../../sop/">Standard Operating Procedures</a></li>
             <li><a href="../../stats/#id-validation">ID Validation</a></li>
         </ul>
@@ -113,7 +402,10 @@
 </main>
 
 <footer>
-    <p><a href="../">← Back to Tasks</a></p>
+    <div class="footer-nav">
+        <a href="../">← Back to Tasks</a>
+        <a href="../../">Dashboard</a>
+    </div>
 </footer>
 
 </body>

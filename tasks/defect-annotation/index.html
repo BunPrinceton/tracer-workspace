@@ -4,16 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Defect Annotation - Tasks - Princeton Tracer</title>
+    <!-- ============================================================
+         TASK PAGE TEMPLATE - Defect Annotation (TASK-05)
+         See semantic-segmentation/index.html for full template documentation
+         ============================================================ -->
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { font-size: 18px; line-height: 1.6; }
-        body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f5; color: #1a1a1a; min-height: 100vh; }
+        body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background-color: #f5f5f5; color: #1a1a1a; min-height: 100vh; }
 
-        nav { background: #1a1a1a; padding: 0.75rem 1.5rem; }
+        nav { background-color: #1a1a1a; padding: 0.75rem 1.5rem; }
         nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; max-width: 1200px; margin: 0 auto; }
-        nav a { color: #e5e5e5; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0; }
-        nav a:hover, nav a:focus { text-decoration: underline; }
-        nav a[aria-current="page"] { color: #fff; font-weight: 600; }
+        nav a { color: #e5e5e5; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0; display: inline-block; }
+        nav a:hover, nav a:focus { text-decoration: underline; text-underline-offset: 4px; }
+        nav a[aria-current="page"] { color: #ffffff; font-weight: 600; }
 
         main { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 
@@ -22,25 +26,73 @@
         .breadcrumb a:hover { text-decoration: underline; }
 
         .page-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #d4d4d4; }
-        .page-header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem; }
-        .page-header .task-id { font-size: 0.875rem; font-weight: 600; color: #2563eb; background: #eff6ff; padding: 0.25rem 0.625rem; border-radius: 4px; }
-        .page-header p { color: #525252; font-size: 1.0625rem; }
+        .page-header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+        .task-id { font-size: 0.875rem; font-weight: 600; color: #2563eb; background-color: #eff6ff; padding: 0.25rem 0.625rem; border-radius: 4px; }
+        .page-header > p { color: #525252; font-size: 1.0625rem; }
 
-        .placeholder { background: #fff; border: 2px dashed #d4d4d4; border-radius: 8px; padding: 3rem 2rem; text-align: center; margin-bottom: 2rem; }
-        .placeholder h2 { font-size: 1.25rem; color: #525252; margin-bottom: 0.5rem; }
-        .placeholder p { color: #737373; font-size: 0.9375rem; }
+        .section { background-color: #ffffff; border: 2px solid #d4d4d4; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .section h2 { font-size: 1.125rem; font-weight: 600; color: #1a1a1a; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e5e5e5; }
+        .section h3 { font-size: 1rem; font-weight: 600; color: #1a1a1a; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .section h3:first-child { margin-top: 0; }
+        .section p { margin-bottom: 1rem; color: #525252; }
+        .section p:last-child { margin-bottom: 0; }
+        .section ul, .section ol { margin-left: 1.25rem; margin-bottom: 1rem; }
+        .section li { padding: 0.25rem 0; }
+        .section a { color: #2563eb; text-decoration: none; }
+        .section a:hover, .section a:focus { text-decoration: underline; }
 
-        section { margin-bottom: 2rem; }
-        section h2 { font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #d4d4d4; }
-        section ul { list-style: none; }
-        section li { padding: 0.375rem 0; }
-        section a { color: #2563eb; text-decoration: none; }
-        section a:hover { text-decoration: underline; }
+        .sop-current { background-color: #eff6ff; border-color: #2563eb; }
+        .sop-badge { display: inline-block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.25rem 0.5rem; border-radius: 3px; margin-left: 0.5rem; vertical-align: middle; }
+        .sop-badge--current { background-color: #2563eb; color: #ffffff; }
+        .sop-badge--archived { background-color: #737373; color: #ffffff; }
+
+        details { background-color: #fafafa; border: 2px solid #e5e5e5; border-radius: 8px; margin-bottom: 1.5rem; }
+        summary { padding: 1rem 1.5rem; cursor: pointer; font-weight: 600; color: #525252; list-style: none; display: flex; align-items: center; gap: 0.5rem; }
+        summary::-webkit-details-marker { display: none; }
+        summary::before { content: "▶"; font-size: 0.75rem; transition: transform 0.2s; }
+        details[open] summary::before { transform: rotate(90deg); }
+        summary:hover { background-color: #f5f5f5; }
+        details .details-content { padding: 0 1.5rem 1.5rem; border-top: 1px solid #e5e5e5; }
+
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+        .tool-card { background-color: #f5f5f5; border-radius: 6px; padding: 1rem; }
+        .tool-card h4 { font-size: 0.9375rem; font-weight: 600; margin-bottom: 0.25rem; }
+        .tool-card p { font-size: 0.875rem; color: #525252; margin: 0; }
+
+        .failure-modes { list-style: none; margin: 0; }
+        .failure-modes li { background-color: #f5f5f5; border-left: 4px solid #d4d4d4; padding: 0.75rem 1rem; margin-bottom: 0.5rem; border-radius: 0 6px 6px 0; }
+        .failure-modes strong { display: block; margin-bottom: 0.25rem; }
+        .failure-modes span { font-size: 0.875rem; color: #525252; }
+
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background-color: #1a1a1a; border-radius: 8px; margin-bottom: 1rem; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .video-placeholder { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #737373; text-align: center; padding: 1rem; }
+        .video-placeholder-icon { font-size: 3rem; margin-bottom: 0.5rem; }
+        .video-list { list-style: none; margin: 0; }
+        .video-list li { padding: 0.5rem 0; border-bottom: 1px solid #e5e5e5; }
+        .video-list li:last-child { border-bottom: none; }
+
+        .gallery-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; list-style: none; margin: 0; }
+        .gallery-links a { display: block; background-color: #f5f5f5; padding: 0.75rem 1rem; border-radius: 6px; text-align: center; font-size: 0.875rem; }
+        .gallery-links a:hover { background-color: #eff6ff; text-decoration: none; }
+
+        .publication-list { list-style: none; margin: 0; }
+        .publication-list li { padding: 0.75rem 0; border-bottom: 1px solid #e5e5e5; }
+        .publication-list li:last-child { border-bottom: none; }
+        .publication-title { font-weight: 600; margin-bottom: 0.25rem; }
+        .publication-meta { font-size: 0.875rem; color: #525252; }
+        .publication-links { font-size: 0.875rem; margin-top: 0.25rem; }
+        .publication-links a { margin-right: 1rem; }
+
+        .placeholder-notice { background-color: #fafafa; border: 2px dashed #d4d4d4; border-radius: 6px; padding: 1rem; text-align: center; color: #737373; font-size: 0.875rem; }
 
         footer { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; border-top: 1px solid #e5e5e5; font-size: 0.875rem; color: #737373; }
         footer a { color: #525252; }
+        footer a:hover { color: #1a1a1a; }
+        .footer-nav { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
 
-        @media (max-width: 600px) { html { font-size: 16px; } main { padding: 1.5rem 1rem; } }
+        @media (max-width: 600px) { html { font-size: 16px; } main { padding: 1.5rem 1rem; } .page-header h1 { font-size: 1.5rem; } .tools-grid { grid-template-columns: 1fr; } .gallery-links { grid-template-columns: 1fr 1fr; } }
+        @media print { nav, footer { display: none; } .section { break-inside: avoid; border: 1px solid #000; } }
     </style>
 </head>
 <body>
@@ -72,38 +124,252 @@
         <p>Marking imaging artifacts, tissue damage, and data quality issues.</p>
     </div>
 
-    <!-- ============================================================
-         PLACEHOLDER: Content to be added
-         ============================================================ -->
-    <div class="placeholder">
-        <h2>Content Coming Soon</h2>
-        <p>Training materials, protocols, and examples for this task type will be added here.</p>
-    </div>
 
-    <!-- ============================================================
-         SECTION: Planned Content
-         ============================================================ -->
-    <section>
-        <h2>Planned Content</h2>
+    <!-- SECTION 1: TASK OVERVIEW -->
+    <section class="section" id="overview">
+        <h2>Task Overview</h2>
+
+        <h3>What is Defect Annotation?</h3>
+        <p>
+            Defect annotation is the systematic identification and labeling of regions where
+            imaging or sample preparation problems compromise data quality. This includes
+            tissue tears, folds, missing sections, staining artifacts, and imaging distortions.
+            Marking these areas prevents wasted effort on unannotatable regions.
+        </p>
+
+        <h3>Why is it Important?</h3>
+        <p>
+            Defects are inevitable in large-scale EM datasets. Without proper annotation,
+            proofreaders waste time on impossible-to-resolve regions, and AI models may learn
+            incorrect patterns from corrupted data. Defect masks enable automated quality
+            metrics and guide human attention to regions that can actually be improved.
+        </p>
+
+        <h3>Key Objectives</h3>
         <ul>
-            <!-- TODO: Add training content for defect annotation -->
-            <li>Types of imaging artifacts</li>
-            <li>Tissue damage patterns</li>
-            <li>Section loss and folds</li>
-            <li>Staining artifacts</li>
-            <li>Annotation conventions</li>
-            <li>Impact on downstream analysis</li>
+            <li>Identify all major defect types in assigned regions</li>
+            <li>Create accurate boundary masks for affected areas</li>
+            <li>Classify defects by type and severity</li>
+            <li>Document extent of data loss for quality reporting</li>
+            <li>Flag regions requiring re-imaging if possible</li>
         </ul>
     </section>
 
-    <!-- ============================================================
-         SECTION: Related Documentation
-         ============================================================ -->
-    <section>
+
+    <!-- SECTION 2: CURRENT SOP (AUTHORITATIVE) -->
+    <section class="section sop-current" id="current-sop">
+        <h2>
+            Current Standard Operating Procedure
+            <span class="sop-badge sop-badge--current">Authoritative</span>
+        </h2>
+
+        <h3>Defect Classification</h3>
+        <p>Mark each defect with the appropriate category:</p>
+        <ul>
+            <li><strong>Section Loss</strong> — Missing tissue section (gap in Z)</li>
+            <li><strong>Tissue Fold</strong> — Section folded over itself</li>
+            <li><strong>Tissue Tear</strong> — Rip through tissue</li>
+            <li><strong>Staining Artifact</strong> — Over/under staining, precipitate</li>
+            <li><strong>Knife Mark</strong> — Cutting damage (chatter, compression)</li>
+            <li><strong>Imaging Artifact</strong> — Focus issues, charging, drift</li>
+            <li><strong>Contamination</strong> — Foreign material on section</li>
+        </ul>
+
+        <h3>Annotation Procedure</h3>
+        <ol>
+            <li>Load the assigned volume in WebKnossos</li>
+            <li>Systematically scan through all Z-slices</li>
+            <li>When a defect is found, select the appropriate defect label</li>
+            <li>Paint the affected region, including a small margin</li>
+            <li>Ensure the mask covers all unusable tissue</li>
+            <li>Continue scanning through the entire volume</li>
+            <li>Submit with notes on any unusual findings</li>
+        </ol>
+
+        <h3>Severity Levels</h3>
+        <ul>
+            <li><strong>Minor</strong> — Annotation possible with effort</li>
+            <li><strong>Moderate</strong> — Some structures recoverable</li>
+            <li><strong>Severe</strong> — Region completely unusable</li>
+        </ul>
+
+        <h3>Quality Criteria</h3>
+        <ul>
+            <li>All visible defects identified and labeled</li>
+            <li>Defect boundaries accurate to within 1 µm</li>
+            <li>Correct classification applied to each defect</li>
+            <li>No over-annotation of usable tissue</li>
+        </ul>
+    </section>
+
+
+    <!-- SECTION 3: HISTORICAL SOPS (COLLAPSED) -->
+    <details id="historical-sops">
+        <summary>
+            Historical SOPs
+            <span class="sop-badge sop-badge--archived">Archived</span>
+        </summary>
+        <div class="details-content">
+            <p>
+                Previous defect annotation protocols are preserved here for reference.
+                Always use the Current SOP above.
+            </p>
+
+            <h3>Version History</h3>
+            <ul>
+                <li>
+                    <strong>v1.0 (Current)</strong> — 2025
+                    <br>Initial defect classification system
+                </li>
+            </ul>
+
+            <div class="placeholder-notice">
+                Historical documents will be linked here as they are migrated.
+            </div>
+        </div>
+    </details>
+
+
+    <!-- SECTION 4: VISUAL EXAMPLES -->
+    <section class="section" id="visual-examples">
+        <h2>Visual Examples</h2>
+
+        <p>
+            Reference images showing each defect type and correct annotation boundaries.
+        </p>
+
+        <ul class="gallery-links">
+            <li><a href="../../gallery/">Visual Gallery</a></li>
+        </ul>
+
+        <h3>Defect Visual Reference</h3>
+        <ul>
+            <li><strong>Section Loss</strong> — Abrupt change in image content between Z-slices</li>
+            <li><strong>Tissue Fold</strong> — Double-layer appearance, overlapping structures</li>
+            <li><strong>Tear</strong> — Dark void with ragged edges</li>
+            <li><strong>Staining</strong> — Unusually light or dark regions, crystalline deposits</li>
+            <li><strong>Knife Mark</strong> — Parallel streaks across section</li>
+        </ul>
+
+        <div class="placeholder-notice">
+            Defect example images will be added to the gallery and linked here.
+        </div>
+    </section>
+
+
+    <!-- SECTION 5: COMMON FAILURE MODES -->
+    <section class="section" id="failure-modes">
+        <h2>Common Failure Modes</h2>
+
+        <ul class="failure-modes">
+            <li>
+                <strong>Missing subtle defects</strong>
+                <span>
+                    Some artifacts are hard to see at low zoom. Always review at full
+                    resolution when scanning for defects.
+                </span>
+            </li>
+            <li>
+                <strong>Over-annotating as defect</strong>
+                <span>
+                    Not all unusual-looking tissue is defective. Dense neuropil and
+                    myelin are often misidentified as staining artifacts.
+                </span>
+            </li>
+            <li>
+                <strong>Imprecise boundaries</strong>
+                <span>
+                    Defect masks should follow actual damage, not approximate it.
+                    Overly large masks waste usable data.
+                </span>
+            </li>
+            <li>
+                <strong>Missing multi-section defects</strong>
+                <span>
+                    Some defects span many sections (deep tears, folds). Track them
+                    through Z to ensure complete coverage.
+                </span>
+            </li>
+            <li>
+                <strong>Wrong classification</strong>
+                <span>
+                    Correct classification helps prioritize fixes. A knife mark
+                    requires different remediation than a staining issue.
+                </span>
+            </li>
+        </ul>
+    </section>
+
+
+    <!-- SECTION 6: TOOLS USED -->
+    <section class="section" id="tools">
+        <h2>Tools Used</h2>
+
+        <div class="tools-grid">
+            <div class="tool-card">
+                <h4>WebKnossos</h4>
+                <p>Primary defect annotation platform</p>
+            </div>
+            <div class="tool-card">
+                <h4>Neuroglancer</h4>
+                <p>Large-scale visualization for survey</p>
+            </div>
+        </div>
+
+        <h3>Annotation Tools</h3>
+        <ul>
+            <li><strong>Brush</strong> — Paint defect regions</li>
+            <li><strong>Eraser</strong> — Remove over-annotation</li>
+            <li><strong>Fill</strong> — Flood-fill enclosed regions</li>
+            <li><strong>Interpolation</strong> — Extend masks across Z-slices</li>
+        </ul>
+
+        <p>
+            <a href="../../pipeline/#image-processing">View pipeline image processing stage →</a>
+        </p>
+    </section>
+
+
+    <!-- SECTION 7: TRAINING VIDEOS -->
+    <section class="section" id="training-videos">
+        <h2>Training Videos</h2>
+
+        <div class="video-container">
+            <div class="video-placeholder">
+                <div class="video-placeholder-icon">▶</div>
+                <div>Training video coming soon</div>
+                <div style="font-size: 0.75rem; margin-top: 0.5rem;">
+                    YouTube embed will be added here
+                </div>
+            </div>
+        </div>
+
+        <div class="placeholder-notice">
+            Defect annotation tutorial videos will be embedded as they become available.
+        </div>
+    </section>
+
+
+    <!-- SECTION 8: RELATED PUBLICATIONS -->
+    <section class="section" id="publications">
+        <h2>Related Publications</h2>
+
+        <div class="placeholder-notice">
+            Publication references will be added as the bibliography is compiled.
+        </div>
+
+        <p>
+            <a href="../../publications/">View all publications →</a>
+        </p>
+    </section>
+
+
+    <!-- SECTION 9: RELATED DOCUMENTATION -->
+    <section class="section" id="related">
         <h2>Related Documentation</h2>
         <ul>
             <li><a href="../../pipeline/#image-processing">Pipeline: Image Processing Stage</a></li>
-            <li><a href="../quality-assurance/">Quality Assurance</a></li>
+            <li><a href="../quality-assurance/">Task: Quality Assurance</a></li>
             <li><a href="../../gallery/">Visual Gallery</a></li>
         </ul>
     </section>
@@ -111,7 +377,10 @@
 </main>
 
 <footer>
-    <p><a href="../">← Back to Tasks</a></p>
+    <div class="footer-nav">
+        <a href="../">← Back to Tasks</a>
+        <a href="../../">Dashboard</a>
+    </div>
 </footer>
 
 </body>
