@@ -328,9 +328,33 @@
             outline: 2px solid #2563eb;
             outline-offset: 2px;
         }
+
+        /* Skip link for keyboard/screen reader users */
+        .skip-link {
+            position: absolute;
+            left: -10000px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+        .skip-link:focus {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: auto;
+            height: auto;
+            padding: 1rem;
+            background: #2563eb;
+            color: #ffffff;
+            z-index: 10000;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <nav aria-label="Main navigation">
     <ul>
@@ -345,7 +369,7 @@
     </ul>
 </nav>
 
-<main>
+<main id="main-content" role="main">
 
     <nav class="breadcrumb" aria-label="Breadcrumb">
         <a href="../">SOPs</a> &rsaquo; GT Task Handling
