@@ -4,18 +4,523 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pipeline - Princeton Tracer</title>
+    <style>
+        /* ============================================================
+           PIPELINE PAGE STYLES
+           Consistent with dashboard design system
+           ============================================================ */
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 18px;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        /* ============================================================
+           NAVIGATION
+           ============================================================ */
+        nav {
+            background-color: #1a1a1a;
+            padding: 0.75rem 1.5rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav a {
+            color: #e5e5e5;
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            display: inline-block;
+        }
+
+        nav a:hover,
+        nav a:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        nav a[aria-current="page"] {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* ============================================================
+           MAIN CONTENT
+           ============================================================ */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        /* ============================================================
+           PAGE HEADER
+           ============================================================ */
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #d4d4d4;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #525252;
+            font-size: 1.0625rem;
+        }
+
+        /* ============================================================
+           PIPELINE VISUALIZATION
+           Horizontal flow with responsive wrapping
+           ============================================================ */
+        .pipeline-viz {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .pipeline-viz h2 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #525252;
+            margin-bottom: 1.5rem;
+        }
+
+        .pipeline-flow {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-items: stretch;
+        }
+
+        /* Individual pipeline stage */
+        .pipeline-stage {
+            display: flex;
+            align-items: center;
+            flex: 1 1 auto;
+            min-width: 120px;
+        }
+
+        .stage-link {
+            display: block;
+            background-color: #f5f5f5;
+            border: 2px solid #d4d4d4;
+            border-radius: 6px;
+            padding: 1rem;
+            text-decoration: none;
+            color: inherit;
+            text-align: center;
+            flex: 1;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .stage-link:hover,
+        .stage-link:focus {
+            border-color: #2563eb;
+            background-color: #eff6ff;
+            outline: none;
+        }
+
+        .stage-link:focus {
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+        }
+
+        .stage-number {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #2563eb;
+            margin-bottom: 0.25rem;
+        }
+
+        .stage-name {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            line-height: 1.3;
+        }
+
+        /* Arrow between stages */
+        .pipeline-arrow {
+            color: #a3a3a3;
+            font-size: 1.25rem;
+            padding: 0 0.25rem;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Highlight current team focus */
+        .stage-link--active {
+            border-color: #2563eb;
+            background-color: #ffffff;
+        }
+
+        .stage-link--active .stage-number {
+            color: #1d4ed8;
+        }
+
+        /* Upstream stages (not our focus) */
+        .stage-link--upstream {
+            background-color: #fafafa;
+            border-color: #e5e5e5;
+        }
+
+        .stage-link--upstream .stage-number {
+            color: #737373;
+        }
+
+        .stage-link--upstream .stage-name {
+            color: #525252;
+        }
+
+        /* ============================================================
+           PIPELINE KEY / LEGEND
+           ============================================================ */
+        .pipeline-key {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e5e5;
+            font-size: 0.875rem;
+            color: #525252;
+        }
+
+        .key-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .key-swatch {
+            width: 1rem;
+            height: 1rem;
+            border-radius: 3px;
+            border: 2px solid;
+        }
+
+        .key-swatch--active {
+            background-color: #ffffff;
+            border-color: #2563eb;
+        }
+
+        .key-swatch--upstream {
+            background-color: #fafafa;
+            border-color: #e5e5e5;
+        }
+
+        /* ============================================================
+           STAGE DETAILS SECTIONS
+           ============================================================ */
+        .stage-details {
+            margin-bottom: 2rem;
+        }
+
+        .stage-section {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stage-section:target {
+            border-color: #2563eb;
+        }
+
+        .stage-section h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+        }
+
+        .stage-section h3 .stage-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #2563eb;
+            background-color: #eff6ff;
+            padding: 0.125rem 0.5rem;
+            border-radius: 3px;
+        }
+
+        .stage-section h3 .stage-badge--upstream {
+            color: #737373;
+            background-color: #f5f5f5;
+        }
+
+        .stage-desc {
+            color: #525252;
+            margin-bottom: 1rem;
+        }
+
+        /* Input/Output boxes */
+        .stage-io {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .io-box {
+            background-color: #f5f5f5;
+            border-radius: 6px;
+            padding: 1rem;
+        }
+
+        .io-box h4 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #525252;
+            margin-bottom: 0.5rem;
+        }
+
+        .io-box ul {
+            list-style: none;
+            font-size: 0.9375rem;
+        }
+
+        .io-box li {
+            padding: 0.25rem 0;
+        }
+
+        /* Tools list */
+        .stage-tools {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e5e5;
+        }
+
+        .stage-tools h4 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #525252;
+            margin-bottom: 0.5rem;
+        }
+
+        .tool-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tool-tag {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            font-size: 0.8125rem;
+            padding: 0.25rem 0.625rem;
+            border-radius: 3px;
+        }
+
+        .tool-tag--link {
+            background-color: #2563eb;
+            text-decoration: none;
+        }
+
+        .tool-tag--link:hover,
+        .tool-tag--link:focus {
+            background-color: #1d4ed8;
+        }
+
+        /* Related links */
+        .stage-links {
+            margin-top: 1rem;
+        }
+
+        .stage-links h4 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #525252;
+            margin-bottom: 0.5rem;
+        }
+
+        .stage-links ul {
+            list-style: none;
+        }
+
+        .stage-links li {
+            padding: 0.25rem 0;
+        }
+
+        .stage-links a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .stage-links a:hover,
+        .stage-links a:focus {
+            text-decoration: underline;
+        }
+
+        /* ============================================================
+           ADDITIONAL SECTIONS
+           ============================================================ */
+        section {
+            margin-bottom: 2rem;
+        }
+
+        section h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #d4d4d4;
+        }
+
+        section ul {
+            list-style: none;
+        }
+
+        section li {
+            padding: 0.375rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #d4d4d4;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        th {
+            background-color: #f5f5f5;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        code {
+            font-family: "SF Mono", Monaco, "Cascadia Code", monospace;
+            font-size: 0.875rem;
+            background-color: #e5e5e5;
+            padding: 0.125rem 0.375rem;
+            border-radius: 3px;
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        footer {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            border-top: 1px solid #e5e5e5;
+            font-size: 0.875rem;
+            color: #737373;
+        }
+
+        footer a {
+            color: #525252;
+        }
+
+        footer a:hover {
+            color: #1a1a1a;
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 768px) {
+            html {
+                font-size: 16px;
+            }
+
+            .pipeline-flow {
+                flex-direction: column;
+            }
+
+            .pipeline-stage {
+                min-width: 100%;
+            }
+
+            .pipeline-arrow {
+                transform: rotate(90deg);
+                padding: 0.25rem 0;
+                justify-content: center;
+            }
+
+            .stage-io {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ============================================================
+           PRINT
+           ============================================================ */
+        @media print {
+            nav, footer {
+                display: none;
+            }
+
+            .stage-section {
+                break-inside: avoid;
+            }
+        }
+    </style>
 </head>
 <body>
 
 <!-- ============================================================
      NAVIGATION
-     Shared navigation structure - manually sync across all pages
-     TODO: Extract to _includes/nav.html when build system added
      ============================================================ -->
-<nav>
+<nav aria-label="Main navigation">
     <ul>
         <li><a href="../">Dashboard</a></li>
-        <li><a href="../pipeline/">Pipeline</a></li>
+        <li><a href="../pipeline/" aria-current="page">Pipeline</a></li>
         <li><a href="../tasks/">Tasks</a></li>
         <li><a href="../gallery/">Gallery</a></li>
         <li><a href="../sop/">SOP</a></li>
@@ -26,44 +531,469 @@
 </nav>
 
 <main>
-    <h1>Pipeline</h1>
-
-    <p>Documentation for the connectomics annotation pipeline, including tools, workflows, and dataset information.</p>
 
     <!-- ============================================================
-         SECTION: Tools Overview
-         Current annotation and analysis tools
+         PAGE HEADER
+         ============================================================ -->
+    <div class="page-header">
+        <h1>Connectomics Pipeline</h1>
+        <p>End-to-end workflow from tissue preparation to published connectome.</p>
+    </div>
+
+    <!-- ============================================================
+         PIPELINE VISUALIZATION
+         Interactive flow diagram - click stages for details
+         ============================================================ -->
+    <div class="pipeline-viz">
+        <h2>Pipeline Overview</h2>
+
+        <div class="pipeline-flow">
+
+            <div class="pipeline-stage">
+                <a href="#sample-prep" class="stage-link stage-link--upstream">
+                    <span class="stage-number">1</span>
+                    <span class="stage-name">Sample Prep</span>
+                </a>
+            </div>
+            <span class="pipeline-arrow" aria-hidden="true">→</span>
+
+            <div class="pipeline-stage">
+                <a href="#em-imaging" class="stage-link stage-link--upstream">
+                    <span class="stage-number">2</span>
+                    <span class="stage-name">EM Imaging</span>
+                </a>
+            </div>
+            <span class="pipeline-arrow" aria-hidden="true">→</span>
+
+            <div class="pipeline-stage">
+                <a href="#image-processing" class="stage-link stage-link--upstream">
+                    <span class="stage-number">3</span>
+                    <span class="stage-name">Image Processing</span>
+                </a>
+            </div>
+            <span class="pipeline-arrow" aria-hidden="true">→</span>
+
+            <div class="pipeline-stage">
+                <a href="#segmentation" class="stage-link stage-link--upstream">
+                    <span class="stage-number">4</span>
+                    <span class="stage-name">Segmentation</span>
+                </a>
+            </div>
+            <span class="pipeline-arrow" aria-hidden="true">→</span>
+
+            <div class="pipeline-stage">
+                <a href="#proofreading" class="stage-link stage-link--active">
+                    <span class="stage-number">5</span>
+                    <span class="stage-name">Proofreading</span>
+                </a>
+            </div>
+            <span class="pipeline-arrow" aria-hidden="true">→</span>
+
+            <div class="pipeline-stage">
+                <a href="#annotation" class="stage-link stage-link--active">
+                    <span class="stage-number">6</span>
+                    <span class="stage-name">Annotation</span>
+                </a>
+            </div>
+            <span class="pipeline-arrow" aria-hidden="true">→</span>
+
+            <div class="pipeline-stage">
+                <a href="#analysis" class="stage-link stage-link--active">
+                    <span class="stage-number">7</span>
+                    <span class="stage-name">Analysis</span>
+                </a>
+            </div>
+            <span class="pipeline-arrow" aria-hidden="true">→</span>
+
+            <div class="pipeline-stage">
+                <a href="#publication" class="stage-link">
+                    <span class="stage-number">8</span>
+                    <span class="stage-name">Publication</span>
+                </a>
+            </div>
+
+        </div>
+
+        <div class="pipeline-key">
+            <div class="key-item">
+                <span class="key-swatch key-swatch--active"></span>
+                <span>Tracer team focus</span>
+            </div>
+            <div class="key-item">
+                <span class="key-swatch key-swatch--upstream"></span>
+                <span>Upstream / completed</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         STAGE DETAILS
+         Detailed description of each pipeline stage
+         ============================================================ -->
+    <div class="stage-details">
+
+        <!-- Stage 1: Sample Preparation -->
+        <article class="stage-section" id="sample-prep">
+            <h3>
+                <span class="stage-badge stage-badge--upstream">Stage 1</span>
+                Sample Preparation
+            </h3>
+            <p class="stage-desc">
+                Biological tissue is prepared for electron microscopy imaging through fixation, staining, and embedding.
+            </p>
+            <div class="stage-io">
+                <div class="io-box">
+                    <h4>Inputs</h4>
+                    <ul>
+                        <li>Fresh tissue sample</li>
+                        <li>Fixation protocols</li>
+                    </ul>
+                </div>
+                <div class="io-box">
+                    <h4>Outputs</h4>
+                    <ul>
+                        <li>Resin-embedded tissue block</li>
+                        <li>Serial ultrathin sections</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="stage-tools">
+                <h4>Methods</h4>
+                <div class="tool-list">
+                    <span class="tool-tag">Chemical fixation</span>
+                    <span class="tool-tag">Heavy metal staining</span>
+                    <span class="tool-tag">Resin embedding</span>
+                    <span class="tool-tag">Ultramicrotomy</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- Stage 2: EM Imaging -->
+        <article class="stage-section" id="em-imaging">
+            <h3>
+                <span class="stage-badge stage-badge--upstream">Stage 2</span>
+                EM Imaging
+            </h3>
+            <p class="stage-desc">
+                Serial section electron microscopy captures high-resolution images of the tissue volume.
+            </p>
+            <div class="stage-io">
+                <div class="io-box">
+                    <h4>Inputs</h4>
+                    <ul>
+                        <li>Serial tissue sections</li>
+                        <li>Imaging parameters</li>
+                    </ul>
+                </div>
+                <div class="io-box">
+                    <h4>Outputs</h4>
+                    <ul>
+                        <li>Raw EM image tiles</li>
+                        <li>Imaging metadata</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="stage-tools">
+                <h4>Methods</h4>
+                <div class="tool-list">
+                    <span class="tool-tag">Serial section TEM</span>
+                    <span class="tool-tag">SEM (ATUM)</span>
+                    <span class="tool-tag">FIB-SEM</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- Stage 3: Image Processing -->
+        <article class="stage-section" id="image-processing">
+            <h3>
+                <span class="stage-badge stage-badge--upstream">Stage 3</span>
+                Image Processing
+            </h3>
+            <p class="stage-desc">
+                Raw images are stitched, aligned, and corrected to create a contiguous 3D volume.
+            </p>
+            <div class="stage-io">
+                <div class="io-box">
+                    <h4>Inputs</h4>
+                    <ul>
+                        <li>Raw EM image tiles</li>
+                        <li>Section ordering</li>
+                    </ul>
+                </div>
+                <div class="io-box">
+                    <h4>Outputs</h4>
+                    <ul>
+                        <li>Aligned image volume</li>
+                        <li>Multi-resolution pyramid</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="stage-tools">
+                <h4>Methods</h4>
+                <div class="tool-list">
+                    <span class="tool-tag">Tile stitching</span>
+                    <span class="tool-tag">Section alignment</span>
+                    <span class="tool-tag">Artifact correction</span>
+                    <span class="tool-tag">Intensity normalization</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- Stage 4: Segmentation -->
+        <article class="stage-section" id="segmentation">
+            <h3>
+                <span class="stage-badge stage-badge--upstream">Stage 4</span>
+                Segmentation
+            </h3>
+            <p class="stage-desc">
+                Machine learning models identify and label individual neurons and cellular structures in the volume.
+            </p>
+            <div class="stage-io">
+                <div class="io-box">
+                    <h4>Inputs</h4>
+                    <ul>
+                        <li>Aligned EM volume</li>
+                        <li>Training data</li>
+                    </ul>
+                </div>
+                <div class="io-box">
+                    <h4>Outputs</h4>
+                    <ul>
+                        <li>Supervoxel segmentation</li>
+                        <li>Initial neuron IDs</li>
+                        <li>Merge/split predictions</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="stage-tools">
+                <h4>Methods</h4>
+                <div class="tool-list">
+                    <span class="tool-tag">Flood-filling networks</span>
+                    <span class="tool-tag">Affinity prediction</span>
+                    <span class="tool-tag">Agglomeration</span>
+                </div>
+            </div>
+        </article>
+
+        <!-- Stage 5: Proofreading -->
+        <article class="stage-section" id="proofreading">
+            <h3>
+                <span class="stage-badge">Stage 5</span>
+                Proofreading
+            </h3>
+            <p class="stage-desc">
+                Human annotators correct segmentation errors—splits and mergers—to produce accurate neuron reconstructions. <strong>Primary tracer team activity.</strong>
+            </p>
+            <div class="stage-io">
+                <div class="io-box">
+                    <h4>Inputs</h4>
+                    <ul>
+                        <li>AI segmentation</li>
+                        <li>EM imagery</li>
+                        <li>Error predictions</li>
+                    </ul>
+                </div>
+                <div class="io-box">
+                    <h4>Outputs</h4>
+                    <ul>
+                        <li>Corrected neuron segments</li>
+                        <li>Validated root IDs</li>
+                        <li>Proofread status flags</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="stage-tools">
+                <h4>Tools</h4>
+                <div class="tool-list">
+                    <a href="#tools" class="tool-tag tool-tag--link">WebKnossos</a>
+                    <a href="#tools" class="tool-tag tool-tag--link">Neuroglancer</a>
+                    <span class="tool-tag">SAM2 (AI assist)</span>
+                </div>
+            </div>
+            <div class="stage-links">
+                <h4>Related Documentation</h4>
+                <ul>
+                    <li><a href="../sop/">Standard Operating Procedures</a></li>
+                    <li><a href="../sop/#gt-checklist">GT Checklist</a></li>
+                    <li><a href="../tasks/#proofreading">Proofreading Training</a></li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Stage 6: Annotation -->
+        <article class="stage-section" id="annotation">
+            <h3>
+                <span class="stage-badge">Stage 6</span>
+                Annotation
+            </h3>
+            <p class="stage-desc">
+                Synapses, cell types, and other biological features are labeled on the proofread segmentation. <strong>Primary tracer team activity.</strong>
+            </p>
+            <div class="stage-io">
+                <div class="io-box">
+                    <h4>Inputs</h4>
+                    <ul>
+                        <li>Proofread neurons</li>
+                        <li>EM imagery</li>
+                        <li>Protocol guidelines</li>
+                    </ul>
+                </div>
+                <div class="io-box">
+                    <h4>Outputs</h4>
+                    <ul>
+                        <li>Synapse locations</li>
+                        <li>Pre/post assignments</li>
+                        <li>Cell type labels</li>
+                        <li>Neurotransmitter predictions</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="stage-tools">
+                <h4>Tools</h4>
+                <div class="tool-list">
+                    <a href="#tools" class="tool-tag tool-tag--link">Neuroglancer</a>
+                    <a href="#tools" class="tool-tag tool-tag--link">CAVE</a>
+                    <a href="../tampermonkey-scripts/" class="tool-tag tool-tag--link">Tampermonkey</a>
+                </div>
+            </div>
+            <div class="stage-links">
+                <h4>Related Documentation</h4>
+                <ul>
+                    <li><a href="../tasks/#synapses">Synapse Annotation Guide</a></li>
+                    <li><a href="../gallery/#synapse-examples">Synapse Visual Gallery</a></li>
+                    <li><a href="../sop/#gt-protocol-guidelines">GT Protocol Guidelines</a></li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Stage 7: Analysis -->
+        <article class="stage-section" id="analysis">
+            <h3>
+                <span class="stage-badge">Stage 7</span>
+                Analysis
+            </h3>
+            <p class="stage-desc">
+                Connectivity data is queried, analyzed, and visualized to understand neural circuits.
+            </p>
+            <div class="stage-io">
+                <div class="io-box">
+                    <h4>Inputs</h4>
+                    <ul>
+                        <li>Synapse tables</li>
+                        <li>Neuron IDs</li>
+                        <li>Cell type annotations</li>
+                    </ul>
+                </div>
+                <div class="io-box">
+                    <h4>Outputs</h4>
+                    <ul>
+                        <li>Connectivity matrices</li>
+                        <li>Circuit diagrams</li>
+                        <li>Statistical summaries</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="stage-tools">
+                <h4>Tools</h4>
+                <div class="tool-list">
+                    <a href="#tools" class="tool-tag tool-tag--link">tracer_tools</a>
+                    <a href="#tools" class="tool-tag tool-tag--link">CAVE API</a>
+                    <span class="tool-tag">Python / pandas</span>
+                    <span class="tool-tag">Jupyter</span>
+                </div>
+            </div>
+            <div class="stage-links">
+                <h4>Related Documentation</h4>
+                <ul>
+                    <li><a href="../stats/">Statistics &amp; Metrics</a></li>
+                    <li><a href="../stats/#id-validation">ID Validation Results</a></li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- Stage 8: Publication -->
+        <article class="stage-section" id="publication">
+            <h3>
+                <span class="stage-badge">Stage 8</span>
+                Publication
+            </h3>
+            <p class="stage-desc">
+                Findings are documented and shared through papers, preprints, and public data releases.
+            </p>
+            <div class="stage-io">
+                <div class="io-box">
+                    <h4>Inputs</h4>
+                    <ul>
+                        <li>Analysis results</li>
+                        <li>Figures and visualizations</li>
+                        <li>Methods documentation</li>
+                    </ul>
+                </div>
+                <div class="io-box">
+                    <h4>Outputs</h4>
+                    <ul>
+                        <li>Peer-reviewed papers</li>
+                        <li>Preprints</li>
+                        <li>Public datasets</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="stage-links">
+                <h4>Related Documentation</h4>
+                <ul>
+                    <li><a href="../publications/">Publications</a></li>
+                </ul>
+            </div>
+        </article>
+
+    </div>
+
+    <!-- ============================================================
+         TOOLS SECTION
+         Quick reference for pipeline tools
          ============================================================ -->
     <section id="tools">
-        <h2>Tools</h2>
-        <ul>
-            <li>
-                <strong>WebKnossos</strong> - Primary annotation platform for volume segmentation and proofreading
-                <!-- TODO: Create webknossos.html with detailed guide -->
-            </li>
-            <li>
-                <strong>Neuroglancer</strong> - Web-based volumetric data viewer for synapse annotation
-                <!-- TODO: Create neuroglancer.html with detailed guide -->
-            </li>
-            <li>
-                <strong>tracer_tools</strong> - Python library for CAVE/Neuroglancer API access
-                <!-- TODO: Create tracer-tools.html linking to Python docs -->
-            </li>
-            <li>
-                <strong>CAVE</strong> - Connectome Annotation Versioning Engine (backend API)
-                <!-- TODO: Create cave.html with API reference -->
-            </li>
-            <li>
-                <strong>Tampermonkey Scripts</strong> - Browser userscripts for WebKnossos enhancement
-                <br>
-                <a href="../tampermonkey-scripts/">View scripts directory</a>
-            </li>
-        </ul>
+        <h2>Pipeline Tools</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tool</th>
+                    <th>Stage</th>
+                    <th>Purpose</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>WebKnossos</strong></td>
+                    <td>5, 6</td>
+                    <td>Volume annotation, proofreading, segmentation correction</td>
+                </tr>
+                <tr>
+                    <td><strong>Neuroglancer</strong></td>
+                    <td>5, 6</td>
+                    <td>3D visualization, synapse annotation, data viewing</td>
+                </tr>
+                <tr>
+                    <td><strong>CAVE</strong></td>
+                    <td>6, 7</td>
+                    <td>Annotation database, versioned data queries</td>
+                </tr>
+                <tr>
+                    <td><strong>tracer_tools</strong></td>
+                    <td>7</td>
+                    <td>Python API for CAVE queries, batch processing, ID management</td>
+                </tr>
+                <tr>
+                    <td><strong>Tampermonkey</strong></td>
+                    <td>5, 6</td>
+                    <td>Browser scripts for WebKnossos workflow enhancement</td>
+                </tr>
+            </tbody>
+        </table>
     </section>
 
     <!-- ============================================================
-         SECTION: Datasets
-         Supported connectomics datasets
+         DATASETS SECTION
          ============================================================ -->
     <section id="datasets">
         <h2>Supported Datasets</h2>
@@ -78,39 +1008,38 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>FlyWire FAFB</td>
-                    <td>Drosophila</td>
+                    <td><strong>FlyWire FAFB</strong></td>
+                    <td>Drosophila (whole brain)</td>
                     <td><code>flywire_fafb_production</code></td>
                     <td>Active</td>
                 </tr>
                 <tr>
-                    <td>BANC</td>
-                    <td>Drosophila (Brain + Nerve Cord)</td>
+                    <td><strong>BANC</strong></td>
+                    <td>Drosophila (brain + nerve cord)</td>
                     <td><code>brain_and_nerve_cord</code></td>
                     <td>Active</td>
                 </tr>
             </tbody>
         </table>
-        <!-- TODO: Create datasets.html with resolution info, coordinate systems -->
     </section>
 
     <!-- ============================================================
-         SECTION: Quick Links
-         Links to existing documentation
+         QUICK LINKS
          ============================================================ -->
     <section id="quick-links">
-        <h2>Quick Links</h2>
+        <h2>Additional Resources</h2>
         <ul>
             <li><a href="../index-legacy.html#current-tools">Legacy Tools Documentation</a></li>
             <li><a href="../drive_docs_output/Misc/Copy of Neuroglancer Synapses.html">Neuroglancer Synapses Guide</a></li>
             <li><a href="../New Documentation Styles-Templates-Files/HTML Versions/tommy_macrina_FINAL.html">Tommy Macrina Protocol Reference</a></li>
+            <li><a href="../tampermonkey-scripts/">Tampermonkey Scripts Directory</a></li>
         </ul>
     </section>
 
 </main>
 
 <footer>
-    <p><a href="../">Back to Dashboard</a></p>
+    <p><a href="../">← Back to Dashboard</a></p>
 </footer>
 
 </body>
