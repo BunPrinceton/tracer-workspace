@@ -4,20 +4,608 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gallery - Princeton Tracer</title>
+    <!-- ============================================================
+         GALLERY SYSTEM
+
+         Features:
+         - Dataset-based grouping (FAFB 2019, BANC, Reference)
+         - CSS-only category filtering (no heavy JS)
+         - Responsive image grid
+         - Accessible with alt text and captions
+
+         To add new images:
+         1. Add <figure> with appropriate data-category attribute
+         2. Include descriptive alt text
+         3. Add caption with metadata
+         ============================================================ -->
+    <style>
+        /* ============================================================
+           BASE STYLES
+           ============================================================ */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        /* ============================================================
+           NAVIGATION
+           ============================================================ */
+        nav {
+            background-color: #1a1a1a;
+            padding: 0.75rem 1.5rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav a {
+            color: #e5e5e5;
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            display: inline-block;
+        }
+
+        nav a:hover,
+        nav a:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        nav a[aria-current="page"] {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* ============================================================
+           MAIN LAYOUT
+           ============================================================ */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #d4d4d4;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #525252;
+            font-size: 1.0625rem;
+        }
+
+        /* ============================================================
+           FILTER SYSTEM (CSS-only)
+           Uses hidden checkboxes + labels + :checked selectors
+           ============================================================ */
+        .filter-section {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .filter-section h2 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #525252;
+            margin-bottom: 1rem;
+        }
+
+        .filter-groups {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .filter-group-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #737373;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        /* Hidden checkboxes */
+        .filter-checkbox {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Filter labels styled as buttons */
+        .filter-label {
+            display: inline-block;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: #525252;
+            background-color: #f5f5f5;
+            border: 2px solid #e5e5e5;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+
+        .filter-label:hover {
+            background-color: #e5e5e5;
+            border-color: #d4d4d4;
+        }
+
+        .filter-label:focus-within {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+
+        /* Checked state */
+        .filter-checkbox:checked + .filter-label {
+            background-color: #2563eb;
+            border-color: #2563eb;
+            color: #ffffff;
+        }
+
+        /* Reset/Show All button */
+        .filter-reset {
+            display: inline-block;
+            padding: 0.375rem 0.75rem;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            color: #2563eb;
+            background-color: transparent;
+            border: 2px solid #2563eb;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .filter-reset:hover {
+            background-color: #eff6ff;
+        }
+
+        /* ============================================================
+           DATASET SECTIONS
+           ============================================================ */
+        .dataset-section {
+            margin-bottom: 3rem;
+        }
+
+        .dataset-header {
+            display: flex;
+            align-items: baseline;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #d4d4d4;
+        }
+
+        .dataset-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .dataset-badge {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #525252;
+            background-color: #e5e5e5;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+        }
+
+        .dataset-description {
+            color: #525252;
+            font-size: 0.9375rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* ============================================================
+           IMAGE GRID
+           ============================================================ */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* ============================================================
+           GALLERY ITEMS (figure + figcaption)
+           ============================================================ */
+        .gallery-item {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: border-color 0.15s ease;
+        }
+
+        .gallery-item:hover {
+            border-color: #2563eb;
+        }
+
+        .gallery-item:focus-within {
+            border-color: #2563eb;
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+
+        /* Image container */
+        .gallery-image-container {
+            position: relative;
+            aspect-ratio: 4 / 3;
+            background-color: #1a1a1a;
+            overflow: hidden;
+        }
+
+        .gallery-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .gallery-image-container a {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Placeholder for images not yet added */
+        .gallery-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #262626;
+            color: #737373;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .gallery-placeholder-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.5;
+        }
+
+        .gallery-placeholder-text {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Category badge on image */
+        .gallery-category-badge {
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            background-color: rgba(0, 0, 0, 0.75);
+            color: #ffffff;
+        }
+
+        /* Category-specific badge colors */
+        .gallery-category-badge[data-category="synapse"] {
+            background-color: rgba(37, 99, 235, 0.9);
+        }
+        .gallery-category-badge[data-category="segmentation"] {
+            background-color: rgba(124, 58, 237, 0.9);
+        }
+        .gallery-category-badge[data-category="defect"] {
+            background-color: rgba(220, 38, 38, 0.9);
+        }
+        .gallery-category-badge[data-category="structure"] {
+            background-color: rgba(5, 150, 105, 0.9);
+        }
+
+        /* Caption area */
+        .gallery-caption {
+            padding: 1rem;
+        }
+
+        .gallery-title {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: #1a1a1a;
+        }
+
+        .gallery-title a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .gallery-title a:hover {
+            color: #2563eb;
+        }
+
+        .gallery-description {
+            font-size: 0.8125rem;
+            color: #525252;
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+
+        .gallery-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            font-size: 0.75rem;
+            color: #737373;
+        }
+
+        .gallery-meta-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .gallery-meta-item::before {
+            content: "";
+            display: inline-block;
+            width: 4px;
+            height: 4px;
+            background-color: #d4d4d4;
+            border-radius: 50%;
+        }
+
+        .gallery-meta-item:first-child::before {
+            display: none;
+        }
+
+        /* ============================================================
+           CSS-ONLY FILTERING LOGIC
+           When a filter is checked, hide non-matching items
+           ============================================================ */
+
+        /* Default: show all items */
+        .gallery-item {
+            display: block;
+        }
+
+        /* When ANY category filter is checked, hide all items first */
+        #filter-synapse:checked ~ main .gallery-item,
+        #filter-segmentation:checked ~ main .gallery-item,
+        #filter-defect:checked ~ main .gallery-item,
+        #filter-structure:checked ~ main .gallery-item {
+            display: none;
+        }
+
+        /* Then show items matching the checked category */
+        #filter-synapse:checked ~ main .gallery-item[data-category="synapse"] {
+            display: block;
+        }
+
+        #filter-segmentation:checked ~ main .gallery-item[data-category="segmentation"] {
+            display: block;
+        }
+
+        #filter-defect:checked ~ main .gallery-item[data-category="defect"] {
+            display: block;
+        }
+
+        #filter-structure:checked ~ main .gallery-item[data-category="structure"] {
+            display: block;
+        }
+
+        /* Multiple filters: show if ANY checked filter matches */
+        #filter-synapse:checked ~ main .gallery-item[data-category="synapse"],
+        #filter-segmentation:checked ~ main .gallery-item[data-category="segmentation"],
+        #filter-defect:checked ~ main .gallery-item[data-category="defect"],
+        #filter-structure:checked ~ main .gallery-item[data-category="structure"] {
+            display: block;
+        }
+
+        /* Hide empty dataset sections when filtering */
+        .dataset-section:has(.gallery-item:not([style*="display: none"])) {
+            display: block;
+        }
+
+        /* ============================================================
+           QUICK LINKS SECTION
+           ============================================================ */
+        .quick-links {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .quick-links h2 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e5e5e5;
+        }
+
+        .quick-links ul {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 0.5rem;
+        }
+
+        .quick-links a {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 0.9375rem;
+        }
+
+        .quick-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        footer {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            border-top: 1px solid #e5e5e5;
+            font-size: 0.875rem;
+            color: #737373;
+        }
+
+        footer a {
+            color: #525252;
+        }
+
+        footer a:hover {
+            color: #1a1a1a;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 768px) {
+            html {
+                font-size: 16px;
+            }
+
+            main {
+                padding: 1.5rem 1rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 1rem;
+            }
+
+            .filter-groups {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-image-container {
+                aspect-ratio: 16 / 10;
+            }
+        }
+
+        /* ============================================================
+           PRINT
+           ============================================================ */
+        @media print {
+            nav, footer, .filter-section {
+                display: none;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .gallery-item {
+                break-inside: avoid;
+                border: 1px solid #000;
+            }
+        }
+
+        /* ============================================================
+           ACCESSIBILITY: Focus visible
+           ============================================================ */
+        :focus-visible {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+
+        /* Screen reader only */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
 </head>
 <body>
 
-<!-- ============================================================
-     NAVIGATION
-     Shared navigation structure - manually sync across all pages
-     TODO: Extract to _includes/nav.html when build system added
-     ============================================================ -->
-<nav>
+<!-- Filter checkboxes must be outside main for CSS sibling selectors -->
+<input type="checkbox" id="filter-synapse" class="filter-checkbox" aria-label="Filter by synapses">
+<input type="checkbox" id="filter-segmentation" class="filter-checkbox" aria-label="Filter by segmentation">
+<input type="checkbox" id="filter-defect" class="filter-checkbox" aria-label="Filter by defects">
+<input type="checkbox" id="filter-structure" class="filter-checkbox" aria-label="Filter by structures">
+
+<nav aria-label="Main navigation">
     <ul>
         <li><a href="../">Dashboard</a></li>
         <li><a href="../pipeline/">Pipeline</a></li>
         <li><a href="../tasks/">Tasks</a></li>
-        <li><a href="../gallery/">Gallery</a></li>
+        <li><a href="./" aria-current="page">Gallery</a></li>
         <li><a href="../sop/">SOP</a></li>
         <li><a href="../publications/">Publications</a></li>
         <li><a href="../stats/">Stats</a></li>
@@ -26,103 +614,497 @@
 </nav>
 
 <main>
-    <h1>Gallery</h1>
 
-    <p>Visual reference materials including annotated examples, training images, and video demonstrations.</p>
+    <div class="page-header">
+        <h1>Visual Reference Gallery</h1>
+        <p>Annotated examples, training images, and reference materials organized by dataset and category.</p>
+    </div>
 
     <!-- ============================================================
-         SECTION: Synapse Examples
-         Visual examples of synapse types and indicators
+         FILTER CONTROLS
          ============================================================ -->
-    <section id="synapse-examples">
-        <h2>Synapse Examples</h2>
-        <p>Visual examples of synapse structures, T-bars, and annotation patterns.</p>
+    <section class="filter-section" aria-labelledby="filter-heading">
+        <h2 id="filter-heading">Filter by Category</h2>
 
-        <h3>T-bar Examples</h3>
-        <ul>
-            <li>
-                <a href="../Ground-Truth-Training/synapse training videos/t-bar_example.png">T-bar Example</a>
-            </li>
-            <li>
-                <a href="../Ground-Truth-Training/synapse training videos/elongated_t-bar_example.png">Elongated T-bar Example</a>
-            </li>
-            <li>
-                <a href="../Ground-Truth-Training/synapse training videos/three_t-bars_smudge-shape.png">Three T-bars (Smudge Shape)</a>
-            </li>
-        </ul>
-        <!-- TODO: Create synapses.html with organized image gallery -->
+        <div class="filter-groups">
+            <div class="filter-group">
+                <span class="filter-group-label">Categories</span>
+                <div class="filter-options" role="group" aria-label="Category filters">
+                    <label for="filter-synapse" class="filter-label">Synapses</label>
+                    <label for="filter-segmentation" class="filter-label">Segmentation</label>
+                    <label for="filter-defect" class="filter-label">Defects</label>
+                    <label for="filter-structure" class="filter-label">Structures</label>
+                </div>
+            </div>
+
+            <div class="filter-group">
+                <span class="filter-group-label">Actions</span>
+                <div class="filter-options">
+                    <a href="./" class="filter-reset">Show All</a>
+                </div>
+            </div>
+        </div>
+
+        <p style="font-size: 0.8125rem; color: #737373; margin-top: 1rem;">
+            Click categories to filter. Multiple selections show all matching images.
+        </p>
     </section>
 
-    <!-- ============================================================
-         SECTION: Training Videos
-         Video demonstrations of annotation techniques
-         ============================================================ -->
-    <section id="training-videos">
-        <h2>Training Videos</h2>
-        <p>Video demonstrations of synapse identification and annotation workflows.</p>
 
-        <ul>
-            <li>
-                <a href="../Ground-Truth-Training/synapse training videos/bushell_of_synapses.webm">Bushel of Synapses</a>
-                - Multiple synapse identification
-            </li>
-            <li>
-                <a href="../Ground-Truth-Training/synapse training videos/top-down_synapse_example.webm">Top-down Synapse Example</a>
-                - Viewing synapses from above
-            </li>
-            <li>
-                <a href="../Ground-Truth-Training/synapse training videos/PSD-gap_example.webm">PSD Gap Example</a>
-                - Postsynaptic density gaps
-            </li>
-            <li>
-                <a href="../Ground-Truth-Training/synapse training videos/Diff.webm">Diff Comparison</a>
-                - Annotation differences
-            </li>
-        </ul>
-        <!-- TODO: Create training-videos.html with embedded video players -->
+    <!-- ============================================================
+         DATASET: FAFB 2019 (FlyWire)
+         ============================================================ -->
+    <section class="dataset-section" id="fafb-2019" aria-labelledby="fafb-heading">
+        <div class="dataset-header">
+            <h2 id="fafb-heading">FAFB 2019</h2>
+            <span class="dataset-badge">FlyWire</span>
+        </div>
+        <p class="dataset-description">
+            Full Adult Fly Brain dataset. Primary source for Drosophila connectomics research.
+        </p>
+
+        <div class="gallery-grid">
+
+            <!-- Synapse: T-bar example -->
+            <figure class="gallery-item" data-category="synapse">
+                <div class="gallery-image-container">
+                    <a href="../Ground-Truth-Training/synapse training videos/t-bar_example.png"
+                       aria-describedby="fafb-tbar-desc">
+                        <img src="../Ground-Truth-Training/synapse training videos/t-bar_example.png"
+                             alt="T-bar synapse showing characteristic platform structure with dense body and vesicle cloud"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="synapse">Synapse</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="../Ground-Truth-Training/synapse training videos/t-bar_example.png">T-bar Synapse</a>
+                    </h3>
+                    <p class="gallery-description" id="fafb-tbar-desc">
+                        Classic T-bar morphology with platform structure, dense body visible in cross-section.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Presynaptic</span>
+                        <span class="gallery-meta-item">Training example</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Synapse: Elongated T-bar -->
+            <figure class="gallery-item" data-category="synapse">
+                <div class="gallery-image-container">
+                    <a href="../Ground-Truth-Training/synapse training videos/elongated_t-bar_example.png"
+                       aria-describedby="fafb-elong-desc">
+                        <img src="../Ground-Truth-Training/synapse training videos/elongated_t-bar_example.png"
+                             alt="Elongated T-bar synapse with extended platform, viewed in cross-section"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="synapse">Synapse</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="../Ground-Truth-Training/synapse training videos/elongated_t-bar_example.png">Elongated T-bar</a>
+                    </h3>
+                    <p class="gallery-description" id="fafb-elong-desc">
+                        Extended platform variant. Note the longer horizontal extent compared to standard T-bars.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Variant morphology</span>
+                        <span class="gallery-meta-item">Training example</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Synapse: Multiple T-bars -->
+            <figure class="gallery-item" data-category="synapse">
+                <div class="gallery-image-container">
+                    <a href="../Ground-Truth-Training/synapse training videos/three_t-bars_smudge-shape.png"
+                       aria-describedby="fafb-multi-desc">
+                        <img src="../Ground-Truth-Training/synapse training videos/three_t-bars_smudge-shape.png"
+                             alt="Three T-bar synapses in close proximity showing smudge-like appearance"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="synapse">Synapse</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="../Ground-Truth-Training/synapse training videos/three_t-bars_smudge-shape.png">Multiple T-bars (Smudge)</a>
+                    </h3>
+                    <p class="gallery-description" id="fafb-multi-desc">
+                        Clustered synapses appearing as smudge-like shapes. Common in regions of high synaptic density.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Multiple synapses</span>
+                        <span class="gallery-meta-item">Dense region</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Defect: Placeholder - Tissue fold -->
+            <figure class="gallery-item" data-category="defect">
+                <div class="gallery-image-container">
+                    <div class="gallery-placeholder" role="img" aria-label="Placeholder for tissue fold example">
+                        <span class="gallery-placeholder-icon">&#9634;</span>
+                        <span class="gallery-placeholder-text">Image pending</span>
+                    </div>
+                    <span class="gallery-category-badge" data-category="defect">Defect</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">Tissue Fold</h3>
+                    <p class="gallery-description">
+                        Section folded during preparation showing doubled tissue appearance.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Fold</span>
+                        <span class="gallery-meta-item">Preparation artifact</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Defect: Placeholder - Crack -->
+            <figure class="gallery-item" data-category="defect">
+                <div class="gallery-image-container">
+                    <div class="gallery-placeholder" role="img" aria-label="Placeholder for tissue crack example">
+                        <span class="gallery-placeholder-icon">&#9634;</span>
+                        <span class="gallery-placeholder-text">Image pending</span>
+                    </div>
+                    <span class="gallery-category-badge" data-category="defect">Defect</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">Tissue Crack</h3>
+                    <p class="gallery-description">
+                        Fracture in section creating void. Mark as defect, do not annotate across.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Crack</span>
+                        <span class="gallery-meta-item">Sectioning damage</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Segmentation: Placeholder - False merger -->
+            <figure class="gallery-item" data-category="segmentation">
+                <div class="gallery-image-container">
+                    <div class="gallery-placeholder" role="img" aria-label="Placeholder for false merger example">
+                        <span class="gallery-placeholder-icon">&#9634;</span>
+                        <span class="gallery-placeholder-text">Image pending</span>
+                    </div>
+                    <span class="gallery-category-badge" data-category="segmentation">Segmentation</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">False Merger</h3>
+                    <p class="gallery-description">
+                        Two neurons incorrectly joined by automated segmentation. Requires split operation.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Merger error</span>
+                        <span class="gallery-meta-item">Needs correction</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+        </div>
     </section>
 
+
     <!-- ============================================================
-         SECTION: Tommy Macrina Reference Set
-         Protocol reference images from expert annotator
+         DATASET: BANC
          ============================================================ -->
-    <section id="tommy-macrina">
-        <h2>Tommy Macrina Reference Set</h2>
-        <p>Reference images from Tommy Macrina's Ground Truth protocol documentation.</p>
+    <section class="dataset-section" id="banc" aria-labelledby="banc-heading">
+        <div class="dataset-header">
+            <h2 id="banc-heading">BANC</h2>
+            <span class="dataset-badge">Brain and Nerve Cord</span>
+        </div>
+        <p class="dataset-description">
+            Full brain and ventral nerve cord dataset providing complete CNS connectivity.
+        </p>
 
-        <ul>
-            <li><a href="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image.png">Reference Image 1</a></li>
-            <li><a href="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image-1.png">Reference Image 2</a></li>
-            <li><a href="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image-2.png">Reference Image 3</a></li>
-            <li><a href="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image-3.png">Reference Image 4</a></li>
-            <li><a href="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image-4.png">Reference Image 5</a></li>
-            <li><a href="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image-5.png">Reference Image 6</a></li>
-            <li><a href="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image-6.png">Reference Image 7</a></li>
-            <li><a href="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image-7.png">Reference Image 8</a></li>
-            <li><a href="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image-8.png">Reference Image 9</a></li>
-            <li><a href="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/reopen_button.png">Reopen Button Reference</a></li>
-        </ul>
+        <div class="gallery-grid">
 
-        <p><a href="../New Documentation Styles-Templates-Files/HTML Versions/tommy_macrina_FINAL.html">View Full Tommy Macrina Protocol Document</a></p>
-        <!-- TODO: Create tommy-macrina.html with organized image gallery and context -->
+            <!-- Structure: Placeholder - Soma -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <div class="gallery-placeholder" role="img" aria-label="Placeholder for soma example">
+                        <span class="gallery-placeholder-icon">&#9634;</span>
+                        <span class="gallery-placeholder-text">Image pending</span>
+                    </div>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">Cell Body (Soma)</h3>
+                    <p class="gallery-description">
+                        Neuronal cell body with visible nucleus. Starting point for morphological tracing.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Soma</span>
+                        <span class="gallery-meta-item">BANC dataset</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Structure: Placeholder - Axon bundle -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <div class="gallery-placeholder" role="img" aria-label="Placeholder for axon bundle example">
+                        <span class="gallery-placeholder-icon">&#9634;</span>
+                        <span class="gallery-placeholder-text">Image pending</span>
+                    </div>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">Axon Bundle</h3>
+                    <p class="gallery-description">
+                        Fasciculated axons in the nerve cord. Note uniform diameter and parallel arrangement.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Axon</span>
+                        <span class="gallery-meta-item">Nerve cord</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Segmentation: Placeholder - False split -->
+            <figure class="gallery-item" data-category="segmentation">
+                <div class="gallery-image-container">
+                    <div class="gallery-placeholder" role="img" aria-label="Placeholder for false split example">
+                        <span class="gallery-placeholder-icon">&#9634;</span>
+                        <span class="gallery-placeholder-text">Image pending</span>
+                    </div>
+                    <span class="gallery-category-badge" data-category="segmentation">Segmentation</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">False Split</h3>
+                    <p class="gallery-description">
+                        Single neuron fragmented into multiple segments. Requires merge operation to reconnect.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Split error</span>
+                        <span class="gallery-meta-item">Needs correction</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Defect: Placeholder - Staining artifact -->
+            <figure class="gallery-item" data-category="defect">
+                <div class="gallery-image-container">
+                    <div class="gallery-placeholder" role="img" aria-label="Placeholder for staining artifact example">
+                        <span class="gallery-placeholder-icon">&#9634;</span>
+                        <span class="gallery-placeholder-text">Image pending</span>
+                    </div>
+                    <span class="gallery-category-badge" data-category="defect">Defect</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">Staining Artifact</h3>
+                    <p class="gallery-description">
+                        Uneven heavy metal staining causing contrast issues. May obscure fine structures.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Staining</span>
+                        <span class="gallery-meta-item">Imaging artifact</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+        </div>
     </section>
 
+
     <!-- ============================================================
-         SECTION: Quick Links
-         Additional visual resources
+         DATASET: Reference / Training Materials
          ============================================================ -->
-    <section id="quick-links">
-        <h2>Additional Resources</h2>
+    <section class="dataset-section" id="reference" aria-labelledby="ref-heading">
+        <div class="dataset-header">
+            <h2 id="ref-heading">Reference Materials</h2>
+            <span class="dataset-badge">Training</span>
+        </div>
+        <p class="dataset-description">
+            Protocol reference images and training materials from expert annotators.
+        </p>
+
+        <div class="gallery-grid">
+
+            <!-- Tommy Macrina reference images -->
+            <figure class="gallery-item" data-category="synapse">
+                <div class="gallery-image-container">
+                    <a href="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image.png"
+                       aria-describedby="ref-tommy1-desc">
+                        <img src="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image.png"
+                             alt="Protocol reference showing synapse identification criteria"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="synapse">Synapse</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image.png">
+                            GT Protocol Reference 1
+                        </a>
+                    </h3>
+                    <p class="gallery-description" id="ref-tommy1-desc">
+                        Tommy Macrina ground truth protocol. Demonstrates synapse identification criteria.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Tommy Macrina</span>
+                        <span class="gallery-meta-item">Aug 2025</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure class="gallery-item" data-category="synapse">
+                <div class="gallery-image-container">
+                    <a href="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image-1.png"
+                       aria-describedby="ref-tommy2-desc">
+                        <img src="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image-1.png"
+                             alt="Protocol reference showing vesicle identification"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="synapse">Synapse</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image-1.png">
+                            GT Protocol Reference 2
+                        </a>
+                    </h3>
+                    <p class="gallery-description" id="ref-tommy2-desc">
+                        Vesicle cloud identification and synaptic cleft visualization.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Tommy Macrina</span>
+                        <span class="gallery-meta-item">Aug 2025</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure class="gallery-item" data-category="synapse">
+                <div class="gallery-image-container">
+                    <a href="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image-2.png"
+                       aria-describedby="ref-tommy3-desc">
+                        <img src="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image-2.png"
+                             alt="Protocol reference showing PSD identification"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="synapse">Synapse</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image-2.png">
+                            GT Protocol Reference 3
+                        </a>
+                    </h3>
+                    <p class="gallery-description" id="ref-tommy3-desc">
+                        Post-synaptic density (PSD) characteristics and boundary marking.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Tommy Macrina</span>
+                        <span class="gallery-meta-item">Aug 2025</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image-3.png"
+                       aria-describedby="ref-tommy4-desc">
+                        <img src="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image-3.png"
+                             alt="Protocol reference showing neurite identification"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image-3.png">
+                            GT Protocol Reference 4
+                        </a>
+                    </h3>
+                    <p class="gallery-description" id="ref-tommy4-desc">
+                        Neurite identification and process tracing guidelines.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Tommy Macrina</span>
+                        <span class="gallery-meta-item">Aug 2025</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure class="gallery-item" data-category="synapse">
+                <div class="gallery-image-container">
+                    <a href="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image-4.png"
+                       aria-describedby="ref-tommy5-desc">
+                        <img src="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image-4.png"
+                             alt="Protocol reference showing synapse classification"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="synapse">Synapse</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image-4.png">
+                            GT Protocol Reference 5
+                        </a>
+                    </h3>
+                    <p class="gallery-description" id="ref-tommy5-desc">
+                        Synapse type classification and annotation conventions.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Tommy Macrina</span>
+                        <span class="gallery-meta-item">Aug 2025</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure class="gallery-item" data-category="synapse">
+                <div class="gallery-image-container">
+                    <a href="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image-5.png"
+                       aria-describedby="ref-tommy6-desc">
+                        <img src="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image-5.png"
+                             alt="Protocol reference showing edge cases"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="synapse">Synapse</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="../New Documentation Styles-Templates-Files/Protocol Reference Images/Ground Truth Protocol_ Tommy Macrina Reference Set/image-5.png">
+                            GT Protocol Reference 6
+                        </a>
+                    </h3>
+                    <p class="gallery-description" id="ref-tommy6-desc">
+                        Ambiguous cases and decision criteria for edge cases.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Tommy Macrina</span>
+                        <span class="gallery-meta-item">Aug 2025</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         QUICK LINKS
+         ============================================================ -->
+    <section class="quick-links" aria-labelledby="links-heading">
+        <h2 id="links-heading">Additional Resources</h2>
         <ul>
-            <li><a href="../drive_docs_output/Ground-Truth-Training/synapse training videos/">All Training Videos (Directory)</a></li>
+            <li><a href="../Ground-Truth-Training/synapse training videos/">All Training Videos (Directory)</a></li>
+            <li><a href="../New Documentation Styles-Templates-Files/HTML Versions/tommy_macrina_FINAL.html">Tommy Macrina Full Protocol</a></li>
             <li><a href="../index-legacy.html#synapses">Legacy Synapse Documentation</a></li>
+            <li><a href="../tasks/defect-annotation/">Defect Annotation Guide</a></li>
+            <li><a href="../tasks/semantic-segmentation/">Semantic Segmentation Guide</a></li>
         </ul>
     </section>
 
 </main>
 
 <footer>
-    <p><a href="../">Back to Dashboard</a></p>
+    <div class="footer-nav">
+        <a href="../">Back to Dashboard</a>
+        <a href="../tasks/">View Tasks</a>
+    </div>
 </footer>
 
 </body>
