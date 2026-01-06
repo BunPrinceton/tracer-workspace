@@ -4,18 +4,296 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Princeton Tracer - Dashboard</title>
+    <style>
+        /* ============================================================
+           LOW-STIMULATION DASHBOARD STYLES
+
+           Design principles:
+           - Colorblind-safe: Blue/amber palette (no red/green)
+           - High contrast: WCAG AA compliant (4.5:1 minimum)
+           - No animations or transitions
+           - Large touch targets (minimum 44px)
+           - Generous whitespace
+           ============================================================ */
+
+        /* Reset and base */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        /* ============================================================
+           NAVIGATION BAR
+           Minimal top nav for utility links
+           ============================================================ */
+        nav {
+            background-color: #1a1a1a;
+            padding: 0.75rem 1.5rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav a {
+            color: #e5e5e5;
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            display: inline-block;
+        }
+
+        nav a:hover,
+        nav a:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        nav a[aria-current="page"] {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* ============================================================
+           MAIN CONTENT AREA
+           ============================================================ */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        /* ============================================================
+           HEADER / MISSION STATEMENT
+           Brief, scannable introduction
+           ============================================================ */
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #d4d4d4;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .mission {
+            font-size: 1.125rem;
+            color: #404040;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ============================================================
+           NAVIGATION TILES
+           Large, clearly labeled cards for each section
+           ============================================================ */
+        .tiles {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .tile {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .tile:hover,
+        .tile:focus {
+            border-color: #2563eb;
+            outline: none;
+        }
+
+        .tile:focus {
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+        }
+
+        .tile-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #2563eb;
+            margin-bottom: 0.5rem;
+        }
+
+        .tile-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+        }
+
+        .tile-desc {
+            font-size: 0.9375rem;
+            color: #525252;
+            line-height: 1.5;
+        }
+
+        /* Highlight primary action tiles */
+        .tile--primary {
+            border-color: #2563eb;
+            border-width: 2px;
+        }
+
+        .tile--primary .tile-label {
+            color: #1d4ed8;
+        }
+
+        /* Archive tile - muted styling */
+        .tile--muted {
+            background-color: #fafafa;
+            border-color: #e5e5e5;
+        }
+
+        .tile--muted .tile-label {
+            color: #737373;
+        }
+
+        .tile--muted .tile-title {
+            color: #525252;
+        }
+
+        /* ============================================================
+           QUICK REFERENCE SECTION
+           Compact info for datasets and communication
+           ============================================================ */
+        .quick-ref {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding-top: 2rem;
+            border-top: 2px solid #d4d4d4;
+        }
+
+        .quick-ref h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #525252;
+            margin-bottom: 1rem;
+        }
+
+        .quick-ref ul {
+            list-style: none;
+        }
+
+        .quick-ref li {
+            padding: 0.375rem 0;
+            font-size: 0.9375rem;
+        }
+
+        .quick-ref code {
+            font-family: "SF Mono", Monaco, "Cascadia Code", monospace;
+            font-size: 0.875rem;
+            background-color: #e5e5e5;
+            padding: 0.125rem 0.375rem;
+            border-radius: 3px;
+        }
+
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        footer {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            border-top: 1px solid #e5e5e5;
+            font-size: 0.875rem;
+            color: #737373;
+        }
+
+        footer a {
+            color: #525252;
+        }
+
+        footer a:hover,
+        footer a:focus {
+            color: #1a1a1a;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* ============================================================
+           RESPONSIVE ADJUSTMENTS
+           ============================================================ */
+        @media (max-width: 600px) {
+            html {
+                font-size: 16px;
+            }
+
+            main {
+                padding: 2rem 1rem;
+            }
+
+            .tiles {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-ref {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ============================================================
+           PRINT STYLES
+           ============================================================ */
+        @media print {
+            nav, footer {
+                display: none;
+            }
+
+            .tile {
+                border: 1px solid #000;
+                break-inside: avoid;
+            }
+        }
+    </style>
 </head>
 <body>
 
 <!-- ============================================================
      NAVIGATION
-     Shared navigation structure - manually sync across all pages
-     Root-level paths (no ../ prefix)
-     TODO: Extract to _includes/nav.html when build system added
+     Minimal top bar for utility navigation
      ============================================================ -->
-<nav>
+<nav aria-label="Main navigation">
     <ul>
-        <li><a href="./">Dashboard</a></li>
+        <li><a href="./" aria-current="page">Dashboard</a></li>
         <li><a href="./pipeline/">Pipeline</a></li>
         <li><a href="./tasks/">Tasks</a></li>
         <li><a href="./gallery/">Gallery</a></li>
@@ -27,177 +305,114 @@
 </nav>
 
 <main>
+    <!-- ============================================================
+         HEADER / MISSION
+         Brief statement of purpose - no marketing language
+         ============================================================ -->
     <header>
         <h1>Princeton Tracer</h1>
-        <p>Internal knowledge gateway for connectomics annotation</p>
+        <p class="mission">
+            Internal documentation for connectomics annotation workflows.<br>
+            SOPs, training materials, and tool references for the tracer team.
+        </p>
     </header>
 
     <!-- ============================================================
-         SECTION: Quick Links
-         Primary navigation cards for common workflows
+         NAVIGATION TILES
+         Primary site navigation - large click targets, clear labels
          ============================================================ -->
-    <section id="quick-links">
-        <h2>Quick Links</h2>
+    <div class="tiles">
 
-        <ul>
-            <li>
-                <a href="./sop/"><strong>Start a GT Task</strong></a>
-                - Standard operating procedures and checklists
-            </li>
-            <li>
-                <a href="./tasks/"><strong>Training Materials</strong></a>
-                - Synapse annotation, vesicle tracing, and more
-            </li>
-            <li>
-                <a href="./pipeline/"><strong>Tools &amp; Pipeline</strong></a>
-                - WebKnossos, Neuroglancer, tracer_tools
-            </li>
-            <li>
-                <a href="./gallery/"><strong>Visual Gallery</strong></a>
-                - Reference images and training videos
-            </li>
-        </ul>
-    </section>
+        <a href="./sop/" class="tile tile--primary">
+            <div class="tile-label">Start Here</div>
+            <div class="tile-title">Standard Operating Procedures</div>
+            <div class="tile-desc">GT task handling, protocol guidelines, verification checklists.</div>
+        </a>
+
+        <a href="./tasks/" class="tile tile--primary">
+            <div class="tile-label">Training</div>
+            <div class="tile-title">Task Guides</div>
+            <div class="tile-desc">Synapse annotation, vesicle tracing, semantic segmentation.</div>
+        </a>
+
+        <a href="./pipeline/" class="tile">
+            <div class="tile-label">Tools</div>
+            <div class="tile-title">Pipeline &amp; Infrastructure</div>
+            <div class="tile-desc">WebKnossos, Neuroglancer, CAVE API, tracer_tools.</div>
+        </a>
+
+        <a href="./gallery/" class="tile">
+            <div class="tile-label">Reference</div>
+            <div class="tile-title">Visual Gallery</div>
+            <div class="tile-desc">Annotated examples, training images, video walkthroughs.</div>
+        </a>
+
+        <a href="./stats/" class="tile">
+            <div class="tile-label">Metrics</div>
+            <div class="tile-title">Statistics</div>
+            <div class="tile-desc">ID validation results, annotation progress, quality metrics.</div>
+        </a>
+
+        <a href="./publications/" class="tile">
+            <div class="tile-label">Research</div>
+            <div class="tile-title">Publications</div>
+            <div class="tile-desc">Papers, preprints, and data releases from the project.</div>
+        </a>
+
+        <a href="./archive/" class="tile tile--muted">
+            <div class="tile-label">Historical</div>
+            <div class="tile-title">Archive</div>
+            <div class="tile-desc">Deprecated tools: VAST, Omni, Eyewire.</div>
+        </a>
+
+        <a href="./index-legacy.html" class="tile tile--muted">
+            <div class="tile-label">Reference</div>
+            <div class="tile-title">Legacy Documentation</div>
+            <div class="tile-desc">Original single-page guide with all inline content.</div>
+        </a>
+
+    </div>
 
     <!-- ============================================================
-         SECTION: Site Sections
-         Overview of all available sections
+         QUICK REFERENCE
+         Compact reference info - datasets and communication
          ============================================================ -->
-    <section id="sections">
-        <h2>Site Sections</h2>
+    <div class="quick-ref">
 
-        <dl>
-            <dt><a href="./pipeline/">Pipeline</a></dt>
-            <dd>Tools, workflows, and dataset documentation. WebKnossos, Neuroglancer, CAVE API, and tracer_tools.</dd>
+        <section>
+            <h2>Active Datasets</h2>
+            <ul>
+                <li><strong>FlyWire FAFB</strong> &mdash; <code>flywire_fafb_production</code></li>
+                <li><strong>BANC</strong> &mdash; <code>brain_and_nerve_cord</code></li>
+            </ul>
+        </section>
 
-            <dt><a href="./tasks/">Tasks</a></dt>
-            <dd>Training materials for annotation tasks. Synapse identification, vesicle tracing, semantic segmentation, proofreading.</dd>
+        <section>
+            <h2>Communication</h2>
+            <ul>
+                <li><strong>Slack:</strong> #putracers</li>
+                <li><strong>Meetings:</strong> Zoom (see calendar)</li>
+            </ul>
+        </section>
 
-            <dt><a href="./gallery/">Gallery</a></dt>
-            <dd>Visual reference materials. Annotated examples, training images, video demonstrations.</dd>
+        <section>
+            <h2>Quick Links</h2>
+            <ul>
+                <li><a href="./sop/#gt-checklist">GT Checklist</a></li>
+                <li><a href="./gallery/#synapse-examples">Synapse Examples</a></li>
+                <li><a href="./pipeline/#datasets">Dataset Details</a></li>
+            </ul>
+        </section>
 
-            <dt><a href="./sop/">SOP</a></dt>
-            <dd>Standard Operating Procedures. Ground Truth task handling, protocol guidelines, verification, checklists.</dd>
-
-            <dt><a href="./publications/">Publications</a></dt>
-            <dd>Research publications, preprints, and data releases from the project.</dd>
-
-            <dt><a href="./stats/">Stats</a></dt>
-            <dd>Project metrics and statistics. ID validation results, annotation progress, quality metrics.</dd>
-
-            <dt><a href="./archive/">Archive</a></dt>
-            <dd>Historical documentation for deprecated tools. VAST, Omni, Eyewire.</dd>
-        </dl>
-    </section>
-
-    <!-- ============================================================
-         SECTION: Current Tools
-         Quick reference for active tools
-         ============================================================ -->
-    <section id="current-tools">
-        <h2>Current Tools</h2>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Tool</th>
-                    <th>Purpose</th>
-                    <th>Documentation</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>WebKnossos</td>
-                    <td>Primary annotation platform</td>
-                    <td><a href="./pipeline/#tools">Pipeline &rarr; Tools</a></td>
-                </tr>
-                <tr>
-                    <td>Neuroglancer</td>
-                    <td>Volumetric data viewer</td>
-                    <td><a href="./pipeline/#tools">Pipeline &rarr; Tools</a></td>
-                </tr>
-                <tr>
-                    <td>tracer_tools</td>
-                    <td>Python library for CAVE/API</td>
-                    <td><a href="./pipeline/#tools">Pipeline &rarr; Tools</a></td>
-                </tr>
-                <tr>
-                    <td>CAVE</td>
-                    <td>Backend annotation database</td>
-                    <td><a href="./pipeline/#tools">Pipeline &rarr; Tools</a></td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
-
-    <!-- ============================================================
-         SECTION: Datasets
-         Active datasets overview
-         ============================================================ -->
-    <section id="datasets">
-        <h2>Supported Datasets</h2>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Dataset</th>
-                    <th>Organism</th>
-                    <th>Datastack</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>FlyWire FAFB</td>
-                    <td>Drosophila</td>
-                    <td><code>flywire_fafb_production</code></td>
-                </tr>
-                <tr>
-                    <td>BANC</td>
-                    <td>Drosophila (Brain + Nerve Cord)</td>
-                    <td><code>brain_and_nerve_cord</code></td>
-                </tr>
-            </tbody>
-        </table>
-
-        <p><a href="./pipeline/#datasets">View full dataset documentation &rarr;</a></p>
-    </section>
-
-    <!-- ============================================================
-         SECTION: Legacy Access
-         Link to preserved original documentation
-         ============================================================ -->
-    <section id="legacy">
-        <h2>Legacy Documentation</h2>
-        <p>
-            The original comprehensive single-page documentation is preserved at:
-            <a href="./index-legacy.html">index-legacy.html</a>
-        </p>
-        <p>
-            This includes all inline content from the previous site structure.
-            Use this for reference if content has not yet been migrated to the new structure.
-        </p>
-    </section>
-
-    <!-- ============================================================
-         SECTION: Communication
-         Team communication channels
-         ============================================================ -->
-    <section id="communication">
-        <h2>Communication</h2>
-        <ul>
-            <li><strong>Primary:</strong> Slack (#putracers channel)</li>
-            <li><strong>Secondary:</strong> Zoom (team meetings)</li>
-        </ul>
-    </section>
+    </div>
 
 </main>
 
 <footer>
-    <p>Last updated: January 2026</p>
-    <p>
-        <a href="./index-legacy.html">Legacy Documentation</a> |
-        <a href="https://github.com/BunPrinceton/tracer-workspace">GitHub Repository</a>
-    </p>
+    <div class="footer-links">
+        <a href="./index-legacy.html">Legacy Docs</a>
+        <a href="https://github.com/BunPrinceton/tracer-workspace">GitHub</a>
+    </div>
 </footer>
 
 </body>
