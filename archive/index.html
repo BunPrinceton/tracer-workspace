@@ -482,9 +482,33 @@
             outline: 2px solid #2563eb;
             outline-offset: 2px;
         }
+
+        /* Skip link for keyboard/screen reader users */
+        .skip-link {
+            position: absolute;
+            left: -10000px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+        .skip-link:focus {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: auto;
+            height: auto;
+            padding: 1rem;
+            background: #2563eb;
+            color: #ffffff;
+            z-index: 10000;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <nav aria-label="Main navigation">
     <ul>
@@ -499,7 +523,7 @@
     </ul>
 </nav>
 
-<main>
+<main id="main-content" role="main">
 
     <div class="page-header">
         <h1>Archive</h1>
@@ -574,7 +598,7 @@
                 <ul class="doc-list">
                     <li><a href="../drive_docs_output/Omni/How to Omni.html">How to Omni Guide</a> <span class="doc-format">HTML</span></li>
                     <li><a href="../drive_docs_output/Omni/Copy of Exporting Omni.html">Exporting from Omni</a> <span class="doc-format">HTML</span></li>
-                    <li><a href="../Omni/Copy of Omni keyboard and mouse commands (alpha).xlsx">Keyboard Commands</a> <span class="doc-format">XLSX</span></li>
+                    <li><a href="../drive_docs_output/Omni/Copy of Omni keyboard and mouse commands alpha.csv">Keyboard Commands</a> <span class="doc-format">CSV</span></li>
                 </ul>
             </article>
 

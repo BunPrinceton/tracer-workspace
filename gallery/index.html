@@ -590,9 +590,33 @@
             white-space: nowrap;
             border: 0;
         }
+
+        /* Skip link for keyboard/screen reader users */
+        .skip-link {
+            position: absolute;
+            left: -10000px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+        .skip-link:focus {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: auto;
+            height: auto;
+            padding: 1rem;
+            background: #2563eb;
+            color: #ffffff;
+            z-index: 10000;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
 
 <!-- Filter checkboxes must be outside main for CSS sibling selectors -->
 <input type="checkbox" id="filter-synapse" class="filter-checkbox" aria-label="Filter by synapses">
@@ -613,7 +637,7 @@
     </ul>
 </nav>
 
-<main>
+<main id="main-content" role="main">
 
     <div class="page-header">
         <h1>Visual Reference Gallery</h1>
@@ -630,7 +654,7 @@
             <div class="filter-group">
                 <span class="filter-group-label">Categories</span>
                 <div class="filter-options" role="group" aria-label="Category filters">
-                    <label for="filter-synapse" class="filter-label">Synapses</label>
+                    <label for="filter-synapse" class="filter-label" id="synapses">Synapses</label>
                     <label for="filter-segmentation" class="filter-label">Segmentation</label>
                     <label for="filter-defect" class="filter-label">Defects</label>
                     <label for="filter-structure" class="filter-label">Structures</label>
