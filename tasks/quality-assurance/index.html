@@ -4,16 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quality Assurance - Tasks - Princeton Tracer</title>
+    <!-- ============================================================
+         TASK PAGE TEMPLATE - Quality Assurance (TASK-06)
+         See semantic-segmentation/index.html for full template documentation
+         ============================================================ -->
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { font-size: 18px; line-height: 1.6; }
-        body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f5; color: #1a1a1a; min-height: 100vh; }
+        body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background-color: #f5f5f5; color: #1a1a1a; min-height: 100vh; }
 
-        nav { background: #1a1a1a; padding: 0.75rem 1.5rem; }
+        nav { background-color: #1a1a1a; padding: 0.75rem 1.5rem; }
         nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; max-width: 1200px; margin: 0 auto; }
-        nav a { color: #e5e5e5; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0; }
-        nav a:hover, nav a:focus { text-decoration: underline; }
-        nav a[aria-current="page"] { color: #fff; font-weight: 600; }
+        nav a { color: #e5e5e5; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0; display: inline-block; }
+        nav a:hover, nav a:focus { text-decoration: underline; text-underline-offset: 4px; }
+        nav a[aria-current="page"] { color: #ffffff; font-weight: 600; }
 
         main { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 
@@ -22,25 +26,73 @@
         .breadcrumb a:hover { text-decoration: underline; }
 
         .page-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #d4d4d4; }
-        .page-header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem; }
-        .page-header .task-id { font-size: 0.875rem; font-weight: 600; color: #2563eb; background: #eff6ff; padding: 0.25rem 0.625rem; border-radius: 4px; }
-        .page-header p { color: #525252; font-size: 1.0625rem; }
+        .page-header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+        .task-id { font-size: 0.875rem; font-weight: 600; color: #2563eb; background-color: #eff6ff; padding: 0.25rem 0.625rem; border-radius: 4px; }
+        .page-header > p { color: #525252; font-size: 1.0625rem; }
 
-        .placeholder { background: #fff; border: 2px dashed #d4d4d4; border-radius: 8px; padding: 3rem 2rem; text-align: center; margin-bottom: 2rem; }
-        .placeholder h2 { font-size: 1.25rem; color: #525252; margin-bottom: 0.5rem; }
-        .placeholder p { color: #737373; font-size: 0.9375rem; }
+        .section { background-color: #ffffff; border: 2px solid #d4d4d4; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .section h2 { font-size: 1.125rem; font-weight: 600; color: #1a1a1a; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e5e5e5; }
+        .section h3 { font-size: 1rem; font-weight: 600; color: #1a1a1a; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .section h3:first-child { margin-top: 0; }
+        .section p { margin-bottom: 1rem; color: #525252; }
+        .section p:last-child { margin-bottom: 0; }
+        .section ul, .section ol { margin-left: 1.25rem; margin-bottom: 1rem; }
+        .section li { padding: 0.25rem 0; }
+        .section a { color: #2563eb; text-decoration: none; }
+        .section a:hover, .section a:focus { text-decoration: underline; }
 
-        section { margin-bottom: 2rem; }
-        section h2 { font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #d4d4d4; }
-        section ul { list-style: none; }
-        section li { padding: 0.375rem 0; }
-        section a { color: #2563eb; text-decoration: none; }
-        section a:hover { text-decoration: underline; }
+        .sop-current { background-color: #eff6ff; border-color: #2563eb; }
+        .sop-badge { display: inline-block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.25rem 0.5rem; border-radius: 3px; margin-left: 0.5rem; vertical-align: middle; }
+        .sop-badge--current { background-color: #2563eb; color: #ffffff; }
+        .sop-badge--archived { background-color: #737373; color: #ffffff; }
+
+        details { background-color: #fafafa; border: 2px solid #e5e5e5; border-radius: 8px; margin-bottom: 1.5rem; }
+        summary { padding: 1rem 1.5rem; cursor: pointer; font-weight: 600; color: #525252; list-style: none; display: flex; align-items: center; gap: 0.5rem; }
+        summary::-webkit-details-marker { display: none; }
+        summary::before { content: "▶"; font-size: 0.75rem; transition: transform 0.2s; }
+        details[open] summary::before { transform: rotate(90deg); }
+        summary:hover { background-color: #f5f5f5; }
+        details .details-content { padding: 0 1.5rem 1.5rem; border-top: 1px solid #e5e5e5; }
+
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+        .tool-card { background-color: #f5f5f5; border-radius: 6px; padding: 1rem; }
+        .tool-card h4 { font-size: 0.9375rem; font-weight: 600; margin-bottom: 0.25rem; }
+        .tool-card p { font-size: 0.875rem; color: #525252; margin: 0; }
+
+        .failure-modes { list-style: none; margin: 0; }
+        .failure-modes li { background-color: #f5f5f5; border-left: 4px solid #d4d4d4; padding: 0.75rem 1rem; margin-bottom: 0.5rem; border-radius: 0 6px 6px 0; }
+        .failure-modes strong { display: block; margin-bottom: 0.25rem; }
+        .failure-modes span { font-size: 0.875rem; color: #525252; }
+
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background-color: #1a1a1a; border-radius: 8px; margin-bottom: 1rem; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .video-placeholder { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #737373; text-align: center; padding: 1rem; }
+        .video-placeholder-icon { font-size: 3rem; margin-bottom: 0.5rem; }
+        .video-list { list-style: none; margin: 0; }
+        .video-list li { padding: 0.5rem 0; border-bottom: 1px solid #e5e5e5; }
+        .video-list li:last-child { border-bottom: none; }
+
+        .gallery-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; list-style: none; margin: 0; }
+        .gallery-links a { display: block; background-color: #f5f5f5; padding: 0.75rem 1rem; border-radius: 6px; text-align: center; font-size: 0.875rem; }
+        .gallery-links a:hover { background-color: #eff6ff; text-decoration: none; }
+
+        .publication-list { list-style: none; margin: 0; }
+        .publication-list li { padding: 0.75rem 0; border-bottom: 1px solid #e5e5e5; }
+        .publication-list li:last-child { border-bottom: none; }
+        .publication-title { font-weight: 600; margin-bottom: 0.25rem; }
+        .publication-meta { font-size: 0.875rem; color: #525252; }
+        .publication-links { font-size: 0.875rem; margin-top: 0.25rem; }
+        .publication-links a { margin-right: 1rem; }
+
+        .placeholder-notice { background-color: #fafafa; border: 2px dashed #d4d4d4; border-radius: 6px; padding: 1rem; text-align: center; color: #737373; font-size: 0.875rem; }
 
         footer { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; border-top: 1px solid #e5e5e5; font-size: 0.875rem; color: #737373; }
         footer a { color: #525252; }
+        footer a:hover { color: #1a1a1a; }
+        .footer-nav { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
 
-        @media (max-width: 600px) { html { font-size: 16px; } main { padding: 1.5rem 1rem; } }
+        @media (max-width: 600px) { html { font-size: 16px; } main { padding: 1.5rem 1rem; } .page-header h1 { font-size: 1.5rem; } .tools-grid { grid-template-columns: 1fr; } .gallery-links { grid-template-columns: 1fr 1fr; } }
+        @media print { nav, footer { display: none; } .section { break-inside: avoid; border: 1px solid #000; } }
     </style>
 </head>
 <body>
@@ -72,47 +124,278 @@
         <p>Reviewing completed annotations for accuracy and consistency.</p>
     </div>
 
-    <!-- ============================================================
-         PLACEHOLDER: Content to be added
-         ============================================================ -->
-    <div class="placeholder">
-        <h2>Content Coming Soon</h2>
-        <p>Training materials, protocols, and examples for this task type will be added here.</p>
-    </div>
 
-    <!-- ============================================================
-         SECTION: Planned Content
-         ============================================================ -->
-    <section>
-        <h2>Planned Content</h2>
+    <!-- SECTION 1: TASK OVERVIEW -->
+    <section class="section" id="overview">
+        <h2>Task Overview</h2>
+
+        <h3>What is Quality Assurance?</h3>
+        <p>
+            Quality Assurance (QA) is the systematic review of completed annotations to verify
+            they meet project standards. QA reviewers sample submitted work, identify errors,
+            provide feedback to annotators, and determine whether submissions can be accepted
+            or need revision.
+        </p>
+
+        <h3>Why is it Important?</h3>
+        <p>
+            Without QA, errors accumulate and compound throughout the dataset. QA catches
+            mistakes before they become embedded in downstream analysis. It also provides
+            feedback that improves annotator performance over time, reducing error rates
+            across the entire project.
+        </p>
+
+        <h3>Key Objectives</h3>
         <ul>
-            <!-- TODO: Add training content for quality assurance -->
-            <li>QA review workflow</li>
-            <li>Sampling strategies</li>
-            <li>Error classification</li>
-            <li>Feedback procedures</li>
-            <li>Quality metrics</li>
-            <li>Inter-annotator agreement</li>
+            <li>Review sampled annotations against ground truth standards</li>
+            <li>Calculate accuracy metrics (precision, recall, agreement)</li>
+            <li>Identify systematic error patterns</li>
+            <li>Provide constructive feedback to annotators</li>
+            <li>Approve or reject submissions based on quality thresholds</li>
         </ul>
     </section>
 
-    <!-- ============================================================
-         SECTION: Related Documentation
-         ============================================================ -->
-    <section>
+
+    <!-- SECTION 2: CURRENT SOP (AUTHORITATIVE) -->
+    <section class="section sop-current" id="current-sop">
+        <h2>
+            Current Standard Operating Procedure
+            <span class="sop-badge sop-badge--current">Authoritative</span>
+        </h2>
+
+        <h3>Sampling Strategy</h3>
+        <p>
+            Not every annotation is reviewed. QA uses statistical sampling:
+        </p>
+        <ul>
+            <li><strong>New annotators</strong> — 100% review for first 5 submissions</li>
+            <li><strong>Experienced annotators</strong> — 10-20% random sample</li>
+            <li><strong>Flagged submissions</strong> — Always reviewed</li>
+            <li><strong>Complex regions</strong> — Higher sampling rate</li>
+        </ul>
+
+        <h3>Review Procedure</h3>
+        <ol>
+            <li>Load the submitted annotation and reference data</li>
+            <li>Compare annotation against EM imagery at full resolution</li>
+            <li>Check for completeness (all required structures labeled)</li>
+            <li>Check for accuracy (labels match actual structures)</li>
+            <li>Check for consistency (style matches project standards)</li>
+            <li>Document all errors found with screenshots</li>
+            <li>Calculate error rate and compare to threshold</li>
+        </ol>
+
+        <h3>Error Classification</h3>
+        <ul>
+            <li><strong>Critical</strong> — Wrong structure identity, major omission</li>
+            <li><strong>Major</strong> — Significant boundary error, missing branch</li>
+            <li><strong>Minor</strong> — Small boundary imprecision, style inconsistency</li>
+        </ul>
+
+        <h3>Quality Thresholds</h3>
+        <ul>
+            <li><strong>Pass</strong> — Less than 5% critical/major error rate</li>
+            <li><strong>Conditional</strong> — 5-10% error rate, requires feedback</li>
+            <li><strong>Reject</strong> — Greater than 10% error rate, needs redo</li>
+        </ul>
+
+        <h3>Feedback Process</h3>
+        <ol>
+            <li>Compile error report with specific examples</li>
+            <li>Identify patterns (repeated mistakes vs. random errors)</li>
+            <li>Write constructive feedback focusing on improvement</li>
+            <li>Send to annotator via project tracking system</li>
+            <li>Schedule retraining if systematic issues identified</li>
+        </ol>
+    </section>
+
+
+    <!-- SECTION 3: HISTORICAL SOPS (COLLAPSED) -->
+    <details id="historical-sops">
+        <summary>
+            Historical SOPs
+            <span class="sop-badge sop-badge--archived">Archived</span>
+        </summary>
+        <div class="details-content">
+            <p>
+                Previous QA protocols are preserved here for reference.
+                Always use the Current SOP above.
+            </p>
+
+            <h3>Version History</h3>
+            <ul>
+                <li>
+                    <strong>v1.0 (Current)</strong> — 2025
+                    <br>Initial QA workflow with sampling strategy
+                </li>
+            </ul>
+
+            <div class="placeholder-notice">
+                Historical documents will be linked here as they are migrated.
+            </div>
+        </div>
+    </details>
+
+
+    <!-- SECTION 4: VISUAL EXAMPLES -->
+    <section class="section" id="visual-examples">
+        <h2>Visual Examples</h2>
+
+        <p>
+            Reference images showing acceptable quality vs. common errors requiring rejection.
+        </p>
+
+        <ul class="gallery-links">
+            <li><a href="../../gallery/">Visual Gallery</a></li>
+            <li><a href="../../gallery/#tommy-macrina">Ground Truth Reference</a></li>
+        </ul>
+
+        <h3>Quality Reference</h3>
+        <ul>
+            <li><strong>Acceptable</strong> — Boundaries within 0.5 µm, all structures labeled</li>
+            <li><strong>Marginal</strong> — Minor boundary drift, occasional missed detail</li>
+            <li><strong>Unacceptable</strong> — Major omissions, wrong identifications</li>
+        </ul>
+
+        <div class="placeholder-notice">
+            QA example comparisons will be added to the gallery and linked here.
+        </div>
+    </section>
+
+
+    <!-- SECTION 5: COMMON FAILURE MODES -->
+    <section class="section" id="failure-modes">
+        <h2>Common Failure Modes</h2>
+
+        <ul class="failure-modes">
+            <li>
+                <strong>Inconsistent standards</strong>
+                <span>
+                    Different QA reviewers may apply different criteria. Regular
+                    calibration meetings maintain consistency across reviewers.
+                </span>
+            </li>
+            <li>
+                <strong>Sampling bias</strong>
+                <span>
+                    Easy regions may be over-sampled while difficult regions slip through.
+                    Use stratified sampling based on complexity.
+                </span>
+            </li>
+            <li>
+                <strong>Feedback without specifics</strong>
+                <span>
+                    "More careful" isn't actionable. Provide exact examples and explain
+                    what the correct annotation should look like.
+                </span>
+            </li>
+            <li>
+                <strong>Delayed feedback</strong>
+                <span>
+                    Feedback weeks after submission is less useful. Aim for same-day
+                    or next-day turnaround on QA reviews.
+                </span>
+            </li>
+            <li>
+                <strong>Missing systematic patterns</strong>
+                <span>
+                    Track errors across annotators to identify training gaps. One
+                    person's repeated mistake may indicate unclear instructions.
+                </span>
+            </li>
+        </ul>
+    </section>
+
+
+    <!-- SECTION 6: TOOLS USED -->
+    <section class="section" id="tools">
+        <h2>Tools Used</h2>
+
+        <div class="tools-grid">
+            <div class="tool-card">
+                <h4>WebKnossos</h4>
+                <p>Side-by-side annotation comparison</p>
+            </div>
+            <div class="tool-card">
+                <h4>Neuroglancer</h4>
+                <p>3D review of reconstructions</p>
+            </div>
+            <div class="tool-card">
+                <h4>Spreadsheets</h4>
+                <p>Error tracking and metrics</p>
+            </div>
+            <div class="tool-card">
+                <h4>ID Validation</h4>
+                <p>Automated consistency checks</p>
+            </div>
+        </div>
+
+        <h3>Metrics Calculated</h3>
+        <ul>
+            <li><strong>Error Rate</strong> — Errors per unit volume or structure</li>
+            <li><strong>Agreement</strong> — Inter-annotator consistency</li>
+            <li><strong>Completeness</strong> — Fraction of structures labeled</li>
+            <li><strong>Precision</strong> — Correct labels / total labels</li>
+        </ul>
+
+        <p>
+            <a href="../../stats/">View quality metrics dashboard →</a>
+        </p>
+    </section>
+
+
+    <!-- SECTION 7: TRAINING VIDEOS -->
+    <section class="section" id="training-videos">
+        <h2>Training Videos</h2>
+
+        <div class="video-container">
+            <div class="video-placeholder">
+                <div class="video-placeholder-icon">▶</div>
+                <div>Training video coming soon</div>
+                <div style="font-size: 0.75rem; margin-top: 0.5rem;">
+                    YouTube embed will be added here
+                </div>
+            </div>
+        </div>
+
+        <div class="placeholder-notice">
+            QA training videos will be embedded as they become available.
+        </div>
+    </section>
+
+
+    <!-- SECTION 8: RELATED PUBLICATIONS -->
+    <section class="section" id="publications">
+        <h2>Related Publications</h2>
+
+        <div class="placeholder-notice">
+            Publication references will be added as the bibliography is compiled.
+        </div>
+
+        <p>
+            <a href="../../publications/">View all publications →</a>
+        </p>
+    </section>
+
+
+    <!-- SECTION 9: RELATED DOCUMENTATION -->
+    <section class="section" id="related">
         <h2>Related Documentation</h2>
         <ul>
-            <li><a href="../../sop/#gt-verification">GT Verification</a></li>
+            <li><a href="../../sop/#gt-verification">GT Verification Procedures</a></li>
             <li><a href="../../sop/#gt-checklist">GT Checklist</a></li>
             <li><a href="../../stats/">Statistics &amp; Metrics</a></li>
-            <li><a href="../defect-annotation/">Defect Annotation</a></li>
+            <li><a href="../defect-annotation/">Task: Defect Annotation</a></li>
         </ul>
     </section>
 
 </main>
 
 <footer>
-    <p><a href="../">← Back to Tasks</a></p>
+    <div class="footer-nav">
+        <a href="../">← Back to Tasks</a>
+        <a href="../../">Dashboard</a>
+    </div>
 </footer>
 
 </body>

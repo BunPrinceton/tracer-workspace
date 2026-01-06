@@ -4,16 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Skeletonization - Tasks - Princeton Tracer</title>
+    <!-- ============================================================
+         TASK PAGE TEMPLATE - Skeletonization (TASK-03)
+         See semantic-segmentation/index.html for full template documentation
+         ============================================================ -->
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { font-size: 18px; line-height: 1.6; }
-        body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f5; color: #1a1a1a; min-height: 100vh; }
+        body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background-color: #f5f5f5; color: #1a1a1a; min-height: 100vh; }
 
-        nav { background: #1a1a1a; padding: 0.75rem 1.5rem; }
+        nav { background-color: #1a1a1a; padding: 0.75rem 1.5rem; }
         nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; max-width: 1200px; margin: 0 auto; }
-        nav a { color: #e5e5e5; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0; }
-        nav a:hover, nav a:focus { text-decoration: underline; }
-        nav a[aria-current="page"] { color: #fff; font-weight: 600; }
+        nav a { color: #e5e5e5; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0; display: inline-block; }
+        nav a:hover, nav a:focus { text-decoration: underline; text-underline-offset: 4px; }
+        nav a[aria-current="page"] { color: #ffffff; font-weight: 600; }
 
         main { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 
@@ -22,25 +26,73 @@
         .breadcrumb a:hover { text-decoration: underline; }
 
         .page-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #d4d4d4; }
-        .page-header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem; }
-        .page-header .task-id { font-size: 0.875rem; font-weight: 600; color: #2563eb; background: #eff6ff; padding: 0.25rem 0.625rem; border-radius: 4px; }
-        .page-header p { color: #525252; font-size: 1.0625rem; }
+        .page-header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+        .task-id { font-size: 0.875rem; font-weight: 600; color: #2563eb; background-color: #eff6ff; padding: 0.25rem 0.625rem; border-radius: 4px; }
+        .page-header > p { color: #525252; font-size: 1.0625rem; }
 
-        .placeholder { background: #fff; border: 2px dashed #d4d4d4; border-radius: 8px; padding: 3rem 2rem; text-align: center; margin-bottom: 2rem; }
-        .placeholder h2 { font-size: 1.25rem; color: #525252; margin-bottom: 0.5rem; }
-        .placeholder p { color: #737373; font-size: 0.9375rem; }
+        .section { background-color: #ffffff; border: 2px solid #d4d4d4; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .section h2 { font-size: 1.125rem; font-weight: 600; color: #1a1a1a; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e5e5e5; }
+        .section h3 { font-size: 1rem; font-weight: 600; color: #1a1a1a; margin-top: 1.25rem; margin-bottom: 0.5rem; }
+        .section h3:first-child { margin-top: 0; }
+        .section p { margin-bottom: 1rem; color: #525252; }
+        .section p:last-child { margin-bottom: 0; }
+        .section ul, .section ol { margin-left: 1.25rem; margin-bottom: 1rem; }
+        .section li { padding: 0.25rem 0; }
+        .section a { color: #2563eb; text-decoration: none; }
+        .section a:hover, .section a:focus { text-decoration: underline; }
 
-        section { margin-bottom: 2rem; }
-        section h2 { font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #d4d4d4; }
-        section ul { list-style: none; }
-        section li { padding: 0.375rem 0; }
-        section a { color: #2563eb; text-decoration: none; }
-        section a:hover { text-decoration: underline; }
+        .sop-current { background-color: #eff6ff; border-color: #2563eb; }
+        .sop-badge { display: inline-block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.25rem 0.5rem; border-radius: 3px; margin-left: 0.5rem; vertical-align: middle; }
+        .sop-badge--current { background-color: #2563eb; color: #ffffff; }
+        .sop-badge--archived { background-color: #737373; color: #ffffff; }
+
+        details { background-color: #fafafa; border: 2px solid #e5e5e5; border-radius: 8px; margin-bottom: 1.5rem; }
+        summary { padding: 1rem 1.5rem; cursor: pointer; font-weight: 600; color: #525252; list-style: none; display: flex; align-items: center; gap: 0.5rem; }
+        summary::-webkit-details-marker { display: none; }
+        summary::before { content: "▶"; font-size: 0.75rem; transition: transform 0.2s; }
+        details[open] summary::before { transform: rotate(90deg); }
+        summary:hover { background-color: #f5f5f5; }
+        details .details-content { padding: 0 1.5rem 1.5rem; border-top: 1px solid #e5e5e5; }
+
+        .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+        .tool-card { background-color: #f5f5f5; border-radius: 6px; padding: 1rem; }
+        .tool-card h4 { font-size: 0.9375rem; font-weight: 600; margin-bottom: 0.25rem; }
+        .tool-card p { font-size: 0.875rem; color: #525252; margin: 0; }
+
+        .failure-modes { list-style: none; margin: 0; }
+        .failure-modes li { background-color: #f5f5f5; border-left: 4px solid #d4d4d4; padding: 0.75rem 1rem; margin-bottom: 0.5rem; border-radius: 0 6px 6px 0; }
+        .failure-modes strong { display: block; margin-bottom: 0.25rem; }
+        .failure-modes span { font-size: 0.875rem; color: #525252; }
+
+        .video-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background-color: #1a1a1a; border-radius: 8px; margin-bottom: 1rem; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        .video-placeholder { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #737373; text-align: center; padding: 1rem; }
+        .video-placeholder-icon { font-size: 3rem; margin-bottom: 0.5rem; }
+        .video-list { list-style: none; margin: 0; }
+        .video-list li { padding: 0.5rem 0; border-bottom: 1px solid #e5e5e5; }
+        .video-list li:last-child { border-bottom: none; }
+
+        .gallery-links { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0.75rem; list-style: none; margin: 0; }
+        .gallery-links a { display: block; background-color: #f5f5f5; padding: 0.75rem 1rem; border-radius: 6px; text-align: center; font-size: 0.875rem; }
+        .gallery-links a:hover { background-color: #eff6ff; text-decoration: none; }
+
+        .publication-list { list-style: none; margin: 0; }
+        .publication-list li { padding: 0.75rem 0; border-bottom: 1px solid #e5e5e5; }
+        .publication-list li:last-child { border-bottom: none; }
+        .publication-title { font-weight: 600; margin-bottom: 0.25rem; }
+        .publication-meta { font-size: 0.875rem; color: #525252; }
+        .publication-links { font-size: 0.875rem; margin-top: 0.25rem; }
+        .publication-links a { margin-right: 1rem; }
+
+        .placeholder-notice { background-color: #fafafa; border: 2px dashed #d4d4d4; border-radius: 6px; padding: 1rem; text-align: center; color: #737373; font-size: 0.875rem; }
 
         footer { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; border-top: 1px solid #e5e5e5; font-size: 0.875rem; color: #737373; }
         footer a { color: #525252; }
+        footer a:hover { color: #1a1a1a; }
+        .footer-nav { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
 
-        @media (max-width: 600px) { html { font-size: 16px; } main { padding: 1.5rem 1rem; } }
+        @media (max-width: 600px) { html { font-size: 16px; } main { padding: 1.5rem 1rem; } .page-header h1 { font-size: 1.5rem; } .tools-grid { grid-template-columns: 1fr; } .gallery-links { grid-template-columns: 1fr 1fr; } }
+        @media print { nav, footer { display: none; } .section { break-inside: avoid; border: 1px solid #000; } }
     </style>
 </head>
 <body>
@@ -72,38 +124,277 @@
         <p>Creating skeletal representations of neuron morphology for analysis.</p>
     </div>
 
-    <!-- ============================================================
-         PLACEHOLDER: Content to be added
-         ============================================================ -->
-    <div class="placeholder">
-        <h2>Content Coming Soon</h2>
-        <p>Training materials, protocols, and examples for this task type will be added here.</p>
-    </div>
 
-    <!-- ============================================================
-         SECTION: Planned Content
-         ============================================================ -->
-    <section>
-        <h2>Planned Content</h2>
+    <!-- SECTION 1: TASK OVERVIEW -->
+    <section class="section" id="overview">
+        <h2>Task Overview</h2>
+
+        <h3>What is Skeletonization?</h3>
+        <p>
+            Skeletonization transforms dense 3D neuron segmentations into simplified skeletal
+            representations—graphs of connected nodes that trace the centerline of each process.
+            These skeletons capture the essential branching structure while reducing data complexity
+            by orders of magnitude.
+        </p>
+
+        <h3>Why is it Important?</h3>
+        <p>
+            Skeletons enable quantitative morphological analysis: branch length, tortuosity, branching
+            patterns, and cable properties. They're essential for comparing neuron types, building
+            computational models, and visualizing connectivity. Most downstream analysis tools work
+            with skeletons rather than dense voxel data.
+        </p>
+
+        <h3>Key Objectives</h3>
         <ul>
-            <!-- TODO: Add training content for skeletonization -->
-            <li>Purpose of skeletonization</li>
-            <li>Manual vs automated approaches</li>
-            <li>Node placement guidelines</li>
-            <li>Branch point handling</li>
-            <li>Skeleton validation</li>
-            <li>Integration with analysis tools</li>
+            <li>Generate accurate centerline traces through neuron volumes</li>
+            <li>Correctly identify and mark branch points</li>
+            <li>Preserve morphological features (spine locations, varicosities)</li>
+            <li>Validate skeleton connectivity matches segmentation</li>
+            <li>Export in standard formats (SWC, JSON)</li>
         </ul>
     </section>
 
-    <!-- ============================================================
-         SECTION: Related Documentation
-         ============================================================ -->
-    <section>
+
+    <!-- SECTION 2: CURRENT SOP (AUTHORITATIVE) -->
+    <section class="section sop-current" id="current-sop">
+        <h2>
+            Current Standard Operating Procedure
+            <span class="sop-badge sop-badge--current">Authoritative</span>
+        </h2>
+
+        <h3>Scope</h3>
+        <p>
+            This SOP covers both automated skeletonization validation and manual skeleton
+            correction. Most skeletons are generated automatically; human review focuses
+            on quality control and fixing errors.
+        </p>
+
+        <h3>Automated Skeleton Review</h3>
+        <ol>
+            <li>Load the neuron and its generated skeleton in Neuroglancer</li>
+            <li>Enable skeleton overlay on the 3D view</li>
+            <li>Verify skeleton runs through center of each process (not along edges)</li>
+            <li>Check all branch points are correctly detected</li>
+            <li>Verify terminal nodes reach actual process endings</li>
+            <li>Flag errors for manual correction</li>
+        </ol>
+
+        <h3>Manual Skeleton Correction</h3>
+        <ol>
+            <li>Open skeleton editor in WebKnossos</li>
+            <li>Navigate to flagged error location</li>
+            <li>For missing branches: add nodes tracing the centerline</li>
+            <li>For incorrect branch points: split and reconnect nodes</li>
+            <li>For centerline drift: adjust node positions</li>
+            <li>Save and re-validate</li>
+        </ol>
+
+        <h3>Node Placement Guidelines</h3>
+        <ul>
+            <li>Place nodes at morphological landmarks (branch points, diameter changes)</li>
+            <li>Space intermediate nodes every 1-2 µm along straight segments</li>
+            <li>Node should be at volumetric center, not membrane</li>
+            <li>Maintain smooth interpolation between nodes</li>
+        </ul>
+
+        <h3>Quality Criteria</h3>
+        <ul>
+            <li>Skeleton fully connected (no orphan branches)</li>
+            <li>Centerline deviation less than 0.5 µm from true center</li>
+            <li>All branch points within 1 node of actual bifurcation</li>
+            <li>No skeleton paths through extracellular space</li>
+        </ul>
+    </section>
+
+
+    <!-- SECTION 3: HISTORICAL SOPS (COLLAPSED) -->
+    <details id="historical-sops">
+        <summary>
+            Historical SOPs
+            <span class="sop-badge sop-badge--archived">Archived</span>
+        </summary>
+        <div class="details-content">
+            <p>
+                Previous skeletonization protocols are preserved here for reference.
+                Always use the Current SOP above.
+            </p>
+
+            <h3>Version History</h3>
+            <ul>
+                <li>
+                    <strong>v1.0 (Current)</strong> — 2025
+                    <br>Initial automated + manual hybrid workflow
+                </li>
+            </ul>
+
+            <div class="placeholder-notice">
+                Historical skeletonization documents will be linked here as they are migrated.
+            </div>
+        </div>
+    </details>
+
+
+    <!-- SECTION 4: VISUAL EXAMPLES -->
+    <section class="section" id="visual-examples">
+        <h2>Visual Examples</h2>
+
+        <p>
+            Reference images showing correct skeleton placement and common errors.
+        </p>
+
+        <ul class="gallery-links">
+            <li><a href="../../gallery/">Visual Gallery</a></li>
+        </ul>
+
+        <h3>Skeleton Quality Reference</h3>
+        <ul>
+            <li><strong>Good centerline</strong> — Skeleton runs through middle of process</li>
+            <li><strong>Edge-riding (error)</strong> — Skeleton hugs one side of membrane</li>
+            <li><strong>Missing branch</strong> — Process exists but no skeleton nodes trace it</li>
+            <li><strong>Floating segment</strong> — Skeleton disconnected from main tree</li>
+        </ul>
+
+        <div class="placeholder-notice">
+            Skeleton example images will be added to the gallery and linked here.
+        </div>
+    </section>
+
+
+    <!-- SECTION 5: COMMON FAILURE MODES -->
+    <section class="section" id="failure-modes">
+        <h2>Common Failure Modes</h2>
+
+        <ul class="failure-modes">
+            <li>
+                <strong>Missing thin processes</strong>
+                <span>
+                    Very fine axons may be skipped by automated skeletonization. Manually
+                    trace any visible processes without skeleton coverage.
+                </span>
+            </li>
+            <li>
+                <strong>Incorrect branch point topology</strong>
+                <span>
+                    Branch points should have exactly one parent and multiple children.
+                    Fix loops or disconnections immediately.
+                </span>
+            </li>
+            <li>
+                <strong>Centerline drift in curved regions</strong>
+                <span>
+                    Automated skeletons may cut corners. Add intermediate nodes to follow
+                    actual curvature of the process.
+                </span>
+            </li>
+            <li>
+                <strong>Skeleton extending beyond segmentation</strong>
+                <span>
+                    Nodes should never be in extracellular space. Delete or reposition
+                    nodes that extend past the neuron boundary.
+                </span>
+            </li>
+            <li>
+                <strong>Inconsistent node density</strong>
+                <span>
+                    Maintain roughly uniform spacing. Dense clusters make analysis harder;
+                    sparse regions lose morphological detail.
+                </span>
+            </li>
+        </ul>
+    </section>
+
+
+    <!-- SECTION 6: TOOLS USED -->
+    <section class="section" id="tools">
+        <h2>Tools Used</h2>
+
+        <div class="tools-grid">
+            <div class="tool-card">
+                <h4>WebKnossos</h4>
+                <p>Skeleton editing and manual tracing</p>
+            </div>
+            <div class="tool-card">
+                <h4>Neuroglancer</h4>
+                <p>3D skeleton visualization and validation</p>
+            </div>
+            <div class="tool-card">
+                <h4>Kimimaro</h4>
+                <p>Automated skeleton generation library</p>
+            </div>
+            <div class="tool-card">
+                <h4>TEASAR</h4>
+                <p>Tree-structure extraction algorithm</p>
+            </div>
+        </div>
+
+        <h3>Output Formats</h3>
+        <ul>
+            <li><strong>SWC</strong> — Standard format for neuron morphologies</li>
+            <li><strong>JSON</strong> — Structured format with metadata</li>
+            <li><strong>Precomputed</strong> — Neuroglancer-compatible chunks</li>
+        </ul>
+
+        <p>
+            <a href="../../pipeline/#analysis">View pipeline analysis stage →</a>
+        </p>
+    </section>
+
+
+    <!-- SECTION 7: TRAINING VIDEOS -->
+    <section class="section" id="training-videos">
+        <h2>Training Videos</h2>
+
+        <div class="video-container">
+            <div class="video-placeholder">
+                <div class="video-placeholder-icon">▶</div>
+                <div>Training video coming soon</div>
+                <div style="font-size: 0.75rem; margin-top: 0.5rem;">
+                    YouTube embed will be added here
+                </div>
+            </div>
+        </div>
+
+        <div class="placeholder-notice">
+            Skeletonization tutorial videos will be embedded as they become available.
+        </div>
+    </section>
+
+
+    <!-- SECTION 8: RELATED PUBLICATIONS -->
+    <section class="section" id="publications">
+        <h2>Related Publications</h2>
+
+        <ul class="publication-list">
+            <li>
+                <div class="publication-title">
+                    TEASAR: Tree-structure Extraction Algorithm for Accurate and Robust Skeletons
+                </div>
+                <div class="publication-meta">
+                    Sato et al. • 2000
+                </div>
+                <div class="publication-links">
+                    <a href="#">Paper</a>
+                </div>
+            </li>
+        </ul>
+
+        <div class="placeholder-notice">
+            Additional publication references will be added as the bibliography is compiled.
+        </div>
+
+        <p>
+            <a href="../../publications/">View all publications →</a>
+        </p>
+    </section>
+
+
+    <!-- SECTION 9: RELATED DOCUMENTATION -->
+    <section class="section" id="related">
         <h2>Related Documentation</h2>
         <ul>
             <li><a href="../../pipeline/#analysis">Pipeline: Analysis Stage</a></li>
-            <li><a href="../proofreading/">Proofreading</a></li>
+            <li><a href="../proofreading/">Task: Proofreading</a></li>
             <li><a href="../../gallery/">Visual Gallery</a></li>
         </ul>
     </section>
@@ -111,7 +402,10 @@
 </main>
 
 <footer>
-    <p><a href="../">← Back to Tasks</a></p>
+    <div class="footer-nav">
+        <a href="../">← Back to Tasks</a>
+        <a href="../../">Dashboard</a>
+    </div>
 </footer>
 
 </body>
