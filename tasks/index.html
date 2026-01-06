@@ -4,19 +4,250 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tasks - Princeton Tracer</title>
+    <style>
+        /* ============================================================
+           TASKS INDEX PAGE STYLES
+           Consistent with site design system
+           ============================================================ */
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #1a1a1a;
+            padding: 0.75rem 1.5rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav a {
+            color: #e5e5e5;
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            display: inline-block;
+        }
+
+        nav a:hover,
+        nav a:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        nav a[aria-current="page"] {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* Main content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        /* Page header */
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #d4d4d4;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #525252;
+            font-size: 1.0625rem;
+        }
+
+        /* Task type grid */
+        .task-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .task-card {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .task-card:hover,
+        .task-card:focus {
+            border-color: #2563eb;
+            outline: none;
+        }
+
+        .task-card:focus {
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+        }
+
+        .task-card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .task-card h2 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin: 0;
+        }
+
+        .task-card .task-id {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #2563eb;
+            background-color: #eff6ff;
+            padding: 0.125rem 0.5rem;
+            border-radius: 3px;
+            white-space: nowrap;
+        }
+
+        .task-card p {
+            font-size: 0.9375rem;
+            color: #525252;
+            margin-bottom: 1rem;
+        }
+
+        .task-card .task-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            font-size: 0.8125rem;
+        }
+
+        .task-card .meta-tag {
+            background-color: #f5f5f5;
+            color: #525252;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+        }
+
+        /* Section styling */
+        section {
+            margin-bottom: 2rem;
+        }
+
+        section h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #d4d4d4;
+        }
+
+        section ul {
+            list-style: none;
+        }
+
+        section li {
+            padding: 0.375rem 0;
+        }
+
+        section a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        section a:hover,
+        section a:focus {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            border-top: 1px solid #e5e5e5;
+            font-size: 0.875rem;
+            color: #737373;
+        }
+
+        footer a {
+            color: #525252;
+        }
+
+        footer a:hover {
+            color: #1a1a1a;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            html {
+                font-size: 16px;
+            }
+
+            main {
+                padding: 1.5rem 1rem;
+            }
+
+            .task-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Print */
+        @media print {
+            nav, footer {
+                display: none;
+            }
+
+            .task-card {
+                break-inside: avoid;
+                border: 1px solid #000;
+            }
+        }
+    </style>
 </head>
 <body>
 
 <!-- ============================================================
      NAVIGATION
-     Shared navigation structure - manually sync across all pages
-     TODO: Extract to _includes/nav.html when build system added
      ============================================================ -->
-<nav>
+<nav aria-label="Main navigation">
     <ul>
         <li><a href="../">Dashboard</a></li>
         <li><a href="../pipeline/">Pipeline</a></li>
-        <li><a href="../tasks/">Tasks</a></li>
+        <li><a href="../tasks/" aria-current="page">Tasks</a></li>
         <li><a href="../gallery/">Gallery</a></li>
         <li><a href="../sop/">SOP</a></li>
         <li><a href="../publications/">Publications</a></li>
@@ -26,105 +257,126 @@
 </nav>
 
 <main>
-    <h1>Tasks</h1>
-
-    <p>Training materials and guides for annotation tasks. Learn how to identify structures, annotate accurately, and follow established protocols.</p>
 
     <!-- ============================================================
-         SECTION: Synapse Annotation
-         Core synapse identification training
+         PAGE HEADER
          ============================================================ -->
-    <section id="synapses">
-        <h2>Synapse Annotation</h2>
-        <p>Learn to identify synapses using the four key indicators and classify the five synapse types.</p>
+    <div class="page-header">
+        <h1>Task Types</h1>
+        <p>Training materials and protocols for each annotation task type in the connectomics pipeline.</p>
+    </div>
 
-        <h3>Four Indicators of a Synapse</h3>
-        <ol>
-            <li>T-bar (presynaptic density)</li>
-            <li>Vesicle cloud</li>
-            <li>Synaptic cleft</li>
-            <li>Postsynaptic density (PSD)</li>
-        </ol>
+    <!-- ============================================================
+         TASK TYPE GRID
+         Primary navigation to task-specific documentation
+         ============================================================ -->
+    <div class="task-grid">
 
-        <h3>Five Synapse Types</h3>
-        <ul>
-            <li>Chemical synapses (most common)</li>
-            <li>Gap junctions (electrical)</li>
-            <li>Polyadic synapses</li>
-            <li>Ribbon synapses</li>
-            <li>Neuromuscular junctions</li>
-        </ul>
+        <a href="./semantic-segmentation/" class="task-card">
+            <div class="task-card-header">
+                <h2>Semantic Segmentation</h2>
+                <span class="task-id">TASK-01</span>
+            </div>
+            <p>Labeling tissue types and cellular structures at the semantic level.</p>
+            <div class="task-meta">
+                <span class="meta-tag">Classification</span>
+                <span class="meta-tag">Structure ID</span>
+            </div>
+        </a>
 
-        <h3>Related Documentation</h3>
+        <a href="./proofreading/" class="task-card">
+            <div class="task-card-header">
+                <h2>Proofreading</h2>
+                <span class="task-id">TASK-02</span>
+            </div>
+            <p>Verifying and correcting AI-generated neuron segmentations.</p>
+            <div class="task-meta">
+                <span class="meta-tag">Verification</span>
+                <span class="meta-tag">Correction</span>
+            </div>
+        </a>
+
+        <a href="./skeletonization/" class="task-card">
+            <div class="task-card-header">
+                <h2>Skeletonization</h2>
+                <span class="task-id">TASK-03</span>
+            </div>
+            <p>Creating skeletal representations of neuron morphology.</p>
+            <div class="task-meta">
+                <span class="meta-tag">Morphology</span>
+                <span class="meta-tag">Tracing</span>
+            </div>
+        </a>
+
+        <a href="./split-merge/" class="task-card">
+            <div class="task-card-header">
+                <h2>Split/Merge Resolution</h2>
+                <span class="task-id">TASK-04</span>
+            </div>
+            <p>Correcting segmentation errors where neurons are incorrectly joined or divided.</p>
+            <div class="task-meta">
+                <span class="meta-tag">Error Correction</span>
+                <span class="meta-tag">Segmentation</span>
+            </div>
+        </a>
+
+        <a href="./defect-annotation/" class="task-card">
+            <div class="task-card-header">
+                <h2>Defect Annotation</h2>
+                <span class="task-id">TASK-05</span>
+            </div>
+            <p>Marking imaging artifacts, tissue damage, and data quality issues.</p>
+            <div class="task-meta">
+                <span class="meta-tag">Quality Control</span>
+                <span class="meta-tag">Artifacts</span>
+            </div>
+        </a>
+
+        <a href="./quality-assurance/" class="task-card">
+            <div class="task-card-header">
+                <h2>Quality Assurance</h2>
+                <span class="task-id">TASK-06</span>
+            </div>
+            <p>Reviewing completed annotations for accuracy and consistency.</p>
+            <div class="task-meta">
+                <span class="meta-tag">Review</span>
+                <span class="meta-tag">Validation</span>
+            </div>
+        </a>
+
+    </div>
+
+    <!-- ============================================================
+         ADDITIONAL TRAINING RESOURCES
+         Links to legacy content and related materials
+         ============================================================ -->
+    <section id="additional-resources">
+        <h2>Additional Training Resources</h2>
         <ul>
             <li><a href="../drive_docs_output/Ground-Truth-Training/Copy of Fly Synapses.html">Fly Synapses Guide</a></li>
             <li><a href="../drive_docs_output/Ground-Truth-Training/Copy of Synapse Stuff.html">Synapse Stuff Reference</a></li>
-            <li><a href="../gallery/synapses.html">Synapse Visual Gallery</a></li>
-        </ul>
-        <!-- TODO: Create synapses.html with comprehensive training content -->
-    </section>
-
-    <!-- ============================================================
-         SECTION: Vesicle Tracing
-         Vesicle identification and tracing
-         ============================================================ -->
-    <section id="vesicles">
-        <h2>Vesicle Tracing</h2>
-        <p>Procedures for identifying and tracing vesicle pools associated with synaptic terminals.</p>
-
-        <h3>Related Documentation</h3>
-        <ul>
             <li><a href="../drive_docs_output/Ground-Truth-Training/Copy of How to Vesicle.html">How to Vesicle Guide</a></li>
-        </ul>
-        <!-- TODO: Create vesicles.html with detailed vesicle tracing guide -->
-    </section>
-
-    <!-- ============================================================
-         SECTION: Semantic Segmentation
-         Semantic structure annotation
-         ============================================================ -->
-    <section id="semantic-segmentation">
-        <h2>Semantic Segmentation</h2>
-        <p>Annotating semantic structures and tissue types within EM volumes.</p>
-
-        <h3>Related Documentation</h3>
-        <ul>
-            <li><a href="../drive_docs_output/Misc/Copy of How to semantic segmentation.html">Semantic Segmentation Guide</a></li>
-        </ul>
-        <!-- TODO: Create semantic-segmentation.html with detailed guide -->
-    </section>
-
-    <!-- ============================================================
-         SECTION: Proofreading
-         Proofreading workflows and triage
-         ============================================================ -->
-    <section id="proofreading">
-        <h2>Proofreading</h2>
-        <p>Three-round triage system for efficient proofreading of segmentation data.</p>
-
-        <h3>Related Documentation</h3>
-        <ul>
-            <li><a href="../Proofreading Protocol_ Three-Round Triage System.docx">Proofreading Protocol (DOCX)</a></li>
-        </ul>
-        <!-- TODO: Create proofreading.html with triage system details -->
-    </section>
-
-    <!-- ============================================================
-         SECTION: Quick Links
-         Links to existing training materials
-         ============================================================ -->
-    <section id="quick-links">
-        <h2>Quick Links</h2>
-        <ul>
-            <li><a href="../index-legacy.html#training">Legacy Training Documentation</a></li>
             <li><a href="../gallery/">Visual Gallery</a></li>
+            <li><a href="../index-legacy.html#training">Legacy Training Documentation</a></li>
+        </ul>
+    </section>
+
+    <!-- ============================================================
+         RELATED PAGES
+         ============================================================ -->
+    <section id="related">
+        <h2>Related Pages</h2>
+        <ul>
+            <li><a href="../sop/">Standard Operating Procedures</a> — GT task handling and checklists</li>
+            <li><a href="../pipeline/#proofreading">Pipeline: Proofreading Stage</a> — Where tasks fit in workflow</li>
+            <li><a href="../pipeline/#annotation">Pipeline: Annotation Stage</a> — Synapse and cell type labeling</li>
         </ul>
     </section>
 
 </main>
 
 <footer>
-    <p><a href="../">Back to Dashboard</a></p>
+    <p><a href="../">← Back to Dashboard</a></p>
 </footer>
 
 </body>
