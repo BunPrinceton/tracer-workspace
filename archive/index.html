@@ -4,15 +4,489 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Archive - Princeton Tracer</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #1a1a1a;
+            padding: 0.75rem 1.5rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav a {
+            color: #e5e5e5;
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            display: inline-block;
+        }
+
+        nav a:hover,
+        nav a:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        nav a[aria-current="page"] {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* Main content */
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #d4d4d4;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #525252;
+            font-size: 1.0625rem;
+        }
+
+        /* Archive warning */
+        .archive-warning {
+            background-color: #fef3c7;
+            border: 2px solid #d97706;
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .archive-warning-icon {
+            font-size: 1.25rem;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .archive-warning p {
+            font-size: 0.9375rem;
+            color: #92400e;
+            margin: 0;
+        }
+
+        .archive-warning a {
+            color: #92400e;
+            font-weight: 600;
+        }
+
+        /* Jump links */
+        .jump-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .jump-link {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            color: #525252;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: border-color 0.15s ease;
+        }
+
+        .jump-link:hover {
+            border-color: #737373;
+            color: #1a1a1a;
+        }
+
+        /* Sections */
+        .archive-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #d4d4d4;
+        }
+
+        .section-header h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        /* Deprecated badge */
+        .deprecated-badge {
+            display: inline-block;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            background-color: #737373;
+            color: #ffffff;
+        }
+
+        /* Archive cards */
+        .archive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .archive-card {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 1.25rem;
+            opacity: 0.95;
+        }
+
+        .archive-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .archive-card h3 {
+            font-size: 1.0625rem;
+            font-weight: 700;
+        }
+
+        .archive-card-meta {
+            font-size: 0.8125rem;
+            color: #737373;
+            margin-bottom: 0.75rem;
+        }
+
+        .archive-card p {
+            font-size: 0.875rem;
+            color: #525252;
+            margin-bottom: 1rem;
+        }
+
+        .archive-card-replaced {
+            font-size: 0.8125rem;
+            color: #059669;
+            background-color: #ecfdf5;
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .archive-card-replaced a {
+            color: #059669;
+            font-weight: 600;
+        }
+
+        /* Doc list */
+        .doc-list {
+            list-style: none;
+        }
+
+        .doc-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e5e5e5;
+            font-size: 0.875rem;
+        }
+
+        .doc-list li:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .doc-list a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .doc-list a:hover {
+            text-decoration: underline;
+        }
+
+        .doc-format {
+            font-size: 0.75rem;
+            color: #737373;
+            margin-left: 0.5rem;
+        }
+
+        /* Tool evolution timeline */
+        .evolution-timeline {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .evolution-item {
+            position: relative;
+            padding-left: 2rem;
+            padding-bottom: 1.5rem;
+            border-left: 2px solid #d4d4d4;
+            margin-left: 0.5rem;
+        }
+
+        .evolution-item:last-child {
+            border-left: 2px solid transparent;
+            padding-bottom: 0;
+        }
+
+        .evolution-item::before {
+            content: "";
+            position: absolute;
+            left: -7px;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .evolution-item--deprecated::before {
+            background-color: #737373;
+            border: 2px solid #737373;
+        }
+
+        .evolution-item--current::before {
+            background-color: #059669;
+            border: 2px solid #059669;
+        }
+
+        .evolution-era {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .evolution-era--deprecated {
+            color: #737373;
+        }
+
+        .evolution-era--current {
+            color: #059669;
+        }
+
+        .evolution-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .evolution-desc {
+            font-size: 0.875rem;
+            color: #525252;
+        }
+
+        .evolution-tools {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .evolution-tool {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            color: #525252;
+        }
+
+        .evolution-tool--current {
+            background-color: #ecfdf5;
+            color: #059669;
+        }
+
+        /* Glossary */
+        .glossary {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .glossary-header {
+            background-color: #f5f5f5;
+            padding: 0.75rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .glossary-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .glossary-table th,
+        .glossary-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e5e5;
+            font-size: 0.875rem;
+        }
+
+        .glossary-table th {
+            background-color: #fafafa;
+            font-weight: 600;
+            width: 25%;
+        }
+
+        .glossary-table tr:last-child td,
+        .glossary-table tr:last-child th {
+            border-bottom: none;
+        }
+
+        /* Legacy docs section */
+        .legacy-docs {
+            background-color: #fafafa;
+            border: 2px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .legacy-docs h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .legacy-docs ul {
+            list-style: none;
+        }
+
+        .legacy-docs li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .legacy-docs li:last-child {
+            border-bottom: none;
+        }
+
+        .legacy-docs a {
+            color: #525252;
+            text-decoration: none;
+        }
+
+        .legacy-docs a:hover {
+            color: #2563eb;
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            border-top: 1px solid #e5e5e5;
+            font-size: 0.875rem;
+            color: #737373;
+        }
+
+        footer a {
+            color: #525252;
+        }
+
+        footer a:hover {
+            color: #1a1a1a;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            html {
+                font-size: 16px;
+            }
+
+            main {
+                padding: 1.5rem 1rem;
+            }
+
+            .archive-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .jump-links {
+                flex-direction: column;
+            }
+
+            .jump-link {
+                text-align: center;
+            }
+        }
+
+        /* Print */
+        @media print {
+            nav, footer, .archive-warning {
+                display: none;
+            }
+
+            .archive-card, .glossary, .evolution-timeline {
+                break-inside: avoid;
+                border: 1px solid #000;
+            }
+        }
+
+        /* Focus visible */
+        :focus-visible {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+    </style>
 </head>
 <body>
 
-<!-- ============================================================
-     NAVIGATION
-     Shared navigation structure - manually sync across all pages
-     TODO: Extract to _includes/nav.html when build system added
-     ============================================================ -->
-<nav>
+<nav aria-label="Main navigation">
     <ul>
         <li><a href="../">Dashboard</a></li>
         <li><a href="../pipeline/">Pipeline</a></li>
@@ -21,154 +495,341 @@
         <li><a href="../sop/">SOP</a></li>
         <li><a href="../publications/">Publications</a></li>
         <li><a href="../stats/">Stats</a></li>
-        <li><a href="../archive/">Archive</a></li>
+        <li><a href="./" aria-current="page">Archive</a></li>
     </ul>
 </nav>
 
 <main>
-    <h1>Archive</h1>
 
-    <p>Historical documentation for deprecated tools and workflows. Preserved for reference but no longer actively used.</p>
+    <div class="page-header">
+        <h1>Archive</h1>
+        <p>Historical documentation for deprecated tools, workflows, and procedures. Preserved for institutional memory and reference.</p>
+    </div>
 
-    <p><strong>Note:</strong> The tools documented here have been superseded by modern alternatives. See <a href="../pipeline/">Pipeline</a> for current tools.</p>
+    <div class="archive-warning" role="alert">
+        <span class="archive-warning-icon" aria-hidden="true">&#9888;</span>
+        <p>
+            <strong>Historical Reference Only.</strong> The tools and workflows documented here have been superseded by modern alternatives.
+            See <a href="../pipeline/">Pipeline</a> and <a href="../tasks/">Tasks</a> for current procedures.
+        </p>
+    </div>
 
-    <!-- ============================================================
-         SECTION: VAST
-         VAST annotation tool (deprecated)
-         ============================================================ -->
-    <section id="vast">
-        <h2>VAST</h2>
-        <p><strong>Status:</strong> Deprecated</p>
-        <p>Volume Annotation and Segmentation Tool - desktop application for manual segmentation annotation. Replaced by WebKnossos.</p>
+    <!-- Jump Links -->
+    <div class="jump-links" role="navigation" aria-label="Archive sections">
+        <a href="#tools" class="jump-link">Deprecated Tools</a>
+        <a href="#workflows" class="jump-link">Legacy Workflows</a>
+        <a href="#evolution" class="jump-link">Tool Evolution</a>
+        <a href="#glossary" class="jump-link">Historical Glossary</a>
+        <a href="#legacy-docs" class="jump-link">Legacy Documentation</a>
+    </div>
 
-        <h3>Documentation</h3>
-        <ul>
-            <li><a href="../drive_docs_output/Ground-Truth-Training/How-to VAST.html">How to VAST Guide</a></li>
-        </ul>
 
-        <h3>Key Features (Historical)</h3>
-        <ul>
-            <li>Desktop-based annotation</li>
-            <li>Ubuntu/Linux environment</li>
-            <li>Network-mounted storage required</li>
-        </ul>
-        <!-- TODO: Create vast.html with full historical documentation -->
+    <!-- ================================================================
+         DEPRECATED TOOLS
+         ================================================================ -->
+    <section class="archive-section" id="tools" aria-labelledby="tools-heading">
+        <div class="section-header">
+            <h2 id="tools-heading">Deprecated Tools</h2>
+        </div>
+
+        <div class="archive-grid">
+
+            <!-- VAST -->
+            <article class="archive-card" id="vast">
+                <div class="archive-card-header">
+                    <h3>VAST</h3>
+                    <span class="deprecated-badge">Deprecated</span>
+                </div>
+                <div class="archive-card-meta">
+                    Volume Annotation and Segmentation Tool
+                </div>
+                <p>Desktop application for manual segmentation annotation. Required Ubuntu/Linux environment with network-mounted storage.</p>
+
+                <div class="archive-card-replaced">
+                    Replaced by: <a href="../tasks/semantic-segmentation/">WebKnossos</a>
+                </div>
+
+                <h4 style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: #737373; margin-bottom: 0.5rem;">Documentation</h4>
+                <ul class="doc-list">
+                    <li><a href="../drive_docs_output/Ground-Truth-Training/How-to VAST.html">How to VAST Guide</a> <span class="doc-format">HTML</span></li>
+                </ul>
+            </article>
+
+            <!-- Omni -->
+            <article class="archive-card" id="omni">
+                <div class="archive-card-header">
+                    <h3>Omni</h3>
+                    <span class="deprecated-badge">Deprecated</span>
+                </div>
+                <div class="archive-card-meta">
+                    3D Proofreading &amp; Visualization
+                </div>
+                <p>3D proofreading and visualization tool for segmentation data. Desktop application for reviewing and correcting automated segmentation.</p>
+
+                <div class="archive-card-replaced">
+                    Replaced by: <a href="../tasks/proofreading/">WebKnossos</a> + <a href="../pipeline/#proofreading">Neuroglancer</a>
+                </div>
+
+                <h4 style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: #737373; margin-bottom: 0.5rem;">Documentation</h4>
+                <ul class="doc-list">
+                    <li><a href="../drive_docs_output/Omni/How to Omni.html">How to Omni Guide</a> <span class="doc-format">HTML</span></li>
+                    <li><a href="../drive_docs_output/Omni/Copy of Exporting Omni.html">Exporting from Omni</a> <span class="doc-format">HTML</span></li>
+                    <li><a href="../Omni/Copy of Omni keyboard and mouse commands (alpha).xlsx">Keyboard Commands</a> <span class="doc-format">XLSX</span></li>
+                </ul>
+            </article>
+
+            <!-- Eyewire -->
+            <article class="archive-card" id="eyewire">
+                <div class="archive-card-header">
+                    <h3>Eyewire</h3>
+                    <span class="deprecated-badge">Deprecated</span>
+                </div>
+                <div class="archive-card-meta">
+                    Citizen Science Platform
+                </div>
+                <p>Browser-based citizen science game for neuron reconstruction. Gamified approach to crowdsourced annotation.</p>
+
+                <div class="archive-card-replaced">
+                    Replaced by: Professional annotation tools
+                </div>
+
+                <h4 style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: #737373; margin-bottom: 0.5rem;">Documentation</h4>
+                <ul class="doc-list">
+                    <li><a href="../Eyewire/How-to_ Eyewire.docx">How to Eyewire</a> <span class="doc-format">DOCX</span></li>
+                    <li><a href="../Eyewire/Eyewire Visual Aid.pptx">Visual Aid</a> <span class="doc-format">PPTX</span></li>
+                </ul>
+            </article>
+
+        </div>
     </section>
 
-    <!-- ============================================================
-         SECTION: Omni
-         Omni 3D proofreading tool (deprecated)
-         ============================================================ -->
-    <section id="omni">
-        <h2>Omni</h2>
-        <p><strong>Status:</strong> Deprecated</p>
-        <p>3D proofreading and visualization tool for segmentation data. Replaced by WebKnossos and Neuroglancer.</p>
 
-        <h3>Documentation</h3>
-        <ul>
-            <li><a href="../drive_docs_output/Omni/How to Omni.html">How to Omni Guide</a></li>
-            <li><a href="../drive_docs_output/Omni/Copy of Exporting Omni.html">Exporting from Omni</a></li>
-            <li><a href="../Omni/Copy of Omni keyboard and mouse commands (alpha).xlsx">Omni Keyboard Commands (XLSX)</a></li>
-        </ul>
+    <!-- ================================================================
+         LEGACY WORKFLOWS
+         ================================================================ -->
+    <section class="archive-section" id="workflows" aria-labelledby="workflows-heading">
+        <div class="section-header">
+            <h2 id="workflows-heading">Legacy Workflows</h2>
+        </div>
 
-        <h3>Glossary (Historical)</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Term</th>
-                    <th>Definition</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Dust</td>
-                    <td>Small voxel fragments inside large dendrites/axons</td>
-                </tr>
-                <tr>
-                    <td>Merger</td>
-                    <td>AI error combining two non-connecting structures</td>
-                </tr>
-                <tr>
-                    <td>Segment</td>
-                    <td>Collection of supervoxels</td>
-                </tr>
-                <tr>
-                    <td>Supervoxel</td>
-                    <td>Smallest rearrangeable unit of segmentation</td>
-                </tr>
-                <tr>
-                    <td>Spine</td>
-                    <td>Small membranous protrusion from dendrite</td>
-                </tr>
-            </tbody>
-        </table>
-        <!-- TODO: Create omni.html with full historical documentation -->
+        <div class="archive-grid">
+
+            <!-- Desktop-Based Annotation -->
+            <article class="archive-card">
+                <div class="archive-card-header">
+                    <h3>Desktop-Based Annotation</h3>
+                    <span class="deprecated-badge">Deprecated</span>
+                </div>
+                <div class="archive-card-meta">
+                    VAST + Omni Workflow
+                </div>
+                <p>Original annotation workflow using desktop applications on Ubuntu workstations with network-mounted data storage.</p>
+
+                <div class="archive-card-replaced">
+                    Current: <a href="../tasks/">Web-based task workflow</a>
+                </div>
+
+                <h4 style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: #737373; margin-bottom: 0.5rem;">Key Differences</h4>
+                <ul class="doc-list">
+                    <li>Local data access vs. cloud-hosted volumes</li>
+                    <li>Single-user vs. collaborative editing</li>
+                    <li>File-based vs. database-backed annotations</li>
+                </ul>
+            </article>
+
+            <!-- Manual ID Tracking -->
+            <article class="archive-card">
+                <div class="archive-card-header">
+                    <h3>Manual ID Tracking</h3>
+                    <span class="deprecated-badge">Deprecated</span>
+                </div>
+                <div class="archive-card-meta">
+                    Spreadsheet-Based
+                </div>
+                <p>Manual tracking of segment IDs in spreadsheets without automated validation against changing segmentation.</p>
+
+                <div class="archive-card-replaced">
+                    Current: <a href="../stats/#validation-heading">Automated ID validation via CAVE</a>
+                </div>
+
+                <h4 style="font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: #737373; margin-bottom: 0.5rem;">Limitations</h4>
+                <ul class="doc-list">
+                    <li>No detection of split/merge changes</li>
+                    <li>IDs could become stale without notice</li>
+                    <li>No supervoxel-based tracking</li>
+                </ul>
+            </article>
+
+        </div>
     </section>
 
-    <!-- ============================================================
-         SECTION: Eyewire
-         Eyewire citizen science platform (deprecated)
-         ============================================================ -->
-    <section id="eyewire">
-        <h2>Eyewire</h2>
-        <p><strong>Status:</strong> Deprecated</p>
-        <p>Browser-based citizen science game for neuron reconstruction. Replaced by professional annotation tools.</p>
 
-        <h3>Documentation</h3>
-        <ul>
-            <li><a href="../Eyewire/How-to_ Eyewire.docx">How to Eyewire (DOCX)</a></li>
-            <li><a href="../Eyewire/Eyewire Visual Aid.pptx">Eyewire Visual Aid (PPTX)</a></li>
-        </ul>
+    <!-- ================================================================
+         TOOL EVOLUTION TIMELINE
+         ================================================================ -->
+    <section class="archive-section" id="evolution" aria-labelledby="evolution-heading">
+        <div class="section-header">
+            <h2 id="evolution-heading">Tool Evolution Timeline</h2>
+        </div>
 
-        <h3>Key Features (Historical)</h3>
-        <ul>
-            <li>Gamified neuron tracing</li>
-            <li>Browser-based interface</li>
-            <li>Public participation model</li>
-        </ul>
-        <!-- TODO: Create eyewire.html with full historical documentation -->
+        <div class="evolution-timeline">
+
+            <div class="evolution-item evolution-item--deprecated">
+                <div class="evolution-era evolution-era--deprecated">Era 1: Citizen Science</div>
+                <div class="evolution-title">Eyewire Era</div>
+                <div class="evolution-desc">Browser-based gamified neuron reconstruction for public participation. Pioneered crowdsourced connectomics.</div>
+                <div class="evolution-tools">
+                    <span class="evolution-tool">Eyewire</span>
+                    <span class="evolution-tool">Browser-based</span>
+                </div>
+            </div>
+
+            <div class="evolution-item evolution-item--deprecated">
+                <div class="evolution-era evolution-era--deprecated">Era 2: Professional Desktop</div>
+                <div class="evolution-title">VAST + Omni Era</div>
+                <div class="evolution-desc">Professional desktop tools for annotation (VAST) and 3D proofreading (Omni). Required Ubuntu workstations with local data access.</div>
+                <div class="evolution-tools">
+                    <span class="evolution-tool">VAST</span>
+                    <span class="evolution-tool">Omni</span>
+                    <span class="evolution-tool">Ubuntu/Linux</span>
+                </div>
+            </div>
+
+            <div class="evolution-item evolution-item--current">
+                <div class="evolution-era evolution-era--current">Era 3: Web-Based Collaboration (Current)</div>
+                <div class="evolution-title">WebKnossos + Neuroglancer Era</div>
+                <div class="evolution-desc">Web-based tools with collaborative features, AI assistance, and cloud integration. CAVE provides versioned annotation backend.</div>
+                <div class="evolution-tools">
+                    <span class="evolution-tool evolution-tool--current">WebKnossos</span>
+                    <span class="evolution-tool evolution-tool--current">Neuroglancer</span>
+                    <span class="evolution-tool evolution-tool--current">CAVE</span>
+                    <span class="evolution-tool evolution-tool--current">FlyWire</span>
+                </div>
+            </div>
+
+        </div>
     </section>
 
-    <!-- ============================================================
-         SECTION: Tool Evolution
-         Timeline of tool transitions
-         ============================================================ -->
-    <section id="tool-evolution">
-        <h2>Tool Evolution Timeline</h2>
 
-        <ol>
-            <li>
-                <strong>Eyewire Era</strong> - Citizen science approach
-                <br>Browser-based gamified neuron reconstruction for public participation.
-            </li>
-            <li>
-                <strong>VAST + Omni Era</strong> - Professional desktop tools
-                <br>VAST for annotation, Omni for 3D proofreading. Ubuntu-based workflow.
-            </li>
-            <li>
-                <strong>WebKnossos + Neuroglancer Era</strong> - Current
-                <br>Web-based tools with collaborative features, AI assistance, and CAVE integration.
-            </li>
-        </ol>
+    <!-- ================================================================
+         HISTORICAL GLOSSARY
+         ================================================================ -->
+    <section class="archive-section" id="glossary" aria-labelledby="glossary-heading">
+        <div class="section-header">
+            <h2 id="glossary-heading">Historical Glossary</h2>
+        </div>
+
+        <p style="color: #525252; font-size: 0.9375rem; margin-bottom: 1rem;">
+            Terms from deprecated tools that may appear in legacy documentation. Some terms remain in use.
+        </p>
+
+        <div class="glossary">
+            <div class="glossary-header">Omni Terminology</div>
+            <table class="glossary-table">
+                <tbody>
+                    <tr>
+                        <th>Dust</th>
+                        <td>Small voxel fragments erroneously included inside large dendrites or axons. Typically noise from segmentation.</td>
+                    </tr>
+                    <tr>
+                        <th>Merger</th>
+                        <td>AI segmentation error where two non-connecting structures are incorrectly combined into one segment.</td>
+                    </tr>
+                    <tr>
+                        <th>Split</th>
+                        <td>AI segmentation error where one continuous structure is incorrectly divided into multiple segments.</td>
+                    </tr>
+                    <tr>
+                        <th>Segment</th>
+                        <td>A collection of supervoxels grouped together, representing a candidate neuron or fragment.</td>
+                    </tr>
+                    <tr>
+                        <th>Supervoxel</th>
+                        <td>The smallest rearrangeable unit of segmentation. Groups of voxels that are always kept together.</td>
+                    </tr>
+                    <tr>
+                        <th>Spine</th>
+                        <td>Small membranous protrusion from a dendrite, typically a postsynaptic structure.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="glossary" style="margin-top: 1rem;">
+            <div class="glossary-header">VAST Terminology</div>
+            <table class="glossary-table">
+                <tbody>
+                    <tr>
+                        <th>Volume</th>
+                        <td>A 3D EM image stack loaded for annotation.</td>
+                    </tr>
+                    <tr>
+                        <th>Brush</th>
+                        <td>Tool for painting segmentation labels onto voxels.</td>
+                    </tr>
+                    <tr>
+                        <th>Label</th>
+                        <td>A semantic category assigned to segmented regions (e.g., "synapse", "mitochondria").</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </section>
 
-    <!-- ============================================================
-         SECTION: Legacy Documentation
-         Links to legacy index.html sections
-         ============================================================ -->
-    <section id="legacy">
-        <h2>Legacy Documentation</h2>
-        <ul>
-            <li><a href="../index-legacy.html">Full Legacy Documentation Page</a></li>
-            <li><a href="../index-legacy.html#history">Legacy History Section</a></li>
-            <li><a href="../index-legacy.html#omni-docs">Legacy Omni Documentation</a></li>
-        </ul>
+
+    <!-- ================================================================
+         LEGACY DOCUMENTATION
+         ================================================================ -->
+    <section class="archive-section" id="legacy-docs" aria-labelledby="legacy-heading">
+        <div class="section-header">
+            <h2 id="legacy-heading">Legacy Documentation</h2>
+        </div>
+
+        <div class="legacy-docs">
+            <h3>Full Legacy Index</h3>
+            <p style="font-size: 0.875rem; color: #525252; margin-bottom: 1rem;">
+                The original monolithic documentation page has been preserved in its entirety.
+            </p>
+            <ul>
+                <li><a href="../index-legacy.html">Full Legacy Documentation Page</a></li>
+                <li><a href="../index-legacy.html#history">Legacy History Section</a></li>
+                <li><a href="../index-legacy.html#omni-docs">Legacy Omni Documentation</a></li>
+                <li><a href="../index-legacy.html#vast-guide">Legacy VAST Guide</a></li>
+            </ul>
+        </div>
+
+        <div class="legacy-docs" style="margin-top: 1rem;">
+            <h3>Deprecated SOPs</h3>
+            <p style="font-size: 0.875rem; color: #525252; margin-bottom: 1rem;">
+                Standard Operating Procedures that have been superseded by current versions.
+            </p>
+            <ul>
+                <li><a href="../sop/omni-export/">SOP-D001: Omni Export Procedure</a> <span style="color: #737373; font-size: 0.8125rem;">(deprecated 2024-12)</span></li>
+                <li><a href="../sop/vast-annotation/">SOP-D002: VAST Annotation</a> <span style="color: #737373; font-size: 0.8125rem;">(deprecated 2024-06)</span></li>
+            </ul>
+        </div>
+
+        <div class="legacy-docs" style="margin-top: 1rem;">
+            <h3>Source Document Archives</h3>
+            <p style="font-size: 0.875rem; color: #525252; margin-bottom: 1rem;">
+                Original Google Docs exports preserved for reference.
+            </p>
+            <ul>
+                <li><a href="../drive_docs_output/Ground-Truth-Protocol-History/">Ground Truth Protocol History</a></li>
+                <li><a href="../drive_docs_output/Ground-Truth-Training/">Ground Truth Training Materials</a></li>
+                <li><a href="../drive_docs_output/Omni/">Omni Documentation</a></li>
+                <li><a href="../drive_docs_output/Misc/">Miscellaneous Documentation</a></li>
+            </ul>
+        </div>
     </section>
 
 </main>
 
 <footer>
-    <p><a href="../">Back to Dashboard</a></p>
+    <div class="footer-nav">
+        <a href="../">Back to Dashboard</a>
+        <a href="../pipeline/">View Current Pipeline</a>
+    </div>
 </footer>
 
 </body>

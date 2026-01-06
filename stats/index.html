@@ -3,16 +3,465 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stats - Princeton Tracer</title>
+    <title>Project Statistics - Princeton Tracer</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #1a1a1a;
+            padding: 0.75rem 1.5rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav a {
+            color: #e5e5e5;
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            display: inline-block;
+        }
+
+        nav a:hover,
+        nav a:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        nav a[aria-current="page"] {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* Main content */
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #d4d4d4;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #525252;
+            font-size: 1.0625rem;
+        }
+
+        .last-updated {
+            font-size: 0.8125rem;
+            color: #737373;
+            margin-top: 0.5rem;
+        }
+
+        /* Stats grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            line-height: 1.2;
+        }
+
+        .stat-value--highlight {
+            color: #059669;
+        }
+
+        .stat-label {
+            font-size: 0.8125rem;
+            color: #525252;
+            margin-top: 0.25rem;
+        }
+
+        .stat-sublabel {
+            font-size: 0.75rem;
+            color: #737373;
+        }
+
+        /* Sections */
+        .stats-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #d4d4d4;
+        }
+
+        .section-header h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        /* Tables */
+        .stats-table-wrapper {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .stats-table th,
+        .stats-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .stats-table th {
+            background-color: #f5f5f5;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #525252;
+        }
+
+        .stats-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .stats-table tbody tr:hover {
+            background-color: #fafafa;
+        }
+
+        .stats-table .numeric {
+            text-align: right;
+            font-family: ui-monospace, "SF Mono", monospace;
+        }
+
+        .stats-table .highlight {
+            font-weight: 600;
+            color: #059669;
+        }
+
+        /* Progress bars */
+        .progress-bar {
+            height: 8px;
+            background-color: #e5e5e5;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: #059669;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-fill--warning {
+            background-color: #d97706;
+        }
+
+        /* Chart placeholder */
+        .chart-placeholder {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 2rem;
+            text-align: center;
+            color: #737373;
+        }
+
+        .chart-placeholder-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.5;
+        }
+
+        .chart-placeholder p {
+            font-size: 0.875rem;
+        }
+
+        /* Bar chart (CSS-only) */
+        .bar-chart {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .bar-chart-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .bar-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .bar-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .bar-label {
+            width: 120px;
+            font-size: 0.8125rem;
+            color: #525252;
+            flex-shrink: 0;
+        }
+
+        .bar-container {
+            flex: 1;
+            height: 24px;
+            background-color: #e5e5e5;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding-left: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .bar-fill--blue { background-color: #2563eb; }
+        .bar-fill--green { background-color: #059669; }
+        .bar-fill--purple { background-color: #7c3aed; }
+        .bar-fill--amber { background-color: #d97706; }
+        .bar-fill--gray { background-color: #737373; }
+
+        .bar-value {
+            width: 60px;
+            text-align: right;
+            font-size: 0.8125rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        /* Timeline */
+        .timeline {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+            padding-bottom: 1.5rem;
+            border-left: 2px solid #d4d4d4;
+            margin-left: 0.5rem;
+        }
+
+        .timeline-item:last-child {
+            border-left: 2px solid transparent;
+            padding-bottom: 0;
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -7px;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            background-color: #ffffff;
+            border: 2px solid #2563eb;
+            border-radius: 50%;
+        }
+
+        .timeline-item--complete::before {
+            background-color: #059669;
+            border-color: #059669;
+        }
+
+        .timeline-date {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #737373;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .timeline-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin: 0.25rem 0;
+        }
+
+        .timeline-desc {
+            font-size: 0.875rem;
+            color: #525252;
+        }
+
+        /* Info box */
+        .info-box {
+            background-color: #eff6ff;
+            border: 2px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-box p {
+            font-size: 0.875rem;
+            color: #1e40af;
+            margin: 0;
+        }
+
+        /* Methodology note */
+        .methodology {
+            background-color: #fafafa;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-top: 1rem;
+        }
+
+        .methodology h3 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #737373;
+            margin-bottom: 0.5rem;
+        }
+
+        .methodology p {
+            font-size: 0.8125rem;
+            color: #525252;
+            margin: 0;
+        }
+
+        /* Footer */
+        footer {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            border-top: 1px solid #e5e5e5;
+            font-size: 0.875rem;
+            color: #737373;
+        }
+
+        footer a {
+            color: #525252;
+        }
+
+        footer a:hover {
+            color: #1a1a1a;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            html {
+                font-size: 16px;
+            }
+
+            main {
+                padding: 1.5rem 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .bar-label {
+                width: 80px;
+            }
+
+            .stats-table-wrapper {
+                overflow-x: auto;
+            }
+        }
+
+        /* Print */
+        @media print {
+            nav, footer {
+                display: none;
+            }
+
+            .stats-section {
+                break-inside: avoid;
+            }
+        }
+
+        /* Focus visible */
+        :focus-visible {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+    </style>
 </head>
 <body>
 
-<!-- ============================================================
-     NAVIGATION
-     Shared navigation structure - manually sync across all pages
-     TODO: Extract to _includes/nav.html when build system added
-     ============================================================ -->
-<nav>
+<nav aria-label="Main navigation">
     <ul>
         <li><a href="../">Dashboard</a></li>
         <li><a href="../pipeline/">Pipeline</a></li>
@@ -20,112 +469,354 @@
         <li><a href="../gallery/">Gallery</a></li>
         <li><a href="../sop/">SOP</a></li>
         <li><a href="../publications/">Publications</a></li>
-        <li><a href="../stats/">Stats</a></li>
+        <li><a href="./" aria-current="page">Stats</a></li>
         <li><a href="../archive/">Archive</a></li>
     </ul>
 </nav>
 
 <main>
-    <h1>Statistics</h1>
 
-    <p>Project metrics, validation results, and progress tracking.</p>
+    <div class="page-header">
+        <h1>Project Statistics</h1>
+        <p>High-level metrics for the Princeton connectomics annotation projects. All figures are aggregate project data.</p>
+        <p class="last-updated">Last updated: January 2026</p>
+    </div>
 
-    <!-- ============================================================
-         SECTION: ID Validation
-         Root ID validation statistics
-         ============================================================ -->
-    <section id="id-validation">
-        <h2>ID Validation Results</h2>
-        <p>Statistics from batch validation of segment root IDs against CAVE database.</p>
+    <div class="info-box">
+        <p><strong>Note:</strong> These statistics reflect aggregate project progress. Individual performance data is not tracked or displayed.</p>
+    </div>
 
-        <h3>Latest Validation Run</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Metric</th>
-                    <th>Value</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Total IDs Validated</td>
-                    <td>12,321</td>
-                </tr>
-                <tr>
-                    <td>Current (No change needed)</td>
-                    <td>11,473 (93.1%)</td>
-                </tr>
-                <tr>
-                    <td>Updated (Changed)</td>
-                    <td>848 (6.9%)</td>
-                </tr>
-                <tr>
-                    <td>Validation Date</td>
-                    <td>2025-12-04</td>
-                </tr>
-            </tbody>
-        </table>
 
-        <h3>Documentation</h3>
-        <ul>
-            <li><a href="../ID_VALIDATION_WORKFLOW_GUIDE.md">ID Validation Workflow Guide</a></li>
-            <li><a href="../EFFICIENT_ID_VALIDATION_SETUP.md">Efficient ID Validation Setup</a></li>
-        </ul>
-        <!-- TODO: Create id-validation.html with detailed breakdown by batch -->
+    <!-- ================================================================
+         SUMMARY METRICS
+         ================================================================ -->
+    <section class="stats-section" aria-labelledby="summary-heading">
+        <div class="section-header">
+            <h2 id="summary-heading">Summary Metrics</h2>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">2</div>
+                <div class="stat-label">Active Datasets</div>
+                <div class="stat-sublabel">FAFB, BANC</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value stat-value--highlight">93.1%</div>
+                <div class="stat-label">ID Validation Rate</div>
+                <div class="stat-sublabel">Current IDs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">12,321</div>
+                <div class="stat-label">IDs Validated</div>
+                <div class="stat-sublabel">Latest batch</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">5</div>
+                <div class="stat-label">Active SOPs</div>
+                <div class="stat-sublabel">Current procedures</div>
+            </div>
+        </div>
     </section>
 
-    <!-- ============================================================
-         SECTION: Annotation Progress
-         Task completion metrics
-         ============================================================ -->
-    <section id="annotation-progress">
-        <h2>Annotation Progress</h2>
-        <p>Placeholder for annotation task completion metrics.</p>
 
-        <!-- TODO: Add annotation progress metrics:
-        - Tasks completed vs assigned
-        - Neurons traced
-        - Synapses annotated
-        - Quality scores
-        -->
+    <!-- ================================================================
+         ID VALIDATION
+         ================================================================ -->
+    <section class="stats-section" aria-labelledby="validation-heading">
+        <div class="section-header">
+            <h2 id="validation-heading">ID Validation Results</h2>
+        </div>
 
-        <p><em>Progress metrics not yet integrated. Contact project lead for current status.</em></p>
+        <p style="color: #525252; margin-bottom: 1rem;">
+            Root ID validation against CAVE database ensures annotation references remain current as the segmentation evolves.
+        </p>
+
+        <div class="stats-table-wrapper">
+            <table class="stats-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th class="numeric">Count</th>
+                        <th class="numeric">Percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Total IDs Validated</td>
+                        <td class="numeric">12,321</td>
+                        <td class="numeric">100%</td>
+                    </tr>
+                    <tr>
+                        <td>Current (No change needed)</td>
+                        <td class="numeric highlight">11,473</td>
+                        <td class="numeric highlight">93.1%</td>
+                    </tr>
+                    <tr>
+                        <td>Updated (ID changed)</td>
+                        <td class="numeric">848</td>
+                        <td class="numeric">6.9%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="bar-chart">
+            <div class="bar-chart-title">ID Status Distribution</div>
+            <div class="bar-row">
+                <span class="bar-label">Current</span>
+                <div class="bar-container">
+                    <div class="bar-fill bar-fill--green" style="width: 93.1%;">93.1%</div>
+                </div>
+                <span class="bar-value">11,473</span>
+            </div>
+            <div class="bar-row">
+                <span class="bar-label">Updated</span>
+                <div class="bar-container">
+                    <div class="bar-fill bar-fill--amber" style="width: 6.9%;"></div>
+                </div>
+                <span class="bar-value">848</span>
+            </div>
+        </div>
+
+        <div class="methodology">
+            <h3>Methodology</h3>
+            <p>IDs validated using supervoxel-based tracking through CAVE API. Updated IDs reflect segmentation changes (splits/merges) since original annotation. See <a href="../ID_VALIDATION_WORKFLOW_GUIDE.md">ID Validation Workflow Guide</a>.</p>
+        </div>
     </section>
 
-    <!-- ============================================================
-         SECTION: Quality Metrics
-         Annotation quality statistics
-         ============================================================ -->
-    <section id="quality-metrics">
-        <h2>Quality Metrics</h2>
-        <p>Placeholder for annotation quality and accuracy metrics.</p>
 
-        <!-- TODO: Add quality metrics:
-        - Inter-annotator agreement
-        - Error rates by type
-        - Revision frequency
-        -->
+    <!-- ================================================================
+         DATASET OVERVIEW
+         ================================================================ -->
+    <section class="stats-section" aria-labelledby="datasets-heading">
+        <div class="section-header">
+            <h2 id="datasets-heading">Dataset Overview</h2>
+        </div>
 
-        <p><em>Quality metrics not yet integrated.</em></p>
+        <div class="stats-table-wrapper">
+            <table class="stats-table">
+                <thead>
+                    <tr>
+                        <th>Dataset</th>
+                        <th>Species</th>
+                        <th class="numeric">Neurons</th>
+                        <th class="numeric">Synapses</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>FAFB</strong></td>
+                        <td><em>D. melanogaster</em> (brain)</td>
+                        <td class="numeric">~140,000</td>
+                        <td class="numeric">~50M</td>
+                        <td>Published</td>
+                    </tr>
+                    <tr>
+                        <td><strong>BANC</strong></td>
+                        <td><em>D. melanogaster</em> (brain + VNC)</td>
+                        <td class="numeric">~200,000</td>
+                        <td class="numeric">~75M</td>
+                        <td>Active</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </section>
 
-    <!-- ============================================================
-         SECTION: Timeline
-         Project timeline and milestones
-         ============================================================ -->
-    <section id="timeline">
-        <h2>Project Timeline</h2>
-        <p>Key milestones and project history.</p>
 
-        <!-- TODO: Add timeline entries -->
+    <!-- ================================================================
+         TASK DISTRIBUTION
+         ================================================================ -->
+    <section class="stats-section" aria-labelledby="tasks-heading">
+        <div class="section-header">
+            <h2 id="tasks-heading">Task Type Distribution</h2>
+        </div>
 
-        <p><em>Timeline not yet documented.</em></p>
+        <p style="color: #525252; margin-bottom: 1rem;">
+            Breakdown of annotation work by task type across all active projects.
+        </p>
+
+        <div class="bar-chart">
+            <div class="bar-chart-title">Tasks by Type (Placeholder Data)</div>
+            <div class="bar-row">
+                <span class="bar-label">Proofreading</span>
+                <div class="bar-container">
+                    <div class="bar-fill bar-fill--blue" style="width: 35%;">35%</div>
+                </div>
+                <span class="bar-value">35%</span>
+            </div>
+            <div class="bar-row">
+                <span class="bar-label">Split/Merge</span>
+                <div class="bar-container">
+                    <div class="bar-fill bar-fill--green" style="width: 25%;">25%</div>
+                </div>
+                <span class="bar-value">25%</span>
+            </div>
+            <div class="bar-row">
+                <span class="bar-label">QA Review</span>
+                <div class="bar-container">
+                    <div class="bar-fill bar-fill--purple" style="width: 20%;">20%</div>
+                </div>
+                <span class="bar-value">20%</span>
+            </div>
+            <div class="bar-row">
+                <span class="bar-label">Skeletonization</span>
+                <div class="bar-container">
+                    <div class="bar-fill bar-fill--amber" style="width: 12%;"></div>
+                </div>
+                <span class="bar-value">12%</span>
+            </div>
+            <div class="bar-row">
+                <span class="bar-label">Other</span>
+                <div class="bar-container">
+                    <div class="bar-fill bar-fill--gray" style="width: 8%;"></div>
+                </div>
+                <span class="bar-value">8%</span>
+            </div>
+        </div>
+
+        <div class="methodology">
+            <h3>Note</h3>
+            <p>Task distribution shown as placeholder. Actual metrics to be integrated from WebKnossos task management system.</p>
+        </div>
+    </section>
+
+
+    <!-- ================================================================
+         QUALITY METRICS
+         ================================================================ -->
+    <section class="stats-section" aria-labelledby="quality-heading">
+        <div class="section-header">
+            <h2 id="quality-heading">Quality Metrics</h2>
+        </div>
+
+        <div class="chart-placeholder">
+            <div class="chart-placeholder-icon">&#9776;</div>
+            <p><strong>Quality metrics visualization pending</strong></p>
+            <p>Will display: error rates by type, revision frequency, validation pass rates</p>
+        </div>
+
+        <div class="stats-table-wrapper" style="margin-top: 1rem;">
+            <table class="stats-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Target</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Synapse Detection Accuracy</td>
+                        <td>&gt;95%</td>
+                        <td>Tracking</td>
+                    </tr>
+                    <tr>
+                        <td>Proofreading Completeness</td>
+                        <td>&gt;99%</td>
+                        <td>Tracking</td>
+                    </tr>
+                    <tr>
+                        <td>ID Currency Rate</td>
+                        <td>&gt;90%</td>
+                        <td style="color: #059669; font-weight: 600;">93.1% &#10003;</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+
+    <!-- ================================================================
+         PROJECT TIMELINE
+         ================================================================ -->
+    <section class="stats-section" aria-labelledby="timeline-heading">
+        <div class="section-header">
+            <h2 id="timeline-heading">Project Milestones</h2>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item timeline-item--complete">
+                <div class="timeline-date">2024</div>
+                <div class="timeline-title">FlyWire Connectome Published</div>
+                <div class="timeline-desc">Complete adult <em>Drosophila</em> brain connectome published in Nature.</div>
+            </div>
+            <div class="timeline-item timeline-item--complete">
+                <div class="timeline-date">2024</div>
+                <div class="timeline-title">BANC Proofreading Phase</div>
+                <div class="timeline-desc">Large-scale proofreading of brain and VNC segmentation.</div>
+            </div>
+            <div class="timeline-item timeline-item--complete">
+                <div class="timeline-date">Dec 2025</div>
+                <div class="timeline-title">ID Validation Complete</div>
+                <div class="timeline-desc">Batch validation of 12,321 root IDs against current CAVE materialization.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">2026</div>
+                <div class="timeline-title">Documentation Consolidation</div>
+                <div class="timeline-desc">Unified knowledge gateway launched for training and reference.</div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-date">TBD</div>
+                <div class="timeline-title">BANC Publication</div>
+                <div class="timeline-desc">Complete adult <em>Drosophila</em> nervous system connectome.</div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ================================================================
+         DATA SOURCES
+         ================================================================ -->
+    <section class="stats-section" aria-labelledby="sources-heading">
+        <div class="section-header">
+            <h2 id="sources-heading">Data Sources</h2>
+        </div>
+
+        <div class="stats-table-wrapper">
+            <table class="stats-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Source</th>
+                        <th>Update Frequency</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>ID Validation</td>
+                        <td>CAVE API / tracer_tools</td>
+                        <td>On demand</td>
+                    </tr>
+                    <tr>
+                        <td>Dataset Statistics</td>
+                        <td>Published papers</td>
+                        <td>At publication</td>
+                    </tr>
+                    <tr>
+                        <td>Task Distribution</td>
+                        <td>WebKnossos (pending)</td>
+                        <td>TBD</td>
+                    </tr>
+                    <tr>
+                        <td>Quality Metrics</td>
+                        <td>Manual review (pending)</td>
+                        <td>TBD</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </section>
 
 </main>
 
 <footer>
-    <p><a href="../">Back to Dashboard</a></p>
+    <div class="footer-nav">
+        <a href="../">Back to Dashboard</a>
+        <a href="../pipeline/">View Pipeline</a>
+    </div>
 </footer>
 
 </body>
