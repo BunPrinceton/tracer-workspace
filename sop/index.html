@@ -3,22 +3,459 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOP - Princeton Tracer</title>
+    <title>Standard Operating Procedures - Princeton Tracer</title>
+    <!-- ============================================================
+         SOP INDEX
+
+         VERSION FILE STRUCTURE:
+         =======================
+         SOPs are versioned using a directory-based structure:
+
+         sop/
+         ├── index.html                      # This index page
+         ├── gt-task-handling/
+         │   ├── index.html                  # Always shows CURRENT version
+         │   ├── current.html                # Redirect/alias to current version
+         │   ├── v2.0.html                   # Version 2.0 (current)
+         │   ├── v1.1.html                   # Version 1.1 (deprecated)
+         │   └── v1.0.html                   # Version 1.0 (deprecated)
+         ├── gt-verification/
+         │   └── ...
+         └── [sop-name]/
+             └── v[X.Y].html
+
+         VERSIONING RULES:
+         - Major version (X.0): Significant procedure changes
+         - Minor version (X.Y): Clarifications, minor updates
+         - Current version: index.html in subdirectory
+         - Deprecated versions: Remain accessible, marked clearly
+         - Never delete old versions; mark as deprecated
+
+         ADDING A NEW SOP VERSION:
+         1. Create new v[X.Y].html in the SOP directory
+         2. Update the subdirectory index.html to point to new version
+         3. Update this index page to reflect new version
+         4. Add change log entry to new version
+
+         ============================================================ -->
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #1a1a1a;
+            padding: 0.75rem 1.5rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav a {
+            color: #e5e5e5;
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            display: inline-block;
+        }
+
+        nav a:hover,
+        nav a:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        nav a[aria-current="page"] {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* Main content */
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #d4d4d4;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #525252;
+            font-size: 1.0625rem;
+        }
+
+        /* Legend */
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        /* Status badges */
+        .status-badge {
+            display: inline-block;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+        }
+
+        .status-badge--current {
+            background-color: #059669;
+            color: #ffffff;
+        }
+
+        .status-badge--deprecated {
+            background-color: #737373;
+            color: #ffffff;
+        }
+
+        .status-badge--draft {
+            background-color: #d97706;
+            color: #ffffff;
+        }
+
+        /* SOP sections */
+        .sop-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .sop-section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #d4d4d4;
+        }
+
+        .sop-section-header h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .sop-count {
+            font-size: 0.75rem;
+            color: #737373;
+            background-color: #e5e5e5;
+            padding: 0.125rem 0.5rem;
+            border-radius: 10px;
+        }
+
+        /* SOP table */
+        .sop-table {
+            width: 100%;
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            border-collapse: separate;
+            border-spacing: 0;
+            overflow: hidden;
+        }
+
+        .sop-table th,
+        .sop-table td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .sop-table th {
+            background-color: #f5f5f5;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #525252;
+        }
+
+        .sop-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .sop-table tbody tr:hover {
+            background-color: #fafafa;
+        }
+
+        .sop-table a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .sop-table a:hover {
+            text-decoration: underline;
+        }
+
+        .sop-id {
+            font-family: ui-monospace, "SF Mono", monospace;
+            font-size: 0.8125rem;
+            color: #525252;
+        }
+
+        .sop-title {
+            font-weight: 600;
+        }
+
+        .sop-version {
+            font-family: ui-monospace, "SF Mono", monospace;
+            font-size: 0.875rem;
+        }
+
+        .sop-date {
+            font-size: 0.875rem;
+            color: #525252;
+        }
+
+        .sop-owner {
+            font-size: 0.875rem;
+        }
+
+        /* Historical versions dropdown */
+        .sop-history {
+            font-size: 0.8125rem;
+        }
+
+        .sop-history summary {
+            cursor: pointer;
+            color: #525252;
+            padding: 0.25rem 0;
+        }
+
+        .sop-history summary:hover {
+            color: #2563eb;
+        }
+
+        .sop-history ul {
+            list-style: none;
+            margin-top: 0.5rem;
+            padding-left: 1rem;
+        }
+
+        .sop-history li {
+            padding: 0.25rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sop-history a {
+            color: #525252;
+        }
+
+        .sop-history a:hover {
+            color: #2563eb;
+        }
+
+        /* Quick access cards */
+        .quick-access {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .quick-card {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 1.25rem;
+            text-decoration: none;
+            color: inherit;
+            transition: border-color 0.15s ease;
+        }
+
+        .quick-card:hover {
+            border-color: #2563eb;
+        }
+
+        .quick-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .quick-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .quick-card p {
+            font-size: 0.875rem;
+            color: #525252;
+            margin-bottom: 0.75rem;
+        }
+
+        .quick-card-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.75rem;
+            color: #737373;
+        }
+
+        /* Source documents section */
+        .source-docs {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .source-docs h2 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e5e5e5;
+        }
+
+        .source-docs ul {
+            list-style: none;
+        }
+
+        .source-docs li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .source-docs li:last-child {
+            border-bottom: none;
+        }
+
+        .source-docs a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .source-docs a:hover {
+            text-decoration: underline;
+        }
+
+        .source-label {
+            font-size: 0.75rem;
+            color: #737373;
+            margin-left: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            border-top: 1px solid #e5e5e5;
+            font-size: 0.875rem;
+            color: #737373;
+        }
+
+        footer a {
+            color: #525252;
+        }
+
+        footer a:hover {
+            color: #1a1a1a;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            html {
+                font-size: 16px;
+            }
+
+            main {
+                padding: 1.5rem 1rem;
+            }
+
+            .sop-table {
+                display: block;
+                overflow-x: auto;
+            }
+
+            .legend {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
+        }
+
+        /* Print */
+        @media print {
+            nav, footer {
+                display: none;
+            }
+
+            .sop-table {
+                border: 1px solid #000;
+            }
+        }
+
+        /* Focus visible */
+        :focus-visible {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+    </style>
 </head>
 <body>
 
-<!-- ============================================================
-     NAVIGATION
-     Shared navigation structure - manually sync across all pages
-     TODO: Extract to _includes/nav.html when build system added
-     ============================================================ -->
-<nav>
+<nav aria-label="Main navigation">
     <ul>
         <li><a href="../">Dashboard</a></li>
         <li><a href="../pipeline/">Pipeline</a></li>
         <li><a href="../tasks/">Tasks</a></li>
         <li><a href="../gallery/">Gallery</a></li>
-        <li><a href="../sop/">SOP</a></li>
+        <li><a href="./" aria-current="page">SOP</a></li>
         <li><a href="../publications/">Publications</a></li>
         <li><a href="../stats/">Stats</a></li>
         <li><a href="../archive/">Archive</a></li>
@@ -26,114 +463,335 @@
 </nav>
 
 <main>
-    <h1>Standard Operating Procedures</h1>
 
-    <p>Official procedures and guidelines for Ground Truth annotation, verification, and quality control.</p>
+    <div class="page-header">
+        <h1>Standard Operating Procedures</h1>
+        <p>Official procedures for Ground Truth annotation, verification, and quality control. Each SOP includes version history and change logs.</p>
+    </div>
 
-    <!-- ============================================================
-         SECTION: Ground Truth Task Handling
-         Primary SOP for GT task workflow
-         ============================================================ -->
-    <section id="gt-task-handling">
-        <h2>GT Task Handling SOP</h2>
-        <p>Standard Operating Procedure for handling Ground Truth tasks from assignment through completion.</p>
+    <!-- Legend -->
+    <div class="legend" role="note" aria-label="Status legend">
+        <div class="legend-item">
+            <span class="status-badge status-badge--current">Current</span>
+            <span>Active procedure - use this version</span>
+        </div>
+        <div class="legend-item">
+            <span class="status-badge status-badge--deprecated">Deprecated</span>
+            <span>Historical reference only</span>
+        </div>
+        <div class="legend-item">
+            <span class="status-badge status-badge--draft">Draft</span>
+            <span>Under review - not yet effective</span>
+        </div>
+    </div>
 
-        <h3>Key Steps</h3>
-        <ol>
-            <li>Task assignment and initial review</li>
-            <li>Annotation following protocol guidelines</li>
-            <li>Self-verification against checklist</li>
-            <li>Submission for review</li>
-            <li>Revision handling (if needed)</li>
-        </ol>
+    <!-- Quick Access Cards -->
+    <section class="sop-section" aria-labelledby="quick-heading">
+        <div class="sop-section-header">
+            <h2 id="quick-heading">Quick Access</h2>
+        </div>
 
-        <h3>Documentation</h3>
-        <ul>
-            <li><a href="../drive_docs_output/Ground-Truth-Protocol-History/Copy of Standard Operating Procedure Ground Truth GT Task Handling.html">GT Task Handling SOP (Full Document)</a></li>
-            <li><a href="../New Documentation Styles-Templates-Files/Ground Truth/Standard Operating Procedure_ Ground Truth (GT) Task Handling.docx">GT Task Handling SOP (DOCX)</a></li>
-        </ul>
-        <!-- TODO: Create gt-task-handling.html with step-by-step guide -->
+        <div class="quick-access">
+            <a href="gt-task-handling/" class="quick-card">
+                <div class="quick-card-header">
+                    <h3>GT Task Handling</h3>
+                    <span class="status-badge status-badge--current">Current</span>
+                </div>
+                <p>Complete workflow from task assignment through submission and review.</p>
+                <div class="quick-card-meta">
+                    <span>SOP-001</span>
+                    <span>v2.0</span>
+                </div>
+            </a>
+
+            <a href="gt-verification/" class="quick-card">
+                <div class="quick-card-header">
+                    <h3>GT Verification</h3>
+                    <span class="status-badge status-badge--current">Current</span>
+                </div>
+                <p>Procedures for verifying Ground Truth task completion and quality.</p>
+                <div class="quick-card-meta">
+                    <span>SOP-002</span>
+                    <span>v1.1</span>
+                </div>
+            </a>
+
+            <a href="gt-checklist/" class="quick-card">
+                <div class="quick-card-header">
+                    <h3>GT Checklist</h3>
+                    <span class="status-badge status-badge--current">Current</span>
+                </div>
+                <p>Pre-submission quality assurance checklist for all GT tasks.</p>
+                <div class="quick-card-meta">
+                    <span>SOP-003</span>
+                    <span>v1.2</span>
+                </div>
+            </a>
+
+            <a href="file-naming/" class="quick-card">
+                <div class="quick-card-header">
+                    <h3>File Naming</h3>
+                    <span class="status-badge status-badge--current">Current</span>
+                </div>
+                <p>Standard conventions for naming files, annotations, and exports.</p>
+                <div class="quick-card-meta">
+                    <span>SOP-004</span>
+                    <span>v1.0</span>
+                </div>
+            </a>
+        </div>
     </section>
 
-    <!-- ============================================================
-         SECTION: Protocol Guidelines
-         GT annotation protocol rules
-         ============================================================ -->
-    <section id="gt-protocol-guidelines">
-        <h2>GT Protocol Guidelines</h2>
-        <p>Detailed guidelines for Ground Truth annotation protocols, including edge cases and clarifications.</p>
 
-        <h3>Documentation</h3>
-        <ul>
-            <li><a href="../drive_docs_output/Ground-Truth-Protocol-History/Copy of Ground Truth Protocol Guidelines Revised.html">GT Protocol Guidelines Revised</a></li>
-            <li><a href="../New Documentation Styles-Templates-Files/HTML Versions/Ground_Truth_Protocol_Clarifications_GDOC.html">GT Protocol Clarifications</a></li>
-            <li><a href="../New Documentation Styles-Templates-Files/Ground Truth/Ground Truth Protocol Guidelines Revised.docx">GT Protocol Guidelines (DOCX)</a></li>
-        </ul>
-        <!-- TODO: Create gt-protocol-guidelines.html with consolidated guidelines -->
+    <!-- Current SOPs Table -->
+    <section class="sop-section" aria-labelledby="current-heading">
+        <div class="sop-section-header">
+            <h2 id="current-heading">Current Procedures</h2>
+            <span class="sop-count">5 active</span>
+        </div>
+
+        <table class="sop-table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Version</th>
+                    <th scope="col">Effective</th>
+                    <th scope="col">Owner</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">History</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="sop-id">SOP-001</td>
+                    <td class="sop-title"><a href="gt-task-handling/">GT Task Handling</a></td>
+                    <td class="sop-version">v2.0</td>
+                    <td class="sop-date">2026-01-01</td>
+                    <td class="sop-owner">GT Team Lead</td>
+                    <td><span class="status-badge status-badge--current">Current</span></td>
+                    <td class="sop-history">
+                        <details>
+                            <summary>2 versions</summary>
+                            <ul>
+                                <li>
+                                    <a href="gt-task-handling/v2.0.html">v2.0</a>
+                                    <span class="status-badge status-badge--current">Current</span>
+                                </li>
+                                <li>
+                                    <a href="gt-task-handling/v1.0.html">v1.0</a>
+                                    <span class="status-badge status-badge--deprecated">Deprecated</span>
+                                </li>
+                            </ul>
+                        </details>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="sop-id">SOP-002</td>
+                    <td class="sop-title"><a href="gt-verification/">GT Verification</a></td>
+                    <td class="sop-version">v1.1</td>
+                    <td class="sop-date">2025-11-15</td>
+                    <td class="sop-owner">QA Lead</td>
+                    <td><span class="status-badge status-badge--current">Current</span></td>
+                    <td class="sop-history">
+                        <details>
+                            <summary>2 versions</summary>
+                            <ul>
+                                <li>
+                                    <a href="gt-verification/v1.1.html">v1.1</a>
+                                    <span class="status-badge status-badge--current">Current</span>
+                                </li>
+                                <li>
+                                    <a href="gt-verification/v1.0.html">v1.0</a>
+                                    <span class="status-badge status-badge--deprecated">Deprecated</span>
+                                </li>
+                            </ul>
+                        </details>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="sop-id">SOP-003</td>
+                    <td class="sop-title"><a href="gt-checklist/">GT Checklist</a></td>
+                    <td class="sop-version">v1.2</td>
+                    <td class="sop-date">2025-12-01</td>
+                    <td class="sop-owner">GT Team Lead</td>
+                    <td><span class="status-badge status-badge--current">Current</span></td>
+                    <td class="sop-history">
+                        <details>
+                            <summary>3 versions</summary>
+                            <ul>
+                                <li>
+                                    <a href="gt-checklist/v1.2.html">v1.2</a>
+                                    <span class="status-badge status-badge--current">Current</span>
+                                </li>
+                                <li>
+                                    <a href="gt-checklist/v1.1.html">v1.1</a>
+                                    <span class="status-badge status-badge--deprecated">Deprecated</span>
+                                </li>
+                                <li>
+                                    <a href="gt-checklist/v1.0.html">v1.0</a>
+                                    <span class="status-badge status-badge--deprecated">Deprecated</span>
+                                </li>
+                            </ul>
+                        </details>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="sop-id">SOP-004</td>
+                    <td class="sop-title"><a href="file-naming/">File Naming</a></td>
+                    <td class="sop-version">v1.0</td>
+                    <td class="sop-date">2025-06-01</td>
+                    <td class="sop-owner">Data Team</td>
+                    <td><span class="status-badge status-badge--current">Current</span></td>
+                    <td class="sop-history">
+                        <details>
+                            <summary>1 version</summary>
+                            <ul>
+                                <li>
+                                    <a href="file-naming/v1.0.html">v1.0</a>
+                                    <span class="status-badge status-badge--current">Current</span>
+                                </li>
+                            </ul>
+                        </details>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="sop-id">SOP-005</td>
+                    <td class="sop-title"><a href="gt-protocol-guidelines/">GT Protocol Guidelines</a></td>
+                    <td class="sop-version">v1.1</td>
+                    <td class="sop-date">2025-10-01</td>
+                    <td class="sop-owner">Protocol Committee</td>
+                    <td><span class="status-badge status-badge--current">Current</span></td>
+                    <td class="sop-history">
+                        <details>
+                            <summary>2 versions</summary>
+                            <ul>
+                                <li>
+                                    <a href="gt-protocol-guidelines/v1.1.html">v1.1</a>
+                                    <span class="status-badge status-badge--current">Current</span>
+                                </li>
+                                <li>
+                                    <a href="gt-protocol-guidelines/v1.0.html">v1.0</a>
+                                    <span class="status-badge status-badge--deprecated">Deprecated</span>
+                                </li>
+                            </ul>
+                        </details>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </section>
 
-    <!-- ============================================================
-         SECTION: Verification
-         How to verify GT tasks
-         ============================================================ -->
-    <section id="gt-verification">
-        <h2>GT Verification</h2>
-        <p>Procedures for verifying Ground Truth task completion and quality.</p>
 
-        <h3>Documentation</h3>
-        <ul>
-            <li><a href="../drive_docs_output/Ground-Truth-Protocol-History/Copy of How to verify ground truth tasks.html">How to Verify GT Tasks</a></li>
-        </ul>
-        <!-- TODO: Create gt-verification.html with verification checklist -->
+    <!-- Deprecated SOPs Table -->
+    <section class="sop-section" aria-labelledby="deprecated-heading">
+        <div class="sop-section-header">
+            <h2 id="deprecated-heading">Deprecated Procedures</h2>
+            <span class="sop-count">2 archived</span>
+        </div>
+
+        <table class="sop-table">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Last Version</th>
+                    <th scope="col">Deprecated</th>
+                    <th scope="col">Replaced By</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="sop-id">SOP-D001</td>
+                    <td class="sop-title"><a href="omni-export/">Omni Export Procedure</a></td>
+                    <td class="sop-version">v1.2</td>
+                    <td class="sop-date">2024-12-01</td>
+                    <td class="sop-owner">
+                        <a href="../archive/#omni">Archive: Omni Tools</a>
+                    </td>
+                    <td><span class="status-badge status-badge--deprecated">Deprecated</span></td>
+                </tr>
+                <tr>
+                    <td class="sop-id">SOP-D002</td>
+                    <td class="sop-title"><a href="vast-annotation/">VAST Annotation</a></td>
+                    <td class="sop-version">v2.0</td>
+                    <td class="sop-date">2024-06-01</td>
+                    <td class="sop-owner">
+                        <a href="../archive/#vast">Archive: VAST Tools</a>
+                    </td>
+                    <td><span class="status-badge status-badge--deprecated">Deprecated</span></td>
+                </tr>
+            </tbody>
+        </table>
     </section>
 
-    <!-- ============================================================
-         SECTION: Checklist
-         GT task completion checklist
-         ============================================================ -->
-    <section id="gt-checklist">
-        <h2>GT Checklist</h2>
-        <p>Pre-submission checklist for Ground Truth task quality assurance.</p>
 
-        <h3>Documentation</h3>
+    <!-- Source Documents -->
+    <section class="source-docs" aria-labelledby="source-heading">
+        <h2 id="source-heading">Source Documents</h2>
+        <p style="font-size: 0.875rem; color: #525252; margin-bottom: 1rem;">
+            Original Google Docs and reference materials that inform current SOPs.
+        </p>
         <ul>
-            <li><a href="../drive_docs_output/Ground-Truth-Protocol-History/Copy of Updated Ground Truth Checklist.html">Updated GT Checklist</a></li>
-        </ul>
-        <!-- TODO: Create gt-checklist.html with interactive checklist -->
-    </section>
-
-    <!-- ============================================================
-         SECTION: File Naming
-         Standards for file and annotation naming
-         ============================================================ -->
-    <section id="file-naming">
-        <h2>File Naming Protocols</h2>
-        <p>Standard conventions for naming files, annotations, and exports.</p>
-
-        <h3>Documentation</h3>
-        <ul>
-            <li><a href="../drive_docs_output/Misc/Copy of Protocols for naming files.html">File Naming Protocols</a></li>
-        </ul>
-        <!-- TODO: Create file-naming.html with naming conventions -->
-    </section>
-
-    <!-- ============================================================
-         SECTION: Quick Links
-         Additional SOP resources
-         ============================================================ -->
-    <section id="quick-links">
-        <h2>Quick Links</h2>
-        <ul>
-            <li><a href="../index-legacy.html#ground-truth">Legacy GT Documentation</a></li>
-            <li><a href="../index-legacy.html#gt-sop">Legacy GT SOP Section</a></li>
-            <li><a href="../New Documentation Styles-Templates-Files/HTML Versions/tommy_macrina_FINAL.html">Tommy Macrina Protocol Reference</a></li>
+            <li>
+                <a href="../drive_docs_output/Ground-Truth-Protocol-History/Copy of Standard Operating Procedure Ground Truth GT Task Handling.html">
+                    GT Task Handling SOP
+                </a>
+                <span class="source-label">HTML export</span>
+            </li>
+            <li>
+                <a href="../New Documentation Styles-Templates-Files/Ground Truth/Standard Operating Procedure_ Ground Truth (GT) Task Handling.docx">
+                    GT Task Handling SOP
+                </a>
+                <span class="source-label">DOCX</span>
+            </li>
+            <li>
+                <a href="../drive_docs_output/Ground-Truth-Protocol-History/Copy of Ground Truth Protocol Guidelines Revised.html">
+                    GT Protocol Guidelines Revised
+                </a>
+                <span class="source-label">HTML export</span>
+            </li>
+            <li>
+                <a href="../drive_docs_output/Ground-Truth-Protocol-History/Copy of How to verify ground truth tasks.html">
+                    How to Verify GT Tasks
+                </a>
+                <span class="source-label">HTML export</span>
+            </li>
+            <li>
+                <a href="../drive_docs_output/Ground-Truth-Protocol-History/Copy of Updated Ground Truth Checklist.html">
+                    Updated GT Checklist
+                </a>
+                <span class="source-label">HTML export</span>
+            </li>
+            <li>
+                <a href="../drive_docs_output/Misc/Copy of Protocols for naming files.html">
+                    File Naming Protocols
+                </a>
+                <span class="source-label">HTML export</span>
+            </li>
+            <li>
+                <a href="../New Documentation Styles-Templates-Files/HTML Versions/tommy_macrina_FINAL.html">
+                    Tommy Macrina Protocol Reference
+                </a>
+                <span class="source-label">Reference</span>
+            </li>
+            <li>
+                <a href="../index-legacy.html#ground-truth">
+                    Legacy GT Documentation
+                </a>
+                <span class="source-label">Archive</span>
+            </li>
         </ul>
     </section>
 
 </main>
 
 <footer>
-    <p><a href="../">Back to Dashboard</a></p>
+    <div class="footer-nav">
+        <a href="../">Back to Dashboard</a>
+        <a href="../tasks/">View Tasks</a>
+    </div>
 </footer>
 
 </body>

@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOP-001: GT Task Handling - Princeton Tracer</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #1a1a1a;
+            padding: 0.75rem 1.5rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav a {
+            color: #e5e5e5;
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            display: inline-block;
+        }
+
+        nav a:hover,
+        nav a:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        nav a[aria-current="page"] {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* Main content */
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            font-size: 0.875rem;
+            color: #525252;
+            margin-bottom: 1.5rem;
+        }
+
+        .breadcrumb a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* SOP Header */
+        .sop-header {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .sop-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .sop-id {
+            font-family: ui-monospace, "SF Mono", monospace;
+            font-size: 0.875rem;
+            color: #525252;
+            margin-bottom: 1rem;
+        }
+
+        /* Status badge */
+        .status-badge {
+            display: inline-block;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+        }
+
+        .status-badge--current {
+            background-color: #059669;
+            color: #ffffff;
+        }
+
+        .status-badge--deprecated {
+            background-color: #737373;
+            color: #ffffff;
+        }
+
+        /* Metadata grid */
+        .sop-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e5e5;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .meta-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #737373;
+        }
+
+        .meta-value {
+            font-size: 0.9375rem;
+        }
+
+        /* Content sections */
+        .sop-content {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .sop-content h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e5e5e5;
+        }
+
+        .sop-content h3 {
+            font-size: 1.0625rem;
+            font-weight: 600;
+            margin: 1.25rem 0 0.75rem;
+        }
+
+        .sop-content p {
+            margin-bottom: 0.75rem;
+        }
+
+        .sop-content ul,
+        .sop-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .sop-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Change log */
+        .change-log {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .change-log h2 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e5e5e5;
+        }
+
+        .change-log-entry {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .change-log-entry:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .change-log-version {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .change-log-date {
+            font-size: 0.875rem;
+            color: #737373;
+        }
+
+        .change-log-notes {
+            font-size: 0.875rem;
+            color: #525252;
+            margin-top: 0.5rem;
+        }
+
+        .change-log-notes ul {
+            margin-left: 1.5rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Version history link */
+        .version-history {
+            background-color: #fafafa;
+            border: 2px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .version-history h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .version-history ul {
+            list-style: none;
+        }
+
+        .version-history li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.875rem;
+        }
+
+        .version-history a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .version-history a:hover {
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        footer {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            border-top: 1px solid #e5e5e5;
+            font-size: 0.875rem;
+            color: #737373;
+        }
+
+        footer a {
+            color: #525252;
+        }
+
+        footer a:hover {
+            color: #1a1a1a;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            html {
+                font-size: 16px;
+            }
+
+            main {
+                padding: 1.5rem 1rem;
+            }
+        }
+
+        /* Print */
+        @media print {
+            nav, footer, .version-history {
+                display: none;
+            }
+
+            .sop-header, .sop-content, .change-log {
+                border: 1px solid #000;
+                break-inside: avoid;
+            }
+        }
+
+        /* Focus visible */
+        :focus-visible {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<nav aria-label="Main navigation">
+    <ul>
+        <li><a href="../../">Dashboard</a></li>
+        <li><a href="../../pipeline/">Pipeline</a></li>
+        <li><a href="../../tasks/">Tasks</a></li>
+        <li><a href="../../gallery/">Gallery</a></li>
+        <li><a href="../" aria-current="page">SOP</a></li>
+        <li><a href="../../publications/">Publications</a></li>
+        <li><a href="../../stats/">Stats</a></li>
+        <li><a href="../../archive/">Archive</a></li>
+    </ul>
+</nav>
+
+<main>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../">SOPs</a> &rsaquo; GT Task Handling
+    </nav>
+
+    <!-- SOP Header with metadata -->
+    <header class="sop-header">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
+            <div>
+                <h1>GT Task Handling</h1>
+                <p class="sop-id">SOP-001</p>
+            </div>
+            <span class="status-badge status-badge--current">Current</span>
+        </div>
+
+        <div class="sop-meta">
+            <div class="meta-item">
+                <span class="meta-label">Version</span>
+                <span class="meta-value">2.0</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Effective Date</span>
+                <span class="meta-value">2026-01-01</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Owner</span>
+                <span class="meta-value">GT Team Lead</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Last Review</span>
+                <span class="meta-value">2025-12-15</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Version History -->
+    <aside class="version-history">
+        <h2>Version History</h2>
+        <ul>
+            <li>
+                <a href="v2.0.html">v2.0</a>
+                <span class="status-badge status-badge--current">Current</span>
+                <span style="color: #737373;">2026-01-01</span>
+            </li>
+            <li>
+                <a href="v1.0.html">v1.0</a>
+                <span class="status-badge status-badge--deprecated">Deprecated</span>
+                <span style="color: #737373;">2025-06-01</span>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- Purpose -->
+    <section class="sop-content">
+        <h2>Purpose</h2>
+        <p>This Standard Operating Procedure establishes the workflow for handling Ground Truth (GT) annotation tasks from assignment through submission and review. It ensures consistent quality and traceability across all GT work.</p>
+    </section>
+
+    <!-- Scope -->
+    <section class="sop-content">
+        <h2>Scope</h2>
+        <p>This procedure applies to all annotators working on Ground Truth tasks, including:</p>
+        <ul>
+            <li>Synapse identification and annotation</li>
+            <li>Vesicle tracing</li>
+            <li>Segment proofreading</li>
+            <li>Quality assurance reviews</li>
+        </ul>
+    </section>
+
+    <!-- Procedure -->
+    <section class="sop-content">
+        <h2>Procedure</h2>
+
+        <h3>1. Task Assignment</h3>
+        <ol>
+            <li>Check the task queue in WebKnossos for assigned tasks</li>
+            <li>Review task description and requirements before starting</li>
+            <li>Confirm you have access to all required datasets</li>
+            <li>Note any special instructions or priority flags</li>
+        </ol>
+
+        <h3>2. Task Execution</h3>
+        <ol>
+            <li>Open the task in WebKnossos with correct viewport settings</li>
+            <li>Follow the specific annotation protocol for the task type:
+                <ul>
+                    <li>Synapses: See <a href="../gt-checklist/">GT Checklist (SOP-003)</a></li>
+                    <li>Verification: See <a href="../gt-verification/">GT Verification (SOP-002)</a></li>
+                </ul>
+            </li>
+            <li>Save work frequently (Ctrl+S)</li>
+            <li>Document any ambiguous cases or questions in task notes</li>
+        </ol>
+
+        <h3>3. Quality Check</h3>
+        <ol>
+            <li>Complete the pre-submission checklist before marking task complete</li>
+            <li>Review all annotations for completeness</li>
+            <li>Verify naming conventions are followed</li>
+            <li>Check for any missed structures in assigned volume</li>
+        </ol>
+
+        <h3>4. Submission</h3>
+        <ol>
+            <li>Mark task as "Complete" in WebKnossos</li>
+            <li>Add summary notes describing work completed</li>
+            <li>Flag any issues requiring reviewer attention</li>
+            <li>Notify team lead if task required significant deviations from protocol</li>
+        </ol>
+    </section>
+
+    <!-- References -->
+    <section class="sop-content">
+        <h2>Related Documents</h2>
+        <ul>
+            <li><a href="../gt-verification/">SOP-002: GT Verification</a></li>
+            <li><a href="../gt-checklist/">SOP-003: GT Checklist</a></li>
+            <li><a href="../file-naming/">SOP-004: File Naming</a></li>
+            <li><a href="../../tasks/quality-assurance/">Task Guide: Quality Assurance</a></li>
+        </ul>
+    </section>
+
+    <!-- Change Log -->
+    <section class="change-log">
+        <h2>Change Log</h2>
+
+        <div class="change-log-entry">
+            <div class="change-log-version">
+                v2.0
+                <span class="status-badge status-badge--current">Current</span>
+            </div>
+            <div class="change-log-date">Effective: 2026-01-01</div>
+            <div class="change-log-notes">
+                <ul>
+                    <li>Added WebKnossos-specific workflow steps</li>
+                    <li>Integrated cross-references to related SOPs</li>
+                    <li>Updated submission procedure with new task status options</li>
+                    <li>Added quality check section as mandatory pre-submission step</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="change-log-entry">
+            <div class="change-log-version">
+                v1.0
+                <span class="status-badge status-badge--deprecated">Deprecated</span>
+            </div>
+            <div class="change-log-date">Effective: 2025-06-01</div>
+            <div class="change-log-notes">
+                <ul>
+                    <li>Initial release</li>
+                    <li>Basic task handling workflow established</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <div class="footer-nav">
+        <a href="../">Back to SOP Index</a>
+        <a href="../../tasks/">View Tasks</a>
+    </div>
+</footer>
+
+</body>
+</html>
