@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Archive - Princeton Tracer</title>
+</head>
+<body>
+
+<!-- ============================================================
+     NAVIGATION
+     Shared navigation structure - manually sync across all pages
+     TODO: Extract to _includes/nav.html when build system added
+     ============================================================ -->
+<nav>
+    <ul>
+        <li><a href="../">Dashboard</a></li>
+        <li><a href="../pipeline/">Pipeline</a></li>
+        <li><a href="../tasks/">Tasks</a></li>
+        <li><a href="../gallery/">Gallery</a></li>
+        <li><a href="../sop/">SOP</a></li>
+        <li><a href="../publications/">Publications</a></li>
+        <li><a href="../stats/">Stats</a></li>
+        <li><a href="../archive/">Archive</a></li>
+    </ul>
+</nav>
+
+<main>
+    <h1>Archive</h1>
+
+    <p>Historical documentation for deprecated tools and workflows. Preserved for reference but no longer actively used.</p>
+
+    <p><strong>Note:</strong> The tools documented here have been superseded by modern alternatives. See <a href="../pipeline/">Pipeline</a> for current tools.</p>
+
+    <!-- ============================================================
+         SECTION: VAST
+         VAST annotation tool (deprecated)
+         ============================================================ -->
+    <section id="vast">
+        <h2>VAST</h2>
+        <p><strong>Status:</strong> Deprecated</p>
+        <p>Volume Annotation and Segmentation Tool - desktop application for manual segmentation annotation. Replaced by WebKnossos.</p>
+
+        <h3>Documentation</h3>
+        <ul>
+            <li><a href="../drive_docs_output/Ground-Truth-Training/How-to VAST.html">How to VAST Guide</a></li>
+        </ul>
+
+        <h3>Key Features (Historical)</h3>
+        <ul>
+            <li>Desktop-based annotation</li>
+            <li>Ubuntu/Linux environment</li>
+            <li>Network-mounted storage required</li>
+        </ul>
+        <!-- TODO: Create vast.html with full historical documentation -->
+    </section>
+
+    <!-- ============================================================
+         SECTION: Omni
+         Omni 3D proofreading tool (deprecated)
+         ============================================================ -->
+    <section id="omni">
+        <h2>Omni</h2>
+        <p><strong>Status:</strong> Deprecated</p>
+        <p>3D proofreading and visualization tool for segmentation data. Replaced by WebKnossos and Neuroglancer.</p>
+
+        <h3>Documentation</h3>
+        <ul>
+            <li><a href="../drive_docs_output/Omni/How to Omni.html">How to Omni Guide</a></li>
+            <li><a href="../drive_docs_output/Omni/Copy of Exporting Omni.html">Exporting from Omni</a></li>
+            <li><a href="../Omni/Copy of Omni keyboard and mouse commands (alpha).xlsx">Omni Keyboard Commands (XLSX)</a></li>
+        </ul>
+
+        <h3>Glossary (Historical)</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Term</th>
+                    <th>Definition</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Dust</td>
+                    <td>Small voxel fragments inside large dendrites/axons</td>
+                </tr>
+                <tr>
+                    <td>Merger</td>
+                    <td>AI error combining two non-connecting structures</td>
+                </tr>
+                <tr>
+                    <td>Segment</td>
+                    <td>Collection of supervoxels</td>
+                </tr>
+                <tr>
+                    <td>Supervoxel</td>
+                    <td>Smallest rearrangeable unit of segmentation</td>
+                </tr>
+                <tr>
+                    <td>Spine</td>
+                    <td>Small membranous protrusion from dendrite</td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- TODO: Create omni.html with full historical documentation -->
+    </section>
+
+    <!-- ============================================================
+         SECTION: Eyewire
+         Eyewire citizen science platform (deprecated)
+         ============================================================ -->
+    <section id="eyewire">
+        <h2>Eyewire</h2>
+        <p><strong>Status:</strong> Deprecated</p>
+        <p>Browser-based citizen science game for neuron reconstruction. Replaced by professional annotation tools.</p>
+
+        <h3>Documentation</h3>
+        <ul>
+            <li><a href="../Eyewire/How-to_ Eyewire.docx">How to Eyewire (DOCX)</a></li>
+            <li><a href="../Eyewire/Eyewire Visual Aid.pptx">Eyewire Visual Aid (PPTX)</a></li>
+        </ul>
+
+        <h3>Key Features (Historical)</h3>
+        <ul>
+            <li>Gamified neuron tracing</li>
+            <li>Browser-based interface</li>
+            <li>Public participation model</li>
+        </ul>
+        <!-- TODO: Create eyewire.html with full historical documentation -->
+    </section>
+
+    <!-- ============================================================
+         SECTION: Tool Evolution
+         Timeline of tool transitions
+         ============================================================ -->
+    <section id="tool-evolution">
+        <h2>Tool Evolution Timeline</h2>
+
+        <ol>
+            <li>
+                <strong>Eyewire Era</strong> - Citizen science approach
+                <br>Browser-based gamified neuron reconstruction for public participation.
+            </li>
+            <li>
+                <strong>VAST + Omni Era</strong> - Professional desktop tools
+                <br>VAST for annotation, Omni for 3D proofreading. Ubuntu-based workflow.
+            </li>
+            <li>
+                <strong>WebKnossos + Neuroglancer Era</strong> - Current
+                <br>Web-based tools with collaborative features, AI assistance, and CAVE integration.
+            </li>
+        </ol>
+    </section>
+
+    <!-- ============================================================
+         SECTION: Legacy Documentation
+         Links to legacy index.html sections
+         ============================================================ -->
+    <section id="legacy">
+        <h2>Legacy Documentation</h2>
+        <ul>
+            <li><a href="../index-legacy.html">Full Legacy Documentation Page</a></li>
+            <li><a href="../index-legacy.html#history">Legacy History Section</a></li>
+            <li><a href="../index-legacy.html#omni-docs">Legacy Omni Documentation</a></li>
+        </ul>
+    </section>
+
+</main>
+
+<footer>
+    <p><a href="../">Back to Dashboard</a></p>
+</footer>
+
+</body>
+</html>
