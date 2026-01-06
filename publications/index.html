@@ -4,115 +4,879 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Publications - Princeton Tracer</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #1a1a1a;
+            padding: 0.75rem 1.5rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav a {
+            color: #e5e5e5;
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            display: inline-block;
+        }
+
+        nav a:hover,
+        nav a:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        nav a[aria-current="page"] {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* Main content */
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #d4d4d4;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #525252;
+            font-size: 1.0625rem;
+        }
+
+        /* Jump links */
+        .jump-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .jump-link {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+            text-decoration: none;
+            color: #1a1a1a;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: border-color 0.15s ease;
+        }
+
+        .jump-link:hover {
+            border-color: #2563eb;
+            color: #2563eb;
+        }
+
+        /* Project sections */
+        .project-section {
+            margin-bottom: 3rem;
+        }
+
+        .project-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #d4d4d4;
+        }
+
+        .project-header h2 {
+            font-size: 1.375rem;
+            font-weight: 700;
+        }
+
+        .pub-count {
+            font-size: 0.75rem;
+            color: #737373;
+            background-color: #e5e5e5;
+            padding: 0.125rem 0.5rem;
+            border-radius: 10px;
+        }
+
+        .project-desc {
+            color: #525252;
+            font-size: 0.9375rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Publication cards */
+        .pub-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .pub-card {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 1.5rem;
+            transition: border-color 0.15s ease;
+        }
+
+        .pub-card:hover {
+            border-color: #a3a3a3;
+        }
+
+        .pub-card-header {
+            margin-bottom: 1rem;
+        }
+
+        .pub-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .pub-title a {
+            color: #1a1a1a;
+            text-decoration: none;
+        }
+
+        .pub-title a:hover {
+            color: #2563eb;
+        }
+
+        .pub-authors {
+            font-size: 0.875rem;
+            color: #525252;
+            margin-bottom: 0.5rem;
+        }
+
+        .pub-venue {
+            font-size: 0.8125rem;
+            color: #737373;
+        }
+
+        .pub-venue strong {
+            color: #525252;
+        }
+
+        /* Type badge */
+        .pub-type {
+            display: inline-block;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+
+        .pub-type--paper {
+            background-color: #059669;
+            color: #ffffff;
+        }
+
+        .pub-type--preprint {
+            background-color: #d97706;
+            color: #ffffff;
+        }
+
+        .pub-type--dataset {
+            background-color: #7c3aed;
+            color: #ffffff;
+        }
+
+        .pub-type--methods {
+            background-color: #2563eb;
+            color: #ffffff;
+        }
+
+        /* Abstract */
+        .pub-abstract {
+            font-size: 0.9375rem;
+            color: #525252;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .pub-abstract summary {
+            cursor: pointer;
+            font-weight: 600;
+            color: #1a1a1a;
+            padding: 0.25rem 0;
+        }
+
+        .pub-abstract summary:hover {
+            color: #2563eb;
+        }
+
+        .pub-abstract p {
+            margin-top: 0.75rem;
+            padding-left: 1rem;
+            border-left: 3px solid #e5e5e5;
+        }
+
+        /* Metadata grid */
+        .pub-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .pub-meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .pub-meta-label {
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #737373;
+        }
+
+        .pub-meta-value {
+            font-size: 0.875rem;
+        }
+
+        .pub-meta-value a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .pub-meta-value a:hover {
+            text-decoration: underline;
+        }
+
+        /* Tags */
+        .pub-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e5e5;
+        }
+
+        .pub-tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.625rem;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+
+        .pub-tag--pipeline {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .pub-tag--pipeline:hover {
+            background-color: #bfdbfe;
+        }
+
+        .pub-tag--task {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .pub-tag--task:hover {
+            background-color: #fde68a;
+        }
+
+        .pub-tag--dataset {
+            background-color: #ede9fe;
+            color: #5b21b6;
+        }
+
+        /* External links */
+        .pub-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .pub-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            font-size: 0.8125rem;
+            color: #525252;
+            text-decoration: none;
+            padding: 0.375rem 0.75rem;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+        }
+
+        .pub-link:hover {
+            background-color: #e5e5e5;
+            color: #1a1a1a;
+        }
+
+        .pub-link--primary {
+            background-color: #2563eb;
+            color: #ffffff;
+        }
+
+        .pub-link--primary:hover {
+            background-color: #1d4ed8;
+            color: #ffffff;
+        }
+
+        /* Internal docs section */
+        .pub-internal {
+            background-color: #fafafa;
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .pub-internal h4 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #737373;
+            margin-bottom: 0.5rem;
+        }
+
+        .pub-internal ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 1rem;
+        }
+
+        .pub-internal a {
+            font-size: 0.875rem;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .pub-internal a:hover {
+            text-decoration: underline;
+        }
+
+        /* Methods section */
+        .methods-section {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .methods-section h2 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e5e5e5;
+        }
+
+        .methods-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .methods-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .methods-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .methods-item h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .methods-item h3 a {
+            color: #1a1a1a;
+            text-decoration: none;
+        }
+
+        .methods-item h3 a:hover {
+            color: #2563eb;
+        }
+
+        .methods-item p {
+            font-size: 0.875rem;
+            color: #525252;
+        }
+
+        /* Footer */
+        footer {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            border-top: 1px solid #e5e5e5;
+            font-size: 0.875rem;
+            color: #737373;
+        }
+
+        footer a {
+            color: #525252;
+        }
+
+        footer a:hover {
+            color: #1a1a1a;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            html {
+                font-size: 16px;
+            }
+
+            main {
+                padding: 1.5rem 1rem;
+            }
+
+            .pub-meta {
+                grid-template-columns: 1fr;
+            }
+
+            .jump-links {
+                flex-direction: column;
+            }
+
+            .jump-link {
+                text-align: center;
+            }
+        }
+
+        /* Print */
+        @media print {
+            nav, footer, .jump-links {
+                display: none;
+            }
+
+            .pub-card {
+                break-inside: avoid;
+                border: 1px solid #000;
+            }
+        }
+
+        /* Focus visible */
+        :focus-visible {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+    </style>
 </head>
 <body>
 
-<!-- ============================================================
-     NAVIGATION
-     Shared navigation structure - manually sync across all pages
-     TODO: Extract to _includes/nav.html when build system added
-     ============================================================ -->
-<nav>
+<nav aria-label="Main navigation">
     <ul>
         <li><a href="../">Dashboard</a></li>
         <li><a href="../pipeline/">Pipeline</a></li>
         <li><a href="../tasks/">Tasks</a></li>
         <li><a href="../gallery/">Gallery</a></li>
         <li><a href="../sop/">SOP</a></li>
-        <li><a href="../publications/">Publications</a></li>
+        <li><a href="./" aria-current="page">Publications</a></li>
         <li><a href="../stats/">Stats</a></li>
         <li><a href="../archive/">Archive</a></li>
     </ul>
 </nav>
 
 <main>
-    <h1>Publications</h1>
 
-    <p>Research publications, preprints, and academic resources related to the Princeton connectomics project.</p>
+    <div class="page-header">
+        <h1>Publications</h1>
+        <p>Research publications organized by project. Each entry links to relevant pipeline stages, task types, and internal documentation.</p>
+    </div>
 
-    <!-- ============================================================
-         SECTION: Papers
-         Published research papers
-         ============================================================ -->
-    <section id="papers">
-        <h2>Research Papers</h2>
-        <p>Placeholder for published research papers using data from this pipeline.</p>
+    <!-- Jump Links -->
+    <div class="jump-links" role="navigation" aria-label="Project navigation">
+        <a href="#flywire" class="jump-link">FlyWire / FAFB</a>
+        <a href="#banc" class="jump-link">BANC</a>
+        <a href="#methods" class="jump-link">Methods &amp; Tools</a>
+    </div>
 
-        <!-- TODO: Add publication entries in format:
-        <article>
-            <h3>Paper Title</h3>
-            <p class="authors">Author A, Author B, et al.</p>
-            <p class="journal">Journal Name, Year</p>
-            <p class="links">
-                <a href="#">PDF</a> |
-                <a href="#">DOI</a> |
-                <a href="#">Data</a>
-            </p>
-        </article>
-        -->
 
-        <p><em>No publications listed yet. Contact the project lead to add entries.</em></p>
+    <!-- ================================================================
+         FLYWIRE / FAFB PROJECT
+         ================================================================ -->
+    <section class="project-section" id="flywire" aria-labelledby="flywire-heading">
+        <div class="project-header">
+            <h2 id="flywire-heading">FlyWire / FAFB</h2>
+            <span class="pub-count">3 publications</span>
+        </div>
+        <p class="project-desc">
+            Publications from the FlyWire collaborative reconstruction of the <em>Drosophila</em> adult brain (FAFB dataset).
+            Our team contributes Ground Truth annotations for synapse detection and proofreading validation.
+        </p>
+
+        <div class="pub-list">
+
+            <!-- FlyWire Connectome Paper -->
+            <article class="pub-card">
+                <div class="pub-card-header">
+                    <h3 class="pub-title">
+                        <a href="flywire-connectome/">Neuronal wiring diagram of an adult brain</a>
+                        <span class="pub-type pub-type--paper">Paper</span>
+                    </h3>
+                    <p class="pub-authors">Dorkenwald S, Matsliah A, Sterling AR, et al. (FlyWire Consortium)</p>
+                    <p class="pub-venue"><strong>Nature</strong>, 2024</p>
+                </div>
+
+                <details class="pub-abstract">
+                    <summary>Abstract</summary>
+                    <p>The first complete connectome of an adult brain, reconstructed from a female <em>Drosophila melanogaster</em>. Contains ~140,000 neurons and ~50 million synapses, enabling comprehensive circuit analysis across the entire central brain.</p>
+                </details>
+
+                <div class="pub-meta">
+                    <div class="pub-meta-item">
+                        <span class="pub-meta-label">Dataset</span>
+                        <span class="pub-meta-value">FAFB (Full Adult Fly Brain)</span>
+                    </div>
+                    <div class="pub-meta-item">
+                        <span class="pub-meta-label">Our Contribution</span>
+                        <span class="pub-meta-value">Synapse GT, Proofreading validation</span>
+                    </div>
+                    <div class="pub-meta-item">
+                        <span class="pub-meta-label">Resolution</span>
+                        <span class="pub-meta-value">4 &times; 4 &times; 40 nm</span>
+                    </div>
+                </div>
+
+                <div class="pub-tags">
+                    <a href="../pipeline/#segmentation" class="pub-tag pub-tag--pipeline">Segmentation</a>
+                    <a href="../pipeline/#proofreading" class="pub-tag pub-tag--pipeline">Proofreading</a>
+                    <a href="../pipeline/#annotation" class="pub-tag pub-tag--pipeline">Annotation</a>
+                    <a href="../tasks/proofreading/" class="pub-tag pub-tag--task">Proofreading</a>
+                    <a href="../tasks/quality-assurance/" class="pub-tag pub-tag--task">Quality Assurance</a>
+                    <span class="pub-tag pub-tag--dataset">FAFB 2019</span>
+                </div>
+
+                <div class="pub-internal">
+                    <h4>Internal Documentation</h4>
+                    <ul>
+                        <li><a href="../sop/gt-task-handling/">GT Task Handling SOP</a></li>
+                        <li><a href="../gallery/#fafb-2019">FAFB Gallery Images</a></li>
+                        <li><a href="../drive_docs_output/Ground-Truth-Training/Copy of Fly Synapses.html">Fly Synapses Guide</a></li>
+                    </ul>
+                </div>
+
+                <div class="pub-links">
+                    <a href="https://doi.org/10.1038/s41586-024-07558-y" class="pub-link pub-link--primary">DOI</a>
+                    <a href="https://flywire.ai/" class="pub-link">FlyWire Portal</a>
+                    <a href="https://codex.flywire.ai/" class="pub-link">Codex Browser</a>
+                </div>
+            </article>
+
+            <!-- FlyWire Methods Paper -->
+            <article class="pub-card">
+                <div class="pub-card-header">
+                    <h3 class="pub-title">
+                        <a href="flywire-methods/">FlyWire: online community for whole-brain connectomics</a>
+                        <span class="pub-type pub-type--methods">Methods</span>
+                    </h3>
+                    <p class="pub-authors">Dorkenwald S, McKellar CE, Macrina T, et al.</p>
+                    <p class="pub-venue"><strong>Nature Methods</strong>, 2022</p>
+                </div>
+
+                <details class="pub-abstract">
+                    <summary>Abstract</summary>
+                    <p>Describes the FlyWire platform for collaborative proofreading, including the segmentation pipeline, proofreading interface, and methods for community coordination at scale.</p>
+                </details>
+
+                <div class="pub-meta">
+                    <div class="pub-meta-item">
+                        <span class="pub-meta-label">Dataset</span>
+                        <span class="pub-meta-value">FAFB</span>
+                    </div>
+                    <div class="pub-meta-item">
+                        <span class="pub-meta-label">Focus</span>
+                        <span class="pub-meta-value">Platform, proofreading workflow</span>
+                    </div>
+                </div>
+
+                <div class="pub-tags">
+                    <a href="../pipeline/#segmentation" class="pub-tag pub-tag--pipeline">Segmentation</a>
+                    <a href="../pipeline/#proofreading" class="pub-tag pub-tag--pipeline">Proofreading</a>
+                    <a href="../tasks/split-merge/" class="pub-tag pub-tag--task">Split/Merge</a>
+                </div>
+
+                <div class="pub-internal">
+                    <h4>Internal Documentation</h4>
+                    <ul>
+                        <li><a href="../tasks/split-merge/">Split/Merge Task Guide</a></li>
+                        <li><a href="../sop/gt-verification/">GT Verification SOP</a></li>
+                    </ul>
+                </div>
+
+                <div class="pub-links">
+                    <a href="https://doi.org/10.1038/s41592-021-01330-0" class="pub-link pub-link--primary">DOI</a>
+                    <a href="https://github.com/seung-lab/FlyWirePublic" class="pub-link">GitHub</a>
+                </div>
+            </article>
+
+            <!-- Synapse Detection Paper -->
+            <article class="pub-card">
+                <div class="pub-card-header">
+                    <h3 class="pub-title">
+                        <a href="synapse-detection/">Synaptic cleft segmentation in non-isotropic EM</a>
+                        <span class="pub-type pub-type--methods">Methods</span>
+                    </h3>
+                    <p class="pub-authors">Heinrich L, Funke J, Pape C, Macrina T, et al.</p>
+                    <p class="pub-venue"><strong>MICCAI</strong>, 2018</p>
+                </div>
+
+                <details class="pub-abstract">
+                    <summary>Abstract</summary>
+                    <p>Neural network approach for detecting synaptic clefts in anisotropic electron microscopy data. Ground Truth annotations from this work form the basis for synapse detection in FAFB.</p>
+                </details>
+
+                <div class="pub-meta">
+                    <div class="pub-meta-item">
+                        <span class="pub-meta-label">Our Contribution</span>
+                        <span class="pub-meta-value">Synapse Ground Truth annotations</span>
+                    </div>
+                    <div class="pub-meta-item">
+                        <span class="pub-meta-label">Focus</span>
+                        <span class="pub-meta-value">Synapse detection, cleft segmentation</span>
+                    </div>
+                </div>
+
+                <div class="pub-tags">
+                    <a href="../pipeline/#annotation" class="pub-tag pub-tag--pipeline">Annotation</a>
+                    <a href="../tasks/quality-assurance/" class="pub-tag pub-tag--task">Quality Assurance</a>
+                </div>
+
+                <div class="pub-internal">
+                    <h4>Internal Documentation</h4>
+                    <ul>
+                        <li><a href="../index.html#synapse-identification">Synapse Identification (Master Guide)</a></li>
+                        <li><a href="../drive_docs_output/Ground-Truth-Training/Copy of Synapse Stuff.html">Synapse Reference</a></li>
+                        <li><a href="../gallery/#synapses">Synapse Gallery</a></li>
+                    </ul>
+                </div>
+
+                <div class="pub-links">
+                    <a href="https://doi.org/10.1007/978-3-030-00934-2_13" class="pub-link pub-link--primary">DOI</a>
+                </div>
+            </article>
+
+        </div>
     </section>
 
-    <!-- ============================================================
-         SECTION: Preprints
-         Preprints and working papers
-         ============================================================ -->
-    <section id="preprints">
-        <h2>Preprints</h2>
-        <p>Preprints and manuscripts under review.</p>
 
-        <!-- TODO: Add preprint entries -->
+    <!-- ================================================================
+         BANC PROJECT
+         ================================================================ -->
+    <section class="project-section" id="banc" aria-labelledby="banc-heading">
+        <div class="project-header">
+            <h2 id="banc-heading">BANC</h2>
+            <span class="pub-count">2 publications</span>
+        </div>
+        <p class="project-desc">
+            Publications from the Brain and Nerve Cord (BANC) project reconstructing the complete adult <em>Drosophila</em> nervous system including VNC.
+        </p>
 
-        <p><em>No preprints listed yet.</em></p>
+        <div class="pub-list">
+
+            <!-- BANC Main Paper -->
+            <article class="pub-card">
+                <div class="pub-card-header">
+                    <h3 class="pub-title">
+                        <a href="banc-connectome/">A Connectome of the Adult Drosophila Ventral Nerve Cord</a>
+                        <span class="pub-type pub-type--preprint">Preprint</span>
+                    </h3>
+                    <p class="pub-authors">Takemura S, et al.</p>
+                    <p class="pub-venue"><strong>bioRxiv</strong>, 2024</p>
+                </div>
+
+                <details class="pub-abstract">
+                    <summary>Abstract</summary>
+                    <p>Complete connectome of the adult <em>Drosophila</em> ventral nerve cord, enabling analysis of motor circuits and sensory integration. Includes comprehensive proofreading and synapse annotation.</p>
+                </details>
+
+                <div class="pub-meta">
+                    <div class="pub-meta-item">
+                        <span class="pub-meta-label">Dataset</span>
+                        <span class="pub-meta-value">BANC (Brain and Nerve Cord)</span>
+                    </div>
+                    <div class="pub-meta-item">
+                        <span class="pub-meta-label">Our Contribution</span>
+                        <span class="pub-meta-value">Proofreading, synapse verification</span>
+                    </div>
+                    <div class="pub-meta-item">
+                        <span class="pub-meta-label">Status</span>
+                        <span class="pub-meta-value">Under review</span>
+                    </div>
+                </div>
+
+                <div class="pub-tags">
+                    <a href="../pipeline/#segmentation" class="pub-tag pub-tag--pipeline">Segmentation</a>
+                    <a href="../pipeline/#proofreading" class="pub-tag pub-tag--pipeline">Proofreading</a>
+                    <a href="../pipeline/#annotation" class="pub-tag pub-tag--pipeline">Annotation</a>
+                    <a href="../tasks/proofreading/" class="pub-tag pub-tag--task">Proofreading</a>
+                    <a href="../tasks/skeletonization/" class="pub-tag pub-tag--task">Skeletonization</a>
+                    <span class="pub-tag pub-tag--dataset">BANC</span>
+                </div>
+
+                <div class="pub-internal">
+                    <h4>Internal Documentation</h4>
+                    <ul>
+                        <li><a href="../sop/gt-task-handling/">GT Task Handling SOP</a></li>
+                        <li><a href="../gallery/#banc">BANC Gallery Images</a></li>
+                        <li><a href="../tracer_tools/">tracer_tools (BANC scripts)</a></li>
+                    </ul>
+                </div>
+
+                <div class="pub-links">
+                    <a href="#" class="pub-link pub-link--primary">bioRxiv (pending)</a>
+                    <a href="https://cave-explorer.app/banc" class="pub-link">CAVE Explorer</a>
+                </div>
+            </article>
+
+            <!-- BANC Data Release -->
+            <article class="pub-card">
+                <div class="pub-card-header">
+                    <h3 class="pub-title">
+                        <a href="banc-data/">BANC Public Data Release v1</a>
+                        <span class="pub-type pub-type--dataset">Dataset</span>
+                    </h3>
+                    <p class="pub-authors">BANC Consortium</p>
+                    <p class="pub-venue"><strong>Data Release</strong>, 2024</p>
+                </div>
+
+                <details class="pub-abstract">
+                    <summary>Summary</summary>
+                    <p>Public release of BANC segmentation, synapses, and annotations. Includes CAVE materialization tables and Neuroglancer state links for browsing.</p>
+                </details>
+
+                <div class="pub-meta">
+                    <div class="pub-meta-item">
+                        <span class="pub-meta-label">Datastack</span>
+                        <span class="pub-meta-value"><code>brain_and_nerve_cord</code></span>
+                    </div>
+                    <div class="pub-meta-item">
+                        <span class="pub-meta-label">Access</span>
+                        <span class="pub-meta-value">CAVE API</span>
+                    </div>
+                </div>
+
+                <div class="pub-tags">
+                    <a href="../pipeline/#publication" class="pub-tag pub-tag--pipeline">Publication</a>
+                    <span class="pub-tag pub-tag--dataset">BANC</span>
+                </div>
+
+                <div class="pub-internal">
+                    <h4>Internal Documentation</h4>
+                    <ul>
+                        <li><a href="../tracer_tools/scripts/">CAVE Query Scripts</a></li>
+                        <li><a href="../CLAUDE.md">tracer_tools API Reference</a></li>
+                    </ul>
+                </div>
+
+                <div class="pub-links">
+                    <a href="https://cave.fanc-fly.com/" class="pub-link pub-link--primary">CAVE Portal</a>
+                </div>
+            </article>
+
+        </div>
     </section>
 
-    <!-- ============================================================
-         SECTION: Datasets
-         Published datasets and data releases
-         ============================================================ -->
-    <section id="datasets">
-        <h2>Data Releases</h2>
-        <p>Published datasets and data releases from the project.</p>
 
-        <!-- TODO: Add dataset entries with links to repositories -->
+    <!-- ================================================================
+         METHODS & TOOLS
+         ================================================================ -->
+    <section class="methods-section" id="methods" aria-labelledby="methods-heading">
+        <h2 id="methods-heading">Methods &amp; Tools</h2>
+        <p style="font-size: 0.9375rem; color: #525252; margin-bottom: 1rem;">
+            Foundational methods papers for tools and techniques used in our annotation workflows.
+        </p>
 
-        <p><em>No data releases listed yet.</em></p>
-    </section>
+        <div class="methods-list">
+            <div class="methods-item">
+                <h3><a href="https://doi.org/10.1038/s41592-021-01106-6">CAVE: Connectome Annotation Versioning Engine</a></h3>
+                <p>Forrest Collman et al. (2021) &mdash; Versioned annotation system used for all CAVE-based projects</p>
+            </div>
 
-    <!-- ============================================================
-         SECTION: Related Work
-         External publications and resources
-         ============================================================ -->
-    <section id="related-work">
-        <h2>Related Work</h2>
-        <p>External publications and foundational research relevant to this project.</p>
+            <div class="methods-item">
+                <h3><a href="https://doi.org/10.1038/nmeth.4206">Neuroglancer</a></h3>
+                <p>Google &mdash; WebGL viewer for volumetric data, used for browsing segmentation and annotations</p>
+            </div>
 
-        <h3>Foundational Papers</h3>
-        <ul>
-            <li>
-                <!-- TODO: Add FlyWire paper -->
-                <em>FlyWire publication - to be added</em>
-            </li>
-            <li>
-                <!-- TODO: Add CAVE paper -->
-                <em>CAVE publication - to be added</em>
-            </li>
-        </ul>
+            <div class="methods-item">
+                <h3><a href="https://webknossos.org/">WebKnossos</a></h3>
+                <p>scalable minds &mdash; Annotation platform used for skeleton tracing and Ground Truth tasks</p>
+            </div>
 
-        <h3>Methods Papers</h3>
-        <ul>
-            <li>
-                <!-- TODO: Add relevant methods papers -->
-                <em>Methods publications - to be added</em>
-            </li>
-        </ul>
+            <div class="methods-item">
+                <h3><a href="https://doi.org/10.1038/s41592-019-0582-9">Flood-Filling Networks</a></h3>
+                <p>Januszewski et al. (2018) &mdash; Segmentation method used for initial neuron reconstructions</p>
+            </div>
+
+            <div class="methods-item">
+                <h3><a href="https://github.com/seung-lab/cloud-volume">CloudVolume</a></h3>
+                <p>Seung Lab &mdash; Python library for reading/writing volumetric data in cloud storage</p>
+            </div>
+        </div>
     </section>
 
 </main>
 
 <footer>
-    <p><a href="../">Back to Dashboard</a></p>
+    <div class="footer-nav">
+        <a href="../">Back to Dashboard</a>
+        <a href="../pipeline/">View Pipeline</a>
+    </div>
 </footer>
 
 </body>

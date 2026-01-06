@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neuronal wiring diagram of an adult brain - Princeton Tracer</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #1a1a1a;
+            padding: 0.75rem 1.5rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav a {
+            color: #e5e5e5;
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            display: inline-block;
+        }
+
+        nav a:hover,
+        nav a:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        nav a[aria-current="page"] {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* Main content */
+        main {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            font-size: 0.875rem;
+            color: #525252;
+            margin-bottom: 1.5rem;
+        }
+
+        .breadcrumb a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Publication header */
+        .pub-header {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pub-type {
+            display: inline-block;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            margin-bottom: 0.75rem;
+            background-color: #059669;
+            color: #ffffff;
+        }
+
+        .pub-header h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            line-height: 1.3;
+        }
+
+        .pub-authors {
+            font-size: 0.9375rem;
+            color: #525252;
+            margin-bottom: 0.5rem;
+        }
+
+        .pub-venue {
+            font-size: 0.875rem;
+            color: #737373;
+            margin-bottom: 1rem;
+        }
+
+        .pub-venue strong {
+            color: #525252;
+        }
+
+        .pub-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e5e5;
+        }
+
+        .pub-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            font-size: 0.8125rem;
+            color: #525252;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .pub-link:hover {
+            background-color: #e5e5e5;
+            color: #1a1a1a;
+        }
+
+        .pub-link--primary {
+            background-color: #2563eb;
+            color: #ffffff;
+        }
+
+        .pub-link--primary:hover {
+            background-color: #1d4ed8;
+            color: #ffffff;
+        }
+
+        /* Content sections */
+        .content-section {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-section h2 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e5e5e5;
+        }
+
+        .content-section p {
+            margin-bottom: 0.75rem;
+        }
+
+        .content-section p:last-child {
+            margin-bottom: 0;
+        }
+
+        .content-section ul,
+        .content-section ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Metadata grid */
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .meta-label {
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #737373;
+        }
+
+        .meta-value {
+            font-size: 0.9375rem;
+        }
+
+        /* Tags */
+        .tag-section {
+            margin-top: 1rem;
+        }
+
+        .tag-section h3 {
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #737373;
+            margin-bottom: 0.5rem;
+        }
+
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.625rem;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+
+        .tag--pipeline {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+
+        .tag--pipeline:hover {
+            background-color: #bfdbfe;
+        }
+
+        .tag--task {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .tag--task:hover {
+            background-color: #fde68a;
+        }
+
+        /* Internal links */
+        .internal-links {
+            background-color: #fafafa;
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .internal-links h3 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #737373;
+            margin-bottom: 0.75rem;
+        }
+
+        .internal-links ul {
+            list-style: none;
+            margin: 0;
+        }
+
+        .internal-links li {
+            padding: 0.375rem 0;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .internal-links li:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .internal-links a {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .internal-links a:hover {
+            text-decoration: underline;
+        }
+
+        .internal-links .link-desc {
+            font-size: 0.8125rem;
+            color: #737373;
+            margin-left: 0.5rem;
+        }
+
+        /* Highlight box */
+        .highlight-box {
+            background-color: #eff6ff;
+            border: 2px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin: 1rem 0;
+        }
+
+        .highlight-box h3 {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-box p {
+            font-size: 0.9375rem;
+            color: #1e3a8a;
+            margin: 0;
+        }
+
+        /* Footer */
+        footer {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            border-top: 1px solid #e5e5e5;
+            font-size: 0.875rem;
+            color: #737373;
+        }
+
+        footer a {
+            color: #525252;
+        }
+
+        footer a:hover {
+            color: #1a1a1a;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            html {
+                font-size: 16px;
+            }
+
+            main {
+                padding: 1.5rem 1rem;
+            }
+
+            .meta-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Print */
+        @media print {
+            nav, footer {
+                display: none;
+            }
+
+            .pub-header, .content-section {
+                border: 1px solid #000;
+                break-inside: avoid;
+            }
+        }
+
+        /* Focus visible */
+        :focus-visible {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+
+<nav aria-label="Main navigation">
+    <ul>
+        <li><a href="../../">Dashboard</a></li>
+        <li><a href="../../pipeline/">Pipeline</a></li>
+        <li><a href="../../tasks/">Tasks</a></li>
+        <li><a href="../../gallery/">Gallery</a></li>
+        <li><a href="../../sop/">SOP</a></li>
+        <li><a href="../" aria-current="page">Publications</a></li>
+        <li><a href="../../stats/">Stats</a></li>
+        <li><a href="../../archive/">Archive</a></li>
+    </ul>
+</nav>
+
+<main>
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../">Publications</a> &rsaquo;
+        <a href="../#flywire">FlyWire / FAFB</a> &rsaquo;
+        FlyWire Connectome
+    </nav>
+
+    <!-- Publication Header -->
+    <header class="pub-header">
+        <span class="pub-type">Published Paper</span>
+        <h1>Neuronal wiring diagram of an adult brain</h1>
+        <p class="pub-authors">
+            Dorkenwald S, Matsliah A, Sterling AR, Schlegel P, Yu S, McKellar CE, Lin A, Costa M, Eichler K, Yin Y, Zinn W, Jefferis GSXE, ... (FlyWire Consortium)
+        </p>
+        <p class="pub-venue">
+            <strong>Nature</strong> 634, 124-138 (2024)
+        </p>
+        <div class="pub-links">
+            <a href="https://doi.org/10.1038/s41586-024-07558-y" class="pub-link pub-link--primary">View Paper (DOI)</a>
+            <a href="https://flywire.ai/" class="pub-link">FlyWire Portal</a>
+            <a href="https://codex.flywire.ai/" class="pub-link">Codex Browser</a>
+            <a href="https://github.com/seung-lab/FlyWirePublic" class="pub-link">GitHub</a>
+        </div>
+    </header>
+
+    <!-- Abstract -->
+    <section class="content-section">
+        <h2>Abstract</h2>
+        <p>
+            Connections between neurons can be mapped by acquiring and analyzing electron microscope images of brain tissue. The resulting 'connectomes' map neural circuits, but have been limited to small insect and worm brains or portions of larger brains. Here we present a neuronal wiring diagram of an entire adult female <em>Drosophila melanogaster</em> brain.
+        </p>
+        <p>
+            The connectome contains roughly 140,000 neurons and 50 million synaptic connections. The neurons have been matched to cell types and brain regions, and their synaptic partners identified. The complete wiring diagram enables comprehensive analysis of circuit motifs and signal flow throughout the brain.
+        </p>
+    </section>
+
+    <!-- Our Team's Contribution -->
+    <section class="content-section">
+        <h2>Our Contribution</h2>
+
+        <div class="highlight-box">
+            <h3>Ground Truth Annotation</h3>
+            <p>Our team provided Ground Truth synapse annotations used to train and validate the automated synapse detection pipeline.</p>
+        </div>
+
+        <p>Specific contributions include:</p>
+        <ul>
+            <li><strong>Synapse Ground Truth</strong> &mdash; Manual annotation of synaptic clefts for training data</li>
+            <li><strong>Proofreading Validation</strong> &mdash; Verification of automated segmentation quality</li>
+            <li><strong>Quality Assurance</strong> &mdash; Systematic review of reconstruction accuracy</li>
+        </ul>
+
+        <div class="internal-links">
+            <h3>Related Internal Documentation</h3>
+            <ul>
+                <li>
+                    <a href="../../sop/gt-task-handling/">GT Task Handling SOP</a>
+                    <span class="link-desc">Standard procedures used for this project</span>
+                </li>
+                <li>
+                    <a href="../../drive_docs_output/Ground-Truth-Training/Copy of Fly Synapses.html">Fly Synapses Guide</a>
+                    <span class="link-desc">Synapse identification training material</span>
+                </li>
+                <li>
+                    <a href="../../index.html#synapse-identification">Synapse Identification (Master Guide)</a>
+                    <span class="link-desc">4 indicators, 5 synapse types</span>
+                </li>
+                <li>
+                    <a href="../../gallery/#fafb-2019">FAFB Gallery Images</a>
+                    <span class="link-desc">Visual references from this dataset</span>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Dataset Information -->
+    <section class="content-section">
+        <h2>Associated Dataset</h2>
+        <div class="meta-grid">
+            <div class="meta-item">
+                <span class="meta-label">Dataset</span>
+                <span class="meta-value">FAFB (Full Adult Fly Brain)</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Species</span>
+                <span class="meta-value"><em>Drosophila melanogaster</em></span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Resolution</span>
+                <span class="meta-value">4 &times; 4 &times; 40 nm</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Neurons</span>
+                <span class="meta-value">~140,000</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Synapses</span>
+                <span class="meta-value">~50 million</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Access</span>
+                <span class="meta-value">FlyWire / CAVE</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pipeline Stages -->
+    <section class="content-section">
+        <h2>Pipeline Stages Involved</h2>
+        <p>This publication involved work across multiple pipeline stages:</p>
+
+        <div class="tag-section">
+            <h3>Pipeline Stages</h3>
+            <div class="tag-list">
+                <a href="../../pipeline/#segmentation" class="tag tag--pipeline">Stage 4: Segmentation</a>
+                <a href="../../pipeline/#proofreading" class="tag tag--pipeline">Stage 5: Proofreading</a>
+                <a href="../../pipeline/#annotation" class="tag tag--pipeline">Stage 6: Annotation</a>
+                <a href="../../pipeline/#analysis" class="tag tag--pipeline">Stage 7: Analysis</a>
+            </div>
+        </div>
+
+        <div class="tag-section">
+            <h3>Task Types</h3>
+            <div class="tag-list">
+                <a href="../../tasks/proofreading/" class="tag tag--task">Proofreading</a>
+                <a href="../../tasks/split-merge/" class="tag tag--task">Split/Merge</a>
+                <a href="../../tasks/quality-assurance/" class="tag tag--task">Quality Assurance</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Findings -->
+    <section class="content-section">
+        <h2>Key Findings (Summary)</h2>
+        <ul>
+            <li>First complete connectome of an adult insect brain</li>
+            <li>Comprehensive cell type catalog with ~8,400 distinct types</li>
+            <li>Complete synaptic connectivity for all neurons</li>
+            <li>Identification of circuit motifs across brain regions</li>
+            <li>Resources for exploring neural pathways and signal flow</li>
+        </ul>
+    </section>
+
+    <!-- Related Publications -->
+    <section class="content-section">
+        <h2>Related Publications</h2>
+        <ul>
+            <li>
+                <a href="../flywire-methods/">FlyWire: online community for whole-brain connectomics</a>
+                <span style="color: #737373; font-size: 0.875rem;">&mdash; Nature Methods, 2022</span>
+            </li>
+            <li>
+                <a href="../synapse-detection/">Synaptic cleft segmentation in non-isotropic EM</a>
+                <span style="color: #737373; font-size: 0.875rem;">&mdash; MICCAI, 2018</span>
+            </li>
+        </ul>
+    </section>
+
+</main>
+
+<footer>
+    <div class="footer-nav">
+        <a href="../">Back to Publications</a>
+        <a href="../../pipeline/">View Pipeline</a>
+    </div>
+</footer>
+
+</body>
+</html>
