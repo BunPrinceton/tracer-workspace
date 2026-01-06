@@ -4,47 +4,545 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Semantic Segmentation - Tasks - Princeton Tracer</title>
+    <!-- ============================================================
+         TASK PAGE TEMPLATE
+
+         This template is designed to be reused across all task types.
+         Copy this file and update the following:
+         1. <title> tag
+         2. Breadcrumb text
+         3. Page header (h1, task-id, description)
+         4. All section content
+
+         Required sections (do not remove):
+         - Task Overview
+         - Current SOP
+         - Historical SOPs
+         - Visual Examples
+         - Common Failure Modes
+         - Tools Used
+         - Training Videos
+         - Related Publications
+         ============================================================ -->
     <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { font-size: 18px; line-height: 1.6; }
-        body { font-family: system-ui, -apple-system, sans-serif; background: #f5f5f5; color: #1a1a1a; min-height: 100vh; }
+        /* ============================================================
+           TASK PAGE TEMPLATE STYLES
+           Reusable across all task type pages
+           ============================================================ */
 
-        nav { background: #1a1a1a; padding: 0.75rem 1.5rem; }
-        nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; max-width: 1200px; margin: 0 auto; }
-        nav a { color: #e5e5e5; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0; }
-        nav a:hover, nav a:focus { text-decoration: underline; }
-        nav a[aria-current="page"] { color: #fff; font-weight: 600; }
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-        main { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+        html {
+            font-size: 18px;
+            line-height: 1.6;
+        }
 
-        .breadcrumb { font-size: 0.875rem; color: #525252; margin-bottom: 1rem; }
-        .breadcrumb a { color: #2563eb; text-decoration: none; }
-        .breadcrumb a:hover { text-decoration: underline; }
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
 
-        .page-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #d4d4d4; }
-        .page-header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.75rem; }
-        .page-header .task-id { font-size: 0.875rem; font-weight: 600; color: #2563eb; background: #eff6ff; padding: 0.25rem 0.625rem; border-radius: 4px; }
-        .page-header p { color: #525252; font-size: 1.0625rem; }
+        /* ----------------------------------------
+           Navigation
+           ---------------------------------------- */
+        nav {
+            background-color: #1a1a1a;
+            padding: 0.75rem 1.5rem;
+        }
 
-        .placeholder { background: #fff; border: 2px dashed #d4d4d4; border-radius: 8px; padding: 3rem 2rem; text-align: center; margin-bottom: 2rem; }
-        .placeholder h2 { font-size: 1.25rem; color: #525252; margin-bottom: 0.5rem; }
-        .placeholder p { color: #737373; font-size: 0.9375rem; }
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
 
-        section { margin-bottom: 2rem; }
-        section h2 { font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #d4d4d4; }
-        section ul { list-style: none; }
-        section li { padding: 0.375rem 0; }
-        section a { color: #2563eb; text-decoration: none; }
-        section a:hover { text-decoration: underline; }
+        nav a {
+            color: #e5e5e5;
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            display: inline-block;
+        }
 
-        footer { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; border-top: 1px solid #e5e5e5; font-size: 0.875rem; color: #737373; }
-        footer a { color: #525252; }
+        nav a:hover,
+        nav a:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
 
-        @media (max-width: 600px) { html { font-size: 16px; } main { padding: 1.5rem 1rem; } }
+        nav a[aria-current="page"] {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* ----------------------------------------
+           Main Content Area
+           ---------------------------------------- */
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        /* ----------------------------------------
+           Breadcrumb
+           ---------------------------------------- */
+        .breadcrumb {
+            font-size: 0.875rem;
+            color: #525252;
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* ----------------------------------------
+           Page Header
+           ---------------------------------------- */
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #d4d4d4;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .task-id {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #2563eb;
+            background-color: #eff6ff;
+            padding: 0.25rem 0.625rem;
+            border-radius: 4px;
+        }
+
+        .page-header > p {
+            color: #525252;
+            font-size: 1.0625rem;
+        }
+
+        /* ----------------------------------------
+           Section Styling
+           ---------------------------------------- */
+        .section {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .section h2 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e5e5e5;
+        }
+
+        .section h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .section h3:first-child {
+            margin-top: 0;
+        }
+
+        .section p {
+            margin-bottom: 1rem;
+            color: #525252;
+        }
+
+        .section p:last-child {
+            margin-bottom: 0;
+        }
+
+        .section ul,
+        .section ol {
+            margin-left: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .section li {
+            padding: 0.25rem 0;
+        }
+
+        .section a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .section a:hover,
+        .section a:focus {
+            text-decoration: underline;
+        }
+
+        /* ----------------------------------------
+           SOP Box (Current/Authoritative)
+           ---------------------------------------- */
+        .sop-current {
+            background-color: #eff6ff;
+            border-color: #2563eb;
+        }
+
+        .sop-badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+
+        .sop-badge--current {
+            background-color: #2563eb;
+            color: #ffffff;
+        }
+
+        .sop-badge--archived {
+            background-color: #737373;
+            color: #ffffff;
+        }
+
+        /* ----------------------------------------
+           Collapsible Details (Historical SOPs)
+           ---------------------------------------- */
+        details {
+            background-color: #fafafa;
+            border: 2px solid #e5e5e5;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        summary {
+            padding: 1rem 1.5rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: #525252;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        summary::before {
+            content: "▶";
+            font-size: 0.75rem;
+            transition: transform 0.2s;
+        }
+
+        details[open] summary::before {
+            transform: rotate(90deg);
+        }
+
+        summary:hover {
+            background-color: #f5f5f5;
+        }
+
+        details .details-content {
+            padding: 0 1.5rem 1.5rem;
+            border-top: 1px solid #e5e5e5;
+        }
+
+        /* ----------------------------------------
+           Tools Grid
+           ---------------------------------------- */
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .tool-card {
+            background-color: #f5f5f5;
+            border-radius: 6px;
+            padding: 1rem;
+        }
+
+        .tool-card h4 {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .tool-card p {
+            font-size: 0.875rem;
+            color: #525252;
+            margin: 0;
+        }
+
+        /* ----------------------------------------
+           Failure Modes List
+           ---------------------------------------- */
+        .failure-modes {
+            list-style: none;
+            margin: 0;
+        }
+
+        .failure-modes li {
+            background-color: #f5f5f5;
+            border-left: 4px solid #d4d4d4;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .failure-modes strong {
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .failure-modes span {
+            font-size: 0.875rem;
+            color: #525252;
+        }
+
+        /* ----------------------------------------
+           Video Embed Container
+           ---------------------------------------- */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            background-color: #1a1a1a;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #737373;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .video-placeholder-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .video-list {
+            list-style: none;
+            margin: 0;
+        }
+
+        .video-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .video-list li:last-child {
+            border-bottom: none;
+        }
+
+        /* ----------------------------------------
+           Gallery Link Grid
+           ---------------------------------------- */
+        .gallery-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 0.75rem;
+            list-style: none;
+            margin: 0;
+        }
+
+        .gallery-links a {
+            display: block;
+            background-color: #f5f5f5;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.875rem;
+        }
+
+        .gallery-links a:hover {
+            background-color: #eff6ff;
+            text-decoration: none;
+        }
+
+        /* ----------------------------------------
+           Publications List
+           ---------------------------------------- */
+        .publication-list {
+            list-style: none;
+            margin: 0;
+        }
+
+        .publication-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .publication-list li:last-child {
+            border-bottom: none;
+        }
+
+        .publication-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .publication-meta {
+            font-size: 0.875rem;
+            color: #525252;
+        }
+
+        .publication-links {
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .publication-links a {
+            margin-right: 1rem;
+        }
+
+        /* ----------------------------------------
+           Placeholder Notice
+           ---------------------------------------- */
+        .placeholder-notice {
+            background-color: #fafafa;
+            border: 2px dashed #d4d4d4;
+            border-radius: 6px;
+            padding: 1rem;
+            text-align: center;
+            color: #737373;
+            font-size: 0.875rem;
+        }
+
+        /* ----------------------------------------
+           Footer
+           ---------------------------------------- */
+        footer {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            border-top: 1px solid #e5e5e5;
+            font-size: 0.875rem;
+            color: #737373;
+        }
+
+        footer a {
+            color: #525252;
+        }
+
+        footer a:hover {
+            color: #1a1a1a;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* ----------------------------------------
+           Responsive
+           ---------------------------------------- */
+        @media (max-width: 600px) {
+            html {
+                font-size: 16px;
+            }
+
+            main {
+                padding: 1.5rem 1rem;
+            }
+
+            .page-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .gallery-links {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* ----------------------------------------
+           Print
+           ---------------------------------------- */
+        @media print {
+            nav, footer {
+                display: none;
+            }
+
+            .section {
+                break-inside: avoid;
+                border: 1px solid #000;
+            }
+
+            details {
+                display: block;
+            }
+
+            details[open] .details-content {
+                display: block;
+            }
+        }
     </style>
 </head>
 <body>
 
+<!-- ============================================================
+     NAVIGATION
+     Standard site navigation - update aria-current as needed
+     ============================================================ -->
 <nav aria-label="Main navigation">
     <ul>
         <li><a href="../../">Dashboard</a></li>
@@ -60,10 +558,18 @@
 
 <main>
 
+    <!-- ============================================================
+         BREADCRUMB
+         Update text for each task type
+         ============================================================ -->
     <div class="breadcrumb">
         <a href="../">Tasks</a> / Semantic Segmentation
     </div>
 
+    <!-- ============================================================
+         PAGE HEADER
+         Update: h1 text, task-id, description paragraph
+         ============================================================ -->
     <div class="page-header">
         <h1>
             Semantic Segmentation
@@ -72,47 +578,401 @@
         <p>Labeling tissue types and cellular structures at the semantic level within EM volumes.</p>
     </div>
 
-    <!-- ============================================================
-         PLACEHOLDER: Content to be added
-         ============================================================ -->
-    <div class="placeholder">
-        <h2>Content Coming Soon</h2>
-        <p>Training materials, protocols, and examples for this task type will be added here.</p>
-    </div>
 
     <!-- ============================================================
-         SECTION: Planned Content
-         Outline of what will be included
+         SECTION 1: TASK OVERVIEW
+         Purpose: Explain what this task is and why it matters
          ============================================================ -->
-    <section>
-        <h2>Planned Content</h2>
+    <section class="section" id="overview">
+        <h2>Task Overview</h2>
+
+        <h3>What is Semantic Segmentation?</h3>
+        <p>
+            Semantic segmentation involves classifying each voxel in an EM volume according to the
+            biological structure it belongs to. Unlike instance segmentation (which identifies individual
+            neurons), semantic segmentation labels broad categories like "cell body," "axon," "dendrite,"
+            "mitochondria," "myelin," and "extracellular space."
+        </p>
+
+        <h3>Why is it Important?</h3>
+        <p>
+            Semantic labels provide critical context for downstream analysis. They help distinguish
+            neural tissue from non-neural structures, identify subcellular compartments, and enable
+            automated quality checks. Accurate semantic segmentation improves the efficiency of
+            proofreading and annotation stages.
+        </p>
+
+        <h3>Key Objectives</h3>
         <ul>
-            <!-- TODO: Add training content for semantic segmentation -->
-            <li>Overview and objectives</li>
-            <li>Structure types to identify</li>
-            <li>Labeling conventions</li>
-            <li>Step-by-step workflow</li>
-            <li>Common mistakes and edge cases</li>
-            <li>Visual examples</li>
+            <li>Identify and label major tissue compartments in EM imagery</li>
+            <li>Distinguish neural from non-neural structures</li>
+            <li>Mark subcellular organelles when required by protocol</li>
+            <li>Flag ambiguous or damaged regions for review</li>
         </ul>
     </section>
 
+
     <!-- ============================================================
-         SECTION: Related Documentation
+         SECTION 2: CURRENT SOP (AUTHORITATIVE)
+         Purpose: The official, current procedure for this task
+         Note: Use .sop-current class for visual emphasis
          ============================================================ -->
-    <section>
+    <section class="section sop-current" id="current-sop">
+        <h2>
+            Current Standard Operating Procedure
+            <span class="sop-badge sop-badge--current">Authoritative</span>
+        </h2>
+
+        <h3>Scope</h3>
+        <p>
+            This SOP applies to all semantic segmentation tasks in the FlyWire and BANC datasets.
+            Follow these steps exactly unless instructed otherwise by a supervisor.
+        </p>
+
+        <h3>Procedure</h3>
+        <ol>
+            <li>
+                <strong>Open the assigned volume</strong> in WebKnossos using the provided task link.
+            </li>
+            <li>
+                <strong>Review the task region</strong> by scrolling through all Z-slices to understand
+                the structures present.
+            </li>
+            <li>
+                <strong>Select the appropriate label</strong> from the semantic class palette:
+                <ul>
+                    <li><strong>Soma</strong> — Cell bodies with visible nucleus</li>
+                    <li><strong>Axon</strong> — Thin processes with vesicle-filled terminals</li>
+                    <li><strong>Dendrite</strong> — Larger processes with spines or PSDs</li>
+                    <li><strong>Glia</strong> — Non-neuronal cells (astrocytes, microglia)</li>
+                    <li><strong>Myelin</strong> — Dark-staining membrane wrapping</li>
+                    <li><strong>Mitochondria</strong> — Subcellular organelles with cristae</li>
+                    <li><strong>Extracellular</strong> — Space between cells</li>
+                    <li><strong>Artifact</strong> — Damaged or ambiguous regions</li>
+                </ul>
+            </li>
+            <li>
+                <strong>Paint each structure</strong> using the brush tool. Use appropriate brush size
+                for the feature scale.
+            </li>
+            <li>
+                <strong>Review boundaries</strong> by toggling the segmentation overlay. Ensure clean
+                edges without gaps or overlaps.
+            </li>
+            <li>
+                <strong>Submit for review</strong> when complete. Add notes for any ambiguous regions.
+            </li>
+        </ol>
+
+        <h3>Quality Criteria</h3>
+        <ul>
+            <li>No unlabeled voxels within the task region</li>
+            <li>Boundaries follow actual membrane contours</li>
+            <li>Consistent labeling across Z-slices</li>
+            <li>Artifacts properly marked rather than guessed</li>
+        </ul>
+
+        <h3>Source Document</h3>
+        <p>
+            <a href="../../drive_docs_output/Misc/Copy of How to semantic segmentation.html">
+                How to Semantic Segmentation (Full Document)
+            </a>
+        </p>
+    </section>
+
+
+    <!-- ============================================================
+         SECTION 3: HISTORICAL SOPS (COLLAPSED)
+         Purpose: Archive of previous procedures for reference
+         Note: Use <details> element for collapsible content
+         ============================================================ -->
+    <details id="historical-sops">
+        <summary>
+            Historical SOPs
+            <span class="sop-badge sop-badge--archived">Archived</span>
+        </summary>
+        <div class="details-content">
+            <p>
+                Previous versions of the semantic segmentation protocol are preserved here for
+                reference. These may contain outdated procedures—always use the Current SOP above.
+            </p>
+
+            <h3>Version History</h3>
+            <ul>
+                <li>
+                    <strong>v2.0 (Current)</strong> — January 2026
+                    <br>Added artifact class, updated WebKnossos workflow
+                </li>
+                <li>
+                    <strong>v1.1</strong> — September 2025
+                    <br>Added myelin and glia classes
+                </li>
+                <li>
+                    <strong>v1.0</strong> — June 2025
+                    <br>Initial protocol with basic neural/non-neural distinction
+                </li>
+            </ul>
+
+            <h3>Archived Documents</h3>
+            <ul>
+                <li>
+                    <a href="../../archive/">Archive: Historical Documentation</a>
+                </li>
+            </ul>
+
+            <div class="placeholder-notice">
+                Additional historical documents will be linked here as they are migrated.
+            </div>
+        </div>
+    </details>
+
+
+    <!-- ============================================================
+         SECTION 4: VISUAL EXAMPLES
+         Purpose: Links to gallery images demonstrating the task
+         ============================================================ -->
+    <section class="section" id="visual-examples">
+        <h2>Visual Examples</h2>
+
+        <p>
+            Reference images showing correct labeling for each semantic class.
+            Click to view full-resolution examples in the gallery.
+        </p>
+
+        <ul class="gallery-links">
+            <li><a href="../../gallery/#synapse-examples">Synapse Structures</a></li>
+            <li><a href="../../gallery/#tommy-macrina">Protocol Reference</a></li>
+            <li><a href="../../gallery/">Full Gallery</a></li>
+        </ul>
+
+        <h3>Quick Reference</h3>
+        <ul>
+            <li><strong>Soma</strong> — Large, round profile with nucleus visible</li>
+            <li><strong>Axon</strong> — Thin, uniform diameter, may have myelin</li>
+            <li><strong>Dendrite</strong> — Thicker, tapered, with spines</li>
+            <li><strong>Myelin</strong> — Dark concentric rings around axon</li>
+            <li><strong>Mitochondria</strong> — Oval with internal cristae structure</li>
+        </ul>
+
+        <div class="placeholder-notice">
+            Task-specific example images will be added to the gallery and linked here.
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SECTION 5: COMMON FAILURE MODES
+         Purpose: Document frequent mistakes and how to avoid them
+         ============================================================ -->
+    <section class="section" id="failure-modes">
+        <h2>Common Failure Modes</h2>
+
+        <ul class="failure-modes">
+            <li>
+                <strong>Confusing axons with dendrites</strong>
+                <span>
+                    Axons are thinner and more uniform. Dendrites taper and have spines.
+                    Check for vesicle clouds (axon) vs PSDs (dendrite) at synapses.
+                </span>
+            </li>
+            <li>
+                <strong>Missing myelin wrapping</strong>
+                <span>
+                    Myelin appears as dark concentric layers. Don't label myelinated regions
+                    as pure "axon"—include the myelin label.
+                </span>
+            </li>
+            <li>
+                <strong>Inconsistent labeling across Z-slices</strong>
+                <span>
+                    A structure should maintain its label through the volume. Use 3D view to
+                    verify continuity.
+                </span>
+            </li>
+            <li>
+                <strong>Guessing in damaged regions</strong>
+                <span>
+                    If tissue is torn, folded, or poorly stained, use the "Artifact" label.
+                    Don't guess the underlying structure.
+                </span>
+            </li>
+            <li>
+                <strong>Boundary leakage</strong>
+                <span>
+                    Labels should stop at membrane boundaries. Use smaller brush sizes near
+                    edges and toggle overlay to check.
+                </span>
+            </li>
+        </ul>
+    </section>
+
+
+    <!-- ============================================================
+         SECTION 6: TOOLS USED
+         Purpose: List software/tools required for this task
+         ============================================================ -->
+    <section class="section" id="tools">
+        <h2>Tools Used</h2>
+
+        <div class="tools-grid">
+            <div class="tool-card">
+                <h4>WebKnossos</h4>
+                <p>Primary annotation platform for semantic painting</p>
+            </div>
+            <div class="tool-card">
+                <h4>Neuroglancer</h4>
+                <p>3D visualization for context and verification</p>
+            </div>
+            <div class="tool-card">
+                <h4>CAVE</h4>
+                <p>Backend database for storing annotations</p>
+            </div>
+        </div>
+
+        <h3>Keyboard Shortcuts (WebKnossos)</h3>
+        <ul>
+            <li><kbd>1</kbd>-<kbd>9</kbd> — Select label class</li>
+            <li><kbd>B</kbd> — Brush tool</li>
+            <li><kbd>E</kbd> — Eraser tool</li>
+            <li><kbd>Shift</kbd>+<kbd>Scroll</kbd> — Adjust brush size</li>
+            <li><kbd>.</kbd> — Toggle segmentation overlay</li>
+        </ul>
+
+        <p>
+            <a href="../../pipeline/#tools">View all pipeline tools →</a>
+        </p>
+    </section>
+
+
+    <!-- ============================================================
+         SECTION 7: TRAINING VIDEOS
+         Purpose: Embedded video tutorials (YouTube-ready)
+         Note: Replace data-video-id with actual YouTube IDs
+         ============================================================ -->
+    <section class="section" id="training-videos">
+        <h2>Training Videos</h2>
+
+        <!-- Primary video embed -->
+        <div class="video-container">
+            <!--
+                YOUTUBE EMBED TEMPLATE:
+                Replace the placeholder below with actual iframe when video is available:
+
+                <iframe
+                    src="https://www.youtube-nocookie.com/embed/VIDEO_ID"
+                    title="Semantic Segmentation Tutorial"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+                </iframe>
+            -->
+            <div class="video-placeholder">
+                <div class="video-placeholder-icon">▶</div>
+                <div>Training video coming soon</div>
+                <div style="font-size: 0.75rem; margin-top: 0.5rem;">
+                    YouTube embed will be added here
+                </div>
+            </div>
+        </div>
+
+        <h3>Additional Videos</h3>
+        <ul class="video-list">
+            <li>
+                <a href="../../Ground-Truth-Training/synapse training videos/bushell_of_synapses.webm">
+                    Synapse Identification Walkthrough
+                </a>
+                (Local file)
+            </li>
+            <li>
+                <a href="../../Ground-Truth-Training/synapse training videos/top-down_synapse_example.webm">
+                    Top-down View Example
+                </a>
+                (Local file)
+            </li>
+            <!--
+                ADD MORE VIDEOS:
+                <li>
+                    <a href="https://youtube.com/watch?v=VIDEO_ID">Video Title</a>
+                    (YouTube)
+                </li>
+            -->
+        </ul>
+
+        <div class="placeholder-notice">
+            Additional tutorial videos will be embedded as they become available.
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         SECTION 8: RELATED PUBLICATIONS
+         Purpose: Academic papers relevant to this task type
+         ============================================================ -->
+    <section class="section" id="publications">
+        <h2>Related Publications</h2>
+
+        <ul class="publication-list">
+            <li>
+                <div class="publication-title">
+                    <!-- TODO: Add actual publication -->
+                    Automated Semantic Segmentation of Electron Microscopy Images
+                </div>
+                <div class="publication-meta">
+                    Example Authors et al. • Journal Name • 2024
+                </div>
+                <div class="publication-links">
+                    <a href="#">PDF</a>
+                    <a href="#">DOI</a>
+                </div>
+            </li>
+            <!--
+                ADD MORE PUBLICATIONS:
+                <li>
+                    <div class="publication-title">Paper Title</div>
+                    <div class="publication-meta">Authors • Journal • Year</div>
+                    <div class="publication-links">
+                        <a href="#">PDF</a>
+                        <a href="#">DOI</a>
+                    </div>
+                </li>
+            -->
+        </ul>
+
+        <div class="placeholder-notice">
+            Publication references will be added as the bibliography is compiled.
+        </div>
+
+        <p>
+            <a href="../../publications/">View all publications →</a>
+        </p>
+    </section>
+
+
+    <!-- ============================================================
+         SECTION 9: RELATED DOCUMENTATION (Optional)
+         Purpose: Links to other relevant pages
+         ============================================================ -->
+    <section class="section" id="related">
         <h2>Related Documentation</h2>
         <ul>
-            <li><a href="../../drive_docs_output/Misc/Copy of How to semantic segmentation.html">Semantic Segmentation Guide (Legacy)</a></li>
             <li><a href="../../sop/">Standard Operating Procedures</a></li>
-            <li><a href="../../gallery/">Visual Gallery</a></li>
+            <li><a href="../../pipeline/#segmentation">Pipeline: Segmentation Stage</a></li>
+            <li><a href="../proofreading/">Task: Proofreading</a></li>
+            <li><a href="../quality-assurance/">Task: Quality Assurance</a></li>
+            <li><a href="../../index-legacy.html#semantic-segmentation">Legacy Documentation</a></li>
         </ul>
     </section>
 
 </main>
 
+<!-- ============================================================
+     FOOTER
+     Navigation back to parent pages
+     ============================================================ -->
 <footer>
-    <p><a href="../">← Back to Tasks</a></p>
+    <div class="footer-nav">
+        <a href="../">← Back to Tasks</a>
+        <a href="../../">Dashboard</a>
+    </div>
 </footer>
 
 </body>
