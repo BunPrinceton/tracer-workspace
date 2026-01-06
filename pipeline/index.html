@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pipeline - Princeton Tracer</title>
+</head>
+<body>
+
+<!-- ============================================================
+     NAVIGATION
+     Shared navigation structure - manually sync across all pages
+     TODO: Extract to _includes/nav.html when build system added
+     ============================================================ -->
+<nav>
+    <ul>
+        <li><a href="../">Dashboard</a></li>
+        <li><a href="../pipeline/">Pipeline</a></li>
+        <li><a href="../tasks/">Tasks</a></li>
+        <li><a href="../gallery/">Gallery</a></li>
+        <li><a href="../sop/">SOP</a></li>
+        <li><a href="../publications/">Publications</a></li>
+        <li><a href="../stats/">Stats</a></li>
+        <li><a href="../archive/">Archive</a></li>
+    </ul>
+</nav>
+
+<main>
+    <h1>Pipeline</h1>
+
+    <p>Documentation for the connectomics annotation pipeline, including tools, workflows, and dataset information.</p>
+
+    <!-- ============================================================
+         SECTION: Tools Overview
+         Current annotation and analysis tools
+         ============================================================ -->
+    <section id="tools">
+        <h2>Tools</h2>
+        <ul>
+            <li>
+                <strong>WebKnossos</strong> - Primary annotation platform for volume segmentation and proofreading
+                <!-- TODO: Create webknossos.html with detailed guide -->
+            </li>
+            <li>
+                <strong>Neuroglancer</strong> - Web-based volumetric data viewer for synapse annotation
+                <!-- TODO: Create neuroglancer.html with detailed guide -->
+            </li>
+            <li>
+                <strong>tracer_tools</strong> - Python library for CAVE/Neuroglancer API access
+                <!-- TODO: Create tracer-tools.html linking to Python docs -->
+            </li>
+            <li>
+                <strong>CAVE</strong> - Connectome Annotation Versioning Engine (backend API)
+                <!-- TODO: Create cave.html with API reference -->
+            </li>
+            <li>
+                <strong>Tampermonkey Scripts</strong> - Browser userscripts for WebKnossos enhancement
+                <br>
+                <a href="../tampermonkey-scripts/">View scripts directory</a>
+            </li>
+        </ul>
+    </section>
+
+    <!-- ============================================================
+         SECTION: Datasets
+         Supported connectomics datasets
+         ============================================================ -->
+    <section id="datasets">
+        <h2>Supported Datasets</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Dataset</th>
+                    <th>Organism</th>
+                    <th>Datastack</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>FlyWire FAFB</td>
+                    <td>Drosophila</td>
+                    <td><code>flywire_fafb_production</code></td>
+                    <td>Active</td>
+                </tr>
+                <tr>
+                    <td>BANC</td>
+                    <td>Drosophila (Brain + Nerve Cord)</td>
+                    <td><code>brain_and_nerve_cord</code></td>
+                    <td>Active</td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- TODO: Create datasets.html with resolution info, coordinate systems -->
+    </section>
+
+    <!-- ============================================================
+         SECTION: Quick Links
+         Links to existing documentation
+         ============================================================ -->
+    <section id="quick-links">
+        <h2>Quick Links</h2>
+        <ul>
+            <li><a href="../index-legacy.html#current-tools">Legacy Tools Documentation</a></li>
+            <li><a href="../drive_docs_output/Misc/Copy of Neuroglancer Synapses.html">Neuroglancer Synapses Guide</a></li>
+            <li><a href="../New Documentation Styles-Templates-Files/HTML Versions/tommy_macrina_FINAL.html">Tommy Macrina Protocol Reference</a></li>
+        </ul>
+    </section>
+
+</main>
+
+<footer>
+    <p><a href="../">Back to Dashboard</a></p>
+</footer>
+
+</body>
+</html>

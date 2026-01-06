@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stats - Princeton Tracer</title>
+</head>
+<body>
+
+<!-- ============================================================
+     NAVIGATION
+     Shared navigation structure - manually sync across all pages
+     TODO: Extract to _includes/nav.html when build system added
+     ============================================================ -->
+<nav>
+    <ul>
+        <li><a href="../">Dashboard</a></li>
+        <li><a href="../pipeline/">Pipeline</a></li>
+        <li><a href="../tasks/">Tasks</a></li>
+        <li><a href="../gallery/">Gallery</a></li>
+        <li><a href="../sop/">SOP</a></li>
+        <li><a href="../publications/">Publications</a></li>
+        <li><a href="../stats/">Stats</a></li>
+        <li><a href="../archive/">Archive</a></li>
+    </ul>
+</nav>
+
+<main>
+    <h1>Statistics</h1>
+
+    <p>Project metrics, validation results, and progress tracking.</p>
+
+    <!-- ============================================================
+         SECTION: ID Validation
+         Root ID validation statistics
+         ============================================================ -->
+    <section id="id-validation">
+        <h2>ID Validation Results</h2>
+        <p>Statistics from batch validation of segment root IDs against CAVE database.</p>
+
+        <h3>Latest Validation Run</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Metric</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Total IDs Validated</td>
+                    <td>12,321</td>
+                </tr>
+                <tr>
+                    <td>Current (No change needed)</td>
+                    <td>11,473 (93.1%)</td>
+                </tr>
+                <tr>
+                    <td>Updated (Changed)</td>
+                    <td>848 (6.9%)</td>
+                </tr>
+                <tr>
+                    <td>Validation Date</td>
+                    <td>2025-12-04</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Documentation</h3>
+        <ul>
+            <li><a href="../ID_VALIDATION_WORKFLOW_GUIDE.md">ID Validation Workflow Guide</a></li>
+            <li><a href="../EFFICIENT_ID_VALIDATION_SETUP.md">Efficient ID Validation Setup</a></li>
+        </ul>
+        <!-- TODO: Create id-validation.html with detailed breakdown by batch -->
+    </section>
+
+    <!-- ============================================================
+         SECTION: Annotation Progress
+         Task completion metrics
+         ============================================================ -->
+    <section id="annotation-progress">
+        <h2>Annotation Progress</h2>
+        <p>Placeholder for annotation task completion metrics.</p>
+
+        <!-- TODO: Add annotation progress metrics:
+        - Tasks completed vs assigned
+        - Neurons traced
+        - Synapses annotated
+        - Quality scores
+        -->
+
+        <p><em>Progress metrics not yet integrated. Contact project lead for current status.</em></p>
+    </section>
+
+    <!-- ============================================================
+         SECTION: Quality Metrics
+         Annotation quality statistics
+         ============================================================ -->
+    <section id="quality-metrics">
+        <h2>Quality Metrics</h2>
+        <p>Placeholder for annotation quality and accuracy metrics.</p>
+
+        <!-- TODO: Add quality metrics:
+        - Inter-annotator agreement
+        - Error rates by type
+        - Revision frequency
+        -->
+
+        <p><em>Quality metrics not yet integrated.</em></p>
+    </section>
+
+    <!-- ============================================================
+         SECTION: Timeline
+         Project timeline and milestones
+         ============================================================ -->
+    <section id="timeline">
+        <h2>Project Timeline</h2>
+        <p>Key milestones and project history.</p>
+
+        <!-- TODO: Add timeline entries -->
+
+        <p><em>Timeline not yet documented.</em></p>
+    </section>
+
+</main>
+
+<footer>
+    <p><a href="../">Back to Dashboard</a></p>
+</footer>
+
+</body>
+</html>
