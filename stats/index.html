@@ -520,26 +520,32 @@
         </div>
 
         <div class="stats-grid">
-            <div class="stat-card">
+            <div class="stat-card" aria-describedby="method-datasets">
                 <div class="stat-value">2</div>
                 <div class="stat-label">Active Datasets</div>
                 <div class="stat-sublabel">FAFB, BANC</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" aria-describedby="method-validation">
                 <div class="stat-value stat-value--highlight">93.1%</div>
                 <div class="stat-label">ID Validation Rate</div>
                 <div class="stat-sublabel">Current IDs</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" aria-describedby="method-validation">
                 <div class="stat-value">12,321</div>
                 <div class="stat-label">IDs Validated</div>
                 <div class="stat-sublabel">Latest batch</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card" aria-describedby="method-sops">
                 <div class="stat-value">5</div>
                 <div class="stat-label">Active SOPs</div>
                 <div class="stat-sublabel">Current procedures</div>
             </div>
+        </div>
+
+        <div class="methodology" id="method-summary" hidden>
+            <p id="method-datasets">Dataset count from published connectomics projects.</p>
+            <p id="method-validation">Validation via CAVE API supervoxel tracking.</p>
+            <p id="method-sops">Count of current (non-deprecated) SOPs.</p>
         </div>
     </section>
 
