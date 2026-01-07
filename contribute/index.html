@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Suggest Changes - Princeton Tracer</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #1a1a1a;
+            padding: 0.75rem 1.5rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav a {
+            color: #e5e5e5;
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            display: inline-block;
+        }
+
+        nav a:hover,
+        nav a:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        /* Main content */
+        main {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #d4d4d4;
+        }
+
+        .page-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #525252;
+            font-size: 1.0625rem;
+        }
+
+        /* Content sections */
+        .content-section {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-section h2 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e5e5e5;
+        }
+
+        .content-section p {
+            margin-bottom: 0.75rem;
+        }
+
+        .content-section p:last-child {
+            margin-bottom: 0;
+        }
+
+        .content-section ul {
+            margin-left: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .content-section li {
+            margin-bottom: 0.375rem;
+        }
+
+        .content-section a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .content-section a:hover {
+            text-decoration: underline;
+        }
+
+        /* Highlight box */
+        .highlight-box {
+            background-color: #eff6ff;
+            border: 2px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .highlight-box p {
+            color: #1e40af;
+            font-size: 0.9375rem;
+            margin: 0;
+        }
+
+        /* CTA section */
+        .cta-section {
+            background-color: #ffffff;
+            border: 2px solid #2563eb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .cta-section h2 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .cta-section p {
+            color: #525252;
+            margin-bottom: 1rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: #2563eb;
+            color: #ffffff;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9375rem;
+        }
+
+        .cta-button:hover {
+            background-color: #1d4ed8;
+        }
+
+        /* Reassurance list */
+        .reassurance-list {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .reassurance-list li {
+            padding-left: 1.5rem;
+            position: relative;
+            margin-bottom: 0.5rem;
+        }
+
+        .reassurance-list li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 8px;
+            height: 8px;
+            background-color: #059669;
+            border-radius: 50%;
+        }
+
+        /* Footer */
+        footer {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            border-top: 1px solid #e5e5e5;
+            font-size: 0.875rem;
+            color: #737373;
+        }
+
+        footer a {
+            color: #525252;
+        }
+
+        footer a:hover {
+            color: #1a1a1a;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            html {
+                font-size: 16px;
+            }
+
+            main {
+                padding: 1.5rem 1rem;
+            }
+        }
+
+        /* Print */
+        @media print {
+            nav, footer, .cta-section {
+                display: none;
+            }
+        }
+
+        /* Focus visible */
+        :focus-visible {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+
+        /* Skip link */
+        .skip-link {
+            position: absolute;
+            left: -10000px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+        .skip-link:focus {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: auto;
+            height: auto;
+            padding: 1rem;
+            background: #2563eb;
+            color: #ffffff;
+            z-index: 10000;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Main navigation">
+    <ul>
+        <li><a href="../">Dashboard</a></li>
+        <li><a href="../pipeline/">Pipeline</a></li>
+        <li><a href="../tasks/">Tasks</a></li>
+        <li><a href="../gallery/">Gallery</a></li>
+        <li><a href="../sop/">SOP</a></li>
+        <li><a href="../publications/">Publications</a></li>
+        <li><a href="../stats/">Stats</a></li>
+        <li><a href="../archive/">Archive</a></li>
+    </ul>
+</nav>
+
+<main id="main-content" role="main">
+
+    <div class="page-header">
+        <h1>How to Suggest Changes</h1>
+        <p>Your input helps keep this resource accurate and useful for everyone.</p>
+    </div>
+
+    <div class="highlight-box">
+        <p>You don't need to attend a meeting, learn any tools, or worry about formatting. Just describe what you noticed or what you'd like to see, and we'll take it from there.</p>
+    </div>
+
+
+    <!-- About This Site -->
+    <section class="content-section">
+        <h2>What This Site Is</h2>
+        <p>Princeton Tracer is the team's shared reference for connectomics annotation work. It brings together:</p>
+        <ul>
+            <li>Training materials and task guides</li>
+            <li>Standard operating procedures (SOPs)</li>
+            <li>Visual examples and protocol references</li>
+            <li>Archived documentation from earlier tools</li>
+        </ul>
+        <p>The goal is a single, consistent place where everyone can find what they need, using the same language across all pipeline stages.</p>
+    </section>
+
+
+    <!-- How Contributions Work -->
+    <section class="content-section">
+        <h2>How Suggestions Work</h2>
+        <p>This site is maintained by a single editor to ensure consistency in style, accuracy, and organization. It's not a wiki where anyone can edit directly, but your suggestions are genuinely valued.</p>
+        <p>When you submit a suggestion:</p>
+        <ul>
+            <li>It goes into a queue for review</li>
+            <li>The editor incorporates it when appropriate</li>
+            <li>You may be credited for significant contributions</li>
+        </ul>
+        <p>This approach keeps the documentation coherent while still benefiting from everyone's knowledge and perspective.</p>
+    </section>
+
+
+    <!-- What to Suggest -->
+    <section class="content-section">
+        <h2>What You Can Suggest</h2>
+        <p>All kinds of input are welcome:</p>
+        <ul>
+            <li><strong>Wording clarifications</strong> &mdash; "This sentence confused me" or "Could this be clearer?"</li>
+            <li><strong>SOP updates</strong> &mdash; Procedures that have changed or need revision</li>
+            <li><strong>Missing examples</strong> &mdash; Cases that should be documented but aren't</li>
+            <li><strong>New gallery items</strong> &mdash; Images that would help others learn</li>
+            <li><strong>Corrections</strong> &mdash; Typos, broken links, outdated information</li>
+            <li><strong>New topics</strong> &mdash; Things you wish were documented</li>
+        </ul>
+    </section>
+
+
+    <!-- What Not to Worry About -->
+    <section class="content-section">
+        <h2>What You Don't Need to Worry About</h2>
+        <ul class="reassurance-list">
+            <li>No meetings required to suggest something</li>
+            <li>No special formatting needed</li>
+            <li>No Git or GitHub expertise necessary</li>
+            <li>No need to write the final text yourself</li>
+            <li>No concern about "bothering" anyone</li>
+        </ul>
+        <p>Just describe what you noticed or what you think would help. Plain language is perfect.</p>
+    </section>
+
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <h2>Ready to Suggest Something?</h2>
+        <p>Suggestions are submitted through GitHub Issues.</p>
+        <a href="https://github.com/BunPrinceton/tracer-workspace/issues/new/choose" class="cta-button">Open a Suggestion</a>
+        <p style="margin-top: 1rem; font-size: 0.8125rem; color: #737373;">Requires a free GitHub account. No GitHub? Message <strong>#putracers</strong> on Slack instead.</p>
+    </section>
+
+
+    <!-- Questions -->
+    <section class="content-section">
+        <h2>Questions?</h2>
+        <p>If you're unsure whether something is worth suggesting, it probably is. Small things count—even "this confused me for a second" is useful feedback.</p>
+    </section>
+
+</main>
+
+<footer>
+    <div class="footer-nav">
+        <a href="../">Back to Dashboard</a>
+        <a href="https://github.com/BunPrinceton/tracer-workspace">View on GitHub</a>
+    </div>
+</footer>
+
+</body>
+</html>

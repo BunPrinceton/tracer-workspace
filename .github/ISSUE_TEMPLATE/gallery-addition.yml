@@ -1,0 +1,66 @@
+name: Gallery Addition
+description: Suggest a new image for the visual reference gallery
+title: "[Gallery] "
+labels: ["gallery", "suggestion"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Help expand the training gallery with useful examples.
+
+  - type: dropdown
+    id: dataset
+    attributes:
+      label: Dataset
+      description: Which dataset is this image from?
+      options:
+        - FAFB / FlyWire
+        - BANC
+        - Reference / Training
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: What type of example is this?
+      options:
+        - Synapse
+        - Segmentation (merger/split)
+        - Defect (crack, fold, tear)
+        - Staining artifact
+        - Structure (soma, axon, dendrite)
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: why-useful
+    attributes:
+      label: Why is this example useful?
+      description: What does it show that would help others learn?
+      placeholder: |
+        Example: "This shows an unusual T-bar orientation that's easy to miss during annotation."
+    validations:
+      required: true
+
+  - type: textarea
+    id: image
+    attributes:
+      label: Image
+      description: Drag and drop an image here, or paste a link to the file
+      placeholder: |
+        Drag image here or paste a link (e.g., Google Drive, Neuroglancer state URL)
+    validations:
+      required: false
+
+  - type: input
+    id: coordinates
+    attributes:
+      label: Coordinates (optional)
+      description: If applicable, include coordinates or a Neuroglancer link
+      placeholder: e.g., [12500, 34000, 2100] or Neuroglancer URL
+    validations:
+      required: false

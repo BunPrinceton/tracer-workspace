@@ -515,6 +515,31 @@
             gap: 1rem;
         }
 
+        .suggest-edit {
+            color: #737373;
+            font-size: 0.8125rem;
+        }
+
+        .suggest-edit:hover {
+            color: #2563eb;
+        }
+
+        .feedback-note {
+            text-align: center;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            font-size: 0.875rem;
+            color: #737373;
+        }
+
+        .feedback-note a {
+            color: #525252;
+        }
+
+        .feedback-note a:hover {
+            color: #2563eb;
+        }
+
         /* ============================================================
            RESPONSIVE
            ============================================================ */
@@ -1122,14 +1147,25 @@
         </ul>
     </section>
 
+    <p class="feedback-note">Have a good example to share? <a href="../contribute/">Submit it to the gallery</a>—no formatting required.</p>
+
 </main>
 
 <footer>
     <div class="footer-nav">
         <a href="../">Back to Dashboard</a>
-        <a href="../tasks/">View Tasks</a>
+        <a href="#" id="suggest-edit-link" class="suggest-edit">Suggest an edit</a>
     </div>
 </footer>
 
+<script>
+(function() {
+    var link = document.getElementById('suggest-edit-link');
+    if (link) {
+        var title = encodeURIComponent('[Content] ' + document.title.replace(' - Princeton Tracer', ''));
+        link.href = 'https://github.com/BunPrinceton/tracer-workspace/issues/new?template=content-suggestion.yml&title=' + title + '&body=' + encodeURIComponent('**Page:** ' + window.location.href + '\n\n**Section:** \n\n**Suggestion:**\n');
+    }
+})();
+</script>
 </body>
 </html>
