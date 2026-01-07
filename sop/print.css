@@ -1,0 +1,318 @@
+/**
+ * SOP Print Stylesheet
+ *
+ * Optimized for printing Standard Operating Procedures
+ * during training sessions or for review purposes.
+ *
+ * Usage: <link rel="stylesheet" href="print.css" media="print">
+ * Scoped to /sop/ pages only.
+ */
+
+@media print {
+    /* ============================================================
+       HIDE NON-ESSENTIAL UI
+       ============================================================ */
+    nav,
+    footer,
+    .skip-link,
+    .quick-access,
+    .legend,
+    .sop-history details,
+    .source-docs,
+    .footer-nav,
+    [role="navigation"],
+    .filter-section {
+        display: none !important;
+    }
+
+    /* ============================================================
+       PAGE SETUP
+       ============================================================ */
+    @page {
+        size: letter;
+        margin: 0.75in;
+    }
+
+    html {
+        font-size: 11pt;
+        line-height: 1.5;
+    }
+
+    body {
+        background: white !important;
+        color: black !important;
+        font-family: "Times New Roman", Times, Georgia, serif;
+    }
+
+    main {
+        max-width: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    /* ============================================================
+       TYPOGRAPHY - NO COLOR DEPENDENCY
+       ============================================================ */
+    h1, h2, h3, h4, h5, h6 {
+        color: black !important;
+        page-break-after: avoid;
+        break-after: avoid;
+    }
+
+    h1 {
+        font-size: 18pt;
+        border-bottom: 2pt solid black;
+        padding-bottom: 6pt;
+        margin-bottom: 12pt;
+    }
+
+    h2 {
+        font-size: 14pt;
+        border-bottom: 1pt solid black;
+        padding-bottom: 4pt;
+        margin-top: 18pt;
+        margin-bottom: 8pt;
+    }
+
+    h3 {
+        font-size: 12pt;
+        margin-top: 12pt;
+        margin-bottom: 6pt;
+    }
+
+    p {
+        orphans: 3;
+        widows: 3;
+    }
+
+    /* ============================================================
+       LINKS - SHOW URLs FOR PRINT
+       ============================================================ */
+    a {
+        color: black !important;
+        text-decoration: underline;
+    }
+
+    /* Show URL after external links */
+    a[href^="http"]:after,
+    a[href^="https"]:after {
+        content: " (" attr(href) ")";
+        font-size: 9pt;
+        font-style: italic;
+    }
+
+    /* Don't show URL for internal navigation links */
+    a[href^="#"]:after,
+    a[href^="./"]:after,
+    a[href^="../"]:after {
+        content: "";
+    }
+
+    /* ============================================================
+       LISTS - PRESERVE STRUCTURE
+       ============================================================ */
+    ul, ol {
+        margin-left: 0.25in;
+        padding-left: 0;
+    }
+
+    li {
+        margin-bottom: 4pt;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    /* Numbered procedures get extra emphasis */
+    ol > li {
+        margin-bottom: 8pt;
+    }
+
+    /* ============================================================
+       TABLES
+       ============================================================ */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12pt 0;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    th, td {
+        border: 1pt solid black;
+        padding: 6pt 8pt;
+        text-align: left;
+    }
+
+    th {
+        background-color: #e0e0e0 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        font-weight: bold;
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    .sop-table {
+        border: 1pt solid black;
+        border-radius: 0;
+    }
+
+    .sop-table th,
+    .sop-table td {
+        border: 1pt solid black;
+    }
+
+    /* ============================================================
+       CARDS AND SECTIONS - FLATTEN FOR PRINT
+       ============================================================ */
+    .sop-section,
+    .content-section,
+    .quick-card,
+    .stat-card,
+    .archive-card {
+        background: white !important;
+        border: 1pt solid black !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        margin-bottom: 12pt;
+    }
+
+    /* ============================================================
+       STATUS BADGES - CONVERT TO TEXT
+       ============================================================ */
+    .status-badge {
+        background: white !important;
+        color: black !important;
+        border: 1pt solid black;
+        padding: 2pt 4pt;
+        font-size: 9pt;
+    }
+
+    .status-badge--current:before {
+        content: "[CURRENT] ";
+    }
+
+    .status-badge--deprecated:before {
+        content: "[DEPRECATED] ";
+    }
+
+    .status-badge--draft:before {
+        content: "[DRAFT] ";
+    }
+
+    /* ============================================================
+       CODE BLOCKS
+       ============================================================ */
+    code, pre {
+        font-family: "Courier New", Courier, monospace;
+        font-size: 10pt;
+        background: #f0f0f0 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        border: 1pt solid #ccc;
+        padding: 2pt 4pt;
+    }
+
+    pre {
+        padding: 8pt;
+        page-break-inside: avoid;
+        break-inside: avoid;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    /* ============================================================
+       FIGURES AND IMAGES
+       ============================================================ */
+    figure {
+        page-break-inside: avoid;
+        break-inside: avoid;
+        margin: 12pt 0;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    figcaption {
+        font-size: 10pt;
+        font-style: italic;
+        margin-top: 4pt;
+    }
+
+    /* ============================================================
+       PAGE HEADER - ADD DOCUMENT INFO
+       ============================================================ */
+    .page-header {
+        border-bottom: 2pt solid black;
+        padding-bottom: 12pt;
+        margin-bottom: 18pt;
+    }
+
+    .page-header h1 {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .page-header p {
+        color: #333 !important;
+    }
+
+    /* ============================================================
+       VERSION INFO BOX
+       ============================================================ */
+    .version-info,
+    .info-box,
+    .methodology {
+        background: #f5f5f5 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+        border: 1pt solid black;
+        padding: 8pt;
+        margin: 12pt 0;
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    /* ============================================================
+       CHECKLIST ITEMS
+       ============================================================ */
+    input[type="checkbox"] {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* Show checkbox state clearly */
+    .checklist-item {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    /* ============================================================
+       AVOID PAGE BREAKS IN CRITICAL PLACES
+       ============================================================ */
+    .procedure-step,
+    .warning,
+    .note,
+    .caution {
+        page-break-inside: avoid;
+        break-inside: avoid;
+    }
+
+    /* ============================================================
+       UTILITY: PRINT-ONLY ELEMENTS
+       ============================================================ */
+    .print-only {
+        display: block !important;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+}
