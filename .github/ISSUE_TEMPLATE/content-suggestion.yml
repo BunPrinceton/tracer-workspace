@@ -1,0 +1,47 @@
+name: Content Suggestion
+description: Suggest a clarification, addition, or improvement to existing content
+title: "[Content] "
+labels: ["content", "suggestion"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve the documentation. Just fill in what you can.
+
+  - type: input
+    id: page-url
+    attributes:
+      label: Page URL
+      description: Which page is this about?
+      placeholder: e.g., https://bunprinceton.github.io/tracer-workspace/tasks/proofreading/
+    validations:
+      required: true
+
+  - type: input
+    id: section
+    attributes:
+      label: Section or Heading
+      description: Which part of the page? (optional)
+      placeholder: e.g., "Step 3" or "Quality Check section"
+    validations:
+      required: false
+
+  - type: textarea
+    id: issue
+    attributes:
+      label: What feels unclear or missing?
+      description: Describe what confused you or what you think should be added
+      placeholder: |
+        Example: "The instructions mention saving frequently but don't say what happens if you forget."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-wording
+    attributes:
+      label: Proposed wording (optional)
+      description: If you have specific text in mind, include it here
+      placeholder: |
+        Example: "Consider adding: 'If you forget to save, your work since the last save will be lost.'"
+    validations:
+      required: false

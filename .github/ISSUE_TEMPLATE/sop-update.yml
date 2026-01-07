@@ -1,0 +1,51 @@
+name: SOP Update Request
+description: Request a change to a Standard Operating Procedure
+title: "[SOP] "
+labels: ["sop", "update-request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form to request changes to an existing SOP or suggest a new one.
+
+  - type: input
+    id: sop-name
+    attributes:
+      label: SOP Name
+      description: Which SOP needs updating?
+      placeholder: e.g., GT Task Handling (SOP-001) or "New SOP needed"
+    validations:
+      required: true
+
+  - type: textarea
+    id: reason
+    attributes:
+      label: Reason for Update
+      description: What changed, or why is the current version incomplete?
+      placeholder: |
+        Example: "The submission step now requires an extra confirmation in WebKnossos that isn't documented."
+    validations:
+      required: true
+
+  - type: dropdown
+    id: urgency
+    attributes:
+      label: Urgency
+      description: How soon does this need attention?
+      options:
+        - Routine (when convenient)
+        - Blocking (affecting current work)
+        - Critical (incorrect procedure causing errors)
+      default: 0
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Supporting Context
+      description: Any additional details, screenshots, or links that help explain the situation
+      placeholder: |
+        Example: "This came up during training on Jan 5. Screenshot attached showing the new dialog."
+    validations:
+      required: false

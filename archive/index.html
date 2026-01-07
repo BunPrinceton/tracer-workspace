@@ -442,6 +442,15 @@
             gap: 1rem;
         }
 
+        .suggest-edit {
+            color: #737373;
+            font-size: 0.8125rem;
+        }
+
+        .suggest-edit:hover {
+            color: #2563eb;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             html {
@@ -852,9 +861,18 @@
 <footer>
     <div class="footer-nav">
         <a href="../">Back to Dashboard</a>
-        <a href="../pipeline/">View Current Pipeline</a>
+        <a href="#" id="suggest-edit-link" class="suggest-edit">Suggest an edit</a>
     </div>
 </footer>
 
+<script>
+(function() {
+    var link = document.getElementById('suggest-edit-link');
+    if (link) {
+        var title = encodeURIComponent('[Content] ' + document.title.replace(' - Princeton Tracer', ''));
+        link.href = 'https://github.com/BunPrinceton/tracer-workspace/issues/new?template=content-suggestion.yml&title=' + title + '&body=' + encodeURIComponent('**Page:** ' + window.location.href + '\n\n**Section:** \n\n**Suggestion:**\n');
+    }
+})();
+</script>
 </body>
 </html>

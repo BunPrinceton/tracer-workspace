@@ -1,0 +1,41 @@
+name: Correction / Error Report
+description: Report a typo, broken link, or factual error
+title: "[Fix] "
+labels: ["bug", "correction"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Found something wrong? Let us know so we can fix it.
+
+  - type: input
+    id: page-url
+    attributes:
+      label: Page URL
+      description: Where is the error?
+      placeholder: e.g., https://bunprinceton.github.io/tracer-workspace/sop/gt-checklist/
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What's wrong?
+      description: Describe the error as specifically as you can
+      placeholder: |
+        Examples:
+        - "The link to 'GT Verification' goes to a 404 page"
+        - "Step 4 says 'Ctrl+S' but the shortcut is actually 'Ctrl+Shift+S'"
+        - "The date says 2024 but should be 2025"
+    validations:
+      required: true
+
+  - type: textarea
+    id: correction
+    attributes:
+      label: Suggested Correction
+      description: If you know what it should say, include it here
+      placeholder: |
+        Example: "The link should point to ../gt-verification/ instead of ../verification/"
+    validations:
+      required: false
