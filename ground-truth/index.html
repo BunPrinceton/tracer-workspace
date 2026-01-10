@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ground Truth Hub - Princeton Tracer</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #1a1a1a;
+            padding: 0.75rem 1.5rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav a {
+            color: #e5e5e5;
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            display: inline-block;
+        }
+
+        nav a:hover,
+        nav a:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        nav a[aria-current="page"] {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* Main content */
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            font-size: 0.875rem;
+            color: #525252;
+            margin-bottom: 1.5rem;
+        }
+
+        .breadcrumb a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #d4d4d4;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #525252;
+            font-size: 1.0625rem;
+        }
+
+        /* Content sections */
+        .content-section {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-section h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e5e5e5;
+        }
+
+        .content-section h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+
+        .content-section p {
+            margin-bottom: 0.75rem;
+        }
+
+        .content-section ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .content-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .content-section a {
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .content-section a:hover {
+            text-decoration: underline;
+        }
+
+        /* Status badges */
+        .status-badge {
+            display: inline-block;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.25rem 0.5rem;
+            border-radius: 3px;
+        }
+
+        .status-badge--current {
+            background-color: #059669;
+            color: #ffffff;
+        }
+
+        .status-badge--placeholder {
+            background-color: #dc2626;
+            color: #ffffff;
+        }
+
+        /* Guidance box */
+        .guidance-box {
+            background-color: #f0fdf4;
+            border: 2px solid #86efac;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .guidance-box h2 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #166534;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .guidance-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 640px) {
+            .guidance-columns {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .guidance-column h3 {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #166534;
+        }
+
+        .guidance-column ul {
+            margin-left: 1.25rem;
+            font-size: 0.9375rem;
+        }
+
+        .guidance-column li {
+            margin-bottom: 0.375rem;
+        }
+
+        /* Workflow steps */
+        .workflow-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .workflow-step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            background-color: #f9fafb;
+            border-radius: 6px;
+            border-left: 4px solid #d4d4d4;
+        }
+
+        .workflow-step--current {
+            border-left-color: #059669;
+        }
+
+        .workflow-step--placeholder {
+            border-left-color: #dc2626;
+        }
+
+        .workflow-number {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #737373;
+            min-width: 1.5rem;
+        }
+
+        .workflow-content {
+            flex: 1;
+        }
+
+        .workflow-stage {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .workflow-sop {
+            font-size: 0.875rem;
+            color: #525252;
+        }
+
+        /* SOP table */
+        .sop-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .sop-table th,
+        .sop-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .sop-table th {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #525252;
+            background-color: #f9fafb;
+        }
+
+        .sop-table tbody tr:hover {
+            background-color: #fafafa;
+        }
+
+        .sop-id {
+            font-family: ui-monospace, "SF Mono", monospace;
+            font-size: 0.8125rem;
+            color: #525252;
+        }
+
+        /* Quick reference */
+        .quick-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .quick-table th,
+        .quick-table td {
+            padding: 0.625rem 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .quick-table th {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #525252;
+            background-color: #f9fafb;
+        }
+
+        .quick-table td:first-child {
+            font-size: 0.9375rem;
+        }
+
+        .quick-table td:last-child {
+            font-family: ui-monospace, "SF Mono", monospace;
+            font-size: 0.875rem;
+            color: #525252;
+        }
+
+        /* Task links */
+        .task-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .task-link {
+            display: block;
+            padding: 1rem;
+            background-color: #f9fafb;
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            text-decoration: none;
+            color: inherit;
+            transition: border-color 0.15s ease;
+        }
+
+        .task-link:hover {
+            border-color: #2563eb;
+        }
+
+        .task-link-title {
+            font-weight: 600;
+            color: #2563eb;
+            margin-bottom: 0.25rem;
+        }
+
+        .task-link-desc {
+            font-size: 0.875rem;
+            color: #525252;
+        }
+
+        /* Footer */
+        footer {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            border-top: 1px solid #e5e5e5;
+            font-size: 0.875rem;
+            color: #737373;
+        }
+
+        footer a {
+            color: #525252;
+        }
+
+        footer a:hover {
+            color: #1a1a1a;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* Focus visible */
+        :focus-visible {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+
+        /* Skip link */
+        .skip-link {
+            position: absolute;
+            left: -10000px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+        .skip-link:focus {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: auto;
+            height: auto;
+            padding: 1rem;
+            background: #2563eb;
+            color: #ffffff;
+            z-index: 10000;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            html {
+                font-size: 16px;
+            }
+
+            main {
+                padding: 1.5rem 1rem;
+            }
+
+            .sop-table,
+            .quick-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Main navigation">
+    <ul>
+        <li><a href="../">Dashboard</a></li>
+        <li><a href="../pipeline/">Pipeline</a></li>
+        <li><a href="../tasks/">Tasks</a></li>
+        <li><a href="../gallery/">Gallery</a></li>
+        <li><a href="../sop/">SOP</a></li>
+        <li><a href="../publications/">Publications</a></li>
+        <li><a href="../stats/">Stats</a></li>
+        <li><a href="../archive/">Archive</a></li>
+    </ul>
+</nav>
+
+<main id="main-content" role="main">
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../">Dashboard</a> &rsaquo; Ground Truth
+    </nav>
+
+    <!-- Section 1: Page Header -->
+    <header class="page-header">
+        <h1>Ground Truth Hub</h1>
+        <p>Central reference for all Ground Truth annotation procedures, verification workflows, and quality standards.</p>
+    </header>
+
+    <!-- Section 2: How to Use This Section -->
+    <div class="guidance-box">
+        <h2>How to Use This Section</h2>
+        <div class="guidance-columns">
+            <div class="guidance-column">
+                <h3>For Scientists / Annotators</h3>
+                <ul>
+                    <li>Start with <a href="../sop/gt-task-handling/">GT Task Handling (SOP-001)</a> for the complete annotation workflow</li>
+                    <li>Use the <a href="../sop/gt-checklist/">GT Checklist (SOP-003)</a> before submitting any completed task</li>
+                    <li>Refer to <a href="../sop/gt-protocol-guidelines/">Protocol Guidelines (SOP-005)</a> when encountering edge cases</li>
+                </ul>
+            </div>
+            <div class="guidance-column">
+                <h3>For Managers / QA Leads</h3>
+                <ul>
+                    <li>Use <a href="../sop/gt-verification/">GT Verification (SOP-002)</a> to review submitted work</li>
+                    <li>Monitor compliance via the <a href="../sop/gt-checklist/">GT Checklist (SOP-003)</a></li>
+                    <li>Delegate tasks by pointing team members to <a href="../sop/gt-task-handling/">GT Task Handling (SOP-001)</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 3: SOP Relationship Overview -->
+    <section class="content-section">
+        <h2>How These SOPs Fit Together</h2>
+        <p>Ground Truth work follows a lifecycle from task assignment through verification. Each SOP addresses a specific stage.</p>
+
+        <div class="workflow-steps">
+            <div class="workflow-step workflow-step--current">
+                <span class="workflow-number">1</span>
+                <div class="workflow-content">
+                    <span class="workflow-stage">Assignment</span>
+                    <span class="workflow-sop">&rarr; <a href="../sop/gt-task-handling/">SOP-001: GT Task Handling</a></span>
+                </div>
+                <span class="status-badge status-badge--current">Current</span>
+            </div>
+            <div class="workflow-step workflow-step--placeholder">
+                <span class="workflow-number">2</span>
+                <div class="workflow-content">
+                    <span class="workflow-stage">Execution (Edge Cases)</span>
+                    <span class="workflow-sop">&rarr; <a href="../sop/gt-protocol-guidelines/">SOP-005: GT Protocol Guidelines</a></span>
+                </div>
+                <span class="status-badge status-badge--placeholder">Placeholder</span>
+            </div>
+            <div class="workflow-step workflow-step--placeholder">
+                <span class="workflow-number">3</span>
+                <div class="workflow-content">
+                    <span class="workflow-stage">Pre-submission</span>
+                    <span class="workflow-sop">&rarr; <a href="../sop/gt-checklist/">SOP-003: GT Checklist</a></span>
+                </div>
+                <span class="status-badge status-badge--placeholder">Placeholder</span>
+            </div>
+            <div class="workflow-step workflow-step--placeholder">
+                <span class="workflow-number">4</span>
+                <div class="workflow-content">
+                    <span class="workflow-stage">Review</span>
+                    <span class="workflow-sop">&rarr; <a href="../sop/gt-verification/">SOP-002: GT Verification</a></span>
+                </div>
+                <span class="status-badge status-badge--placeholder">Placeholder</span>
+            </div>
+            <div class="workflow-step workflow-step--placeholder">
+                <span class="workflow-number">5</span>
+                <div class="workflow-content">
+                    <span class="workflow-stage">Standards (Throughout)</span>
+                    <span class="workflow-sop">&rarr; <a href="../sop/file-naming/">SOP-004: File Naming</a></span>
+                </div>
+                <span class="status-badge status-badge--placeholder">Placeholder</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Core SOPs -->
+    <section class="content-section">
+        <h2>Core Procedures</h2>
+        <p>Essential SOPs that govern the Ground Truth annotation lifecycle.</p>
+
+        <table class="sop-table">
+            <thead>
+                <tr>
+                    <th scope="col">SOP ID</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="sop-id">SOP-001</td>
+                    <td><a href="../sop/gt-task-handling/">GT Task Handling</a></td>
+                    <td><span class="status-badge status-badge--current">Current</span></td>
+                    <td>Complete workflow from task assignment through submission and review.</td>
+                </tr>
+                <tr>
+                    <td class="sop-id">SOP-002</td>
+                    <td><a href="../sop/gt-verification/">GT Verification</a></td>
+                    <td><span class="status-badge status-badge--placeholder">Placeholder</span></td>
+                    <td>Procedures for verifying task completion and annotation quality.</td>
+                </tr>
+                <tr>
+                    <td class="sop-id">SOP-003</td>
+                    <td><a href="../sop/gt-checklist/">GT Checklist</a></td>
+                    <td><span class="status-badge status-badge--placeholder">Placeholder</span></td>
+                    <td>Pre-submission quality assurance checklist for all GT tasks.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Section 5: Supporting SOPs -->
+    <section class="content-section">
+        <h2>Supporting Procedures</h2>
+        <p>Reference SOPs that apply throughout the GT workflow.</p>
+
+        <table class="sop-table">
+            <thead>
+                <tr>
+                    <th scope="col">SOP ID</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="sop-id">SOP-004</td>
+                    <td><a href="../sop/file-naming/">File Naming</a></td>
+                    <td><span class="status-badge status-badge--placeholder">Placeholder</span></td>
+                    <td>Standard conventions for naming files, annotations, and exports.</td>
+                </tr>
+                <tr>
+                    <td class="sop-id">SOP-005</td>
+                    <td><a href="../sop/gt-protocol-guidelines/">GT Protocol Guidelines</a></td>
+                    <td><span class="status-badge status-badge--placeholder">Placeholder</span></td>
+                    <td>Decision frameworks and edge case handling for annotations.</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Section 6: Related Task Guides -->
+    <section class="content-section">
+        <h2>Related Task Guides</h2>
+        <p>Task overview pages provide context and training material. The SOPs above are authoritative for procedures.</p>
+
+        <div class="task-links">
+            <a href="../tasks/semantic-segmentation/" class="task-link">
+                <div class="task-link-title">Semantic Segmentation</div>
+                <div class="task-link-desc">Synapse annotation workflow context</div>
+            </a>
+            <a href="../tasks/proofreading/" class="task-link">
+                <div class="task-link-title">Proofreading</div>
+                <div class="task-link-desc">Error correction workflow context</div>
+            </a>
+            <a href="../tasks/quality-assurance/" class="task-link">
+                <div class="task-link-title">Quality Assurance</div>
+                <div class="task-link-desc">QA review workflow context</div>
+            </a>
+        </div>
+    </section>
+
+    <!-- Section 7: Quick Reference -->
+    <section class="content-section">
+        <h2>Quick Reference</h2>
+        <p>Common questions and which SOP answers them.</p>
+
+        <table class="quick-table">
+            <thead>
+                <tr>
+                    <th scope="col">Question</th>
+                    <th scope="col">See SOP</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>How do I start a new GT task?</td>
+                    <td><a href="../sop/gt-task-handling/">SOP-001</a></td>
+                </tr>
+                <tr>
+                    <td>What do I check before submitting?</td>
+                    <td><a href="../sop/gt-checklist/">SOP-003</a></td>
+                </tr>
+                <tr>
+                    <td>How do I handle an ambiguous annotation?</td>
+                    <td><a href="../sop/gt-protocol-guidelines/">SOP-005</a></td>
+                </tr>
+                <tr>
+                    <td>How should I name my export files?</td>
+                    <td><a href="../sop/file-naming/">SOP-004</a></td>
+                </tr>
+                <tr>
+                    <td>How do managers verify completed work?</td>
+                    <td><a href="../sop/gt-verification/">SOP-002</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+</main>
+
+<!-- Section 8: Footer -->
+<footer>
+    <div class="footer-nav">
+        <div>
+            <a href="../">Dashboard</a> &bull;
+            <a href="../sop/">Full SOP Index</a>
+        </div>
+        <a href="https://github.com/BunPrinceton/tracer-workspace/issues/new?template=content-suggestion.yml" id="suggest-edit-link">Suggest an edit</a>
+    </div>
+</footer>
+
+</body>
+</html>
