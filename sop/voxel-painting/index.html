@@ -298,7 +298,7 @@
             <a href="../../ground-truth/">Ground Truth Hub</a> &bull;
             <a href="../">SOP Index</a>
         </div>
-        <a href="#" id="suggest-edit-link" class="suggest-edit">Suggest an edit</a>
+        <a href="#" id="suggest-edit-link" class="suggest-edit" target="_blank" rel="noopener noreferrer">Suggest an edit</a>
     </div>
 </footer>
 
@@ -308,6 +308,8 @@
     if (link) {
         var title = encodeURIComponent('[SOP] ' + document.title.replace(' - Princeton Tracer', ''));
         link.href = 'https://github.com/BunPrinceton/tracer-workspace/issues/new?template=sop-update.yml&title=' + title + '&body=' + encodeURIComponent('**SOP:** ' + window.location.href + '\n\n**Reason for update:**\n');
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
     }
 })();
 </script>
