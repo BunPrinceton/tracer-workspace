@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voxel Painting Cell Segmentation Protocol v1.2 - Princeton Tracer</title>
+    <link rel="stylesheet" href="../print.css" media="print">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-size: 18px; line-height: 1.6; }
+        body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background-color: #f5f5f5; color: #1a1a1a; min-height: 100vh; }
+
+        /* Navigation */
+        nav { background-color: #1a1a1a; padding: 0.75rem 1.5rem; }
+        nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; max-width: 1200px; margin: 0 auto; }
+        nav a { color: #e5e5e5; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0; display: inline-block; }
+        nav a:hover, nav a:focus { text-decoration: underline; text-underline-offset: 4px; }
+        nav a[aria-current="page"] { color: #ffffff; font-weight: 600; }
+
+        /* Main content */
+        main { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+        /* Breadcrumb */
+        .breadcrumb { font-size: 0.875rem; color: #525252; margin-bottom: 1.5rem; }
+        .breadcrumb a { color: #2563eb; text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+
+        /* Page header */
+        .page-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #d4d4d4; }
+        .page-header h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .page-header p { color: #525252; font-size: 1.0625rem; }
+
+        .sop-meta { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 0.75rem; font-size: 0.8125rem; color: #737373; }
+        .sop-meta strong { color: #525252; }
+
+        .version-badge { display: inline-block; font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.25rem 0.5rem; border-radius: 3px; background-color: #059669; color: #ffffff; margin-left: 0.5rem; vertical-align: middle; }
+
+        /* Content sections */
+        .content-section { background-color: #ffffff; border: 2px solid #d4d4d4; border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .content-section h2 { font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #e5e5e5; }
+        .content-section h3 { font-size: 1rem; font-weight: 600; margin-top: 1.25rem; margin-bottom: 0.5rem; color: #374151; }
+        .content-section p { margin-bottom: 0.75rem; font-size: 0.9375rem; }
+        .content-section ul, .content-section ol { margin-left: 1.5rem; margin-bottom: 1rem; font-size: 0.9375rem; }
+        .content-section li { margin-bottom: 0.375rem; }
+        .content-section a { color: #2563eb; text-decoration: none; }
+        .content-section a:hover { text-decoration: underline; }
+
+        /* Semantic class table */
+        .class-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .class-table th, .class-table td { padding: 0.625rem 0.75rem; text-align: left; border-bottom: 1px solid #e5e5e5; font-size: 0.875rem; }
+        .class-table th { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #525252; background-color: #f9fafb; }
+        .class-table td:first-child { font-weight: 600; white-space: nowrap; }
+        .class-table tbody tr:hover { background-color: #fafafa; }
+
+        /* Release notes */
+        .release-notes { background-color: #eff6ff; border: 2px solid #93c5fd; border-radius: 8px; padding: 1.25rem; margin-bottom: 1.5rem; }
+        .release-notes h2 { font-size: 1rem; font-weight: 700; color: #1e40af; margin-bottom: 0.75rem; border-bottom: none; padding-bottom: 0; }
+        .release-notes ul { margin-left: 1.5rem; font-size: 0.9375rem; }
+        .release-notes li { margin-bottom: 0.375rem; }
+
+        /* Important callouts */
+        .callout { background-color: #fef3c7; border-left: 4px solid #d97706; padding: 0.75rem 1rem; margin: 0.75rem 0; border-radius: 0 4px 4px 0; font-size: 0.9375rem; }
+        .callout strong { color: #92400e; }
+
+        /* Footer */
+        footer { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem; border-top: 1px solid #e5e5e5; font-size: 0.875rem; color: #737373; }
+        footer a { color: #525252; }
+        footer a:hover { color: #1a1a1a; }
+        .footer-nav { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+        .suggest-edit { color: #737373; font-size: 0.8125rem; }
+        .suggest-edit:hover { color: #2563eb; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            html { font-size: 16px; }
+            main { padding: 1.5rem 1rem; }
+            .class-table { display: block; overflow-x: auto; }
+        }
+
+        :focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+        .skip-link { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+        .skip-link:focus { position: fixed; top: 0; left: 0; width: auto; height: auto; padding: 1rem; background: #2563eb; color: #ffffff; z-index: 10000; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Main navigation">
+    <ul>
+        <li><a href="../../">Dashboard</a></li>
+        <li><a href="../../pipeline/">Pipeline</a></li>
+        <li><a href="../../tasks/">Tasks</a></li>
+        <li><a href="../../gallery/">Gallery</a></li>
+        <li><a href="../../sop/" aria-current="page">SOP</a></li>
+        <li><a href="../../publications/">Publications</a></li>
+        <li><a href="../../stats/">Stats</a></li>
+        <li><a href="../../archive/">Archive</a></li>
+        <li><a href="../../ground-truth/">Ground Truth</a></li>
+        <li><a href="../../experimental/">Experimental</a></li>
+    </ul>
+</nav>
+
+<main id="main-content" role="main">
+
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="../../">Dashboard</a> &rsaquo; <a href="../../ground-truth/">Ground Truth</a> &rsaquo; <a href="../">SOP</a> &rsaquo; Voxel Painting v1.2
+    </nav>
+
+    <header class="page-header">
+        <h1>Voxel Painting Cell Segmentation Protocol <span class="version-badge">v1.2</span></h1>
+        <p>Protocol for voxel painting training data for the cell segmentation pipeline.</p>
+        <div class="sop-meta">
+            <span><strong>Owner:</strong> Selden Koolman</span>
+            <span><strong>Status:</strong> Release v1.2</span>
+            <span><strong>Source:</strong> Zetta</span>
+        </div>
+    </header>
+
+    <!-- Release Notes -->
+    <div class="release-notes">
+        <h2>Changes from v1.1</h2>
+        <ul>
+            <li>Clarify that cell segmentation should paint over defects as best as possible</li>
+            <li>Change fat globule handling: removed from defect segmentation, added to cell segmentation. Fat globules touching myelin are considered part of the myelin object.</li>
+            <li>Clarify that tears should be marked as a single segment</li>
+            <li>Add "misaligned sections" as a defect class</li>
+        </ul>
+    </div>
+
+    <!-- Desired Output Overview -->
+    <section class="content-section">
+        <h2>Desired Output</h2>
+        <p>Each cutout (bounding box) must produce three segmentations:</p>
+        <ol>
+            <li><strong>Cell segmentation</strong> with semantic classification</li>
+            <li><strong>Mitochondria segmentation</strong> with uncertain labels</li>
+            <li><strong>Defect segmentation</strong> with semantic classification</li>
+        </ol>
+        <p>Each cutout must be reviewed, unless otherwise noted. The review must inspect the 3D mesh and semantic class of each object in each segmentation. There must be proof-of-work for the review (spreadsheet or Neuroglancer link).</p>
+    </section>
+
+    <!-- Cell Segmentation -->
+    <section class="content-section" id="cell-segmentation">
+        <h2>1. Cell Segmentation</h2>
+
+        <h3>Rules</h3>
+        <ul>
+            <li>Paint fully over mitochondria &mdash; do not oversegment mitochondria</li>
+            <li>Paint fully over defects, as best as possible</li>
+            <li>Objects that span defects should be treated as a single object (a defect should not "split" an object)</li>
+            <li>Note uncertain segments: make sure any uncertain regions are included later in the defect segmentation as "uncertain" segments</li>
+        </ul>
+
+        <h3>Fat Globule Handling</h3>
+        <ul>
+            <li>Oversegment (paint as separate segments) fat globules that are <strong>not</strong> connected to myelin</li>
+            <li>Make sure there is no boundary between a fat globule and surrounding segments</li>
+            <li>It is better to overpaint the fat globule than to underpaint</li>
+            <li>Leave a boundary between myelin and neighboring objects</li>
+            <li>If the fat globule touches myelin, consider that fat globule part of the myelin object</li>
+        </ul>
+
+        <h3>Semantic Classes</h3>
+        <p>Use <em>segment name</em> to label each segment's compartment type based on the <strong>mesh of the object</strong>.</p>
+
+        <table class="class-table">
+            <thead>
+                <tr>
+                    <th scope="col">Class</th>
+                    <th scope="col">Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>dendrite</td>
+                    <td>Dendritic trunk, spine head, or spine neck (try to keep spines attached if possible)</td>
+                </tr>
+                <tr>
+                    <td>axon</td>
+                    <td>Any type of axon, including axon initial segment or terminal</td>
+                </tr>
+                <tr>
+                    <td>soma</td>
+                    <td>Cytosol of the soma other than the nucleus. If soma transitions to neurite within a single segment, mark as "merge between classes"</td>
+                </tr>
+                <tr>
+                    <td>nucleus</td>
+                    <td>Nucleus of any cell</td>
+                </tr>
+                <tr>
+                    <td>glia</td>
+                    <td>All glia cell types</td>
+                </tr>
+                <tr>
+                    <td>extracellular space</td>
+                    <td>Try your best to distinguish this from glia</td>
+                </tr>
+                <tr>
+                    <td>myelin</td>
+                    <td>Myelin sheath; includes fat globules connected to the myelin</td>
+                </tr>
+                <tr>
+                    <td>myelin inner tongue</td>
+                    <td>Glia associated with the myelin on the <em>inside</em> of the sheath</td>
+                </tr>
+                <tr>
+                    <td>myelin outer tongue</td>
+                    <td>Glia associated with the myelin on the <em>outside</em> of the sheath</td>
+                </tr>
+                <tr>
+                    <td>blood vessel</td>
+                    <td>Interior of a blood vessel (mark surrounding cells as soma)</td>
+                </tr>
+                <tr>
+                    <td>fat globule</td>
+                    <td>Dark objects that appear to be a dense tangle of membranes; often span multiple cells. If connected to myelin, do not oversegment.</td>
+                </tr>
+                <tr>
+                    <td>merge between classes</td>
+                    <td>Object spans multiple classes within the bounding box (e.g., soma&rarr;dendrite, dendrite-axon merge error). Small overcoloring into glia or extracellular space should NOT be marked as merge.</td>
+                </tr>
+                <tr>
+                    <td>uncertain</td>
+                    <td>Unable to determine semantic category, or unable to determine how an object continues through the volume</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- Mitochondria Segmentation -->
+    <section class="content-section" id="mitochondria-segmentation">
+        <h2>2. Mitochondria Segmentation</h2>
+        <ul>
+            <li>Paint the mitochondria <strong>and its membrane</strong>. Do not overpaint into the cytoplasm of the parent cell.</li>
+            <li>If necessary, underpainting the mitochondria's membrane is okay.</li>
+            <li>If an object is a questionable mitochondria, add it and set <em>segment name</em> to "uncertain".</li>
+        </ul>
+    </section>
+
+    <!-- Defect Segmentation -->
+    <section class="content-section" id="defect-segmentation">
+        <h2>3. Defect Segmentation</h2>
+        <p>Paint the following defects, with a <strong>different color for each instance</strong> (e.g., each fold gets a different color):</p>
+
+        <table class="class-table">
+            <thead>
+                <tr>
+                    <th scope="col">Defect Class</th>
+                    <th scope="col">Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Folds</td>
+                    <td>Each fold is a separate segment</td>
+                </tr>
+                <tr>
+                    <td>Cracks</td>
+                    <td>Each crack is a separate segment</td>
+                </tr>
+                <tr>
+                    <td>Tears</td>
+                    <td>Paint the white and black part of any tear as a <strong>single segment</strong></td>
+                </tr>
+                <tr>
+                    <td>Missing section</td>
+                    <td>Some of the image in a section is black, but not obviously related to another defect (fold or tear)</td>
+                </tr>
+                <tr>
+                    <td>Misaligned section</td>
+                    <td>A non-black section that noticeably breaks the flow of objects. Do not paint objects in cell or mitochondria segmentation for these sections.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="callout">
+            <strong>Important:</strong> When painting defects, it is better to overpaint than underpaint.
+        </div>
+
+        <p>Use <em>segment name</em> to label each segment with its semantic category from the list above.</p>
+    </section>
+
+    <!-- References -->
+    <section class="content-section" id="references">
+        <h2>References</h2>
+        <ul>
+            <li>Cell Segmentation Visual Glossary v1.0</li>
+            <li>Voxel Painting Cell Segmentation Work Instructions &mdash; WebKnossos v1.0</li>
+        </ul>
+    </section>
+
+</main>
+
+<footer>
+    <div class="footer-nav">
+        <div>
+            <a href="../../ground-truth/">Ground Truth Hub</a> &bull;
+            <a href="../">SOP Index</a>
+        </div>
+        <a href="#" id="suggest-edit-link" class="suggest-edit">Suggest an edit</a>
+    </div>
+</footer>
+
+<script>
+(function() {
+    var link = document.getElementById('suggest-edit-link');
+    if (link) {
+        var title = encodeURIComponent('[SOP] ' + document.title.replace(' - Princeton Tracer', ''));
+        link.href = 'https://github.com/BunPrinceton/tracer-workspace/issues/new?template=sop-update.yml&title=' + title + '&body=' + encodeURIComponent('**SOP:** ' + window.location.href + '\n\n**Reason for update:**\n');
+    }
+})();
+</script>
+</body>
+</html>
