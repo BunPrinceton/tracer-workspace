@@ -81,31 +81,6 @@
             font-size: 1.0625rem;
         }
 
-        /* Jump links */
-        .jump-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .jump-link {
-            background-color: #ffffff;
-            border: 2px solid #d4d4d4;
-            border-radius: 6px;
-            padding: 0.5rem 1rem;
-            text-decoration: none;
-            color: #1a1a1a;
-            font-size: 0.875rem;
-            font-weight: 500;
-            transition: border-color 0.15s ease;
-        }
-
-        .jump-link:hover {
-            border-color: #2563eb;
-            color: #2563eb;
-        }
-
         /* Project sections */
         .project-section {
             margin-bottom: 3rem;
@@ -143,29 +118,24 @@
         .pub-list {
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 0.75rem;
         }
 
         .pub-card {
             background-color: #ffffff;
             border: 2px solid #d4d4d4;
             border-radius: 8px;
-            padding: 1.5rem;
-            transition: border-color 0.15s ease;
+            padding: 1rem 1.5rem;
         }
 
         .pub-card:hover {
             border-color: #a3a3a3;
         }
 
-        .pub-card-header {
-            margin-bottom: 1rem;
-        }
-
         .pub-title {
-            font-size: 1.125rem;
-            font-weight: 700;
-            margin-bottom: 0.25rem;
+            font-size: 1rem;
+            font-weight: 600;
+            line-height: 1.4;
         }
 
         .pub-title a {
@@ -177,224 +147,14 @@
             color: #2563eb;
         }
 
-        .pub-authors {
-            font-size: 0.875rem;
-            color: #525252;
-            margin-bottom: 0.5rem;
-        }
-
         .pub-venue {
             font-size: 0.8125rem;
             color: #737373;
+            margin-top: 0.25rem;
         }
 
         .pub-venue strong {
             color: #525252;
-        }
-
-        /* Type badge */
-        .pub-type {
-            display: inline-block;
-            font-size: 0.6875rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            padding: 0.25rem 0.5rem;
-            border-radius: 3px;
-            margin-left: 0.5rem;
-            vertical-align: middle;
-        }
-
-        .pub-type--paper {
-            background-color: #059669;
-            color: #ffffff;
-        }
-
-        .pub-type--preprint {
-            background-color: #d97706;
-            color: #ffffff;
-        }
-
-        .pub-type--dataset {
-            background-color: #7c3aed;
-            color: #ffffff;
-        }
-
-        .pub-type--methods {
-            background-color: #2563eb;
-            color: #ffffff;
-        }
-
-        /* Abstract */
-        .pub-abstract {
-            font-size: 0.9375rem;
-            color: #525252;
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #e5e5e5;
-        }
-
-        .pub-abstract summary {
-            cursor: pointer;
-            font-weight: 600;
-            color: #1a1a1a;
-            padding: 0.25rem 0;
-        }
-
-        .pub-abstract summary:hover {
-            color: #2563eb;
-        }
-
-        .pub-abstract p {
-            margin-top: 0.75rem;
-            padding-left: 1rem;
-            border-left: 3px solid #e5e5e5;
-        }
-
-        /* Metadata grid */
-        .pub-meta {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .pub-meta-item {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-
-        .pub-meta-label {
-            font-size: 0.6875rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #737373;
-        }
-
-        .pub-meta-value {
-            font-size: 0.875rem;
-        }
-
-        .pub-meta-value a {
-            color: #2563eb;
-            text-decoration: none;
-        }
-
-        .pub-meta-value a:hover {
-            text-decoration: underline;
-        }
-
-        /* Tags */
-        .pub-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #e5e5e5;
-        }
-
-        .pub-tag {
-            display: inline-block;
-            font-size: 0.75rem;
-            padding: 0.25rem 0.625rem;
-            border-radius: 4px;
-            text-decoration: none;
-        }
-
-        .pub-tag--pipeline {
-            background-color: #dbeafe;
-            color: #1e40af;
-        }
-
-        .pub-tag--pipeline:hover {
-            background-color: #bfdbfe;
-        }
-
-        .pub-tag--task {
-            background-color: #fef3c7;
-            color: #92400e;
-        }
-
-        .pub-tag--task:hover {
-            background-color: #fde68a;
-        }
-
-        .pub-tag--dataset {
-            background-color: #ede9fe;
-            color: #5b21b6;
-        }
-
-        /* External links */
-        .pub-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            margin-top: 1rem;
-        }
-
-        .pub-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.375rem;
-            font-size: 0.8125rem;
-            color: #525252;
-            text-decoration: none;
-            padding: 0.375rem 0.75rem;
-            background-color: #f5f5f5;
-            border-radius: 4px;
-        }
-
-        .pub-link:hover {
-            background-color: #e5e5e5;
-            color: #1a1a1a;
-        }
-
-        .pub-link--primary {
-            background-color: #2563eb;
-            color: #ffffff;
-        }
-
-        .pub-link--primary:hover {
-            background-color: #1d4ed8;
-            color: #ffffff;
-        }
-
-        /* Internal docs section */
-        .pub-internal {
-            background-color: #fafafa;
-            border: 1px solid #e5e5e5;
-            border-radius: 6px;
-            padding: 1rem;
-            margin-top: 1rem;
-        }
-
-        .pub-internal h4 {
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #737373;
-            margin-bottom: 0.5rem;
-        }
-
-        .pub-internal ul {
-            list-style: none;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem 1rem;
-        }
-
-        .pub-internal a {
-            font-size: 0.875rem;
-            color: #2563eb;
-            text-decoration: none;
-        }
-
-        .pub-internal a:hover {
-            text-decoration: underline;
         }
 
         /* Methods section */
@@ -494,22 +254,11 @@
                 padding: 1.5rem 1rem;
             }
 
-            .pub-meta {
-                grid-template-columns: 1fr;
-            }
-
-            .jump-links {
-                flex-direction: column;
-            }
-
-            .jump-link {
-                text-align: center;
-            }
         }
 
         /* Print */
         @media print {
-            nav, footer, .jump-links {
+            nav, footer {
                 display: none;
             }
 
@@ -569,297 +318,101 @@
 
     <div class="page-header">
         <h1>Publications</h1>
-        <p>Research publications organized by project. Each entry links to relevant pipeline stages, task types, and internal documentation.</p>
+        <p>Research publications from the Seung Lab at Princeton University that our team has contributed to through Ground Truth annotations, proofreading, and related work.</p>
     </div>
-
-    <!-- Jump Links -->
-    <div class="jump-links" role="navigation" aria-label="Project navigation">
-        <a href="#flywire" class="jump-link">FlyWire / FAFB</a>
-        <a href="#banc" class="jump-link">BANC</a>
-        <a href="#methods" class="jump-link">Methods &amp; Tools</a>
-    </div>
-
 
     <!-- ================================================================
-         FLYWIRE / FAFB PROJECT
+         PUBLICATIONS (newest first)
          ================================================================ -->
-    <section class="project-section" id="flywire" aria-labelledby="flywire-heading">
+    <section class="project-section" id="publications" aria-labelledby="publications-heading">
         <div class="project-header">
-            <h2 id="flywire-heading">FlyWire / FAFB</h2>
-            <span class="pub-count">3 publications</span>
+            <h2 id="publications-heading">Publications</h2>
+            <span class="pub-count">15 publications</span>
         </div>
-        <p class="project-desc">
-            Publications from the FlyWire collaborative reconstruction of the <em>Drosophila</em> adult brain (FAFB dataset).
-            Our team contributes Ground Truth annotations for synapse detection and proofreading validation.
-        </p>
 
         <div class="pub-list">
 
-            <!-- FlyWire Connectome Paper -->
+            <!-- 2025 -->
+
             <article class="pub-card">
-                <div class="pub-card-header">
-                    <h3 class="pub-title">
-                        <a href="flywire-connectome/">Neuronal wiring diagram of an adult brain</a>
-                        <span class="pub-type pub-type--paper">Paper</span>
-                    </h3>
-                    <p class="pub-authors">Dorkenwald S, Matsliah A, Sterling AR, et al. (FlyWire Consortium)</p>
-                    <p class="pub-venue"><strong>Nature</strong>, 2024</p>
-                </div>
-
-                <details class="pub-abstract">
-                    <summary>Abstract</summary>
-                    <p>The first complete connectome of an adult brain, reconstructed from a female <em>Drosophila melanogaster</em>. Contains ~140,000 neurons and ~50 million synapses, enabling comprehensive circuit analysis across the entire central brain.</p>
-                </details>
-
-                <div class="pub-meta">
-                    <div class="pub-meta-item">
-                        <span class="pub-meta-label">Dataset</span>
-                        <span class="pub-meta-value">FAFB (Full Adult Fly Brain)</span>
-                    </div>
-                    <div class="pub-meta-item">
-                        <span class="pub-meta-label">Our Contribution</span>
-                        <span class="pub-meta-value">Synapse GT, Proofreading validation</span>
-                    </div>
-                    <div class="pub-meta-item">
-                        <span class="pub-meta-label">Resolution</span>
-                        <span class="pub-meta-value">4 &times; 4 &times; 40 nm</span>
-                    </div>
-                </div>
-
-                <div class="pub-tags">
-                    <a href="../pipeline/#segmentation" class="pub-tag pub-tag--pipeline">Segmentation</a>
-                    <a href="../pipeline/#proofreading" class="pub-tag pub-tag--pipeline">Proofreading</a>
-                    <a href="../pipeline/#annotation" class="pub-tag pub-tag--pipeline">Annotation</a>
-                    <a href="../tasks/proofreading/" class="pub-tag pub-tag--task">Proofreading</a>
-                    <a href="../tasks/quality-assurance/" class="pub-tag pub-tag--task">Quality Assurance</a>
-                    <span class="pub-tag pub-tag--dataset">FAFB 2019</span>
-                </div>
-
-                <div class="pub-internal">
-                    <h4>Internal Documentation</h4>
-                    <ul>
-                        <li><a href="../sop/gt-task-handling/">GT Task Handling SOP</a></li>
-                        <li><a href="../gallery/#fafb-2019">FAFB Gallery Images</a></li>
-                        <li><a href="../drive_docs_output/Ground-Truth-Training/Copy of Fly Synapses.html">Fly Synapses Guide</a></li>
-                    </ul>
-                </div>
-
-                <div class="pub-links">
-                    <a href="https://doi.org/10.1038/s41586-024-07558-y" class="pub-link pub-link--primary">DOI</a>
-                    <a href="https://flywire.ai/" class="pub-link">FlyWire Portal</a>
-                    <a href="https://codex.flywire.ai/" class="pub-link">Codex Browser</a>
-                </div>
+                <h3 class="pub-title"><a href="https://doi.org/10.1038/s41586-025-08790-w">Functional connectomics spanning multiple areas of mouse visual cortex</a></h3>
+                <p class="pub-venue"><strong>Nature</strong>, 2025</p>
             </article>
 
-            <!-- FlyWire Methods Paper -->
             <article class="pub-card">
-                <div class="pub-card-header">
-                    <h3 class="pub-title">
-                        <a href="flywire-methods/">FlyWire: online community for whole-brain connectomics</a>
-                        <span class="pub-type pub-type--methods">Methods</span>
-                    </h3>
-                    <p class="pub-authors">Dorkenwald S, McKellar CE, Macrina T, et al.</p>
-                    <p class="pub-venue"><strong>Nature Methods</strong>, 2022</p>
-                </div>
-
-                <details class="pub-abstract">
-                    <summary>Abstract</summary>
-                    <p>Describes the FlyWire platform for collaborative proofreading, including the segmentation pipeline, proofreading interface, and methods for community coordination at scale.</p>
-                </details>
-
-                <div class="pub-meta">
-                    <div class="pub-meta-item">
-                        <span class="pub-meta-label">Dataset</span>
-                        <span class="pub-meta-value">FAFB</span>
-                    </div>
-                    <div class="pub-meta-item">
-                        <span class="pub-meta-label">Focus</span>
-                        <span class="pub-meta-value">Platform, proofreading workflow</span>
-                    </div>
-                </div>
-
-                <div class="pub-tags">
-                    <a href="../pipeline/#segmentation" class="pub-tag pub-tag--pipeline">Segmentation</a>
-                    <a href="../pipeline/#proofreading" class="pub-tag pub-tag--pipeline">Proofreading</a>
-                    <a href="../tasks/split-merge/" class="pub-tag pub-tag--task">Split/Merge</a>
-                </div>
-
-                <div class="pub-internal">
-                    <h4>Internal Documentation</h4>
-                    <ul>
-                        <li><a href="../tasks/split-merge/">Split/Merge Task Guide</a></li>
-                        <li><a href="../sop/gt-verification/">GT Verification SOP</a></li>
-                    </ul>
-                </div>
-
-                <div class="pub-links">
-                    <a href="https://doi.org/10.1038/s41592-021-01330-0" class="pub-link pub-link--primary">DOI</a>
-                    <a href="https://github.com/seung-lab/FlyWirePublic" class="pub-link">GitHub</a>
-                </div>
+                <h3 class="pub-title"><a href="https://doi.org/10.1038/s41586-025-08660-5">NEURD offers automated proofreading and feature extraction for connectomics</a></h3>
+                <p class="pub-venue"><strong>Nature</strong>, 2025</p>
             </article>
 
-            <!-- Synapse Detection Paper -->
             <article class="pub-card">
-                <div class="pub-card-header">
-                    <h3 class="pub-title">
-                        <a href="synapse-detection/">Synaptic cleft segmentation in non-isotropic EM</a>
-                        <span class="pub-type pub-type--methods">Methods</span>
-                    </h3>
-                    <p class="pub-authors">Heinrich L, Funke J, Pape C, Macrina T, et al.</p>
-                    <p class="pub-venue"><strong>MICCAI</strong>, 2018</p>
-                </div>
-
-                <details class="pub-abstract">
-                    <summary>Abstract</summary>
-                    <p>Neural network approach for detecting synaptic clefts in anisotropic electron microscopy data. Ground Truth annotations from this work form the basis for synapse detection in FAFB.</p>
-                </details>
-
-                <div class="pub-meta">
-                    <div class="pub-meta-item">
-                        <span class="pub-meta-label">Our Contribution</span>
-                        <span class="pub-meta-value">Synapse Ground Truth annotations</span>
-                    </div>
-                    <div class="pub-meta-item">
-                        <span class="pub-meta-label">Focus</span>
-                        <span class="pub-meta-value">Synapse detection, cleft segmentation</span>
-                    </div>
-                </div>
-
-                <div class="pub-tags">
-                    <a href="../pipeline/#annotation" class="pub-tag pub-tag--pipeline">Annotation</a>
-                    <a href="../tasks/quality-assurance/" class="pub-tag pub-tag--task">Quality Assurance</a>
-                </div>
-
-                <div class="pub-internal">
-                    <h4>Internal Documentation</h4>
-                    <ul>
-                        <li><a href="../index.html#synapse-identification">Synapse Identification (Master Guide)</a></li>
-                        <li><a href="../drive_docs_output/Ground-Truth-Training/Copy of Synapse Stuff.html">Synapse Reference</a></li>
-                        <li><a href="../gallery/#synapses">Synapse Gallery</a></li>
-                    </ul>
-                </div>
-
-                <div class="pub-links">
-                    <a href="https://doi.org/10.1007/978-3-030-00934-2_13" class="pub-link pub-link--primary">DOI</a>
-                </div>
+                <h3 class="pub-title"><a href="https://doi.org/10.1101/2025.07.31.667571">Distributed control circuits across a brain-and-cord connectome</a></h3>
+                <p class="pub-venue"><strong>bioRxiv</strong>, 2025 (preprint)</p>
             </article>
 
-        </div>
-    </section>
-
-
-    <!-- ================================================================
-         BANC PROJECT
-         ================================================================ -->
-    <section class="project-section" id="banc" aria-labelledby="banc-heading">
-        <div class="project-header">
-            <h2 id="banc-heading">BANC</h2>
-            <span class="pub-count">2 publications</span>
-        </div>
-        <p class="project-desc">
-            Publications from the Brain and Nerve Cord (BANC) project reconstructing the complete adult <em>Drosophila</em> nervous system including VNC.
-        </p>
-
-        <div class="pub-list">
-
-            <!-- BANC Main Paper -->
             <article class="pub-card">
-                <div class="pub-card-header">
-                    <h3 class="pub-title">
-                        <a href="banc-connectome/">A Connectome of the Adult Drosophila Ventral Nerve Cord</a>
-                        <span class="pub-type pub-type--preprint">Preprint</span>
-                    </h3>
-                    <p class="pub-authors">Takemura S, et al.</p>
-                    <p class="pub-venue"><strong>bioRxiv</strong>, 2024</p>
-                </div>
-
-                <details class="pub-abstract">
-                    <summary>Abstract</summary>
-                    <p>Complete connectome of the adult <em>Drosophila</em> ventral nerve cord, enabling analysis of motor circuits and sensory integration. Includes comprehensive proofreading and synapse annotation.</p>
-                </details>
-
-                <div class="pub-meta">
-                    <div class="pub-meta-item">
-                        <span class="pub-meta-label">Dataset</span>
-                        <span class="pub-meta-value">BANC (Brain and Nerve Cord)</span>
-                    </div>
-                    <div class="pub-meta-item">
-                        <span class="pub-meta-label">Our Contribution</span>
-                        <span class="pub-meta-value">Proofreading, synapse verification</span>
-                    </div>
-                    <div class="pub-meta-item">
-                        <span class="pub-meta-label">Status</span>
-                        <span class="pub-meta-value">Under review</span>
-                    </div>
-                </div>
-
-                <div class="pub-tags">
-                    <a href="../pipeline/#segmentation" class="pub-tag pub-tag--pipeline">Segmentation</a>
-                    <a href="../pipeline/#proofreading" class="pub-tag pub-tag--pipeline">Proofreading</a>
-                    <a href="../pipeline/#annotation" class="pub-tag pub-tag--pipeline">Annotation</a>
-                    <a href="../tasks/proofreading/" class="pub-tag pub-tag--task">Proofreading</a>
-                    <a href="../tasks/skeletonization/" class="pub-tag pub-tag--task">Skeletonization</a>
-                    <span class="pub-tag pub-tag--dataset">BANC</span>
-                </div>
-
-                <div class="pub-internal">
-                    <h4>Internal Documentation</h4>
-                    <ul>
-                        <li><a href="../sop/gt-task-handling/">GT Task Handling SOP</a></li>
-                        <li><a href="../gallery/#banc">BANC Gallery Images</a></li>
-                        <li><a href="../tracer_tools/">tracer_tools (BANC scripts)</a></li>
-                    </ul>
-                </div>
-
-                <div class="pub-links">
-                    <a href="#" class="pub-link pub-link--primary">bioRxiv (pending)</a>
-                    <a href="https://cave-explorer.app/banc" class="pub-link">CAVE Explorer</a>
-                </div>
+                <h3 class="pub-title"><a href="https://doi.org/10.1101/2025.07.09.663979">Connectomic reconstruction from hippocampal CA3 reveals spatially graded mossy fiber inputs and selective feedforward inhibition to pyramidal cells</a></h3>
+                <p class="pub-venue"><strong>bioRxiv</strong>, 2025 (preprint)</p>
             </article>
 
-            <!-- BANC Data Release -->
+            <!-- 2024 -->
+
             <article class="pub-card">
-                <div class="pub-card-header">
-                    <h3 class="pub-title">
-                        <a href="banc-data/">BANC Public Data Release v1</a>
-                        <span class="pub-type pub-type--dataset">Dataset</span>
-                    </h3>
-                    <p class="pub-authors">BANC Consortium</p>
-                    <p class="pub-venue"><strong>Data Release</strong>, 2024</p>
-                </div>
+                <h3 class="pub-title"><a href="https://doi.org/10.1038/s41586-024-07558-y">Neuronal wiring diagram of an adult brain</a></h3>
+                <p class="pub-venue"><strong>Nature</strong>, 2024</p>
+            </article>
 
-                <details class="pub-abstract">
-                    <summary>Summary</summary>
-                    <p>Public release of BANC segmentation, synapses, and annotations. Includes CAVE materialization tables and Neuroglancer state links for browsing.</p>
-                </details>
+            <article class="pub-card">
+                <h3 class="pub-title"><a href="https://doi.org/10.1038/s41586-024-07981-1">Neuronal parts list and wiring diagram for a visual system</a></h3>
+                <p class="pub-venue"><strong>Nature</strong>, 2024</p>
+            </article>
 
-                <div class="pub-meta">
-                    <div class="pub-meta-item">
-                        <span class="pub-meta-label">Datastack</span>
-                        <span class="pub-meta-value"><code>brain_and_nerve_cord</code></span>
-                    </div>
-                    <div class="pub-meta-item">
-                        <span class="pub-meta-label">Access</span>
-                        <span class="pub-meta-value">CAVE API</span>
-                    </div>
-                </div>
+            <article class="pub-card">
+                <h3 class="pub-title"><a href="https://doi.org/10.1038/s41586-024-07953-5">Predicting visual function by interpreting a neuronal wiring diagram</a></h3>
+                <p class="pub-venue"><strong>Nature</strong>, 2024</p>
+            </article>
 
-                <div class="pub-tags">
-                    <a href="../pipeline/#publication" class="pub-tag pub-tag--pipeline">Publication</a>
-                    <span class="pub-tag pub-tag--dataset">BANC</span>
-                </div>
+            <article class="pub-card">
+                <h3 class="pub-title"><a href="https://doi.org/10.1038/s41593-024-01784-3">Predicting modular functions and neural coding of behavior from a synaptic wiring diagram</a></h3>
+                <p class="pub-venue"><strong>Nature Neuroscience</strong>, 2024</p>
+            </article>
 
-                <div class="pub-internal">
-                    <h4>Internal Documentation</h4>
-                    <ul>
-                        <li><a href="../tracer_tools/scripts/">CAVE Query Scripts</a></li>
-                        <li><a href="../CLAUDE.md">tracer_tools API Reference</a></li>
-                    </ul>
-                </div>
+            <article class="pub-card">
+                <h3 class="pub-title"><a href="https://doi.org/10.1038/s41586-024-07389-x">Connectomic reconstruction of a female <em>Drosophila</em> ventral nerve cord</a></h3>
+                <p class="pub-venue"><strong>Nature</strong>, 2024</p>
+            </article>
 
-                <div class="pub-links">
-                    <a href="https://cave.fanc-fly.com/" class="pub-link pub-link--primary">CAVE Portal</a>
-                </div>
+            <article class="pub-card">
+                <h3 class="pub-title"><a href="https://doi.org/10.1038/s41467-023-44354-0">Petascale pipeline for precise alignment of images from serial section electron microscopy</a></h3>
+                <p class="pub-venue"><strong>Nature Communications</strong>, 2024</p>
+            </article>
+
+            <article class="pub-card">
+                <h3 class="pub-title"><a href="https://doi.org/10.1038/s41467-024-50846-4">Fast imaging of millimeter-scale areas with beam deflection transmission electron microscopy</a></h3>
+                <p class="pub-venue"><strong>Nature Communications</strong>, 2024</p>
+            </article>
+
+            <!-- 2023 -->
+
+            <article class="pub-card">
+                <h3 class="pub-title"><a href="https://doi.org/10.1038/s41592-023-02059-8">Multi-layered maps of neuropil with segmentation-guided contrastive learning</a></h3>
+                <p class="pub-venue"><strong>Nature Methods</strong>, 2023</p>
+            </article>
+
+            <article class="pub-card">
+                <h3 class="pub-title"><a href="https://doi.org/10.1016/j.cub.2023.05.010">Cyclic structure with cellular precision in a vertebrate sensorimotor neural circuit</a></h3>
+                <p class="pub-venue"><strong>Current Biology</strong>, 2023</p>
+            </article>
+
+            <!-- 2022 -->
+
+            <article class="pub-card">
+                <h3 class="pub-title"><a href="https://doi.org/10.1038/s41592-021-01330-0">FlyWire: online community for whole-brain connectomics</a></h3>
+                <p class="pub-venue"><strong>Nature Methods</strong>, 2022</p>
+            </article>
+
+            <article class="pub-card">
+                <h3 class="pub-title"><a href="https://doi.org/10.3389/fninf.2022.828169">RealNeuralNetworks.jl: An Integrated Julia Package for Skeletonization, Morphological Analysis, and Synaptic Connectivity Analysis of Terabyte-Scale 3D Neural Segmentations</a></h3>
+                <p class="pub-venue"><strong>Frontiers in Neuroinformatics</strong>, 2022</p>
             </article>
 
         </div>
