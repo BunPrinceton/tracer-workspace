@@ -86,3 +86,20 @@ logs/
 # ===================
 .claude/settings.local.json
 scripts/drive_token_write.json
+
+# ===================
+# Workspace - non-repo files
+# ===================
+
+# Billing / invoices / financial docs
+*.xlsx
+*.pdf
+
+# Working files
+work-files/
+
+# Separate git repo (not a submodule)
+slack-workspace-toolkit/
+
+# Windows artifact
+tracer_tools/nul
