@@ -24,7 +24,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **No build system.** Pure static HTML served directly by GitHub Pages. No Jekyll, no bundler, no templating engine. This has major implications:
 
 - **CSS is duplicated in every page** via inline `<style>` blocks. There is no shared stylesheet (except `sop/print.css` for print). Updating the design system means editing every HTML file.
-- **Navigation is duplicated in every page.** `_includes/nav.html` exists as a reference template only — it cannot be auto-included. Adding a nav item requires editing every page.
+- **Navigation is duplicated in every page.** `_includes/nav.html` exists as a reference template only — it cannot be auto-included. Adding a nav item requires editing every page. Nav links are centered (`justify-content: center`).
+- **External links open in new tabs** (`target="_blank" rel="noopener noreferrer"`), including "Suggest an edit" footer links which are built dynamically via JavaScript.
 - **Deployment is just `git push` to `master`.** No build step, no CI/CD, no GitHub Actions.
 
 ### Design System
@@ -40,16 +41,16 @@ All pages follow these principles (documented in `index.html` comments):
 ### Site Structure
 
 ```
-/                    # Dashboard (index.html)
+/                    # Dashboard (index.html) — 3 tiles: SOP, Tasks, Gallery
 /pipeline/           # Pipeline stages
 /tasks/              # Task guides (6 subdirectories)
-/sop/                # SOPs with versioning (7 subdirectories)
+/sop/                # SOPs with versioning (8 subdirectories)
 /gallery/            # Visual reference gallery
-/publications/       # Publication pages
-/stats/              # Project statistics
+/publications/       # Seung Lab publication stubs (15 papers, links to DOIs)
 /archive/            # Legacy tool documentation
 /contribute/         # How to suggest changes
-/ground-truth/       # Ground Truth Hub (not yet in nav bar)
+/ground-truth/       # Ground Truth Hub
+/experimental/       # Experimental tools (Gen 2 scripts)
 ```
 
 ### Site Editing Rules
@@ -80,7 +81,7 @@ sop/gt-task-handling/
 
 ### Suggestion System
 
-Every page footer has JavaScript that builds a GitHub Issues URL dynamically from the page title and URL. Templates in `.github/ISSUE_TEMPLATE/` (content, SOP, gallery, correction). The `/contribute/` page explains the process.
+Every page footer has JavaScript that builds a GitHub Issues URL dynamically from the page title and URL, with `target="_blank"` set both in HTML and JS. Templates in `.github/ISSUE_TEMPLATE/` (content, SOP, gallery, correction). The `/contribute/` page explains the process.
 
 ## tracer_tools
 
@@ -143,7 +144,7 @@ python tracer_tools/scripts/fast_get_coords.py      # Parallel L2 lookups
 python tracer_tools/scripts/fast_validate_ids.py     # Parallel supervoxel lookups, 5000+ IDs in <2 min
 ```
 
-Note: Gen 2 scripts contain hardcoded Windows paths for module resolution. They work when `tracer_tools` is `pip install -e`'d.
+Gen 2 scripts use relative path resolution (`Path(__file__).resolve().parent.parent / "src"`) and also work when `tracer_tools` is `pip install -e`'d.
 
 ### ID Updates — Critical Implementation Detail
 

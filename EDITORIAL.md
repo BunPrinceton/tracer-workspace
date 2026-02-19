@@ -162,4 +162,4 @@ Suggestions come via GitHub Issues using templates:
 
 ---
 
-*Last updated: January 2026*
+*Last updated: February 2026*
