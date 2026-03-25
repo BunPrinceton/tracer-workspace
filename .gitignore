@@ -101,5 +101,8 @@ work-files/
 # Separate git repo (not a submodule)
 slack-workspace-toolkit/
 
+# Large files exceeding Cloudflare Pages 25 MiB limit
+Eyewire/Eyewire Visual Aid.pptx
+
 # Windows artifact
 tracer_tools/nul
