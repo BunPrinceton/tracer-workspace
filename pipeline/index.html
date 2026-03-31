@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pipeline - Princeton Tracer</title>
+    <title>Pipeline - Princeton Tracers</title>
     <style>
         /* ============================================================
            PIPELINE PAGE STYLES
@@ -65,6 +65,63 @@
             color: #ffffff;
             font-weight: 600;
         }
+
+        /* More dropdown */
+        .nav-more {
+            position: relative;
+        }
+
+        .nav-more-btn {
+            background: none;
+            border: none;
+            color: #e5e5e5;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .nav-more-btn:hover,
+        .nav-more-btn:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .nav-more-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 0.25rem 0;
+            min-width: 160px;
+            z-index: 1000;
+            list-style: none;
+        }
+
+        .nav-more-menu li {
+            padding: 0;
+        }
+
+        .nav-more-menu a {
+            display: block;
+            padding: 0.5rem 1rem;
+            white-space: nowrap;
+        }
+
+        .nav-more-menu a:hover,
+        .nav-more-menu a:focus {
+            background-color: #333;
+        }
+
+        .nav-more:hover .nav-more-menu,
+        .nav-more:focus-within .nav-more-menu {
+            display: block;
+        }
+
 
         /* ============================================================
            MAIN CONTENT
@@ -491,14 +548,19 @@
 <nav aria-label="Main navigation">
     <ul>
         <li><a href="../">Dashboard</a></li>
-        <li><a href="../pipeline/" aria-current="page">Pipeline</a></li>
-        <li><a href="../tasks/">Tasks</a></li>
         <li><a href="../gallery/">Gallery</a></li>
-        <li><a href="../sop/">SOP</a></li>
-        <li><a href="../publications/">Publications</a></li>
-        <li><a href="../archive/">Archive</a></li>
+        <li><a href="../tasks/">Task Guides</a></li>
+        <li><a href="../sop/">SOPs</a></li>
         <li><a href="../ground-truth/">Ground Truth</a></li>
-        <li><a href="../experimental/">Experimental</a></li>
+        <li><a href="../pipeline/" aria-current="page">Pipeline</a></li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">More &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../publications/">Publications</a></li>
+                <li><a href="../experimental/">Experimental</a></li>
+                <li><a href="../archive/">Archive</a></li>
+            </ul>
+        </li>
     </ul>
 </nav>
 
@@ -776,8 +838,8 @@
                 <h4>Related Documentation</h4>
                 <ul>
                     <li><a href="../sop/">Standard Operating Procedures</a></li>
-                    <li><a href="../sop/#gt-checklist">GT Checklist</a></li>
-                    <li><a href="../tasks/#proofreading">Proofreading Training</a></li>
+                    <li><a href="../sop/gt-checklist/">GT Checklist</a></li>
+                    <li><a href="../tasks/proofreading/">Proofreading Training</a></li>
                 </ul>
             </div>
         </article>
@@ -815,15 +877,15 @@
                 <div class="tool-list">
                     <a href="#tools" class="tool-tag tool-tag--link">Neuroglancer</a>
                     <a href="#tools" class="tool-tag tool-tag--link">CAVE</a>
-                    <a href="../tampermonkey-scripts/" class="tool-tag tool-tag--link">Tampermonkey</a>
+                    <span class="tool-tag">Tampermonkey</span>
                 </div>
             </div>
             <div class="stage-links">
                 <h4>Related Documentation</h4>
                 <ul>
-                    <li><a href="../tasks/#synapses">Synapse Annotation Guide</a></li>
-                    <li><a href="../gallery/#synapse-examples">Synapse Visual Gallery</a></li>
-                    <li><a href="../sop/#gt-protocol-guidelines">GT Protocol Guidelines</a></li>
+                    <li><a href="../tasks/semantic-segmentation/">Synapse Annotation Guide</a></li>
+                    <li><a href="../gallery/#banc">Visual Gallery</a></li>
+                    <li><a href="../sop/gt-protocol-guidelines/">GT Protocol Guidelines</a></li>
                 </ul>
             </div>
         </article>
@@ -867,7 +929,7 @@
             <div class="stage-links">
                 <h4>Related Documentation</h4>
                 <ul>
-                    <li><a href="../stats/#id-validation">ID Validation Results</a></li>
+                    <li><a href="../experimental/">ID Validation Tools</a></li>
                 </ul>
             </div>
         </article>
@@ -947,7 +1009,7 @@
                 <tr>
                     <td><strong>Tampermonkey</strong></td>
                     <td>5, 6</td>
-                    <td>Browser scripts for WebKnossos workflow enhancement</td>
+                    <td>Browser userscripts for WebKnossos, Neuroglancer, and Spelunker workflow enhancement</td>
                 </tr>
             </tbody>
         </table>
@@ -1002,7 +1064,7 @@
 <footer>
     <div class="footer-nav">
         <a href="../">← Back to Dashboard</a>
-        <a href="#" id="suggest-edit-link" class="suggest-edit" target="_blank" rel="noopener noreferrer">Suggest an edit</a>
+        <a href="#" id="suggest-edit-link" class="suggest-edit" target="_blank" rel="noopener noreferrer">Please Suggest Edits</a>
     </div>
 </footer>
 
@@ -1010,7 +1072,7 @@
 (function() {
     var link = document.getElementById('suggest-edit-link');
     if (link) {
-        var title = encodeURIComponent('[Content] ' + document.title.replace(' - Princeton Tracer', ''));
+        var title = encodeURIComponent('[Content] ' + document.title.replace(' - Princeton Tracers', ''));
         link.href = 'https://github.com/BunPrinceton/tracer-workspace/issues/new?template=content-suggestion.yml&title=' + title + '&body=' + encodeURIComponent('**Page:** ' + window.location.href + '\n\n**Section:** \n\n**Suggestion:**\n');
         link.target = '_blank';
         link.rel = 'noopener noreferrer';

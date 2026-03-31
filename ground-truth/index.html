@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ground Truth Hub - Princeton Tracer</title>
+    <title>Ground Truth Hub - Princeton Tracers</title>
     <style>
         *, *::before, *::after {
             box-sizing: border-box;
@@ -57,6 +57,63 @@
             color: #ffffff;
             font-weight: 600;
         }
+
+        /* More dropdown */
+        .nav-more {
+            position: relative;
+        }
+
+        .nav-more-btn {
+            background: none;
+            border: none;
+            color: #e5e5e5;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .nav-more-btn:hover,
+        .nav-more-btn:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .nav-more-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 0.25rem 0;
+            min-width: 160px;
+            z-index: 1000;
+            list-style: none;
+        }
+
+        .nav-more-menu li {
+            padding: 0;
+        }
+
+        .nav-more-menu a {
+            display: block;
+            padding: 0.5rem 1rem;
+            white-space: nowrap;
+        }
+
+        .nav-more-menu a:hover,
+        .nav-more-menu a:focus {
+            background-color: #333;
+        }
+
+        .nav-more:hover .nav-more-menu,
+        .nav-more:focus-within .nav-more-menu {
+            display: block;
+        }
+
 
         /* Main content */
         main {
@@ -437,14 +494,19 @@
 <nav aria-label="Main navigation">
     <ul>
         <li><a href="../">Dashboard</a></li>
-        <li><a href="../pipeline/">Pipeline</a></li>
-        <li><a href="../tasks/">Tasks</a></li>
         <li><a href="../gallery/">Gallery</a></li>
-        <li><a href="../sop/">SOP</a></li>
-        <li><a href="../publications/">Publications</a></li>
-        <li><a href="../archive/">Archive</a></li>
-        <li><a href="./" aria-current="page">Ground Truth</a></li>
-        <li><a href="../experimental/">Experimental</a></li>
+        <li><a href="../tasks/">Task Guides</a></li>
+        <li><a href="../sop/">SOPs</a></li>
+        <li><a href="../ground-truth/" aria-current="page">Ground Truth</a></li>
+        <li><a href="../pipeline/">Pipeline</a></li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">More &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../publications/">Publications</a></li>
+                <li><a href="../experimental/">Experimental</a></li>
+                <li><a href="../archive/">Archive</a></li>
+            </ul>
+        </li>
     </ul>
 </nav>
 
@@ -615,27 +677,6 @@
         </table>
     </section>
 
-    <!-- Section 6: Related Task Guides -->
-    <section class="content-section">
-        <h2>Related Task Guides</h2>
-        <p>Task overview pages provide context and training material. The SOPs above are authoritative for procedures.</p>
-
-        <div class="task-links">
-            <a href="../tasks/semantic-segmentation/" class="task-link">
-                <div class="task-link-title">Semantic Segmentation</div>
-                <div class="task-link-desc">Synapse annotation workflow context</div>
-            </a>
-            <a href="../tasks/proofreading/" class="task-link">
-                <div class="task-link-title">Proofreading</div>
-                <div class="task-link-desc">Error correction workflow context</div>
-            </a>
-            <a href="../tasks/quality-assurance/" class="task-link">
-                <div class="task-link-title">Quality Assurance</div>
-                <div class="task-link-desc">QA review workflow context</div>
-            </a>
-        </div>
-    </section>
-
     <!-- Section 7: Quick Reference -->
     <section class="content-section">
         <h2>Quick Reference</h2>
@@ -683,10 +724,9 @@
 <footer>
     <div class="footer-nav">
         <div>
-            <a href="../">Dashboard</a> &bull;
-            <a href="../sop/">Full SOP Index</a>
+            <a href="../">Dashboard</a>
         </div>
-        <a target="_blank" rel="noopener noreferrer" href="https://github.com/BunPrinceton/tracer-workspace/issues/new?template=content-suggestion.yml" id="suggest-edit-link">Suggest an edit</a>
+        <a target="_blank" rel="noopener noreferrer" href="https://github.com/BunPrinceton/tracer-workspace/issues/new?template=content-suggestion.yml" id="suggest-edit-link">Please Suggest Edits</a>
     </div>
 </footer>
 

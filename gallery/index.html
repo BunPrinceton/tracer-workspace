@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gallery - Princeton Tracer</title>
+    <title>Gallery - Princeton Tracers</title>
     <!-- ============================================================
          GALLERY SYSTEM
 
@@ -77,6 +77,63 @@
             font-weight: 600;
         }
 
+        /* More dropdown */
+        .nav-more {
+            position: relative;
+        }
+
+        .nav-more-btn {
+            background: none;
+            border: none;
+            color: #e5e5e5;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .nav-more-btn:hover,
+        .nav-more-btn:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .nav-more-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 0.25rem 0;
+            min-width: 160px;
+            z-index: 1000;
+            list-style: none;
+        }
+
+        .nav-more-menu li {
+            padding: 0;
+        }
+
+        .nav-more-menu a {
+            display: block;
+            padding: 0.5rem 1rem;
+            white-space: nowrap;
+        }
+
+        .nav-more-menu a:hover,
+        .nav-more-menu a:focus {
+            background-color: #333;
+        }
+
+        .nav-more:hover .nav-more-menu,
+        .nav-more:focus-within .nav-more-menu {
+            display: block;
+        }
+
+
         /* ============================================================
            MAIN LAYOUT
            ============================================================ */
@@ -105,8 +162,36 @@
 
         /* ============================================================
            FILTER SYSTEM (CSS-only)
-           Uses hidden checkboxes + labels + :checked selectors
+           Simple dropdown filter
            ============================================================ */
+        .filter-bar {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .filter-select {
+            padding: 0.5rem 0.75rem;
+            border: 2px solid #d4d4d4;
+            border-radius: 6px;
+            background-color: #ffffff;
+            color: #1a1a1a;
+            font-size: 0.875rem;
+            font-family: inherit;
+            cursor: pointer;
+            min-width: 180px;
+        }
+
+        .filter-select:focus {
+            border-color: #2563eb;
+            outline: none;
+        }
+
+        .gallery-item.filtered-out {
+            display: none;
+        }
+
+        /* Legacy filter styles (unused) */
         .filter-section {
             background-color: #ffffff;
             border: 2px solid #d4d4d4;
@@ -151,63 +236,6 @@
             gap: 0.5rem;
         }
 
-        /* Hidden checkboxes */
-        .filter-checkbox {
-            position: absolute;
-            opacity: 0;
-            pointer-events: none;
-        }
-
-        /* Filter labels styled as buttons */
-        .filter-label {
-            display: inline-block;
-            padding: 0.375rem 0.75rem;
-            font-size: 0.8125rem;
-            font-weight: 500;
-            color: #525252;
-            background-color: #f5f5f5;
-            border: 2px solid #e5e5e5;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.15s ease;
-            user-select: none;
-        }
-
-        .filter-label:hover {
-            background-color: #e5e5e5;
-            border-color: #d4d4d4;
-        }
-
-        .filter-label:focus-within {
-            outline: 2px solid #2563eb;
-            outline-offset: 2px;
-        }
-
-        /* Checked state */
-        .filter-checkbox:checked + .filter-label {
-            background-color: #2563eb;
-            border-color: #2563eb;
-            color: #ffffff;
-        }
-
-        /* Reset/Show All button */
-        .filter-reset {
-            display: inline-block;
-            padding: 0.375rem 0.75rem;
-            font-size: 0.8125rem;
-            font-weight: 500;
-            color: #2563eb;
-            background-color: transparent;
-            border: 2px solid #2563eb;
-            border-radius: 4px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-
-        .filter-reset:hover {
-            background-color: #eff6ff;
-        }
-
         /* ============================================================
            DATASET SECTIONS
            ============================================================ */
@@ -217,25 +245,20 @@
 
         .dataset-header {
             display: flex;
-            align-items: baseline;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 2px solid #d4d4d4;
-        }
-
-        .dataset-header h2 {
-            font-size: 1.5rem;
-            font-weight: 700;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
         }
 
         .dataset-badge {
             font-size: 0.75rem;
             font-weight: 600;
-            color: #525252;
-            background-color: #e5e5e5;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
             padding: 0.25rem 0.5rem;
-            border-radius: 3px;
+            background-color: #e5e5e5;
+            border-radius: 4px;
+            color: #525252;
         }
 
         .dataset-description {
@@ -245,7 +268,7 @@
         }
 
         /* ============================================================
-           IMAGE GRID
+           GALLERY GRID & CARDS
            ============================================================ */
         .gallery-grid {
             display: grid;
@@ -253,40 +276,27 @@
             gap: 1.5rem;
         }
 
-        /* ============================================================
-           GALLERY ITEMS (figure + figcaption)
-           ============================================================ */
         .gallery-item {
             background-color: #ffffff;
             border: 2px solid #d4d4d4;
             border-radius: 8px;
             overflow: hidden;
-            transition: border-color 0.15s ease;
+            display: flex;
+            flex-direction: column;
         }
 
-        .gallery-item:hover {
-            border-color: #2563eb;
-        }
-
-        .gallery-item:focus-within {
-            border-color: #2563eb;
-            outline: 2px solid #2563eb;
-            outline-offset: 2px;
-        }
-
-        /* Image container */
         .gallery-image-container {
             position: relative;
-            aspect-ratio: 4 / 3;
-            background-color: #1a1a1a;
+            aspect-ratio: 16 / 11;
             overflow: hidden;
+            background-color: #1a1a1a;
         }
 
         .gallery-image-container img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: block;
+            cursor: pointer;
         }
 
         .gallery-image-container a {
@@ -412,7 +422,7 @@
 
         /* Default: show all items */
         .gallery-item {
-            display: block;
+            display: flex;
         }
 
         /* When ANY category filter is checked, hide all items first */
@@ -425,19 +435,19 @@
 
         /* Then show items matching the checked category */
         #filter-synapse:checked ~ main .gallery-item[data-category="synapse"] {
-            display: block;
+            display: flex;
         }
 
         #filter-segmentation:checked ~ main .gallery-item[data-category="segmentation"] {
-            display: block;
+            display: flex;
         }
 
         #filter-defect:checked ~ main .gallery-item[data-category="defect"] {
-            display: block;
+            display: flex;
         }
 
         #filter-structure:checked ~ main .gallery-item[data-category="structure"] {
-            display: block;
+            display: flex;
         }
 
         /* Multiple filters: show if ANY checked filter matches */
@@ -445,7 +455,7 @@
         #filter-segmentation:checked ~ main .gallery-item[data-category="segmentation"],
         #filter-defect:checked ~ main .gallery-item[data-category="defect"],
         #filter-structure:checked ~ main .gallery-item[data-category="structure"] {
-            display: block;
+            display: flex;
         }
 
         /* Hide empty dataset sections when filtering */
@@ -539,6 +549,156 @@
 
         .feedback-note a:hover {
             color: #2563eb;
+        }
+
+
+        /* ============================================================
+           LIGHTBOX IMAGE VIEWER
+           Two-stage zoom: fit-to-screen, then full resolution
+           ============================================================ */
+        .lightbox-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            z-index: 10000;
+            cursor: pointer;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox-overlay.active {
+            display: flex;
+        }
+
+        .lightbox-overlay.full-res {
+            overflow: auto;
+            cursor: zoom-out;
+            align-items: flex-start;
+            justify-content: flex-start;
+        }
+
+        .lightbox-img {
+            max-width: 90%;
+            max-height: 90vh;
+            object-fit: contain;
+            cursor: zoom-in;
+            border-radius: 4px;
+        }
+
+        .lightbox-overlay.full-res .lightbox-img {
+            max-width: none;
+            max-height: none;
+            cursor: zoom-out;
+            margin: 2rem auto;
+            display: block;
+        }
+
+        .lightbox-caption {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.75);
+            color: #e5e5e5;
+            text-align: center;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.875rem;
+            z-index: 10001;
+        }
+
+        .lightbox-overlay.full-res .lightbox-caption {
+            display: none;
+        }
+
+        .lightbox-close {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(0, 0, 0, 0.6);
+            color: #e5e5e5;
+            border: none;
+            font-size: 1.5rem;
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10002;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .lightbox-hint {
+            position: fixed;
+            top: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            color: #a3a3a3;
+            padding: 0.375rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            z-index: 10001;
+        }
+
+        .lightbox-overlay.full-res .lightbox-hint {
+            display: none;
+        }
+
+        /* Lightbox navigation arrows */
+        .lightbox-nav {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0, 0, 0, 0.6);
+            color: #e5e5e5;
+            border: none;
+            font-size: 2rem;
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 10002;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+
+        .lightbox-nav:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .lightbox-prev {
+            left: 1rem;
+        }
+
+        .lightbox-next {
+            right: 1rem;
+        }
+
+        .lightbox-counter {
+            position: fixed;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #a3a3a3;
+            font-size: 0.8125rem;
+            z-index: 10001;
+        }
+
+        .lightbox-overlay.full-res .lightbox-nav,
+        .lightbox-overlay.full-res .lightbox-counter {
+            display: none;
         }
 
         /* ============================================================
@@ -644,61 +804,1090 @@
 
 <a href="#main-content" class="skip-link">Skip to main content</a>
 
-<!-- Filter checkboxes must be outside main for CSS sibling selectors -->
-<input type="checkbox" id="filter-synapse" class="filter-checkbox" aria-label="Filter by synapses">
-<input type="checkbox" id="filter-segmentation" class="filter-checkbox" aria-label="Filter by segmentation">
-<input type="checkbox" id="filter-defect" class="filter-checkbox" aria-label="Filter by defects">
-<input type="checkbox" id="filter-structure" class="filter-checkbox" aria-label="Filter by structures">
-
 <nav aria-label="Main navigation">
     <ul>
         <li><a href="../">Dashboard</a></li>
-        <li><a href="../pipeline/">Pipeline</a></li>
-        <li><a href="../tasks/">Tasks</a></li>
-        <li><a href="./" aria-current="page">Gallery</a></li>
-        <li><a href="../sop/">SOP</a></li>
-        <li><a href="../publications/">Publications</a></li>
-        <li><a href="../archive/">Archive</a></li>
+        <li><a href="../gallery/" aria-current="page">Gallery</a></li>
+        <li><a href="../tasks/">Task Guides</a></li>
+        <li><a href="../sop/">SOPs</a></li>
         <li><a href="../ground-truth/">Ground Truth</a></li>
-        <li><a href="../experimental/">Experimental</a></li>
+        <li><a href="../pipeline/">Pipeline</a></li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">More &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../publications/">Publications</a></li>
+                <li><a href="../experimental/">Experimental</a></li>
+                <li><a href="../archive/">Archive</a></li>
+            </ul>
+        </li>
     </ul>
 </nav>
 
 <main id="main-content" role="main">
 
     <div class="page-header">
-        <h1>Visual Reference Gallery</h1>
+        <h1>Gallery</h1>
         <p>Annotated examples, training images, and reference materials organized by dataset and category.</p>
     </div>
 
     <!-- ============================================================
          FILTER CONTROLS
          ============================================================ -->
-    <section class="filter-section" aria-labelledby="filter-heading">
-        <h2 id="filter-heading">Filter by Category</h2>
+    <div class="filter-bar">
+        <label for="category-filter" style="font-size:0.875rem; color:#525252; margin-right:0.5rem;">Filter:</label>
+        <select id="category-filter" class="filter-select" onchange="filterGallery(this.value)">
+            <option value="all">All Categories</option>
+            <option value="synapse">Synapses</option>
+            <option value="structure">Structures</option>
+            <option value="defect">Defects</option>
+            <option value="segmentation">Segmentation</option>
+        </select>
+    </div>
 
-        <div class="filter-groups">
-            <div class="filter-group">
-                <span class="filter-group-label">Categories</span>
-                <div class="filter-options" role="group" aria-label="Category filters">
-                    <label for="filter-synapse" class="filter-label" id="synapses">Synapses</label>
-                    <label for="filter-segmentation" class="filter-label">Segmentation</label>
-                    <label for="filter-defect" class="filter-label">Defects</label>
-                    <label for="filter-structure" class="filter-label">Structures</label>
-                </div>
-            </div>
 
-            <div class="filter-group">
-                <span class="filter-group-label">Actions</span>
-                <div class="filter-options">
-                    <a href="./" class="filter-reset">Show All</a>
-                </div>
-            </div>
+    <!-- ============================================================
+         DATASET: BANC
+         ============================================================ -->
+    <section class="dataset-section" id="banc" aria-labelledby="banc-heading">
+        <div class="dataset-header">
+            <h2 id="banc-heading">BANC</h2>
+            <span class="dataset-badge">Brain and Nerve Cord</span>
         </div>
-
-        <p style="font-size: 0.8125rem; color: #737373; margin-top: 1rem;">
-            Click categories to filter. Multiple selections show all matching images.
+        <p class="dataset-description">
+            Full brain and ventral nerve cord dataset providing complete CNS connectivity.
         </p>
+
+        <div class="gallery-grid">
+
+            <!-- ============================
+                 STRUCTURE: Soma & Cell Bodies
+                 ============================ -->
+
+            <!-- Structure: Soma arrangement with segmentation overlay -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-03-10_115032.png"
+                       aria-describedby="banc-soma-arr-desc">
+                        <img src="banc-images/screenshot_2026-03-10_115032.png"
+                             alt="Dense cluster of cell bodies shown with color segmentation overlay, each soma uniquely colored"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-03-10_115032.png">Soma Arrangement (Color Overlay)</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-soma-arr-desc">
+                        Dense cluster of cell bodies with color segmentation overlay. Each unique color represents an individually segmented soma.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Soma cluster</span>
+                        <span class="gallery-meta-item">Segmentation overlay</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Structure: Single soma with segmentation overlay -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-03-10_115042.png"
+                       aria-describedby="banc-soma-single-desc">
+                        <img src="banc-images/screenshot_2026-03-10_115042.png"
+                             alt="Individual neuronal soma highlighted with blue color segmentation overlay showing cell body boundary"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-03-10_115042.png">Single Soma (Color Overlay)</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-soma-single-desc">
+                        Individual neuronal soma highlighted with color segmentation overlay, showing the cell body boundary and surrounding neighbors.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Single soma</span>
+                        <span class="gallery-meta-item">Segmentation overlay</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Structure: Dense soma region -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_124008.png"
+                       aria-describedby="banc-soma-dense-desc">
+                        <img src="banc-images/screenshot_2026-01-21_124008.png"
+                             alt="Region densely packed with neuronal cell bodies with visible nuclei and surrounding neuropil"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_124008.png">Dense Soma Region</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-soma-dense-desc">
+                        Region densely packed with neuronal cell bodies. Nuclei and surrounding neuropil visible throughout.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Soma cluster</span>
+                        <span class="gallery-meta-item">Cell bodies</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Structure: Sparse soma region -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_124014.png"
+                       aria-describedby="banc-soma-sparse-desc">
+                        <img src="banc-images/screenshot_2026-01-21_124014.png"
+                             alt="Region with fewer well-separated cell bodies surrounded by extensive neuropil"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_124014.png">Sparse Soma Region</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-soma-sparse-desc">
+                        Region with fewer, well-separated cell bodies surrounded by extensive neuropil.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Soma</span>
+                        <span class="gallery-meta-item">Neuropil</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Structure: Dark soma, possibly glia -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_124020.png"
+                       aria-describedby="banc-soma-dark-desc">
+                        <img src="banc-images/screenshot_2026-01-21_124020.png"
+                             alt="Darkly stained cell body with electron-dense cytoplasm, possibly glial in origin"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_124020.png">Dark Soma (Possible Glia)</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-soma-dark-desc">
+                        Darkly stained cell body with electron-dense cytoplasm, possibly glial in origin. Note the distinct contrast difference from surrounding neurons.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Dark soma</span>
+                        <span class="gallery-meta-item">Possible glia</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Structure: Large soma with organelles -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_124042.png"
+                       aria-describedby="banc-soma-large1-desc">
+                        <img src="banc-images/screenshot_2026-01-21_124042.png"
+                             alt="Exceptionally large neuronal soma rich in organelles including prominent nucleus and mitochondria"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_124042.png">Large Soma with Organelles</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-soma-large1-desc">
+                        Exceptionally large neuronal soma rich in organelles including prominent nucleus, endoplasmic reticulum, and mitochondria.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Large soma</span>
+                        <span class="gallery-meta-item">Organelle-rich</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Structure: Large soma with organelles #2 -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_124047.png"
+                       aria-describedby="banc-soma-large2-desc">
+                        <img src="banc-images/screenshot_2026-01-21_124047.png"
+                             alt="Large soma showing dense organelle packing with extensive rough endoplasmic reticulum"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_124047.png">Large Soma with Organelles (View 2)</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-soma-large2-desc">
+                        Second perspective of a large soma showing dense organelle packing. Note the extensive rough endoplasmic reticulum and clustered mitochondria.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Large soma</span>
+                        <span class="gallery-meta-item">Organelle-rich</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Structure: Large soma with organelles #3 -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_124055.png"
+                       aria-describedby="banc-soma-large3-desc">
+                        <img src="banc-images/screenshot_2026-01-21_124055.png"
+                             alt="Third view of a large neuronal soma highlighting scale relative to surrounding neurites"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_124055.png">Large Soma with Organelles (View 3)</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-soma-large3-desc">
+                        Third view highlighting the scale of a large neuronal soma relative to surrounding neurites and neuropil.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Large soma</span>
+                        <span class="gallery-meta-item">Organelle-rich</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Structure: Possibly myelinated soma -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_124735.png"
+                       aria-describedby="banc-soma-myelin-desc">
+                        <img src="banc-images/screenshot_2026-01-21_124735.png"
+                             alt="Soma with unusually thick membrane border possibly indicating myelination"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_124735.png">Possibly Myelinated Soma</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-soma-myelin-desc">
+                        Soma with an unusually thick membrane border, potentially myelinated. Note: horizontal line artifact from monitor capture is also visible.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Myelination</span>
+                        <span class="gallery-meta-item">Unusual morphology</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Structure: Thick membrane border -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_124848.png"
+                       aria-describedby="banc-thick-membrane-desc">
+                        <img src="banc-images/screenshot_2026-01-21_124848.png"
+                             alt="Soma enclosed by unusually thick electron-dense membrane layer with possible myelination"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_124848.png">Thick Membrane Border</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-thick-membrane-desc">
+                        Soma enclosed by an unusually thick, electron-dense membrane layer. Possible myelination of a cell body &mdash; an uncommon but documented feature. Is this a thing?
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Thick membrane</span>
+                        <span class="gallery-meta-item">Unusual morphology</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- ============================
+                 STRUCTURE: Organelles
+                 ============================ -->
+
+            <!-- Structure: Golgi apparatus -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="banc-images/golgi-1.png"
+                       aria-describedby="banc-golgi1-desc">
+                        <img src="banc-images/golgi-1.png"
+                             alt="Golgi apparatus alongside mitochondria, cisternae, microvesicles, and vacuoles near a soma"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/golgi-1.png">Golgi Apparatus and Organelles</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-golgi1-desc">
+                        Golgi apparatus visible alongside mitochondria, cisternae, microvesicles, and vacuoles near a soma. Cell membrane border clearly delineated.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Golgi apparatus</span>
+                        <span class="gallery-meta-item">Organelles</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Structure: Golgi apparatus #2 -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="banc-images/golgi-2.png"
+                       aria-describedby="banc-golgi2-desc">
+                        <img src="banc-images/golgi-2.png"
+                             alt="Close-up view of Golgi apparatus showing stacked cisternae and associated vesicles"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/golgi-2.png">Golgi Apparatus (Detail)</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-golgi2-desc">
+                        Close-up view of Golgi apparatus showing stacked cisternae and associated vesicles within the cytoplasm.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Golgi apparatus</span>
+                        <span class="gallery-meta-item">Ultrastructure</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Structure: Membrane whorls and Golgi -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-03-10_115209.png"
+                       aria-describedby="banc-whorl-golgi-desc">
+                        <img src="banc-images/screenshot_2026-03-10_115209.png"
+                             alt="Large heavily stained membrane whorls alongside Golgi apparatus and various organelles"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-03-10_115209.png">Membrane Whorls and Golgi Apparatus</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-whorl-golgi-desc">
+                        Large, heavily stained membrane whorls alongside Golgi apparatus and various organelles within or near a cell body.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Membrane whorls</span>
+                        <span class="gallery-meta-item">Golgi apparatus</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Structure: Dense organelle cluster near soma -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-03-10_115229.png"
+                       aria-describedby="banc-organelle-cluster-desc">
+                        <img src="banc-images/screenshot_2026-03-10_115229.png"
+                             alt="Heavily stained organelles including mitochondria clustered near a soma"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-03-10_115229.png">Dense Organelle Cluster Near Soma</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-organelle-cluster-desc">
+                        Heavily stained organelles including mitochondria clustered near a soma. Note the high electron density contrasting with surrounding cytoplasm.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Organelles</span>
+                        <span class="gallery-meta-item">Mitochondria</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Structure: Membrane whorl -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_125204.png"
+                       aria-describedby="banc-whorl-desc">
+                        <img src="banc-images/screenshot_2026-01-21_125204.png"
+                             alt="Concentric membrane whorl forming a spiral pattern within the neuropil"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_125204.png">Membrane Whorl</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-whorl-desc">
+                        Concentric membrane whorl forming a spiral pattern. These lamellar structures are occasionally encountered and may represent myelin figures or autophagic bodies.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Membrane whorl</span>
+                        <span class="gallery-meta-item">Lamellar body</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Structure: Membrane spirals close-up -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-03-10_140634.png"
+                       aria-describedby="banc-spiral-desc">
+                        <img src="banc-images/screenshot_2026-03-10_140634.png"
+                             alt="High-magnification view of concentric membrane spirals with fingerprint-like pattern"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-03-10_140634.png">Membrane Spirals (Close-up)</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-spiral-desc">
+                        High-magnification view of concentric membrane spirals. The tightly wound lamellae create a distinctive fingerprint-like pattern.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Membrane spirals</span>
+                        <span class="gallery-meta-item">Ultrastructure</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Structure: Orphan mitochondria cluster -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_125102.png"
+                       aria-describedby="banc-orphan1-desc">
+                        <img src="banc-images/screenshot_2026-01-21_125102.png"
+                             alt="Isolated cluster of mitochondria and heavily stained myelin-like material disconnected from a parent structure"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_125102.png">Orphan Mitochondria Cluster</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-orphan1-desc">
+                        Isolated cluster of mitochondria and heavily stained myelin-like material. Appears to be an orphan object disconnected from a parent structure.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Mitochondria cluster</span>
+                        <span class="gallery-meta-item">Orphan object</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Structure: Orphan mitochondria cluster with context -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_125107.png"
+                       aria-describedby="banc-orphan2-desc">
+                        <img src="banc-images/screenshot_2026-01-21_125107.png"
+                             alt="Orphan mitochondria cluster shown with surrounding neuropil and dataset coordinate context"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_125107.png">Orphan Mitochondria Cluster (With Context)</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-orphan2-desc">
+                        Same orphan cluster shown with surrounding neuropil, dataset coordinates, and layer information for reference.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Mitochondria cluster</span>
+                        <span class="gallery-meta-item">Dataset context</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Structure: Heavily stained dark organelles -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_124956.png"
+                       aria-describedby="banc-dark-organelles-desc">
+                        <img src="banc-images/screenshot_2026-01-21_124956.png"
+                             alt="Multiple organelles with abnormally heavy staining producing high-contrast electron-dense profiles"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_124956.png">Heavily Stained Dark Organelles</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-dark-organelles-desc">
+                        Multiple organelles with abnormally heavy staining producing high-contrast, electron-dense profiles. Green horizontal line is a monitor capture artifact. Not sure where that comes from, hmm.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Heavy staining</span>
+                        <span class="gallery-meta-item">Organelles</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Structure: Unidentified dense body -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_124657.png"
+                       aria-describedby="banc-dense-body-desc">
+                        <img src="banc-images/screenshot_2026-01-21_124657.png"
+                             alt="Dense heavily stained structure of uncertain identity, possibly an organelle or localized section artifact"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_124657.png">Unidentified Dense Body</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-dense-body-desc">
+                        Dense, heavily stained structure of uncertain identity &mdash; possibly an organelle or a localized section artifact. Differential diagnosis is challenging at this magnification.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Uncertain structure</span>
+                        <span class="gallery-meta-item">Investigation needed</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Structure: Lipid droplets -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_124704.png"
+                       aria-describedby="banc-lipid-desc">
+                        <img src="banc-images/screenshot_2026-01-21_124704.png"
+                             alt="Cluster of lipid droplets appearing as electron-dense spherical inclusions near cell bodies"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_124704.png">Lipid Droplets</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-lipid-desc">
+                        Cluster of lipid droplets (fat globules) appearing as electron-dense spherical inclusions. Commonly found near cell bodies.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Lipid droplets</span>
+                        <span class="gallery-meta-item">Inclusions</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Structure: Staining anomaly with micro tear -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_124938.png"
+                       aria-describedby="banc-stain-tear-desc">
+                        <img src="banc-images/screenshot_2026-01-21_124938.png"
+                             alt="Heavily stained structure with irregular contrast and a small tear visible within"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_124938.png">Staining Anomaly with Micro Tear</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-stain-tear-desc">
+                        Heavily stained structure with irregular contrast and a small tear visible within a strange organelle. Combines staining artifact with minor physical damage.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Staining anomaly</span>
+                        <span class="gallery-meta-item">Micro tear</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- ============================
+                 STRUCTURE: Axon Bundle
+                 ============================ -->
+
+            <!-- Structure: Parallel axon bundle -->
+            <figure class="gallery-item" data-category="structure">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_123509.png"
+                       aria-describedby="banc-axon-desc">
+                        <img src="banc-images/screenshot_2026-01-21_123509.png"
+                             alt="Bundle of neurites sectioned in the parallel plane showing uniform elongated profiles"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="structure">Structure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_123509.png">Parallel Axon Bundle</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-axon-desc">
+                        Bundle of neurites sectioned in the parallel plane, probably axonal. Note the uniform elongated profiles and consistent diameter.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Axon bundle</span>
+                        <span class="gallery-meta-item">Parallel section</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- ============================
+                 DEFECT: Section Damage
+                 ============================ -->
+
+            <!-- Defect: Section damage -->
+            <figure class="gallery-item" data-category="defect">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_122850.png"
+                       aria-describedby="banc-damage-desc">
+                        <img src="banc-images/screenshot_2026-01-21_122850.png"
+                             alt="Physical damage to the tissue section visible as a dark linear disruption with green annotation arrows"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="defect">Defect</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_122850.png">Section Damage</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-damage-desc">
+                        Physical damage to the tissue section visible as a dark linear disruption. Green arrows indicate affected regions. Do not annotate across damaged areas.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Section damage</span>
+                        <span class="gallery-meta-item">Preparation artifact</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Defect: Missing section -->
+            <figure class="gallery-item" data-category="defect">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_123039.png"
+                       aria-describedby="banc-missing-desc">
+                        <img src="banc-images/screenshot_2026-01-21_123039.png"
+                             alt="Gap in tissue where a slice is absent creating a black void region"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="defect">Defect</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_123039.png">Missing Section</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-missing-desc">
+                        Gap in tissue where a slice is absent, creating a void (black region). Green arrows point to the boundary. Data is unrecoverable in these areas.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Missing section</span>
+                        <span class="gallery-meta-item">Data loss</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Defect: Membrane blowout -->
+            <figure class="gallery-item" data-category="defect">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_123139.png"
+                       aria-describedby="banc-blowout-desc">
+                        <img src="banc-images/screenshot_2026-01-21_123139.png"
+                             alt="Localized membrane blowout where tissue has ruptured outward creating a washed-out void"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="defect">Defect</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_123139.png">Membrane Blowout</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-blowout-desc">
+                        Localized membrane blowout where tissue has ruptured outward, creating a washed-out void. Green outline marks the affected boundary.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Blowout</span>
+                        <span class="gallery-meta-item">Sectioning artifact</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Defect: Section pinch -->
+            <figure class="gallery-item" data-category="defect">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_123156.png"
+                       aria-describedby="banc-pinch-desc">
+                        <img src="banc-images/screenshot_2026-01-21_123156.png"
+                             alt="Tissue compression artifact where the section was pinched during preparation"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="defect">Defect</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_123156.png">Section Pinch</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-pinch-desc">
+                        Tissue compression artifact where the section was pinched during preparation, creating artificial convergence of structures.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Pinch</span>
+                        <span class="gallery-meta-item">Compression artifact</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Defect: Section stretch -->
+            <figure class="gallery-item" data-category="defect">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_123231.png"
+                       aria-describedby="banc-stretch-desc">
+                        <img src="banc-images/screenshot_2026-01-21_123231.png"
+                             alt="Stretching artifact showing tissue pulled along one axis with green arrows indicating direction"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="defect">Defect</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_123231.png">Section Stretch</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-stretch-desc">
+                        Stretching artifact showing tissue pulled along one axis. Green arrows indicate the direction of distortion. Structures appear elongated and thinned.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Stretch</span>
+                        <span class="gallery-meta-item">Distortion</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Defect: Section tear -->
+            <figure class="gallery-item" data-category="defect">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_123440.png"
+                       aria-describedby="banc-tear-desc">
+                        <img src="banc-images/screenshot_2026-01-21_123440.png"
+                             alt="Linear tear through the tissue section creating a clean void with green arrows marking boundaries"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="defect">Defect</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_123440.png">Section Tear</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-tear-desc">
+                        Linear tear through the tissue section creating a clean void. Green arrows mark the tear boundaries. Do not trace structures across the gap.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Tear</span>
+                        <span class="gallery-meta-item">Section damage</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Defect: Resin tear -->
+            <figure class="gallery-item" data-category="defect">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_123636.png"
+                       aria-describedby="banc-resin-desc">
+                        <img src="banc-images/screenshot_2026-01-21_123636.png"
+                             alt="Tear occurring within the embedding resin showing clean break edges characteristic of resin fracture"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="defect">Defect</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_123636.png">Resin Tear</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-resin-desc">
+                        Tear occurring within the embedding resin rather than the tissue itself. Shows clean break edges characteristic of resin fracture.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Resin tear</span>
+                        <span class="gallery-meta-item">Embedding artifact</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- ============================
+                 DEFECT: Folds
+                 ============================ -->
+
+            <!-- Defect: Section folds (overview) -->
+            <figure class="gallery-item" data-category="defect">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_123308.png"
+                       aria-describedby="banc-folds-overview-desc">
+                        <img src="banc-images/screenshot_2026-01-21_123308.png"
+                             alt="Zoomed-out view of central brain region showing prominent section folds as dark diagonal lines"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="defect">Defect</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_123308.png">Section Folds (Overview)</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-folds-overview-desc">
+                        Zoomed-out view of the central brain region showing prominent section folds crossing the tissue. Dark diagonal lines are folded-over tissue creating doubled layers.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Folds</span>
+                        <span class="gallery-meta-item">Central brain</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Defect: Folds with rippling -->
+            <figure class="gallery-item" data-category="defect">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_124506.png"
+                       aria-describedby="banc-folds-ripple-desc">
+                        <img src="banc-images/screenshot_2026-01-21_124506.png"
+                             alt="Zoomed-out view showing section folds accompanied by wavy faded rippling patterns"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="defect">Defect</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_124506.png">Folds with Rippling</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-folds-ripple-desc">
+                        Zoomed-out view showing section folds accompanied by wavy, faded rippling patterns. Tissue appears distorted across a large area.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Folds</span>
+                        <span class="gallery-meta-item">Rippling</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Defect: Severe section folds -->
+            <figure class="gallery-item" data-category="defect">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_124516.png"
+                       aria-describedby="banc-folds-severe-desc">
+                        <img src="banc-images/screenshot_2026-01-21_124516.png"
+                             alt="Extreme folding artifact with multiple overlapping fold layers creating near-total data loss"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="defect">Defect</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_124516.png">Severe Section Folds</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-folds-severe-desc">
+                        Extreme folding artifact with multiple overlapping fold layers creating near-total data loss in affected regions.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Severe folds</span>
+                        <span class="gallery-meta-item">Major artifact</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- ============================
+                 DEFECT: Staining & Splotching
+                 ============================ -->
+
+            <!-- Defect: Staining artifact -->
+            <figure class="gallery-item" data-category="defect">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_123404.png"
+                       aria-describedby="banc-staining-desc">
+                        <img src="banc-images/screenshot_2026-01-21_123404.png"
+                             alt="Uneven heavy metal staining producing localized dark deposits obscuring ultrastructure"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="defect">Defect</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_123404.png">Staining Artifact</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-staining-desc">
+                        Uneven heavy metal staining producing localized dark deposits that obscure underlying ultrastructure.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Staining</span>
+                        <span class="gallery-meta-item">Imaging artifact</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Defect: Splotch artifact -->
+            <figure class="gallery-item" data-category="defect">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_124904.png"
+                       aria-describedby="banc-splotch-desc">
+                        <img src="banc-images/screenshot_2026-01-21_124904.png"
+                             alt="Irregular dark splotching at section boundaries from staining contamination or resin pooling"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="defect">Defect</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_124904.png">Splotch Artifact</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-splotch-desc">
+                        Irregular dark splotching at section boundaries, likely from staining contamination or resin pooling during preparation.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Splotching</span>
+                        <span class="gallery-meta-item">Preparation artifact</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Defect: Combined defects -->
+            <figure class="gallery-item" data-category="defect">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_123553.png"
+                       aria-describedby="banc-combined-desc">
+                        <img src="banc-images/screenshot_2026-01-21_123553.png"
+                             alt="Multiple artifacts in one region including uneven staining, tissue fold, and scattered lipid droplets"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="defect">Defect</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_123553.png">Combined Defects: Staining, Fold, Lipid Droplets</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-combined-desc">
+                        Multiple artifacts in one region: uneven staining, tissue fold (dark diagonal band), and scattered lipid droplets (fat globules).
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Combined defects</span>
+                        <span class="gallery-meta-item">Staining</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Defect: Lipid droplets (section artifact) -->
+            <figure class="gallery-item" data-category="defect">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_123931.png"
+                       aria-describedby="banc-lipid-artifact-desc">
+                        <img src="banc-images/screenshot_2026-01-21_123931.png"
+                             alt="Scattered lipid droplets appearing as dark spherical inclusions with green arrows highlighting individual droplets"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="defect">Defect</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_123931.png">Lipid Droplets (Section Artifact)</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-lipid-artifact-desc">
+                        Scattered lipid droplets (fat globules) appearing as dark spherical inclusions. Green arrows highlight individual droplets. Can be confused with biological structures.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Lipid droplets</span>
+                        <span class="gallery-meta-item">Potential confusion</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- ============================
+                 DEFECT: Multi-Error & Overview
+                 ============================ -->
+
+            <!-- Defect: Multiple section errors (central chiasm) -->
+            <figure class="gallery-item" data-category="defect">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_123343.png"
+                       aria-describedby="banc-multi-error-desc">
+                        <img src="banc-images/screenshot_2026-01-21_123343.png"
+                             alt="Central chiasm region exhibiting multiple simultaneous defects including large distortions and torn tissue"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="defect">Defect</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_123343.png">Multiple Section Errors (Central Chiasm)</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-multi-error-desc">
+                        Central chiasm region exhibiting multiple simultaneous defects: large tissue distortions, folds, and torn areas. Severely compromised data integrity.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Multi-error</span>
+                        <span class="gallery-meta-item">Torn tissue</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Defect: Section cracks (aka Lightning) -->
+            <figure class="gallery-item" data-category="defect">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_125254.png"
+                       aria-describedby="banc-cracks-desc">
+                        <img src="banc-images/screenshot_2026-01-21_125254.png"
+                             alt="Zoomed-out view showing branching cracks propagating across the section in a lightning-like pattern"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="defect">Defect</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_125254.png">Section Cracks (aka Lightning&trade;)</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-cracks-desc">
+                        Zoomed-out view showing branching cracks propagating across the section. Nicknamed &ldquo;lightning&rdquo; for their characteristic branching pattern.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Cracks</span>
+                        <span class="gallery-meta-item">Section damage</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <!-- Defect: Multiple section errors (overview) -->
+            <figure class="gallery-item" data-category="defect">
+                <div class="gallery-image-container">
+                    <a href="banc-images/screenshot_2026-01-21_125322.png"
+                       aria-describedby="banc-multi-overview-desc">
+                        <img src="banc-images/screenshot_2026-01-21_125322.png"
+                             alt="Panoramic view showing convergence of folds, cracks, pinch artifacts, and a missing section in one region"
+                             loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="defect">Defect</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="banc-images/screenshot_2026-01-21_125322.png">Multiple Section Errors (Overview)</a>
+                    </h3>
+                    <p class="gallery-description" id="banc-multi-overview-desc">
+                        Panoramic view showing a convergence of defect types: folds, cracks, pinch artifacts, and a missing section &mdash; all in one region.
+                    </p>
+                    <div class="gallery-meta">
+                        <span class="gallery-meta-item">Multi-error</span>
+                        <span class="gallery-meta-item">Overview</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+        </div>
     </section>
 
 
@@ -850,108 +2039,6 @@
                     <div class="gallery-meta">
                         <span class="gallery-meta-item">Merger error</span>
                         <span class="gallery-meta-item">Needs correction</span>
-                    </div>
-                </figcaption>
-            </figure>
-
-        </div>
-    </section>
-
-
-    <!-- ============================================================
-         DATASET: BANC
-         ============================================================ -->
-    <section class="dataset-section" id="banc" aria-labelledby="banc-heading">
-        <div class="dataset-header">
-            <h2 id="banc-heading">BANC</h2>
-            <span class="dataset-badge">Brain and Nerve Cord</span>
-        </div>
-        <p class="dataset-description">
-            Full brain and ventral nerve cord dataset providing complete CNS connectivity.
-        </p>
-
-        <div class="gallery-grid">
-
-            <!-- Structure: Placeholder - Soma -->
-            <figure class="gallery-item" data-category="structure">
-                <div class="gallery-image-container">
-                    <div class="gallery-placeholder" role="img" aria-label="Placeholder for soma example">
-                        <span class="gallery-placeholder-icon">&#9634;</span>
-                        <span class="gallery-placeholder-text">Image pending</span>
-                    </div>
-                    <span class="gallery-category-badge" data-category="structure">Structure</span>
-                </div>
-                <figcaption class="gallery-caption">
-                    <h3 class="gallery-title">Cell Body (Soma)</h3>
-                    <p class="gallery-description">
-                        Neuronal cell body with visible nucleus. Starting point for morphological tracing.
-                    </p>
-                    <div class="gallery-meta">
-                        <span class="gallery-meta-item">Soma</span>
-                        <span class="gallery-meta-item">BANC dataset</span>
-                    </div>
-                </figcaption>
-            </figure>
-
-            <!-- Structure: Placeholder - Axon bundle -->
-            <figure class="gallery-item" data-category="structure">
-                <div class="gallery-image-container">
-                    <div class="gallery-placeholder" role="img" aria-label="Placeholder for axon bundle example">
-                        <span class="gallery-placeholder-icon">&#9634;</span>
-                        <span class="gallery-placeholder-text">Image pending</span>
-                    </div>
-                    <span class="gallery-category-badge" data-category="structure">Structure</span>
-                </div>
-                <figcaption class="gallery-caption">
-                    <h3 class="gallery-title">Axon Bundle</h3>
-                    <p class="gallery-description">
-                        Fasciculated axons in the nerve cord. Note uniform diameter and parallel arrangement.
-                    </p>
-                    <div class="gallery-meta">
-                        <span class="gallery-meta-item">Axon</span>
-                        <span class="gallery-meta-item">Nerve cord</span>
-                    </div>
-                </figcaption>
-            </figure>
-
-            <!-- Segmentation: Placeholder - False split -->
-            <figure class="gallery-item" data-category="segmentation">
-                <div class="gallery-image-container">
-                    <div class="gallery-placeholder" role="img" aria-label="Placeholder for false split example">
-                        <span class="gallery-placeholder-icon">&#9634;</span>
-                        <span class="gallery-placeholder-text">Image pending</span>
-                    </div>
-                    <span class="gallery-category-badge" data-category="segmentation">Segmentation</span>
-                </div>
-                <figcaption class="gallery-caption">
-                    <h3 class="gallery-title">False Split</h3>
-                    <p class="gallery-description">
-                        Single neuron fragmented into multiple segments. Requires merge operation to reconnect.
-                    </p>
-                    <div class="gallery-meta">
-                        <span class="gallery-meta-item">Split error</span>
-                        <span class="gallery-meta-item">Needs correction</span>
-                    </div>
-                </figcaption>
-            </figure>
-
-            <!-- Defect: Placeholder - Staining artifact -->
-            <figure class="gallery-item" data-category="defect">
-                <div class="gallery-image-container">
-                    <div class="gallery-placeholder" role="img" aria-label="Placeholder for staining artifact example">
-                        <span class="gallery-placeholder-icon">&#9634;</span>
-                        <span class="gallery-placeholder-text">Image pending</span>
-                    </div>
-                    <span class="gallery-category-badge" data-category="defect">Defect</span>
-                </div>
-                <figcaption class="gallery-caption">
-                    <h3 class="gallery-title">Staining Artifact</h3>
-                    <p class="gallery-description">
-                        Uneven heavy metal staining causing contrast issues. May obscure fine structures.
-                    </p>
-                    <div class="gallery-meta">
-                        <span class="gallery-meta-item">Staining</span>
-                        <span class="gallery-meta-item">Imaging artifact</span>
                     </div>
                 </figcaption>
             </figure>
@@ -1151,25 +2238,197 @@
 
     <p class="feedback-note">Have a good example to share? <a href="../contribute/">Submit it to the gallery</a>—no formatting required.</p>
 
+
+    <!-- ============================================================
+         IMAGE BOUNTY LIST
+         Desired images we're looking for
+         ============================================================ -->
+    <section class="dataset-section" id="image-bounty" aria-labelledby="bounty-heading">
+        <div class="dataset-header">
+            <h2 id="bounty-heading">Image Bounty List</h2>
+            <span class="dataset-badge">Wanted</span>
+        </div>
+        <p class="dataset-description">
+            We're looking for good examples of these structures and phenomena.
+            Have an image you want to share?
+            <a href="https://github.com/BunPrinceton/tracer-workspace/issues/new?template=content-suggestion.yml&amp;title=[Gallery]+Image+submission"
+               target="_blank" rel="noopener noreferrer">Submit it on GitHub</a>.
+        </p>
+        <div class="gallery-grid">
+            <div style="padding: 1rem; background: #fafafa; border: 2px dashed #d4d4d4; border-radius: 8px; font-size: 0.875rem; color: #737373;">Tissue fold example (any dataset)</div>
+            <div style="padding: 1rem; background: #fafafa; border: 2px dashed #d4d4d4; border-radius: 8px; font-size: 0.875rem; color: #737373;">Tissue crack example (any dataset)</div>
+            <div style="padding: 1rem; background: #fafafa; border: 2px dashed #d4d4d4; border-radius: 8px; font-size: 0.875rem; color: #737373;">False merger example (BANC or FAFB)</div>
+            <div style="padding: 1rem; background: #fafafa; border: 2px dashed #d4d4d4; border-radius: 8px; font-size: 0.875rem; color: #737373;">False split example (BANC or FAFB)</div>
+            <div style="padding: 1rem; background: #fafafa; border: 2px dashed #d4d4d4; border-radius: 8px; font-size: 0.875rem; color: #737373;">Synapse examples from BANC dataset</div>
+            <div style="padding: 1rem; background: #fafafa; border: 2px dashed #d4d4d4; border-radius: 8px; font-size: 0.875rem; color: #737373;">Axon/dendrite crossing fibers</div>
+        </div>
+    </section>
+
 </main>
 
 <footer>
     <div class="footer-nav">
         <a href="../">Back to Dashboard</a>
-        <a href="#" id="suggest-edit-link" class="suggest-edit" target="_blank" rel="noopener noreferrer">Suggest an edit</a>
+        <a href="#" id="suggest-edit-link" class="suggest-edit" target="_blank" rel="noopener noreferrer">Please Suggest Edits</a>
     </div>
 </footer>
+
+<script>
+// Lightbox image viewer with navigation
+var galleryItems = [];
+var currentIndex = 0;
+var canZoom = false;
+
+function buildGalleryList() {
+    galleryItems = [];
+    document.querySelectorAll('.gallery-image-container a').forEach(function(link) {
+        var figure = link.closest('.gallery-item');
+        if (figure && figure.classList.contains('filtered-out')) return;
+        var img = link.querySelector('img');
+        if (!img) return;
+        var captionText = '';
+        if (figure) {
+            var title = figure.querySelector('.gallery-title');
+            var desc = figure.querySelector('.gallery-description');
+            if (title) captionText = title.textContent.trim();
+            if (desc) captionText += ' \u2014 ' + desc.textContent.trim();
+        }
+        galleryItems.push({
+            src: link.href,
+            alt: img.alt || '',
+            caption: captionText
+        });
+    });
+}
+
+function checkZoomable() {
+    var img = document.getElementById('lightbox-img');
+    var hint = document.querySelector('.lightbox-hint');
+    // Image can zoom if its natural size exceeds what's rendered on screen
+    canZoom = img.naturalWidth > img.clientWidth || img.naturalHeight > img.clientHeight;
+    img.style.cursor = canZoom ? 'zoom-in' : 'default';
+    hint.style.display = canZoom ? '' : 'none';
+}
+
+function showImage(index) {
+    if (index < 0 || index >= galleryItems.length) return;
+    currentIndex = index;
+    var item = galleryItems[currentIndex];
+    var overlay = document.getElementById('lightbox');
+    var img = document.getElementById('lightbox-img');
+    var cap = document.getElementById('lightbox-caption');
+    var counter = document.getElementById('lightbox-counter');
+    img.onload = checkZoomable;
+    img.src = item.src;
+    img.alt = item.alt;
+    cap.textContent = item.caption;
+    counter.textContent = (currentIndex + 1) + ' / ' + galleryItems.length;
+    overlay.classList.remove('full-res');
+    overlay.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    document.getElementById('lightbox-prev').style.display = currentIndex > 0 ? '' : 'none';
+    document.getElementById('lightbox-next').style.display = currentIndex < galleryItems.length - 1 ? '' : 'none';
+    // If image is cached, onload may not fire — check immediately too
+    if (img.complete) checkZoomable();
+}
+
+function navigateLightbox(direction, e) {
+    if (e) e.stopPropagation();
+    var newIndex = currentIndex + direction;
+    if (newIndex >= 0 && newIndex < galleryItems.length) {
+        showImage(newIndex);
+    }
+}
+
+function closeLightbox() {
+    var overlay = document.getElementById('lightbox');
+    overlay.classList.remove('active', 'full-res');
+    document.getElementById('lightbox-img').src = '';
+    document.body.style.overflow = '';
+}
+
+function toggleFullRes(e) {
+    e.stopPropagation();
+    if (!canZoom) return;
+    var overlay = document.getElementById('lightbox');
+    if (overlay.classList.contains('full-res')) {
+        overlay.classList.remove('full-res');
+    } else {
+        overlay.classList.add('full-res');
+        overlay.scrollTop = 0;
+    }
+}
+
+function lightboxClick(e) {
+    if (e.target === document.getElementById('lightbox') ||
+        e.target.classList.contains('lightbox-overlay')) {
+        closeLightbox();
+    }
+}
+
+// Attach click handlers to all gallery images
+(function() {
+    document.querySelectorAll('.gallery-image-container a').forEach(function(link) {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            buildGalleryList();
+            var src = this.href;
+            for (var i = 0; i < galleryItems.length; i++) {
+                if (galleryItems[i].src === src) {
+                    currentIndex = i;
+                    break;
+                }
+            }
+            showImage(currentIndex);
+        });
+    });
+})();
+
+// Keyboard navigation
+document.addEventListener('keydown', function(e) {
+    var overlay = document.getElementById('lightbox');
+    if (!overlay.classList.contains('active')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') navigateLightbox(-1);
+    if (e.key === 'ArrowRight') navigateLightbox(1);
+});
+</script>
+
+<script>
+function filterGallery(category) {
+    var items = document.querySelectorAll('.gallery-item');
+    items.forEach(function(item) {
+        if (category === 'all' || item.getAttribute('data-category') === category) {
+            item.classList.remove('filtered-out');
+        } else {
+            item.classList.add('filtered-out');
+        }
+    });
+}
+</script>
 
 <script>
 (function() {
     var link = document.getElementById('suggest-edit-link');
     if (link) {
-        var title = encodeURIComponent('[Content] ' + document.title.replace(' - Princeton Tracer', ''));
+        var title = encodeURIComponent('[Content] ' + document.title.replace(' - Princeton Tracers', ''));
         link.href = 'https://github.com/BunPrinceton/tracer-workspace/issues/new?template=content-suggestion.yml&title=' + title + '&body=' + encodeURIComponent('**Page:** ' + window.location.href + '\n\n**Section:** \n\n**Suggestion:**\n');
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
     }
 })();
 </script>
+
+<!-- Lightbox overlay -->
+<div class="lightbox-overlay" id="lightbox" onclick="lightboxClick(event)">
+    <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close image viewer">&times;</button>
+    <button class="lightbox-nav lightbox-prev" id="lightbox-prev" onclick="navigateLightbox(-1, event)" aria-label="Previous image">&#8249;</button>
+    <button class="lightbox-nav lightbox-next" id="lightbox-next" onclick="navigateLightbox(1, event)" aria-label="Next image">&#8250;</button>
+    <span class="lightbox-hint">Click image for full resolution</span>
+    <img class="lightbox-img" id="lightbox-img" src="" alt="" onclick="toggleFullRes(event)">
+    <div class="lightbox-caption" id="lightbox-caption"></div>
+    <div class="lightbox-counter" id="lightbox-counter"></div>
+</div>
+
 </body>
 </html>

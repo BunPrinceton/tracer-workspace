@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experimental Tools - Princeton Tracer</title>
+    <title>Experimental Tools - Princeton Tracers</title>
     <style>
         *, *::before, *::after {
             box-sizing: border-box;
@@ -57,6 +57,63 @@
             color: #ffffff;
             font-weight: 600;
         }
+
+        /* More dropdown */
+        .nav-more {
+            position: relative;
+        }
+
+        .nav-more-btn {
+            background: none;
+            border: none;
+            color: #e5e5e5;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .nav-more-btn:hover,
+        .nav-more-btn:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .nav-more-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 0.25rem 0;
+            min-width: 160px;
+            z-index: 1000;
+            list-style: none;
+        }
+
+        .nav-more-menu li {
+            padding: 0;
+        }
+
+        .nav-more-menu a {
+            display: block;
+            padding: 0.5rem 1rem;
+            white-space: nowrap;
+        }
+
+        .nav-more-menu a:hover,
+        .nav-more-menu a:focus {
+            background-color: #333;
+        }
+
+        .nav-more:hover .nav-more-menu,
+        .nav-more:focus-within .nav-more-menu {
+            display: block;
+        }
+
 
         /* Main content */
         main {
@@ -310,14 +367,19 @@
 <nav aria-label="Main navigation">
     <ul>
         <li><a href="../">Dashboard</a></li>
-        <li><a href="../pipeline/">Pipeline</a></li>
-        <li><a href="../tasks/">Tasks</a></li>
         <li><a href="../gallery/">Gallery</a></li>
-        <li><a href="../sop/">SOP</a></li>
-        <li><a href="../publications/">Publications</a></li>
-        <li><a href="../archive/">Archive</a></li>
+        <li><a href="../tasks/">Task Guides</a></li>
+        <li><a href="../sop/">SOPs</a></li>
         <li><a href="../ground-truth/">Ground Truth</a></li>
-        <li><a href="./" aria-current="page">Experimental</a></li>
+        <li><a href="../pipeline/">Pipeline</a></li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">More &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../publications/">Publications</a></li>
+                <li><a href="../experimental/" aria-current="page">Experimental</a></li>
+                <li><a href="../archive/">Archive</a></li>
+            </ul>
+        </li>
     </ul>
 </nav>
 
@@ -331,7 +393,10 @@
     <div class="experimental-warning" role="alert">
         <p>
             <strong>Not production-ready.</strong> These tools are functional but have not been fully tested across all scenarios.
-            If you encounter issues, please <a target="_blank" rel="noopener noreferrer" href="https://github.com/BunPrinceton/tracer-workspace/issues/new?template=correction.yml" style="color: #92400e; font-weight: 600;">report them</a>.
+            If you encounter issues, please <a target="_blank" rel="noopener noreferrer" href="https://github.com/BunPrinceton/tracer-tools-extensions/issues" style="color: #92400e; font-weight: 600;">report them</a>.
+        </p>
+        <p style="margin-top: 0.5rem;">
+            <strong>Source:</strong> <a target="_blank" rel="noopener noreferrer" href="https://github.com/BunPrinceton/tracer-tools-extensions" style="color: #92400e;">github.com/BunPrinceton/tracer-tools-extensions</a>
         </p>
     </div>
 
@@ -349,12 +414,12 @@
 
             <div class="tool-usage">
                 <h3>Usage</h3>
-                <code>python tracer_tools/scripts/fast_validate_ids.py --input ids.txt
-python tracer_tools/scripts/fast_validate_ids.py --input ids.txt --output results.txt --workers 20</code>
+                <code>python fast_validate_ids.py --input ids.txt
+python fast_validate_ids.py --input ids.txt --output results.txt --workers 20</code>
             </div>
 
             <div class="tool-meta">
-                <span><strong>Location:</strong> tracer_tools/scripts/fast_validate_ids.py</span>
+                <span><strong>Repo:</strong> <a target="_blank" rel="noopener noreferrer" href="https://github.com/BunPrinceton/tracer-tools-extensions/blob/master/fast_validate_ids.py" style="color:#2563eb">tracer-tools-extensions/fast_validate_ids.py</a></span>
                 <span><strong>Default datastack:</strong> brain_and_nerve_cord</span>
                 <span><strong>Default workers:</strong> 20</span>
             </div>
@@ -366,6 +431,24 @@ python tracer_tools/scripts/fast_validate_ids.py --input ids.txt --output result
                     <li>Progress reporting is coarse (every 500 IDs)</li>
                     <li>High worker count may trigger CAVE API rate limits on some networks</li>
                 </ul>
+            </div>
+        </article>
+
+        <!-- fast_validate_ids_updated_auto_detect_path.py -->
+        <article class="tool-card" id="fast-validate-ids-auto">
+            <div class="tool-header">
+                <h2>fast_validate_ids_updated_auto_detect_path.py</h2>
+                <span class="tool-badge">Experimental</span>
+            </div>
+            <p class="tool-desc">
+                Updated version of fast_validate_ids with automatic path detection. Resolves the correct datastack path automatically, removing the need for manual configuration.
+            </p>
+            <div class="tool-usage">
+                <h3>Usage</h3>
+                <code>python fast_validate_ids_updated_auto_detect_path.py --input ids.txt --output results.txt</code>
+            </div>
+            <div class="tool-meta">
+                <span><strong>Repo:</strong> <a target="_blank" rel="noopener noreferrer" href="https://github.com/BunPrinceton/tracer-tools-extensions/blob/master/fast_validate_ids_updated_auto_detect_path.py" style="color:#2563eb">tracer-tools-extensions/fast_validate_ids_updated_auto_detect_path.py</a></span>
             </div>
         </article>
 
@@ -381,12 +464,12 @@ python tracer_tools/scripts/fast_validate_ids.py --input ids.txt --output result
 
             <div class="tool-usage">
                 <h3>Usage</h3>
-                <code>python tracer_tools/scripts/fast_get_coords.py --input ids.txt
-python tracer_tools/scripts/fast_get_coords.py --input ids.txt --output coords.tsv --workers 20</code>
+                <code>python fast_get_coords.py --input ids.txt
+python fast_get_coords.py --input ids.txt --output coords.tsv --workers 20</code>
             </div>
 
             <div class="tool-meta">
-                <span><strong>Location:</strong> tracer_tools/scripts/fast_get_coords.py</span>
+                <span><strong>Repo:</strong> <a target="_blank" rel="noopener noreferrer" href="https://github.com/BunPrinceton/tracer-tools-extensions/blob/master/fast_get_coords.py" style="color:#2563eb">tracer-tools-extensions/fast_get_coords.py</a></span>
                 <span><strong>Default datastack:</strong> brain_and_nerve_cord</span>
                 <span><strong>Default workers:</strong> 20</span>
             </div>
@@ -401,6 +484,199 @@ python tracer_tools/scripts/fast_get_coords.py --input ids.txt --output coords.t
             </div>
         </article>
 
+        <!-- full_pipeline.py -->
+        <article class="tool-card" id="full-pipeline">
+            <div class="tool-header">
+                <h2>full_pipeline.py</h2>
+                <span class="tool-badge">Experimental</span>
+            </div>
+            <p class="tool-desc">
+                Complete workflow script: update IDs &rarr; get coordinates &rarr; output to file, clipboard, or Google Sheets. Combines multiple steps into one command.
+            </p>
+            <div class="tool-usage">
+                <h3>Usage</h3>
+                <code>python tracer_tools/scripts/full_pipeline.py --input ids.txt --output results.tsv</code>
+            </div>
+            <div class="tool-meta">
+                <span><strong>Location:</strong> tracer_tools/scripts/full_pipeline.py</span>
+            </div>
+        </article>
+
+        <!-- validate_ids_batch.py -->
+        <article class="tool-card" id="validate-ids-batch">
+            <div class="tool-header">
+                <h2>validate_ids_batch.py</h2>
+                <span class="tool-badge">Experimental</span>
+            </div>
+            <p class="tool-desc">
+                Batch ID validator for large datasets (1,000+ IDs). Processes in chunks with progress reporting. More robust than fast_validate_ids for very large batches and Windows environments.
+            </p>
+            <div class="tool-usage">
+                <h3>Usage</h3>
+                <code>python tracer_tools/scripts/validate_ids_batch.py --input ids.txt --output results.txt</code>
+            </div>
+            <div class="tool-meta">
+                <span><strong>Location:</strong> tracer_tools/scripts/validate_ids_batch.py</span>
+                <span><strong>Default datastack:</strong> brain_and_nerve_cord</span>
+            </div>
+        </article>
+
+        <!-- process_file_column.py -->
+        <article class="tool-card" id="process-file-column">
+            <div class="tool-header">
+                <h2>process_file_column.py</h2>
+                <span class="tool-badge">Experimental</span>
+            </div>
+            <p class="tool-desc">
+                Adds coordinate columns to CSV/TSV files. Reads root IDs from a specified column, fetches coordinates, and writes them to adjacent columns in-place.
+            </p>
+            <div class="tool-usage">
+                <h3>Usage</h3>
+                <code>python tracer_tools/scripts/process_file_column.py --input data.csv</code>
+            </div>
+            <div class="tool-meta">
+                <span><strong>Location:</strong> tracer_tools/scripts/process_file_column.py</span>
+            </div>
+        </article>
+
+    </div>
+
+    <!-- Google Sheets Integration -->
+    <h2 style="font-size: 1.25rem; font-weight: 600; margin: 2rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #d4d4d4;">Google Sheets Integration</h2>
+
+    <div class="tool-list">
+
+        <!-- sheets_get_coords.py -->
+        <article class="tool-card" id="sheets-get-coords">
+            <div class="tool-header">
+                <h2>sheets_get_coords.py</h2>
+                <span class="tool-badge">Experimental</span>
+            </div>
+            <p class="tool-desc">
+                Reads root IDs from a Google Sheet, fetches coordinates via CAVE, and writes the coordinates back to columns in the same sheet. Modifies in-place.
+            </p>
+            <div class="tool-meta">
+                <span><strong>Location:</strong> tracer_tools/scripts/sheets_get_coords.py</span>
+            </div>
+        </article>
+
+        <!-- sheets_get_coords_safe.py -->
+        <article class="tool-card" id="sheets-get-coords-safe">
+            <div class="tool-header">
+                <h2>sheets_get_coords_safe.py</h2>
+                <span class="tool-badge">Experimental</span>
+            </div>
+            <p class="tool-desc">
+                Safe mode version: creates a new worksheet with coordinate results rather than modifying the original sheet.
+            </p>
+            <div class="tool-meta">
+                <span><strong>Location:</strong> tracer_tools/scripts/sheets_get_coords_safe.py</span>
+            </div>
+        </article>
+
+        <!-- sheets_coords_oauth.py -->
+        <article class="tool-card" id="sheets-coords-oauth">
+            <div class="tool-header">
+                <h2>sheets_coords_oauth.py</h2>
+                <span class="tool-badge">Experimental</span>
+            </div>
+            <p class="tool-desc">
+                OAuth-based Google Sheets coordinate updater. Uses browser-based OAuth flow instead of service account credentials. Includes offset/limit support for processing sheets in batches.
+            </p>
+            <div class="tool-usage">
+                <h3>Usage</h3>
+                <code>python tracer_tools/scripts/sheets_coords_oauth.py --sheet "SHEET_ID" --offset 0 --limit 1000 --update-ids</code>
+            </div>
+            <div class="tool-meta">
+                <span><strong>Location:</strong> tracer_tools/scripts/sheets_coords_oauth.py</span>
+            </div>
+        </article>
+
+        <!-- sheets_merge.py -->
+        <article class="tool-card" id="sheets-merge">
+            <div class="tool-header">
+                <h2>sheets_merge.py</h2>
+                <span class="tool-badge">Experimental</span>
+            </div>
+            <p class="tool-desc">
+                Merges multiple Google Sheets into one. Useful for combining parallel batch outputs or consolidating results from multiple processing runs.
+            </p>
+            <div class="tool-meta">
+                <span><strong>Location:</strong> tracer_tools/scripts/sheets_merge.py</span>
+            </div>
+        </article>
+
+    </div>
+
+    <!-- CLI Utilities -->
+    <h2 style="font-size: 1.25rem; font-weight: 600; margin: 2rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #d4d4d4;">CLI Utilities</h2>
+
+    <div class="tool-list">
+
+        <!-- get_coords_cli.py -->
+        <article class="tool-card" id="get-coords-cli">
+            <div class="tool-header">
+                <h2>get_coords_cli.py</h2>
+                <span class="tool-badge">Stable</span>
+            </div>
+            <p class="tool-desc">
+                Interactive CLI for fetching coordinates for root IDs. Sequential processing (for small batches or one-off lookups).
+            </p>
+            <div class="tool-usage">
+                <h3>Usage</h3>
+                <code>python tracer_tools/scripts/get_coords_cli.py --datastack brain_and_nerve_cord --ids 720575941471915328</code>
+            </div>
+            <div class="tool-meta">
+                <span><strong>Location:</strong> tracer_tools/scripts/get_coords_cli.py</span>
+            </div>
+        </article>
+
+        <!-- update_ids_cli.py -->
+        <article class="tool-card" id="update-ids-cli">
+            <div class="tool-header">
+                <h2>update_ids_cli.py</h2>
+                <span class="tool-badge">Stable</span>
+            </div>
+            <p class="tool-desc">
+                Interactive CLI for updating outdated segment IDs. Uses the accurate supervoxel method to track IDs through splits and merges.
+            </p>
+            <div class="tool-usage">
+                <h3>Usage</h3>
+                <code>python tracer_tools/scripts/update_ids_cli.py --datastack brain_and_nerve_cord --with-coords</code>
+            </div>
+            <div class="tool-meta">
+                <span><strong>Location:</strong> tracer_tools/scripts/update_ids_cli.py</span>
+            </div>
+        </article>
+
+        <!-- monitor_validation.py -->
+        <article class="tool-card" id="monitor-validation">
+            <div class="tool-header">
+                <h2>monitor_validation.py</h2>
+                <span class="tool-badge">Utility</span>
+            </div>
+            <p class="tool-desc">
+                Monitors real-time progress of running batch ID validation. Useful when processing large datasets with validate_ids_batch.py.
+            </p>
+            <div class="tool-meta">
+                <span><strong>Location:</strong> tracer_tools/scripts/monitor_validation.py</span>
+            </div>
+        </article>
+
+        <!-- save_cave_token.py -->
+        <article class="tool-card" id="save-cave-token">
+            <div class="tool-header">
+                <h2>save_cave_token.py</h2>
+                <span class="tool-badge">Setup</span>
+            </div>
+            <p class="tool-desc">
+                Saves your CAVE authentication token to the standard location. Run this once before using any CAVE-dependent scripts.
+            </p>
+            <div class="tool-meta">
+                <span><strong>Location:</strong> tracer_tools/scripts/save_cave_token.py</span>
+            </div>
+        </article>
+
     </div>
 
 </main>
@@ -408,7 +684,7 @@ python tracer_tools/scripts/fast_get_coords.py --input ids.txt --output coords.t
 <footer>
     <div class="footer-nav">
         <a href="../">Back to Dashboard</a>
-        <a href="#" id="suggest-edit-link" class="suggest-edit" target="_blank" rel="noopener noreferrer">Suggest an edit</a>
+        <a href="#" id="suggest-edit-link" class="suggest-edit" target="_blank" rel="noopener noreferrer">Please Suggest Edits</a>
     </div>
 </footer>
 
@@ -416,7 +692,7 @@ python tracer_tools/scripts/fast_get_coords.py --input ids.txt --output coords.t
 (function() {
     var link = document.getElementById('suggest-edit-link');
     if (link) {
-        var title = encodeURIComponent('[Content] ' + document.title.replace(' - Princeton Tracer', ''));
+        var title = encodeURIComponent('[Content] ' + document.title.replace(' - Princeton Tracers', ''));
         link.href = 'https://github.com/BunPrinceton/tracer-workspace/issues/new?template=content-suggestion.yml&title=' + title + '&body=' + encodeURIComponent('**Page:** ' + window.location.href + '\n\n**Section:** \n\n**Suggestion:**\n');
         link.target = '_blank';
         link.rel = 'noopener noreferrer';

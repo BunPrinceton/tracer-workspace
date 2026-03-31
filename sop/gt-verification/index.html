@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOP-002: GT Verification - Princeton Tracer</title>
+    <title>SOP-002: GT Verification - Princeton Tracers</title>
     <link rel="stylesheet" href="../print.css" media="print">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -15,6 +15,63 @@
         nav a { color: #e5e5e5; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0; display: inline-block; }
         nav a:hover, nav a:focus { text-decoration: underline; text-underline-offset: 4px; }
         nav a[aria-current="page"] { color: #ffffff; font-weight: 600; }
+
+        /* More dropdown */
+        .nav-more {
+            position: relative;
+        }
+
+        .nav-more-btn {
+            background: none;
+            border: none;
+            color: #e5e5e5;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .nav-more-btn:hover,
+        .nav-more-btn:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .nav-more-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 0.25rem 0;
+            min-width: 160px;
+            z-index: 1000;
+            list-style: none;
+        }
+
+        .nav-more-menu li {
+            padding: 0;
+        }
+
+        .nav-more-menu a {
+            display: block;
+            padding: 0.5rem 1rem;
+            white-space: nowrap;
+        }
+
+        .nav-more-menu a:hover,
+        .nav-more-menu a:focus {
+            background-color: #333;
+        }
+
+        .nav-more:hover .nav-more-menu,
+        .nav-more:focus-within .nav-more-menu {
+            display: block;
+        }
+
         main { max-width: 800px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
         .breadcrumb { font-size: 0.875rem; color: #525252; margin-bottom: 1.5rem; }
         .breadcrumb a { color: #2563eb; text-decoration: none; }
@@ -51,14 +108,19 @@
 <nav aria-label="Main navigation">
     <ul>
         <li><a href="../../">Dashboard</a></li>
-        <li><a href="../../pipeline/">Pipeline</a></li>
-        <li><a href="../../tasks/">Tasks</a></li>
         <li><a href="../../gallery/">Gallery</a></li>
-        <li><a href="../" aria-current="page">SOP</a></li>
-        <li><a href="../../publications/">Publications</a></li>
-        <li><a href="../../archive/">Archive</a></li>
+        <li><a href="../../tasks/">Task Guides</a></li>
+        <li><a href="../../sop/" aria-current="page">SOPs</a></li>
         <li><a href="../../ground-truth/">Ground Truth</a></li>
-        <li><a href="../../experimental/">Experimental</a></li>
+        <li><a href="../../pipeline/">Pipeline</a></li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">More &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../../publications/">Publications</a></li>
+                <li><a href="../../experimental/">Experimental</a></li>
+                <li><a href="../../archive/">Archive</a></li>
+            </ul>
+        </li>
     </ul>
 </nav>
 
