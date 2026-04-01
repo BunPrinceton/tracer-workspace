@@ -693,6 +693,18 @@
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
     }
+
+    // Accordion: only one task section open at a time, scroll to top of opened section
+    document.querySelectorAll('details.task-section').forEach(function(details) {
+        details.addEventListener('toggle', function() {
+            if (details.open) {
+                document.querySelectorAll('details.task-section').forEach(function(other) {
+                    if (other !== details) other.removeAttribute('open');
+                });
+                details.scrollIntoView({ block: 'start' });
+            }
+        });
+    });
 })();
 </script>
 </body>
