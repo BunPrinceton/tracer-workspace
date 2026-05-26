@@ -807,7 +807,12 @@
         var filterEl = document.getElementById('doc-filter');
         if (!listEl) return;
 
-        var sorted = SS.INDEX.slice().sort(alphaSort);
+        // The All Documents listing is for documents/pages only. Gallery images
+        // are in INDEX so they stay searchable, but they live in the Gallery —
+        // exclude them here (their urls are gallery anchors like "gallery/#fig-...").
+        function isDocument(e) { return e.url.indexOf('#fig-') === -1; }
+
+        var sorted = SS.INDEX.filter(isDocument).slice().sort(alphaSort);
 
         function paint(items) {
             listEl.innerHTML = '';
@@ -842,7 +847,8 @@
                 // Use the fuzzy scorer to find matches, then re-sort alphabetically
                 // so the all-docs view stays alphabetical rather than score-ranked.
                 var scored = SS.search(query);
-                var filtered = scored.map(function (r) { return r.entry; }).sort(alphaSort);
+                var filtered = scored.map(function (r) { return r.entry; })
+                    .filter(isDocument).sort(alphaSort);
                 paint(filtered);
             });
         }
