@@ -633,6 +633,18 @@
         .search-mode-banner p { font-size: 0.875rem; color: #525252; margin: 0; }
         .search-mode-banner a { color: #2563eb; text-decoration: none; font-weight: 600; }
         .search-mode-banner a:hover { text-decoration: underline; }
+        .search-refine-form { margin: 0 0 0.6rem; }
+        .search-refine-form label.visually-hidden { position: absolute; left: -10000px; }
+        #search-refine-input {
+            width: 100%; font: inherit; font-size: 1.0625rem;
+            padding: 0.625rem 0.875rem; border: 1px solid #d4d4d4; border-radius: 6px;
+            background-color: #ffffff; color: #1a1a1a; box-sizing: border-box;
+            -webkit-appearance: none; appearance: none;
+        }
+        #search-refine-input:focus {
+            outline: none; border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
 
         .search-results-list { list-style: none; padding: 0; margin: 0; }
         .search-results-list li { padding: 1rem 0; border-bottom: 1px solid #e5e5e5; }
@@ -703,9 +715,13 @@
          ================================================================ -->
     <section id="search-mode" aria-labelledby="search-mode-heading">
         <div class="search-mode-banner">
-            <h2 id="search-mode-heading">Search results for "<span id="search-query"></span>"</h2>
+            <h2 id="search-mode-heading" class="visually-hidden" style="position:absolute;left:-10000px;">Search results</h2>
+            <form class="search-refine-form" role="search" id="search-refine-form">
+                <label for="search-refine-input" class="visually-hidden">Refine search</label>
+                <input type="search" id="search-refine-input" placeholder="Refine search…" autocomplete="off" aria-label="Refine search">
+            </form>
             <p>
-                <span id="search-count"></span> ·
+                Showing results for "<strong id="search-query"></strong>" · <span id="search-count"></span> ·
                 <a href="?">Clear search</a> ·
                 <a href="" id="view-all-docs">View all documents</a>
             </p>
@@ -830,6 +846,19 @@
 
         if (queryEl) queryEl.textContent = q;
         if (viewAllLink) viewAllLink.href = window.location.pathname;
+
+        // Refine-search input: pre-fill with current query; submit reruns search
+        var refineInput = document.getElementById('search-refine-input');
+        var refineForm = document.getElementById('search-refine-form');
+        if (refineInput) refineInput.value = q;
+        if (refineForm) {
+            refineForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                var v = (refineInput.value || '').trim();
+                if (v) window.location.search = '?q=' + encodeURIComponent(v);
+                else window.location.search = '';
+            });
+        }
 
         var results = SS.search(q);
         if (countEl) {
