@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Legacy Workflows - Princeton Tracers</title>
+    <title>Manual ID Tracking - Princeton Tracers</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { font-size: 18px; line-height: 1.6; }
@@ -26,29 +26,28 @@
         main { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
 
         .page-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #d4d4d4; }
-        .page-header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
-        .page-header p { color: #525252; font-size: 1.0625rem; }
         .page-header .crumb { font-size: 0.8125rem; color: #737373; margin-bottom: 0.5rem; }
         .page-header .crumb a { color: #525252; text-decoration: none; }
         .page-header .crumb a:hover { color: #1a1a1a; text-decoration: underline; }
+        .page-header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; }
+        .page-header .page-meta { color: #525252; font-size: 1.0625rem; }
 
-        .deprecated-badge { display: inline-block; font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.25rem 0.5rem; border-radius: 3px; background-color: #737373; color: #ffffff; }
+        .deprecated-badge { display: inline-block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.25rem 0.625rem; border-radius: 3px; background-color: #737373; color: #ffffff; vertical-align: middle; }
 
-        .archive-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; }
-        .archive-card { background-color: #ffffff; border: 2px solid #d4d4d4; border-radius: 8px; padding: 1.25rem; opacity: 0.95; }
-        .archive-card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.75rem; }
-        .archive-card h3 { font-size: 1.0625rem; font-weight: 700; }
-        .archive-card-meta { font-size: 0.8125rem; color: #737373; margin-bottom: 0.75rem; }
-        .archive-card p { font-size: 0.875rem; color: #525252; margin-bottom: 1rem; }
-        .archive-card-replaced { font-size: 0.8125rem; color: #059669; background-color: #ecfdf5; padding: 0.5rem 0.75rem; border-radius: 4px; margin-bottom: 1rem; }
+        .archive-detail { background-color: #ffffff; border: 2px solid #d4d4d4; border-radius: 8px; padding: 1.5rem; }
+        .archive-detail p { color: #525252; font-size: 0.9375rem; margin-bottom: 1.25rem; }
+        .archive-detail h2 { font-size: 1rem; font-weight: 600; color: #1a1a1a; text-transform: uppercase; letter-spacing: 0.05em; margin: 1.5rem 0 0.75rem; padding-bottom: 0.375rem; border-bottom: 1px solid #e5e5e5; }
+        .archive-detail h2:first-child { margin-top: 0; }
+
+        .archive-card-replaced { font-size: 0.9375rem; color: #059669; background-color: #ecfdf5; padding: 0.75rem 1rem; border-radius: 4px; margin-bottom: 1.25rem; }
         .archive-card-replaced a { color: #059669; font-weight: 600; }
-        .archive-card h4 { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: #737373; margin-bottom: 0.5rem; }
 
         .doc-list { list-style: none; }
-        .doc-list li { padding: 0.5rem 0; border-bottom: 1px solid #e5e5e5; font-size: 0.875rem; }
+        .doc-list li { padding: 0.5rem 0; border-bottom: 1px solid #e5e5e5; font-size: 0.9375rem; }
         .doc-list li:last-child { border-bottom: none; padding-bottom: 0; }
         .doc-list a { color: #2563eb; text-decoration: none; }
         .doc-list a:hover { text-decoration: underline; }
+        .doc-format { font-size: 0.75rem; color: #737373; margin-left: 0.5rem; }
 
         footer { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; border-top: 1px solid #e5e5e5; font-size: 0.875rem; color: #737373; }
         footer a { color: #525252; }
@@ -60,11 +59,10 @@
         @media (max-width: 768px) {
             html { font-size: 16px; }
             main { padding: 1.5rem 1rem; }
-            .archive-grid { grid-template-columns: 1fr; }
         }
         @media print {
             nav, footer { display: none; }
-            .archive-card { break-inside: avoid; border: 1px solid #000; }
+            .archive-detail { break-inside: avoid; border: 1px solid #000; }
         }
 
         :focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
@@ -99,52 +97,23 @@
 
     <div class="page-header">
         <div class="crumb"><a href="../">← Archive</a></div>
-        <h1>Legacy Workflows</h1>
-        <p>Workflow patterns from earlier eras of the connectomics pipeline. Preserved for institutional memory and reference.</p>
+        <h1>Manual ID Tracking <span class="deprecated-badge">Deprecated</span></h1>
+        <p class="page-meta">Spreadsheet-Based</p>
     </div>
 
-    <div class="archive-grid">
+    <div class="archive-detail">
+        <p>Before automated ID validation existed, segment IDs were tracked manually in spreadsheets. When the underlying segmentation changed (splits or merges), tracked IDs could go stale without notice, since there was no mechanism to follow supervoxel lineage.</p>
 
-        <article class="archive-card">
-            <div class="archive-card-header">
-                <h3>Desktop-Based Annotation</h3>
-                <span class="deprecated-badge">Deprecated</span>
-            </div>
-            <div class="archive-card-meta">VAST + Omni Workflow</div>
-            <p>Original annotation workflow using desktop applications on Ubuntu workstations with network-mounted data storage.</p>
+        <div class="archive-card-replaced">
+            Current: Automated ID validation via CAVE (see <a href="../../experimental/">experimental Gen 2 scripts</a> for the parallel batch validator)
+        </div>
 
-            <div class="archive-card-replaced">
-                Current: <a href="../../tasks/">Web-based task workflow</a>
-            </div>
-
-            <h4>Key Differences</h4>
-            <ul class="doc-list">
-                <li>Local data access vs. cloud-hosted volumes</li>
-                <li>Single-user vs. collaborative editing</li>
-                <li>File-based vs. database-backed annotations</li>
-            </ul>
-        </article>
-
-        <article class="archive-card">
-            <div class="archive-card-header">
-                <h3>Manual ID Tracking</h3>
-                <span class="deprecated-badge">Deprecated</span>
-            </div>
-            <div class="archive-card-meta">Spreadsheet-Based</div>
-            <p>Manual tracking of segment IDs in spreadsheets without automated validation against changing segmentation.</p>
-
-            <div class="archive-card-replaced">
-                Current: Automated ID validation via CAVE
-            </div>
-
-            <h4>Limitations</h4>
-            <ul class="doc-list">
-                <li>No detection of split/merge changes</li>
-                <li>IDs could become stale without notice</li>
-                <li>No supervoxel-based tracking</li>
-            </ul>
-        </article>
-
+        <h2>Limitations of the Manual Approach</h2>
+        <ul class="doc-list">
+            <li>No detection of split/merge changes</li>
+            <li>IDs could become stale without notice</li>
+            <li>No supervoxel-based tracking</li>
+        </ul>
     </div>
 
 </main>

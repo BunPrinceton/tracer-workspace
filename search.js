@@ -99,20 +99,44 @@
             keywords: ['document list', 'all docs']
         },
         {
-            title: 'Deprecated Tools',
-            url: 'archive/deprecated-tools/',
-            section: 'Archive',
-            description: 'VAST, Omni, and Eyewire — tools that have been replaced by modern alternatives. Documentation preserved for institutional memory.',
-            aliases: ['deprecated tools', 'old tools', 'retired tools'],
-            keywords: ['vast', 'omni', 'eyewire', 'legacy', 'volume annotation segmentation tool', 'desktop tools']
+            title: 'VAST',
+            url: 'archive/vast/',
+            section: 'Archive · Deprecated Tool',
+            description: 'Volume Annotation and Segmentation Tool — desktop application for manual segmentation annotation on Ubuntu/Linux. Replaced by WebKnossos.',
+            aliases: ['vast', 'volume annotation segmentation tool'],
+            keywords: ['deprecated', 'desktop tool', 'ubuntu', 'manual segmentation', 'legacy annotation']
         },
         {
-            title: 'Legacy Workflows',
-            url: 'archive/legacy-workflows/',
-            section: 'Archive',
-            description: 'Workflow patterns from earlier eras of the pipeline — desktop-based annotation, manual ID tracking — preserved for institutional memory.',
-            aliases: ['legacy workflows', 'old workflows', 'deprecated workflows'],
-            keywords: ['desktop annotation', 'manual id tracking', 'spreadsheet', 'ubuntu workflow', 'historical workflow']
+            title: 'Omni',
+            url: 'archive/omni/',
+            section: 'Archive · Deprecated Tool',
+            description: '3D proofreading and visualization tool for segmentation data. Desktop application replaced by WebKnossos + Neuroglancer.',
+            aliases: ['omni'],
+            keywords: ['deprecated', '3d proofreading', 'visualization', 'desktop tool', 'segmentation review', 'legacy']
+        },
+        {
+            title: 'Eyewire',
+            url: 'archive/eyewire/',
+            section: 'Archive · Deprecated Tool',
+            description: 'Browser-based citizen science game for neuron reconstruction. Pioneered gamified crowdsourced connectomics. Replaced by professional annotation tools.',
+            aliases: ['eyewire'],
+            keywords: ['deprecated', 'citizen science', 'crowdsourcing', 'gamified', 'public participation', 'legacy']
+        },
+        {
+            title: 'Desktop-Based Annotation',
+            url: 'archive/desktop-annotation/',
+            section: 'Archive · Legacy Workflow',
+            description: 'Original VAST + Omni annotation workflow on Ubuntu workstations with network-mounted storage. Single-user, file-based pipeline replaced by the current web-based collaborative workflow.',
+            aliases: ['desktop annotation', 'desktop-based annotation', 'vast omni workflow', 'old workflow'],
+            keywords: ['deprecated', 'ubuntu workflow', 'file-based', 'single-user', 'legacy workflow']
+        },
+        {
+            title: 'Manual ID Tracking',
+            url: 'archive/manual-id-tracking/',
+            section: 'Archive · Legacy Workflow',
+            description: 'Pre-CAVE workflow where segment IDs were tracked manually in spreadsheets. IDs could go stale silently when segmentation changed. Replaced by automated CAVE-based validation.',
+            aliases: ['manual id tracking', 'spreadsheet tracking', 'id tracking'],
+            keywords: ['deprecated', 'spreadsheet workflow', 'stale ids', 'pre-cave', 'manual validation', 'legacy workflow']
         },
         {
             title: 'Tool Evolution Timeline',
