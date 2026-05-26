@@ -527,7 +527,359 @@
     description: "Cell modeling instructions (Drive shortcut; link-out).",
     aliases: ["cell modeling instructions"],
     keywords: ["cell modeling", "skeletonization"]
-  }
+  },
+        {
+            title: "Soma Arrangement (Color Overlay)",
+            url: "gallery/#fig-soma-arrangement-color-overlay",
+            section: "Gallery \u00b7 BANC",
+            description: "Dense cluster of cell bodies with color segmentation overlay. Each unique color represents an individually segmented soma.",
+            aliases: [],
+            keywords: ["structure", "dense", "cluster", "cell", "bodies", "color", "segmentation", "overlay", "each", "unique"]
+        },
+        {
+            title: "Single Soma (Color Overlay)",
+            url: "gallery/#fig-single-soma-color-overlay",
+            section: "Gallery \u00b7 BANC",
+            description: "Individual neuronal soma highlighted with color segmentation overlay, showing the cell body boundary and surrounding neighbors.",
+            aliases: [],
+            keywords: ["structure", "individual", "neuronal", "soma", "highlighted", "color", "segmentation", "overlay", "showing", "cell"]
+        },
+        {
+            title: "Dense Soma Region",
+            url: "gallery/#fig-dense-soma-region",
+            section: "Gallery \u00b7 BANC",
+            description: "Region densely packed with neuronal cell bodies. Nuclei and surrounding neuropil visible throughout.",
+            aliases: [],
+            keywords: ["structure", "region", "densely", "packed", "neuronal", "cell", "bodies", "nuclei", "surrounding", "neuropil"]
+        },
+        {
+            title: "Sparse Soma Region",
+            url: "gallery/#fig-sparse-soma-region",
+            section: "Gallery \u00b7 BANC",
+            description: "Region with fewer, well-separated cell bodies surrounded by extensive neuropil.",
+            aliases: [],
+            keywords: ["structure", "region", "fewer", "well", "separated", "cell", "bodies", "surrounded", "extensive", "neuropil"]
+        },
+        {
+            title: "Dark Soma (Possible Glia)",
+            url: "gallery/#fig-dark-soma-possible-glia",
+            section: "Gallery \u00b7 BANC",
+            description: "Darkly stained cell body with electron-dense cytoplasm, possibly glial in origin. Note the distinct contrast difference from surrounding neurons.",
+            aliases: [],
+            keywords: ["structure", "darkly", "stained", "cell", "body", "electron", "dense", "cytoplasm", "possibly", "glial"]
+        },
+        {
+            title: "Large Soma with Organelles",
+            url: "gallery/#fig-large-soma-with-organelles",
+            section: "Gallery \u00b7 BANC",
+            description: "Exceptionally large neuronal soma rich in organelles including prominent nucleus, endoplasmic reticulum, and mitochondria.",
+            aliases: [],
+            keywords: ["structure", "exceptionally", "large", "neuronal", "soma", "rich", "organelles", "including", "prominent", "nucleus"]
+        },
+        {
+            title: "Large Soma with Organelles (View 2)",
+            url: "gallery/#fig-large-soma-with-organelles-view-2",
+            section: "Gallery \u00b7 BANC",
+            description: "Second perspective of a large soma showing dense organelle packing. Note the extensive rough endoplasmic reticulum and clustered mitochondria.",
+            aliases: [],
+            keywords: ["structure", "second", "perspective", "large", "soma", "showing", "dense", "organelle", "packing", "note"]
+        },
+        {
+            title: "Large Soma with Organelles (View 3)",
+            url: "gallery/#fig-large-soma-with-organelles-view-3",
+            section: "Gallery \u00b7 BANC",
+            description: "Third view highlighting the scale of a large neuronal soma relative to surrounding neurites and neuropil.",
+            aliases: [],
+            keywords: ["structure", "third", "view", "highlighting", "scale", "large", "neuronal", "soma", "relative", "surrounding"]
+        },
+        {
+            title: "Possibly Myelinated Soma",
+            url: "gallery/#fig-possibly-myelinated-soma",
+            section: "Gallery \u00b7 BANC",
+            description: "Soma with an unusually thick membrane border, potentially myelinated. Note: horizontal line artifact from monitor capture is also visible.",
+            aliases: [],
+            keywords: ["structure", "soma", "unusually", "thick", "membrane", "border", "potentially", "myelinated", "note", "horizontal"]
+        },
+        {
+            title: "Thick Membrane Border",
+            url: "gallery/#fig-thick-membrane-border",
+            section: "Gallery \u00b7 BANC",
+            description: "Soma enclosed by an unusually thick, electron-dense membrane layer. Possible myelination of a cell body &mdash; an uncommon but documented feature. Is this a thing?",
+            aliases: [],
+            keywords: ["structure", "soma", "enclosed", "unusually", "thick", "electron", "dense", "membrane", "layer", "possible"]
+        },
+        {
+            title: "Golgi Apparatus and Organelles",
+            url: "gallery/#fig-golgi-apparatus-and-organelles",
+            section: "Gallery \u00b7 BANC",
+            description: "Golgi apparatus visible alongside mitochondria, cisternae, microvesicles, and vacuoles near a soma. Cell membrane border clearly delineated.",
+            aliases: [],
+            keywords: ["structure", "golgi", "apparatus", "visible", "alongside", "mitochondria", "cisternae", "microvesicles", "vacuoles", "near"]
+        },
+        {
+            title: "Golgi Apparatus (Detail)",
+            url: "gallery/#fig-golgi-apparatus-detail",
+            section: "Gallery \u00b7 BANC",
+            description: "Close-up view of Golgi apparatus showing stacked cisternae and associated vesicles within the cytoplasm.",
+            aliases: [],
+            keywords: ["structure", "close", "view", "golgi", "apparatus", "showing", "stacked", "cisternae", "associated", "vesicles"]
+        },
+        {
+            title: "Membrane Whorls and Golgi Apparatus",
+            url: "gallery/#fig-membrane-whorls-and-golgi-apparatus",
+            section: "Gallery \u00b7 BANC",
+            description: "Large, heavily stained membrane whorls alongside Golgi apparatus and various organelles within or near a cell body.",
+            aliases: [],
+            keywords: ["structure", "large", "heavily", "stained", "membrane", "whorls", "alongside", "golgi", "apparatus", "various"]
+        },
+        {
+            title: "Dense Organelle Cluster Near Soma",
+            url: "gallery/#fig-dense-organelle-cluster-near-soma",
+            section: "Gallery \u00b7 BANC",
+            description: "Heavily stained organelles including mitochondria clustered near a soma. Note the high electron density contrasting with surrounding cytoplasm.",
+            aliases: [],
+            keywords: ["structure", "heavily", "stained", "organelles", "including", "mitochondria", "clustered", "near", "soma", "note"]
+        },
+        {
+            title: "Membrane Whorl",
+            url: "gallery/#fig-membrane-whorl",
+            section: "Gallery \u00b7 BANC",
+            description: "Concentric membrane whorl forming a spiral pattern. These lamellar structures are occasionally encountered and may represent myelin figures or autophagic bodies.",
+            aliases: [],
+            keywords: ["structure", "concentric", "membrane", "whorl", "forming", "spiral", "pattern", "lamellar", "structures", "occasionally"]
+        },
+        {
+            title: "Membrane Spirals (Close-up)",
+            url: "gallery/#fig-membrane-spirals-close-up",
+            section: "Gallery \u00b7 BANC",
+            description: "High-magnification view of concentric membrane spirals. The tightly wound lamellae create a distinctive fingerprint-like pattern.",
+            aliases: [],
+            keywords: ["structure", "high", "magnification", "view", "concentric", "membrane", "spirals", "tightly", "wound", "lamellae"]
+        },
+        {
+            title: "Orphan Mitochondria Cluster",
+            url: "gallery/#fig-orphan-mitochondria-cluster",
+            section: "Gallery \u00b7 BANC",
+            description: "Isolated cluster of mitochondria and heavily stained myelin-like material. Appears to be an orphan object disconnected from a parent structure.",
+            aliases: [],
+            keywords: ["structure", "isolated", "cluster", "mitochondria", "heavily", "stained", "myelin", "like", "material", "appears"]
+        },
+        {
+            title: "Orphan Mitochondria Cluster (With Context)",
+            url: "gallery/#fig-orphan-mitochondria-cluster-with-context",
+            section: "Gallery \u00b7 BANC",
+            description: "Same orphan cluster shown with surrounding neuropil, dataset coordinates, and layer information for reference.",
+            aliases: [],
+            keywords: ["structure", "same", "orphan", "cluster", "shown", "surrounding", "neuropil", "dataset", "coordinates", "layer"]
+        },
+        {
+            title: "Heavily Stained Dark Organelles",
+            url: "gallery/#fig-heavily-stained-dark-organelles",
+            section: "Gallery \u00b7 BANC",
+            description: "Multiple organelles with abnormally heavy staining producing high-contrast, electron-dense profiles. Green horizontal line is a monitor capture artifact. Not sure where that comes from, hmm.",
+            aliases: [],
+            keywords: ["structure", "multiple", "organelles", "abnormally", "heavy", "staining", "producing", "high", "contrast", "electron"]
+        },
+        {
+            title: "Unidentified Dense Body",
+            url: "gallery/#fig-unidentified-dense-body",
+            section: "Gallery \u00b7 BANC",
+            description: "Dense, heavily stained structure of uncertain identity &mdash; possibly an organelle or a localized section artifact. Differential diagnosis is challenging at this magnification.",
+            aliases: [],
+            keywords: ["structure", "dense", "heavily", "stained", "uncertain", "identity", "mdash", "possibly", "organelle", "localized"]
+        },
+        {
+            title: "Lipid Droplets",
+            url: "gallery/#fig-lipid-droplets",
+            section: "Gallery \u00b7 BANC",
+            description: "Cluster of lipid droplets (fat globules) appearing as electron-dense spherical inclusions. Commonly found near cell bodies.",
+            aliases: [],
+            keywords: ["structure", "cluster", "lipid", "droplets", "globules", "appearing", "electron", "dense", "spherical", "inclusions"]
+        },
+        {
+            title: "Staining Anomaly with Micro Tear",
+            url: "gallery/#fig-staining-anomaly-with-micro-tear",
+            section: "Gallery \u00b7 BANC",
+            description: "Heavily stained structure with irregular contrast and a small tear visible within a strange organelle. Combines staining artifact with minor physical damage.",
+            aliases: [],
+            keywords: ["structure", "heavily", "stained", "irregular", "contrast", "small", "tear", "visible", "within", "strange"]
+        },
+        {
+            title: "Parallel Axon Bundle",
+            url: "gallery/#fig-parallel-axon-bundle",
+            section: "Gallery \u00b7 BANC",
+            description: "Bundle of neurites sectioned in the parallel plane, probably axonal. Note the uniform elongated profiles and consistent diameter.",
+            aliases: [],
+            keywords: ["structure", "bundle", "neurites", "sectioned", "parallel", "plane", "probably", "axonal", "note", "uniform"]
+        },
+        {
+            title: "Section Damage",
+            url: "gallery/#fig-section-damage",
+            section: "Gallery \u00b7 BANC",
+            description: "Physical damage to the tissue section visible as a dark linear disruption. Green arrows indicate affected regions. Do not annotate across damaged areas.",
+            aliases: [],
+            keywords: ["defect", "physical", "damage", "tissue", "section", "visible", "dark", "linear", "disruption", "green"]
+        },
+        {
+            title: "Missing Section",
+            url: "gallery/#fig-missing-section",
+            section: "Gallery \u00b7 BANC",
+            description: "Gap in tissue where a slice is absent, creating a void (black region). Green arrows point to the boundary. Data is unrecoverable in these areas.",
+            aliases: [],
+            keywords: ["defect", "tissue", "where", "slice", "absent", "creating", "void", "black", "region", "green"]
+        },
+        {
+            title: "Membrane Blowout",
+            url: "gallery/#fig-membrane-blowout",
+            section: "Gallery \u00b7 BANC",
+            description: "Localized membrane blowout where tissue has ruptured outward, creating a washed-out void. Green outline marks the affected boundary.",
+            aliases: [],
+            keywords: ["defect", "localized", "membrane", "blowout", "where", "tissue", "ruptured", "outward", "creating", "washed"]
+        },
+        {
+            title: "Section Pinch",
+            url: "gallery/#fig-section-pinch",
+            section: "Gallery \u00b7 BANC",
+            description: "Tissue compression artifact where the section was pinched during preparation, creating artificial convergence of structures.",
+            aliases: [],
+            keywords: ["defect", "tissue", "compression", "artifact", "where", "section", "pinched", "during", "preparation", "creating"]
+        },
+        {
+            title: "Section Stretch",
+            url: "gallery/#fig-section-stretch",
+            section: "Gallery \u00b7 BANC",
+            description: "Stretching artifact showing tissue pulled along one axis. Green arrows indicate the direction of distortion. Structures appear elongated and thinned.",
+            aliases: [],
+            keywords: ["defect", "stretching", "artifact", "showing", "tissue", "pulled", "along", "axis", "green", "arrows"]
+        },
+        {
+            title: "Section Tear",
+            url: "gallery/#fig-section-tear",
+            section: "Gallery \u00b7 BANC",
+            description: "Linear tear through the tissue section creating a clean void. Green arrows mark the tear boundaries. Do not trace structures across the gap.",
+            aliases: [],
+            keywords: ["defect", "linear", "tear", "through", "tissue", "section", "creating", "clean", "void", "green"]
+        },
+        {
+            title: "Resin Tear",
+            url: "gallery/#fig-resin-tear",
+            section: "Gallery \u00b7 BANC",
+            description: "Tear occurring within the embedding resin rather than the tissue itself. Shows clean break edges characteristic of resin fracture.",
+            aliases: [],
+            keywords: ["defect", "tear", "occurring", "within", "embedding", "resin", "rather", "than", "tissue", "itself"]
+        },
+        {
+            title: "Section Folds (Overview)",
+            url: "gallery/#fig-section-folds-overview",
+            section: "Gallery \u00b7 BANC",
+            description: "Zoomed-out view of the central brain region showing prominent section folds crossing the tissue. Dark diagonal lines are folded-over tissue creating doubled layers.",
+            aliases: [],
+            keywords: ["defect", "zoomed", "view", "central", "brain", "region", "showing", "prominent", "section", "folds"]
+        },
+        {
+            title: "Folds with Rippling",
+            url: "gallery/#fig-folds-with-rippling",
+            section: "Gallery \u00b7 BANC",
+            description: "Zoomed-out view showing section folds accompanied by wavy, faded rippling patterns. Tissue appears distorted across a large area.",
+            aliases: [],
+            keywords: ["defect", "zoomed", "view", "showing", "section", "folds", "accompanied", "wavy", "faded", "rippling"]
+        },
+        {
+            title: "Severe Section Folds",
+            url: "gallery/#fig-severe-section-folds",
+            section: "Gallery \u00b7 BANC",
+            description: "Extreme folding artifact with multiple overlapping fold layers creating near-total data loss in affected regions.",
+            aliases: [],
+            keywords: ["defect", "extreme", "folding", "artifact", "multiple", "overlapping", "fold", "layers", "creating", "near"]
+        },
+        {
+            title: "Staining Artifact",
+            url: "gallery/#fig-staining-artifact",
+            section: "Gallery \u00b7 BANC",
+            description: "Uneven heavy metal staining producing localized dark deposits that obscure underlying ultrastructure.",
+            aliases: [],
+            keywords: ["defect", "uneven", "heavy", "metal", "staining", "producing", "localized", "dark", "deposits", "obscure"]
+        },
+        {
+            title: "Splotch Artifact",
+            url: "gallery/#fig-splotch-artifact",
+            section: "Gallery \u00b7 BANC",
+            description: "Irregular dark splotching at section boundaries, likely from staining contamination or resin pooling during preparation.",
+            aliases: [],
+            keywords: ["defect", "irregular", "dark", "splotching", "section", "boundaries", "likely", "staining", "contamination", "resin"]
+        },
+        {
+            title: "Combined Defects: Staining, Fold, Lipid Droplets",
+            url: "gallery/#fig-combined-defects-staining-fold-lipid-droplets",
+            section: "Gallery \u00b7 BANC",
+            description: "Multiple artifacts in one region: uneven staining, tissue fold (dark diagonal band), and scattered lipid droplets (fat globules).",
+            aliases: [],
+            keywords: ["defect", "multiple", "artifacts", "region", "uneven", "staining", "tissue", "fold", "dark", "diagonal"]
+        },
+        {
+            title: "Lipid Droplets (Section Artifact)",
+            url: "gallery/#fig-lipid-droplets-section-artifact",
+            section: "Gallery \u00b7 BANC",
+            description: "Scattered lipid droplets (fat globules) appearing as dark spherical inclusions. Green arrows highlight individual droplets. Can be confused with biological structures.",
+            aliases: [],
+            keywords: ["defect", "scattered", "lipid", "droplets", "globules", "appearing", "dark", "spherical", "inclusions", "green"]
+        },
+        {
+            title: "Multiple Section Errors (Central Chiasm)",
+            url: "gallery/#fig-multiple-section-errors-central-chiasm",
+            section: "Gallery \u00b7 BANC",
+            description: "Central chiasm region exhibiting multiple simultaneous defects: large tissue distortions, folds, and torn areas. Severely compromised data integrity.",
+            aliases: [],
+            keywords: ["defect", "central", "chiasm", "region", "exhibiting", "multiple", "simultaneous", "defects", "large", "tissue"]
+        },
+        {
+            title: "Section Cracks (aka Lightning&trade;)",
+            url: "gallery/#fig-section-cracks-aka-lightningtrade",
+            section: "Gallery \u00b7 BANC",
+            description: "Zoomed-out view showing branching cracks propagating across the section. Nicknamed &ldquo;lightning&rdquo; for their characteristic branching pattern.",
+            aliases: [],
+            keywords: ["defect", "zoomed", "view", "showing", "branching", "cracks", "propagating", "across", "section", "nicknamed"]
+        },
+        {
+            title: "Multiple Section Errors (Overview)",
+            url: "gallery/#fig-multiple-section-errors-overview",
+            section: "Gallery \u00b7 BANC",
+            description: "Panoramic view showing a convergence of defect types: folds, cracks, pinch artifacts, and a missing section &mdash; all in one region.",
+            aliases: [],
+            keywords: ["defect", "panoramic", "view", "showing", "convergence", "types", "folds", "cracks", "pinch", "artifacts"]
+        },
+        {
+            title: "T-bar Synapse",
+            url: "gallery/#fig-t-bar-synapse",
+            section: "Gallery \u00b7 FAFB 2019",
+            description: "Classic T-bar morphology with platform structure, dense body visible in cross-section.",
+            aliases: [],
+            keywords: ["synapse", "classic", "morphology", "platform", "structure", "dense", "body", "visible", "cross", "section"]
+        },
+        {
+            title: "Elongated T-bar",
+            url: "gallery/#fig-elongated-t-bar",
+            section: "Gallery \u00b7 FAFB 2019",
+            description: "Extended platform variant. Note the longer horizontal extent compared to standard T-bars.",
+            aliases: [],
+            keywords: ["synapse", "extended", "platform", "variant", "note", "longer", "horizontal", "extent", "compared", "standard"]
+        },
+        {
+            title: "Multiple T-bars (Smudge)",
+            url: "gallery/#fig-multiple-t-bars-smudge",
+            section: "Gallery \u00b7 FAFB 2019",
+            description: "Clustered synapses appearing as smudge-like shapes. Common in regions of high synaptic density.",
+            aliases: [],
+            keywords: ["synapse", "clustered", "synapses", "appearing", "smudge", "like", "shapes", "common", "regions", "high"]
+        },
+        {
+            title: "GT Protocol Reference 6",
+            url: "gallery/#fig-gt-protocol-reference-6",
+            section: "Gallery \u00b7 Reference Materials",
+            description: "Ambiguous cases and decision criteria for edge cases.",
+            aliases: [],
+            keywords: ["synapse", "ambiguous", "cases", "decision", "criteria", "edge"]
+        },
     ];
 
     /* ----------------------------------------------------------------------
