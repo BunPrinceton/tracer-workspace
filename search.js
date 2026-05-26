@@ -94,9 +94,41 @@
             title: 'Archive · All Documents',
             url: 'archive/',
             section: 'Archive',
-            description: 'Comprehensive index of every page on the site, plus legacy tool documentation and historical glossary. Also serves as the full search-results view.',
-            aliases: ['archive', 'all documents', 'all pages', 'document index', 'index', 'glossary', 'appendix', 'legacy', 'deprecated docs'],
-            keywords: ['document list', 'all docs', 'historical', 'vast', 'omni', 'eyewire', 'tool evolution']
+            description: 'Comprehensive index of every page on the site. Also serves as the full search-results view when you press Enter in the site search.',
+            aliases: ['archive', 'all documents', 'all pages', 'document index', 'index', 'appendix'],
+            keywords: ['document list', 'all docs']
+        },
+        {
+            title: 'Deprecated Tools',
+            url: 'archive/deprecated-tools/',
+            section: 'Archive',
+            description: 'VAST, Omni, and Eyewire — tools that have been replaced by modern alternatives. Documentation preserved for institutional memory.',
+            aliases: ['deprecated tools', 'old tools', 'retired tools'],
+            keywords: ['vast', 'omni', 'eyewire', 'legacy', 'volume annotation segmentation tool', 'desktop tools']
+        },
+        {
+            title: 'Legacy Workflows',
+            url: 'archive/legacy-workflows/',
+            section: 'Archive',
+            description: 'Workflow patterns from earlier eras of the pipeline — desktop-based annotation, manual ID tracking — preserved for institutional memory.',
+            aliases: ['legacy workflows', 'old workflows', 'deprecated workflows'],
+            keywords: ['desktop annotation', 'manual id tracking', 'spreadsheet', 'ubuntu workflow', 'historical workflow']
+        },
+        {
+            title: 'Tool Evolution Timeline',
+            url: 'archive/tool-evolution/',
+            section: 'Archive',
+            description: 'The arc of how our tooling has evolved across three eras: citizen science (Eyewire), professional desktop (VAST + Omni), and web-based collaboration (WebKnossos + Neuroglancer + CAVE).',
+            aliases: ['tool evolution', 'evolution timeline', 'tool history', 'history'],
+            keywords: ['eyewire era', 'vast era', 'omni era', 'webknossos', 'neuroglancer', 'cave', 'flywire', 'historical timeline']
+        },
+        {
+            title: 'Historical Glossary',
+            url: 'archive/glossary/',
+            section: 'Archive',
+            description: 'Terms from deprecated tools that may appear in legacy documentation — Omni terminology (dust, merger, supervoxel) and VAST terminology (volume, brush, label).',
+            aliases: ['glossary', 'historical glossary', 'terminology', 'definitions', 'dictionary'],
+            keywords: ['dust', 'merger', 'supervoxel', 'segment', 'spine', 'volume', 'brush', 'label', 'omni terminology', 'vast terminology']
         },
         {
             title: 'Experimental Tools',

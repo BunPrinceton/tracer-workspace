@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tool Evolution Timeline - Princeton Tracers</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-size: 18px; line-height: 1.6; }
+        body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background-color: #f5f5f5; color: #1a1a1a; min-height: 100vh; }
+
+        nav { background-color: #1a1a1a; padding: 0.75rem 1.5rem; }
+        nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; justify-content: center; max-width: 1200px; margin: 0 auto; }
+        nav a { color: #e5e5e5; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0; display: inline-block; }
+        nav a:hover, nav a:focus { text-decoration: underline; text-underline-offset: 4px; }
+        nav a[aria-current="page"] { color: #ffffff; font-weight: 600; }
+        .nav-more { position: relative; }
+        .nav-more-btn { background: none; border: none; color: #e5e5e5; font-size: 0.875rem; padding: 0.5rem 0; cursor: pointer; font-family: inherit; }
+        .nav-more-btn:hover, .nav-more-btn:focus { text-decoration: underline; text-underline-offset: 4px; }
+        .nav-more-menu { display: none; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); background-color: #2a2a2a; border: 1px solid #444; border-radius: 4px; padding: 0.25rem 0; min-width: 160px; z-index: 1000; list-style: none; }
+        .nav-more-menu li { padding: 0; }
+        .nav-more-menu a { display: block; padding: 0.5rem 1rem; white-space: nowrap; }
+        .nav-more-menu a:hover, .nav-more-menu a:focus { background-color: #333; }
+        .nav-more:hover .nav-more-menu, .nav-more:focus-within .nav-more-menu { display: block; }
+
+        main { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+        .page-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #d4d4d4; }
+        .page-header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .page-header p { color: #525252; font-size: 1.0625rem; }
+        .page-header .crumb { font-size: 0.8125rem; color: #737373; margin-bottom: 0.5rem; }
+        .page-header .crumb a { color: #525252; text-decoration: none; }
+        .page-header .crumb a:hover { color: #1a1a1a; text-decoration: underline; }
+
+        /* Tool evolution timeline */
+        .evolution-timeline { background-color: #ffffff; border: 2px solid #d4d4d4; border-radius: 8px; padding: 1.5rem; }
+        .evolution-item { position: relative; padding-left: 2rem; padding-bottom: 1.5rem; border-left: 2px solid #d4d4d4; margin-left: 0.5rem; }
+        .evolution-item:last-child { border-left: 2px solid transparent; padding-bottom: 0; }
+        .evolution-item::before { content: ""; position: absolute; left: -7px; top: 0; width: 12px; height: 12px; border-radius: 50%; }
+        .evolution-item--deprecated::before { background-color: #737373; border: 2px solid #737373; }
+        .evolution-item--current::before { background-color: #059669; border: 2px solid #059669; }
+        .evolution-era { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.25rem; }
+        .evolution-era--deprecated { color: #737373; }
+        .evolution-era--current { color: #059669; }
+        .evolution-title { font-size: 1rem; font-weight: 600; margin-bottom: 0.25rem; }
+        .evolution-desc { font-size: 0.875rem; color: #525252; }
+        .evolution-tools { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+        .evolution-tool { font-size: 0.75rem; padding: 0.25rem 0.5rem; background-color: #f5f5f5; border-radius: 4px; color: #525252; }
+        .evolution-tool--current { background-color: #ecfdf5; color: #059669; }
+
+        footer { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem; border-top: 1px solid #e5e5e5; font-size: 0.875rem; color: #737373; }
+        footer a { color: #525252; }
+        footer a:hover { color: #1a1a1a; }
+        .footer-nav { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+        .suggest-edit { color: #737373; font-size: 0.8125rem; }
+        .suggest-edit:hover { color: #2563eb; }
+
+        @media (max-width: 768px) {
+            html { font-size: 16px; }
+            main { padding: 1.5rem 1rem; }
+        }
+        @media print {
+            nav, footer { display: none; }
+            .evolution-timeline { break-inside: avoid; border: 1px solid #000; }
+        }
+
+        :focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+        .skip-link { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+        .skip-link:focus { position: fixed; top: 0; left: 0; width: auto; height: auto; padding: 1rem; background: #2563eb; color: #ffffff; z-index: 10000; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Main navigation">
+    <ul>
+        <li><a href="../../">Dashboard</a></li>
+        <li><a href="../../gallery/">Gallery</a></li>
+        <li><a href="../../tasks/">Task Guides</a></li>
+        <li><a href="../../sop/">SOPs</a></li>
+        <li><a href="../../ground-truth/">Ground Truth</a></li>
+        <li><a href="../../pipeline/">Pipeline</a></li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">More &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../../publications/">Publications</a></li>
+                <li><a href="../../experimental/">Experimental</a></li>
+                <li><a href="../../archive/" aria-current="page">Archive</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+
+<main id="main-content" role="main">
+
+    <div class="page-header">
+        <div class="crumb"><a href="../">← Archive</a></div>
+        <h1>Tool Evolution Timeline</h1>
+        <p>The arc of how our annotation tooling has evolved across three eras of connectomics work.</p>
+    </div>
+
+    <div class="evolution-timeline">
+
+        <div class="evolution-item evolution-item--deprecated">
+            <div class="evolution-era evolution-era--deprecated">Era 1: Citizen Science</div>
+            <div class="evolution-title">Eyewire Era</div>
+            <div class="evolution-desc">Browser-based gamified neuron reconstruction for public participation. Pioneered crowdsourced connectomics.</div>
+            <div class="evolution-tools">
+                <span class="evolution-tool">Eyewire</span>
+                <span class="evolution-tool">Browser-based</span>
+            </div>
+        </div>
+
+        <div class="evolution-item evolution-item--deprecated">
+            <div class="evolution-era evolution-era--deprecated">Era 2: Professional Desktop</div>
+            <div class="evolution-title">VAST + Omni Era</div>
+            <div class="evolution-desc">Professional desktop tools for annotation (VAST) and 3D proofreading (Omni). Required Ubuntu workstations with local data access.</div>
+            <div class="evolution-tools">
+                <span class="evolution-tool">VAST</span>
+                <span class="evolution-tool">Omni</span>
+                <span class="evolution-tool">Ubuntu/Linux</span>
+            </div>
+        </div>
+
+        <div class="evolution-item evolution-item--current">
+            <div class="evolution-era evolution-era--current">Era 3: Web-Based Collaboration (Current)</div>
+            <div class="evolution-title">WebKnossos + Neuroglancer Era</div>
+            <div class="evolution-desc">Web-based tools with collaborative features, AI assistance, and cloud integration. CAVE provides versioned annotation backend.</div>
+            <div class="evolution-tools">
+                <span class="evolution-tool evolution-tool--current">WebKnossos</span>
+                <span class="evolution-tool evolution-tool--current">Neuroglancer</span>
+                <span class="evolution-tool evolution-tool--current">CAVE</span>
+                <span class="evolution-tool evolution-tool--current">FlyWire</span>
+            </div>
+        </div>
+
+    </div>
+
+</main>
+
+<footer>
+    <div class="footer-nav">
+        <a href="../">← Back to Archive</a>
+        <a href="#" id="suggest-edit-link" class="suggest-edit" target="_blank" rel="noopener noreferrer">Please Suggest Edits</a>
+    </div>
+</footer>
+
+<script>
+(function() {
+    var link = document.getElementById('suggest-edit-link');
+    if (link) {
+        var title = encodeURIComponent('[Content] ' + document.title.replace(' - Princeton Tracers', ''));
+        link.href = 'https://github.com/BunPrinceton/tracer-workspace/issues/new?template=content-suggestion.yml&title=' + title + '&body=' + encodeURIComponent('**Page:** ' + window.location.href + '\n\n**Section:** \n\n**Suggestion:**\n');
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+    }
+})();
+</script>
+<script src="../../search.js" defer></script>
+</body>
+</html>
