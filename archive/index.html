@@ -633,7 +633,7 @@
         .search-mode-banner p { font-size: 0.875rem; color: #525252; margin: 0; }
         .search-mode-banner a { color: #2563eb; text-decoration: none; font-weight: 600; }
         .search-mode-banner a:hover { text-decoration: underline; }
-        .search-refine-form { margin: 0 0 0.6rem; }
+        .search-refine-form { margin: 0 0 0.4rem; }
         .search-refine-form label.visually-hidden { position: absolute; left: -10000px; }
         #search-refine-input {
             width: 100%; font: inherit; font-size: 1.0625rem;
@@ -644,6 +644,15 @@
         #search-refine-input:focus {
             outline: none; border-color: #2563eb;
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+        .search-refine-tip {
+            font-size: 0.75rem; color: #737373; margin: 0 0 0.6rem;
+        }
+        .search-refine-tip code {
+            font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+            background-color: #ffffff; border: 1px solid #d4d4d4;
+            padding: 0 0.25em; border-radius: 3px; font-size: 0.9em;
+            color: #1a1a1a;
         }
 
         .search-results-list { list-style: none; padding: 0; margin: 0; }
@@ -720,6 +729,9 @@
                 <label for="search-refine-input" class="visually-hidden">Refine search</label>
                 <input type="search" id="search-refine-input" placeholder="Refine search…" autocomplete="off" aria-label="Refine search">
             </form>
+            <p class="search-refine-tip">
+                Operators: <code>+word</code> required · <code>-word</code> excluded · <code>"exact phrase"</code> · <code>section:gallery</code> field filter
+            </p>
             <p>
                 Showing results for "<strong id="search-query"></strong>" · <span id="search-count"></span> ·
                 <a href="?">Clear search</a> ·

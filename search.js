@@ -1014,11 +1014,116 @@
         return total;
     }
 
+    /* ----------------------------------------------------------------------
+       OPERATOR PARSER — Google-style query operators on top of the existing
+       fuzzy scoring.
+           +term       term must appear somewhere in the entry
+           -term       entries containing this term are excluded
+           "exact phrase"   exact substring must appear somewhere
+           section:foo restrict to entries whose section contains "foo"
+       Bare words keep current soft-OR behavior (contribute to score, with
+       coverage bonus when multiple match). Operators are silent if absent —
+       backward-compatible with every existing query.
+       ---------------------------------------------------------------------- */
+    function parseQuery(query) {
+        var parsed = { terms: [], required: [], excluded: [], phrases: [], fields: {} };
+        if (!query) return parsed;
+
+        // Extract "quoted phrases" first
+        var phraseRx = /"([^"]+)"/g;
+        var m;
+        while ((m = phraseRx.exec(query)) !== null) {
+            var p = m[1].trim();
+            if (p) parsed.phrases.push(p.toLowerCase());
+        }
+        var remaining = query.replace(phraseRx, ' ').trim();
+
+        // Tokenize remaining on whitespace
+        var tokens = remaining.split(/\s+/);
+        for (var i = 0; i < tokens.length; i++) {
+            var t = tokens[i];
+            if (!t) continue;
+            // Ignore an explicit "OR" — bare words already OR-combine
+            if (t.toUpperCase() === 'OR') continue;
+            // field:value (e.g. section:gallery) — colon not at start/end
+            var colon = t.indexOf(':');
+            if (colon > 0 && colon < t.length - 1) {
+                var field = t.substring(0, colon).toLowerCase();
+                var value = t.substring(colon + 1).toLowerCase();
+                if (!parsed.fields[field]) parsed.fields[field] = [];
+                parsed.fields[field].push(value);
+                continue;
+            }
+            if (t.charAt(0) === '+' && t.length > 1) {
+                parsed.required.push(t.substring(1).toLowerCase());
+            } else if (t.charAt(0) === '-' && t.length > 1) {
+                parsed.excluded.push(t.substring(1).toLowerCase());
+            } else {
+                parsed.terms.push(t.toLowerCase());
+            }
+        }
+        return parsed;
+    }
+
+    function buildEntryHaystack(entry) {
+        // Concatenated lowercase text of every searchable field — used for
+        // operator filters (substring checks).
+        var parts = [entry.title || '', entry.section || '', entry.description || ''];
+        if (entry.aliases) for (var i = 0; i < entry.aliases.length; i++) parts.push(entry.aliases[i]);
+        if (entry.keywords) for (var j = 0; j < entry.keywords.length; j++) parts.push(entry.keywords[j]);
+        return parts.join(' ').toLowerCase();
+    }
+
     function search(query, limit) {
+        var parsed = parseQuery(query);
+        var hasFilters = parsed.required.length || parsed.excluded.length
+            || parsed.phrases.length || Object.keys(parsed.fields).length;
+
         var results = [];
         for (var i = 0; i < INDEX.length; i++) {
-            var s = scoreEntry(query, INDEX[i]);
-            if (s > 0) results.push({ score: s, entry: INDEX[i] });
+            var entry = INDEX[i];
+
+            // Apply operator filters (substring against entry haystack)
+            if (hasFilters) {
+                var hay = buildEntryHaystack(entry);
+                var skip = false;
+                for (var x = 0; !skip && x < parsed.excluded.length; x++) {
+                    if (hay.indexOf(parsed.excluded[x]) !== -1) skip = true;
+                }
+                for (var r = 0; !skip && r < parsed.required.length; r++) {
+                    if (hay.indexOf(parsed.required[r]) === -1) skip = true;
+                }
+                for (var p = 0; !skip && p < parsed.phrases.length; p++) {
+                    if (hay.indexOf(parsed.phrases[p]) === -1) skip = true;
+                }
+                if (!skip && parsed.fields.section) {
+                    var sec = (entry.section || '').toLowerCase();
+                    var ok = false;
+                    for (var f = 0; f < parsed.fields.section.length; f++) {
+                        if (sec.indexOf(parsed.fields.section[f]) !== -1) { ok = true; break; }
+                    }
+                    if (!ok) skip = true;
+                }
+                if (skip) continue;
+            }
+
+            // Score using soft terms + required + phrases (all bias ranking;
+            // required and phrases were gated above so this is purely additive).
+            var scoreParts = parsed.terms.slice();
+            for (var k = 0; k < parsed.required.length; k++) scoreParts.push(parsed.required[k]);
+            for (var q = 0; q < parsed.phrases.length; q++) scoreParts.push(parsed.phrases[q]);
+
+            var s;
+            if (scoreParts.length) {
+                s = scoreEntry(scoreParts.join(' '), entry);
+            } else if (hasFilters) {
+                // Filter-only query (e.g. "section:gallery") — accept with a
+                // base score so results still appear consistently.
+                s = 1;
+            } else {
+                s = 0;
+            }
+            if (s > 0) results.push({ score: s, entry: entry });
         }
         results.sort(function (a, b) { return b.score - a.score; });
         if (typeof limit === 'number' && limit > 0) return results.slice(0, limit);
@@ -1095,6 +1200,7 @@
         search: search,
         scoreEntry: scoreEntry,
         highlight: highlight,
+        parseQuery: parseQuery,
         SITE_ROOT: SITE_ROOT
     };
 
