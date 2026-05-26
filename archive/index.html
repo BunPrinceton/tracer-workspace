@@ -117,7 +117,7 @@
 
         /* Main content */
         main {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 2rem 1.5rem 4rem;
         }
@@ -571,6 +571,77 @@
             z-index: 10000;
             font-weight: 600;
         }
+
+        /* ============================================================
+           ALL DOCUMENTS — Fandom-style multi-column alphabetical index.
+           Rendered from window.SiteSearch.INDEX so adding a page to the
+           search index automatically lists it here.
+           ============================================================ */
+        .all-docs-section {
+            background-color: #ffffff;
+            border: 2px solid #d4d4d4;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .all-docs-section .section-header { margin-bottom: 0.75rem; padding-bottom: 0.5rem; }
+
+        .all-docs-blurb { color: #525252; font-size: 0.9375rem; margin-bottom: 1rem; }
+        .all-docs-blurb .special-tag { font-size: 0.75rem; color: #737373; display: block; margin-bottom: 0.25rem; font-style: italic; }
+
+        .doc-filter-wrap { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap; }
+
+        #doc-filter {
+            flex: 1; min-width: 240px; font: inherit; font-size: 0.9375rem;
+            padding: 0.5rem 0.75rem; border: 1px solid #d4d4d4; border-radius: 6px;
+            background-color: #fafafa;
+        }
+        #doc-filter:focus { outline: none; border-color: #2563eb; background-color: #ffffff; box-shadow: 0 0 0 3px rgba(37,99,235,0.15); }
+        #doc-filter-meta { font-size: 0.8125rem; color: #737373; }
+
+        .all-docs-list { column-count: 3; column-gap: 2rem; list-style: none; padding: 0; margin: 0; }
+        .all-docs-list li { break-inside: avoid; padding: 0.25rem 0; margin: 0; font-size: 0.875rem; border-bottom: none; }
+        .all-docs-list a { color: #2563eb; text-decoration: none; font-style: italic; }
+        .all-docs-list a:hover { text-decoration: underline; }
+        .doc-section-badge { font-size: 0.6875rem; color: #737373; margin-left: 0.25rem; font-style: normal; }
+
+        .no-docs { color: #737373; font-style: italic; padding: 1rem 0; }
+
+        @media (max-width: 900px) { .all-docs-list { column-count: 2; } }
+        @media (max-width: 600px) { .all-docs-list { column-count: 1; } }
+
+        /* ============================================================
+           SEARCH RESULTS MODE — shown when ?q=... is in the URL.
+           Hides the rest of the archive content; richer per-item layout.
+           ============================================================ */
+        main.has-search-query > .archive-warning,
+        main.has-search-query > .jump-links,
+        main.has-search-query > #tools,
+        main.has-search-query > #workflows,
+        main.has-search-query > #evolution,
+        main.has-search-query > #glossary,
+        main.has-search-query > #legacy-docs,
+        main.has-search-query > #all-documents { display: none; }
+        main:not(.has-search-query) > #search-mode { display: none; }
+
+        .search-mode-banner {
+            background-color: #eff6ff; border: 2px solid #bfdbfe; border-radius: 8px;
+            padding: 1.25rem 1.5rem; margin-bottom: 1.5rem;
+        }
+        .search-mode-banner h2 { font-size: 1.25rem; font-weight: 700; color: #1a1a1a; margin-bottom: 0.5rem; }
+        .search-mode-banner p { font-size: 0.875rem; color: #525252; margin: 0; }
+        .search-mode-banner a { color: #2563eb; text-decoration: none; font-weight: 600; }
+        .search-mode-banner a:hover { text-decoration: underline; }
+
+        .search-results-list { list-style: none; padding: 0; margin: 0; }
+        .search-results-list li { padding: 1rem 0; border-bottom: 1px solid #e5e5e5; }
+        .search-results-list li:last-child { border-bottom: none; }
+        .search-results-list .result-title { font-size: 1.0625rem; font-weight: 600; color: #2563eb; text-decoration: none; }
+        .search-results-list .result-title:hover { text-decoration: underline; }
+        .search-results-list .result-section { font-size: 0.75rem; color: #2563eb; margin-left: 0.5rem; }
+        .search-results-list .result-desc { font-size: 0.875rem; color: #525252; margin-top: 0.25rem; }
+        .search-results-list .result-url { font-size: 0.75rem; color: #16a34a; margin-top: 0.25rem; font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
     </style>
 </head>
 <body>
@@ -600,8 +671,48 @@
 
     <div class="page-header">
         <h1>Archive</h1>
-        <p>Historical documentation for deprecated tools, workflows, and procedures. Preserved for institutional memory and reference.</p>
+        <p>A comprehensive index of every page on the site, plus historical documentation for deprecated tools and procedures. Also serves as the full search-results view — try the site search above.</p>
     </div>
+
+    <!-- ================================================================
+         ALL DOCUMENTS
+         Always-visible Fandom-style multi-column alphabetical index of
+         every page in the site, plus a live filter input. Source of truth
+         is window.SiteSearch.INDEX (defined in /search.js).
+         ================================================================ -->
+    <section class="all-docs-section" id="all-documents" aria-labelledby="all-docs-heading">
+        <div class="section-header">
+            <h2 id="all-docs-heading">All Documents</h2>
+        </div>
+        <p class="all-docs-blurb">
+            <span class="special-tag">Special page</span>
+            Every page on Princeton Tracers, sorted alphabetically. This list and the site search share the same source of truth — adding a page to the index makes it discoverable from both.
+        </p>
+        <div class="doc-filter-wrap">
+            <input type="text" id="doc-filter" placeholder="Filter by name or keyword…" autocomplete="off" aria-label="Filter documents">
+            <span id="doc-filter-meta"></span>
+        </div>
+        <ul class="all-docs-list" id="all-docs-list" aria-live="polite"></ul>
+        <p class="no-docs" id="no-docs" hidden>No documents match your filter.</p>
+    </section>
+
+    <!-- ================================================================
+         SEARCH RESULTS MODE
+         Shown only when ?q=... is in the URL. CSS in the <style> block
+         hides every other section when main has class "has-search-query".
+         ================================================================ -->
+    <section id="search-mode" aria-labelledby="search-mode-heading">
+        <div class="search-mode-banner">
+            <h2 id="search-mode-heading">Search results for "<span id="search-query"></span>"</h2>
+            <p>
+                <span id="search-count"></span> ·
+                <a href="?">Clear search</a> ·
+                <a href="" id="view-all-docs">View all documents</a>
+            </p>
+        </div>
+        <ul class="search-results-list" id="search-results-list"></ul>
+        <p class="no-docs" id="search-no-results" hidden>No documents matched your search. Try a shorter or different term, or <a href="?">clear the search</a> to browse all documents.</p>
+    </section>
 
     <div class="archive-warning" role="alert">
         <span class="archive-warning-icon" aria-hidden="true">&#9888;</span>
@@ -916,6 +1027,7 @@
                 <li><a href="../drive_docs_output/Ground-Truth-Training/">Ground Truth Training Materials</a></li>
                 <li><a href="../drive_docs_output/Omni/">Omni Documentation</a></li>
                 <li><a href="../drive_docs_output/Misc/">Miscellaneous Documentation</a></li>
+                <li><a href="../drive_docs_output/FlyWire-Training/FlyWire self-guided training.html">FlyWire Self-Guided Training</a> <span style="color: #737373; font-size: 0.8125rem;">(external onboarding curriculum, flywire@princeton.edu — explore the live doc and its sub-links at the source)</span></li>
             </ul>
         </div>
     </section>
@@ -937,6 +1049,143 @@
         link.href = 'https://github.com/BunPrinceton/tracer-workspace/issues/new?template=content-suggestion.yml&title=' + title + '&body=' + encodeURIComponent('**Page:** ' + window.location.href + '\n\n**Section:** \n\n**Suggestion:**\n');
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
+    }
+})();
+</script>
+<script src="../search.js" defer></script>
+<script>
+/* Archive renderer — runs after search.js (deferred) has set window.SiteSearch.
+   Renders the All Documents list from the canonical search index, and if
+   ?q=... is in the URL, switches the page into search-results mode.       */
+(function () {
+    function escapeHTML(s) {
+        return (s || '').replace(/[&<>"']/g, function (c) {
+            return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+        });
+    }
+
+    function alphaSort(a, b) {
+        return a.title.toLowerCase().localeCompare(b.title.toLowerCase());
+    }
+
+    function init() {
+        var SS = window.SiteSearch;
+        if (!SS || !SS.INDEX) {
+            // Defensive — search.js failed to load. Leave existing static
+            // archive content untouched and bail.
+            return;
+        }
+
+        var params = new URLSearchParams(window.location.search);
+        var q = (params.get('q') || '').trim();
+        var main = document.querySelector('main');
+
+        if (q) {
+            if (main) main.classList.add('has-search-query');
+            document.title = 'Search: ' + q + ' - Princeton Tracers';
+            renderSearchResults(q);
+        }
+        // All-docs always renders so it's ready when the user clears their search.
+        renderAllDocuments();
+    }
+
+    function renderAllDocuments() {
+        var SS = window.SiteSearch;
+        var listEl = document.getElementById('all-docs-list');
+        var countEl = document.getElementById('doc-filter-meta');
+        var noDocsEl = document.getElementById('no-docs');
+        var filterEl = document.getElementById('doc-filter');
+        if (!listEl) return;
+
+        var sorted = SS.INDEX.slice().sort(alphaSort);
+
+        function paint(items) {
+            listEl.innerHTML = '';
+            if (countEl) {
+                countEl.textContent = items.length === sorted.length
+                    ? sorted.length + ' documents'
+                    : items.length + ' of ' + sorted.length + ' documents';
+            }
+            if (!items.length) {
+                if (noDocsEl) noDocsEl.hidden = false;
+                return;
+            }
+            if (noDocsEl) noDocsEl.hidden = true;
+            var frag = document.createDocumentFragment();
+            for (var i = 0; i < items.length; i++) {
+                var e = items[i];
+                var li = document.createElement('li');
+                li.innerHTML =
+                    '<a href="' + SS.SITE_ROOT + e.url + '">' + escapeHTML(e.title) + '</a>' +
+                    '<span class="doc-section-badge"> · ' + escapeHTML(e.section) + '</span>';
+                frag.appendChild(li);
+            }
+            listEl.appendChild(frag);
+        }
+
+        paint(sorted);
+
+        if (filterEl) {
+            filterEl.addEventListener('input', function () {
+                var query = filterEl.value.trim();
+                if (!query) { paint(sorted); return; }
+                // Use the fuzzy scorer to find matches, then re-sort alphabetically
+                // so the all-docs view stays alphabetical rather than score-ranked.
+                var scored = SS.search(query);
+                var filtered = scored.map(function (r) { return r.entry; }).sort(alphaSort);
+                paint(filtered);
+            });
+        }
+    }
+
+    function renderSearchResults(q) {
+        var SS = window.SiteSearch;
+        var listEl = document.getElementById('search-results-list');
+        var queryEl = document.getElementById('search-query');
+        var countEl = document.getElementById('search-count');
+        var noResultsEl = document.getElementById('search-no-results');
+        var viewAllLink = document.getElementById('view-all-docs');
+
+        if (queryEl) queryEl.textContent = q;
+        if (viewAllLink) viewAllLink.href = window.location.pathname;
+
+        var results = SS.search(q);
+        if (countEl) {
+            countEl.textContent = results.length + ' document' + (results.length === 1 ? '' : 's') + ' matched';
+        }
+
+        if (!listEl) return;
+        if (!results.length) {
+            if (noResultsEl) noResultsEl.hidden = false;
+            return;
+        }
+
+        var frag = document.createDocumentFragment();
+        var hl = SS.highlight || function (t) { return escapeHTML(t); };
+        function appendHash(url) {
+            var encoded = 'q=' + encodeURIComponent(q);
+            var hashIdx = url.indexOf('#');
+            if (hashIdx === -1) return url + '#' + encoded;
+            var existing = url.substring(hashIdx + 1);
+            return url.substring(0, hashIdx) + '#' + (existing ? existing + '&' : '') + encoded;
+        }
+        for (var i = 0; i < results.length; i++) {
+            var e = results[i].entry;
+            var li = document.createElement('li');
+            li.innerHTML =
+                '<a class="result-title" href="' + appendHash(SS.SITE_ROOT + e.url) + '">' + hl(e.title, q) + '</a>' +
+                '<span class="result-section">' + escapeHTML(e.section) + '</span>' +
+                '<div class="result-desc">' + hl(e.description, q) + '</div>' +
+                '<div class="result-url">/' + escapeHTML(e.url) + '</div>';
+            frag.appendChild(li);
+        }
+        listEl.appendChild(frag);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
     }
 })();
 </script>
