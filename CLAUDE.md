@@ -23,61 +23,89 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **No build system.** Pure static HTML served directly by GitHub Pages. No Jekyll, no bundler, no templating engine. This has major implications:
 
-- **CSS is duplicated in every page** via inline `<style>` blocks. There is no shared stylesheet (except `sop/print.css` for print). Updating the design system means editing every HTML file.
-- **Navigation is duplicated in every page.** `_includes/nav.html` exists as a reference template only — it cannot be auto-included. Adding a nav item requires editing every page. Nav links are centered (`justify-content: center`).
+- **CSS is duplicated in every page** via inline `<style>` blocks. The only shared stylesheets are `sop/print.css` (print rules) and `/search.js` injects a `<style>` at runtime for shared search UI bits. Updating the design system otherwise means editing every HTML file.
+- **Navigation is duplicated in every page.** `_includes/nav.html` exists as a reference template only — it cannot be auto-included. Adding a nav item requires editing every page. Top-level nav links are centered (`justify-content: center`); the top-right search bar is absolutely positioned and doesn't shift the link layout.
 - **External links open in new tabs** (`target="_blank" rel="noopener noreferrer"`), including "Suggest an edit" footer links which are built dynamically via JavaScript.
-- **Deployment is just `git push` to `master`.** No build step, no CI/CD, no GitHub Actions.
+- **Deployment is just `git push` to `master`.** No build step, no CI/CD, no GitHub Actions. GitHub Pages rebuild takes 30-90s.
 
 ### Design System
 
 All pages follow these principles (documented in `index.html` comments):
 - **Colorblind-safe**: Blue/amber palette, no red/green semantic coloring
 - **WCAG AA**: 4.5:1 contrast minimum
-- **No animations or transitions** (intentional low-stimulation design)
+- **No animations or transitions** in chrome (the search-result landing-highlight pulse is the one intentional exception, and it respects `prefers-reduced-motion`)
 - **44px minimum touch targets**
 - Font stack: `system-ui, -apple-system, "Segoe UI", Roboto, sans-serif` (no web fonts)
-- Color palette: bg `#f5f5f5`, text `#1a1a1a`, links `#2563eb`, nav bg `#1a1a1a`
+- Color palette: bg `#f5f5f5`, text `#1a1a1a`, links `#2563eb`, nav bg `#1a1a1a`, highlight (mark) `#fef3c7`
+- `html { font-size: 18px; line-height: 1.6 }` and `scrollbar-gutter: stable` are universal
+- `main { max-width: 1200px }` is the normalized content width on every content page
 
 ### Site Structure
 
 ```
-/                    # Dashboard (index.html) — 3 tiles: SOP, Tasks, Gallery
+/                    # Dashboard (index.html) — hero image + mission statement
 /pipeline/           # Pipeline stages
-/tasks/              # Task guides (6 subdirectories)
-/sop/                # SOPs with versioning (8 subdirectories)
-/gallery/            # Visual reference gallery
-/publications/       # Seung Lab publication stubs (15 papers, links to DOIs)
-/archive/            # Legacy tool documentation
+/tasks/              # Task guides (3 accordion sections; sub-paths are redirect stubs to the index anchors)
+/sop/                # SOPs with versioning (8 subdirectories, plus print.css)
+/gallery/            # Main visual reference gallery (44 figures across BANC / FAFB 2019 / Reference Materials / Image Bounty)
+/gallery/reference-figures/   # Sub-gallery: 185 figures extracted from training/reference docs (4 collections)
+/publications/       # Seung Lab publication stubs (13 papers)
+/archive/            # All Documents index + search-results view (dual-role; see below)
+/archive/<item>/     # Per-item historical pages: vast, omni, eyewire, desktop-annotation,
+                     # manual-id-tracking, glossary, tool-evolution
 /contribute/         # How to suggest changes
 /ground-truth/       # Ground Truth Hub
 /experimental/       # Experimental tools (Gen 2 scripts)
+/drive_docs_output/  # Curated archived Google Docs (FlyWire-Training, Triage-Additions, etc.)
+/search.js           # Site-wide search system — INDEX is the canonical page registry
 ```
+
+### Search System (`/search.js`)
+
+`/search.js` is loaded by every HTML page as `<script src=".../search.js" defer></script>` with depth-correct relative path. It is the heart of the site:
+
+- **`INDEX` array** at the top of search.js is the **canonical registry of every page and every searchable artifact** (currently ~105 entries: pages + 44 gallery images + 26 archived docs + per-item archive pages). **Adding a page = adding an INDEX entry**, in the same commit. No other data source.
+- **Entry schema**: `{title, url, section, description, aliases, keywords}`. Field weights for scoring: title=10, aliases=8, keywords=6, section=4, description=2 (exact word; fuzzy/transposition variants score 60-80% of these).
+- **Matcher**: hand-rolled (no Fuse.js dep). Substring → prefix → 1-edit-distance → 1-transposition. Plus Google-style operators: `+word` required, `-word` excluded, `"exact phrase"`, `section:name` field filter.
+- **Public API**: `window.SiteSearch = {INDEX, search, scoreEntry, highlight, parseQuery, SITE_ROOT}` — `/archive/` uses these to render its All Documents listing and search-results view from the same source.
+- **Top-nav search bar** auto-injects into every page's `<nav>` (creates a `<ul>` if missing — robust to leaf docs with minimal nav). Dropdown shows up to 8 ranked results; Enter goes to `/archive/?q=...`; arrow + Enter opens highlighted result directly.
+- **Landing handler**: every result link carries `#q=<term>` (combined with `#anchor` as `#anchor&q=term` when applicable). On landing, the handler opens any containing `<details>`, scrolls to the match, and pulse-highlights for ~3s before fading. When an anchor target is present, the highlight search is **scoped to that element** so gallery-image results jump to the right figure.
+- **Redirect stubs preserve the hash** on their way through the meta refresh (tiny inline script before the `<meta http-equiv="refresh">`). Affects `tasks/<name>/`, `sop/.../v2.0.html`, etc.
+
+### Archive Page (`/archive/`)
+
+Dual-role since 2026-05-26:
+1. **All Documents listing** (default view) — alphabetical, Fandom-style 3-column index of every page in the site, rendered live from `SiteSearch.INDEX`. Local filter input narrows in place.
+2. **Search-results view** — when `?q=...` is in the URL, the page hides the alphabetical listing and renders scored results with rich per-item layout (title, section, description, URL). Banner contains an **editable refine-search input** pre-filled with the current query; submit = `?q=<new>`. Tip line below documents the operator syntax. Mode toggle is the CSS class `main.has-search-query`.
+
+Historical content (deprecated tools, glossary, evolution timeline, legacy workflows) lives as standalone per-item sub-pages under `/archive/<item>/`. Discovery is via search and the All Documents listing — no hub pages.
 
 ### Site Editing Rules
 
 **Read `EDITORIAL.md` before making site changes.** Key points:
 
-- **Single-editor model**: All changes go through one maintainer for consistency
+- **Single-editor model**: All changes go through one maintainer for consistency. When coordinating with another Claude in parallel, drop a hand-off note in `work-files/` with pre-formatted data drops (JS-ready syntax for INDEX entries, etc.) — don't both edit `search.js` / `archive/index.html` / `gallery/index.html` simultaneously.
 - **SOP versioning**: Never delete old versions, create new `vX.Y.html` files
 - **Change classification**:
   - Wording fixes: Make directly
   - Structural changes: Consider impact
   - Navigation/architecture: Discuss with team lead first
-- **Page titles**: `[Topic] - Princeton Tracer`
+- **Page titles**: `[Topic] - Princeton Tracers` (plural)
 - **Heading hierarchy**: H1 for page title only, H2 for sections, H3 for subsections
+- **When adding pages**: also add the INDEX entry in `search.js` in the same commit so the search system stays consistent with the file tree.
 
 ### SOP Version Structure
 
 ```
 sop/gt-task-handling/
 ├── index.html     # Always current version
-├── v2.0.html      # Current
-├── v1.0.html      # Deprecated (never delete)
+├── v2.0.html      # Redirect stub to index.html (preserves search-result hash on its way through)
+├── v1.0.html      # Deprecated (full content; never delete)
 ```
 
-### Task Page Template
+### Task Page Pattern
 
-`tasks/semantic-segmentation/index.html` is the canonical template for task pages. Required sections: Task Overview, Current SOP, Historical SOPs, Visual Examples, Common Failure Modes, Tools Used, Training Videos, Related Publications. Each task page has a `.task-id` badge (e.g., `TASK-02`).
+`/tasks/index.html` is the canonical task page — three `<details>` accordion sections (Proofreading, Semantic Segmentation, Skeletonization) covering all task content inline. The subdirectory pages (`tasks/proofreading/`, `tasks/semantic-segmentation/`, `tasks/skeletonization/`, plus older `tasks/defect-annotation/`, `tasks/quality-assurance/`, `tasks/split-merge/`) are **redirect stubs** that bounce to `../#section-id`, preserving any incoming `#q=` hash for search-result deep links.
 
 ### Suggestion System
 
