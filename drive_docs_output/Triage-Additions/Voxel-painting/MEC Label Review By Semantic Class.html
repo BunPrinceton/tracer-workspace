@@ -1,0 +1,29 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>MEC Label Review By Semantic Class - Tracer Archive (text recreation)</title><!-- Archived recreation. Source: https://docs.google.com/document/d/1zJmEUuGohlJTWJqDhObajozbBM78KDzxphTgSBp_f28/edit | retrieved 2026-05-26 --><style>body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;max-width:900px;margin:0 auto;padding:1.5rem;color:#1a1a1a;background:#f5f5f5;}h1{font-size:1.4rem;}pre{white-space:pre-wrap;font:14px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;background:#fff;border:1px solid #d4d4d4;border-radius:6px;padding:1rem;}</style></head><body><div style="font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:#fef3c7;border:1px solid #d97706;border-radius:8px;padding:.75rem 1rem;margin:0 0 1rem;font-size:14px;color:#92400e;line-height:1.5;"><b>Archived source</b> &mdash; recreation of <b>MEC Label Review By Semantic Class</b> (tmacrina, 2025). &middot; <a href="https://docs.google.com/document/d/1zJmEUuGohlJTWJqDhObajozbBM78KDzxphTgSBp_f28/edit" style="color:#92400e;font-weight:700;" target="_blank" rel="noopener">Open the live original ↗</a> &middot; Retrieved 2026-05-26. Point-in-time snapshot.</div><h1>MEC Label Review By Semantic Class</h1><p style='color:#525252;font-size:14px;'>Text recreation (extracted content). Figures/formatting are in the live original linked above.</p><pre>251210 Reviewing MEC Labels By Semantic Class
+
+With Zetta&#x27;s guidance, the Princeton team produced voxel painting labels for Eric&#x27;s MEC dataset. The segmentation team could use help with a final review of the labels, organized by semantic class. This is meant to double-check the semantic labels and catch any final major errors in the segmentation that may have been overlooked.
+
+TRACKING SHEET
+Use &quot;MEC Segmentation Label Revision&quot; (spreadsheet 1OVbYRBYYN2oym5jlNaqaBSVhy6322UjIKacT-S7NQYA) to log information about labels in each cutout, starting from these neuroglancer links:
+  1. Cell semantic v1 Link
+  2. Mito semantic v1 Link
+  3. Defect semantic v1 Link
+
+PROTOCOL
+Voxel Painting Cell Segmentation Protocol v1.1 (doc 1KuefhUI0hGTqZu9Mp5QlBZCrAcmB5REwyuZRamE39IE).
+
+ESTIMATED TIME: 1-4 hours
+
+INSTRUCTIONS
+1. Check out a neuroglancer link for a cutout you have not previously worked on. It contains layers: Image; Segmentation (cell, mito, defect); Annotations with one point per segment, each point carrying the semantic class assigned from webknossos.
+2. Cycle through each point and review:
+   a. The semantic class.
+   b. Whether the segment has any major errors:
+      - Inspect the mesh for obvious merge errors, split errors, or gaps in the segment that could be connected.
+      - Scroll through the 3D segmentation to inspect for large holes.
+      - Do NOT worry about precision of the borders.
+3. Make corrections to semantic labels directly in the annotation layer.
+4. Create a new annotation layer to mark any issues with the segmentation.
+5. Save the reviewed neuroglancer link back to MEC Segmentation Label Revision (Cell / Mito / Defect semantic v1 Reviewed Link).
+6. Make corrections to the segmentation in webknossos:
+   a. Update segment names with any semantic class corrections you made in neuroglancer.
+   b. Mark &quot;Semantic Review Required Changes in Webknossos&quot; as &quot;Yes&quot; in MEC Segmentation Label Revision.</pre></body></html>

@@ -319,7 +319,215 @@
             description: 'Methods paper for the FlyWire fly brain connectome.',
             aliases: ['flywire methods', 'flywire paper'],
             keywords: ['flywire', 'fly brain', 'drosophila', 'connectome methods', 'methods paper']
-        }
+        },
+  {
+    title: "FlyWire Self-Guided Training",
+    url: "drive_docs_output/FlyWire-Training/FlyWire%20self-guided%20training.html",
+    section: "Archive \u00b7 Training",
+    description: "FlyWire's 10-step self-guided onboarding curriculum (datasets, glossary, sandbox, navigation, errors, access).",
+    aliases: ["flywire self-guided training", "flywire onboarding", "flywire training"],
+    keywords: ["FlyWire", "onboarding", "curriculum", "sandbox", "glossary"]
+  },
+  {
+    title: "Archived Documents (Triage Additions)",
+    url: "drive_docs_output/Triage-Additions/",
+    section: "Archive \u00b7 Documents",
+    description: "Index of 23 archived work documents (proofreading, segmentation, ground truth, training) recreated for the site.",
+    aliases: ["triage additions", "archived documents"],
+    keywords: ["archive", "documents", "recreations", "index"]
+  },
+  {
+    title: "Reference Figures Gallery",
+    url: "gallery/reference-figures/",
+    section: "Gallery \u00b7 Reference Figures",
+    description: "185 figures extracted from archived training/reference docs (EM examples, cell-type diagrams).",
+    aliases: ["reference figures", "extracted figures"],
+    keywords: ["figures", "gallery", "EM", "diagrams", "visual glossary", "optic lobe"]
+  },
+  {
+    title: "Seung lab proofreading-annotation empire operation manual",
+    url: "drive_docs_output/Triage-Additions/Proofreading/Seung%20lab%20proofreading-annotation%20empire%20operation%20manual.html",
+    section: "Archive \u00b7 Proofreading",
+    description: "Lab-wide operations manual for proofreading and annotation workflows (Seung lab).",
+    aliases: ["empire operation manual", "proofreading manual"],
+    keywords: ["operations", "workflow", "seung lab", "annotation"]
+  },
+  {
+    title: "Proofreading Tagging Guide (Protocol Update)",
+    url: "drive_docs_output/Triage-Additions/Proofreading/Proofreading%20Tagging%20Guide%20(Protocol%20Update).html",
+    section: "Archive \u00b7 Proofreading",
+    description: "Slide guide for the proofreading tagging protocol update.",
+    aliases: ["tagging guide", "tagging protocol"],
+    keywords: ["tags", "protocol update", "banc-bot"]
+  },
+  {
+    title: "How Ben Proofreads",
+    url: "drive_docs_output/Triage-Additions/Proofreading/How%20Ben%20Proofreads.html",
+    section: "Archive \u00b7 Proofreading",
+    description: "Ben's personal proofreading walkthrough (slides).",
+    aliases: ["how ben proofreads"],
+    keywords: ["proofreading", "walkthrough", "workflow"]
+  },
+  {
+    title: "AN-DN Task Guide",
+    url: "drive_docs_output/Triage-Additions/Proofreading/AN-DN%20Task%20Guide.html",
+    section: "Archive \u00b7 Proofreading",
+    description: "Task guide for ascending/descending neuron (AN/DN) proofreading.",
+    aliases: ["an dn task guide", "ascending descending neuron"],
+    keywords: ["AN", "DN", "ascending neuron", "descending neuron"]
+  },
+  {
+    title: "vnc_nblast_scores_sorted task instructions",
+    url: "drive_docs_output/Triage-Additions/Proofreading/vnc_nblast_scores_sorted%20task%20instructions.html",
+    section: "Archive \u00b7 Proofreading",
+    description: "Instructions for the NBLAST-sorted VNC proofreading task (verify/remove 'backbone proofread' labels).",
+    aliases: ["vnc nblast task", "nblast scores sorted"],
+    keywords: ["VNC", "NBLAST", "backbone proofread", "labels"]
+  },
+  {
+    title: "Previously Marked Proofread Neurons",
+    url: "drive_docs_output/Triage-Additions/Proofreading/Previously%20Marked%20Proofread%20Neurons.html",
+    section: "Archive \u00b7 Proofreading",
+    description: "Reference deck on neurons already marked proofread.",
+    aliases: ["previously marked proofread"],
+    keywords: ["proofread", "reference"]
+  },
+  {
+    title: "Proofreading core cells in Minnie",
+    url: "drive_docs_output/Triage-Additions/Proofreading/Proofreading%20core%20cells%20in%20Minnie.html",
+    section: "Archive \u00b7 Proofreading",
+    description: "Round-by-round procedure for proofreading pyramidal core cells in Minnie65 (dendrites then axons).",
+    aliases: ["minnie core cells", "core cells proofreading"],
+    keywords: ["Minnie", "Minnie65", "pyramidal", "dendrite", "axon"]
+  },
+  {
+    title: "How to create masking layer for image defects",
+    url: "drive_docs_output/Triage-Additions/Defect-annotation/How%20to%20create%20masking%20layer%20for%20image%20defects.html",
+    section: "Archive \u00b7 Defect Annotation",
+    description: "How to create a masking layer for image defects (2019, szichieh).",
+    aliases: ["masking layer", "image defect masking"],
+    keywords: ["defect", "mask", "alignment", "missing data"]
+  },
+  {
+    title: "Cleft Annotation Comparison Protocol - Easy-Seg vs Synaptor-Seg",
+    url: "drive_docs_output/Triage-Additions/Defect-annotation/Cleft%20Annotation%20Comparison%20Protocol%20-%20Easy-Seg%20vs%20Synaptor-Seg.html",
+    section: "Archive \u00b7 Defect Annotation",
+    description: "Protocol comparing cleft annotations between easy-seg and synaptor-seg and assigning a category.",
+    aliases: ["cleft annotation comparison", "easy-seg vs synaptor-seg"],
+    keywords: ["cleft", "synapse", "synaptor", "easy-seg"]
+  },
+  {
+    title: "annotation standard",
+    url: "drive_docs_output/Triage-Additions/Oldies-archive/annotation%20standard.html",
+    section: "Archive \u00b7 Historical",
+    description: "2019 annotation standards deck (szichieh).",
+    aliases: ["annotation standard"],
+    keywords: ["annotation", "standard", "guidelines"]
+  },
+  {
+    title: "Minnie groundtruth difficult-interesting parts",
+    url: "drive_docs_output/Triage-Additions/Oldies-archive/Minnie%20groundtruth%20difficult-interesting%20parts.html",
+    section: "Archive \u00b7 Historical",
+    description: "2019 deck of difficult/interesting ground-truth cases in Minnie.",
+    aliases: ["minnie groundtruth difficult"],
+    keywords: ["ground truth", "Minnie", "edge cases"]
+  },
+  {
+    title: "FlyWire Cheatsheet",
+    url: "drive_docs_output/Triage-Additions/Training-onboarding/FlyWire%20Cheatsheet.html",
+    section: "Archive \u00b7 Training",
+    description: "Quick-command cheatsheet for FlyWire (navigation, annotations, splitting & merging).",
+    aliases: ["flywire cheatsheet", "flywire commands"],
+    keywords: ["FlyWire", "hotkeys", "commands", "split", "merge", "neuroglancer"]
+  },
+  {
+    title: "Hippocampus CA3 training curriculum",
+    url: "drive_docs_output/Triage-Additions/Training-onboarding/Hippocampus%20CA3%20training%20curriculum.html",
+    section: "Archive \u00b7 Training",
+    description: "Structured CA3 hippocampus onboarding/training curriculum.",
+    aliases: ["CA3 training", "hippocampus curriculum"],
+    keywords: ["CA3", "hippocampus", "training", "onboarding"]
+  },
+  {
+    title: "Voxel Painting Cell Segmentation Work Instructions - Webknossos v1.2",
+    url: "drive_docs_output/Triage-Additions/Voxel-painting/Voxel%20Painting%20Cell%20Segmentation%20Work%20Instructions%20-%20Webknossos%20v1.2.html",
+    section: "Archive \u00b7 Voxel Painting",
+    description: "Work instructions for voxel-painting cell segmentation in WebKnossos (v1.2).",
+    aliases: ["voxel painting work instructions", "webknossos work instructions"],
+    keywords: ["voxel painting", "webknossos", "cell segmentation"]
+  },
+  {
+    title: "Cell Segmentation Visual Glossary v1.0",
+    url: "drive_docs_output/Triage-Additions/Voxel-painting/Cell%20Segmentation%20Visual%20Glossary%20v1.0.html",
+    section: "Archive \u00b7 Voxel Painting",
+    description: "Visual glossary for cell segmentation: myelin, axons, dendrites, synapses, soma, glia, artifacts.",
+    aliases: ["visual glossary", "cell segmentation glossary"],
+    keywords: ["glossary", "myelin", "axon", "dendrite", "synapse", "soma", "glia", "artifacts"]
+  },
+  {
+    title: "MEC Segmentation Label Revision",
+    url: "drive_docs_output/Triage-Additions/Voxel-painting/MEC%20Segmentation%20Label%20Revision.html",
+    section: "Archive \u00b7 Voxel Painting",
+    description: "MEC dataset segmentation label revision notes (Zetta/Macrina).",
+    aliases: ["MEC label revision"],
+    keywords: ["MEC", "labels", "segmentation", "Zetta"]
+  },
+  {
+    title: "MEC Label Review By Semantic Class",
+    url: "drive_docs_output/Triage-Additions/Voxel-painting/MEC%20Label%20Review%20By%20Semantic%20Class.html",
+    section: "Archive \u00b7 Voxel Painting",
+    description: "Procedure for reviewing MEC voxel-painting labels organized by semantic class.",
+    aliases: ["MEC label review", "semantic class review"],
+    keywords: ["MEC", "semantic class", "review", "webknossos"]
+  },
+  {
+    title: "Optic Lobe Cell Name Guide",
+    url: "drive_docs_output/Triage-Additions/Naming-setup-misc/Optic%20Lobe%20Cell%20Name%20Guide.html",
+    section: "Archive \u00b7 Reference",
+    description: "Naming guide for optic-lobe cell types (Lawf, Tm, TmY, Dm, Pm, LC, etc.).",
+    aliases: ["optic lobe cell name guide", "OL cell name guide"],
+    keywords: ["optic lobe", "cell types", "naming", "medulla", "lobula"]
+  },
+  {
+    title: "NoMachine Setup Instructions",
+    url: "drive_docs_output/Triage-Additions/Naming-setup-misc/NoMachine%20Setup%20Instructions.html",
+    section: "Archive \u00b7 Reference",
+    description: "Setup instructions for NoMachine remote access.",
+    aliases: ["nomachine setup"],
+    keywords: ["NoMachine", "remote desktop", "setup"]
+  },
+  {
+    title: "Working list of priorities-stages when handling datasets",
+    url: "drive_docs_output/Triage-Additions/Naming-setup-misc/Working%20list%20of%20priorities-stages%20when%20handling%20datasets.html",
+    section: "Archive \u00b7 Reference",
+    description: "Working list of priorities/stages when handling datasets (Kyle Willie).",
+    aliases: ["priorities stages datasets", "working list"],
+    keywords: ["workflow", "priorities", "datasets", "stages"]
+  },
+  {
+    title: "Optional - Fly synapses (re-sync 2026)",
+    url: "drive_docs_output/Triage-Additions/Synapse-GT/Optional%20-%20Fly%20synapses%20(re-sync%202026).html",
+    section: "Archive \u00b7 Synapse Ground Truth",
+    description: "FlyWire synapse-recognition guide: vesicle clusters, clefts, T-bars, PSDs (2026 re-sync).",
+    aliases: ["fly synapses"],
+    keywords: ["synapse", "vesicle", "T-bar", "PSD", "cleft", "FlyWire"]
+  },
+  {
+    title: "Bens Synapse Illustrations",
+    url: "drive_docs_output/Triage-Additions/Synapse-GT/Bens%20Synapse%20Illustrations.html",
+    section: "Archive \u00b7 Synapse Ground Truth",
+    description: "Ben's synapse illustration reference (2016).",
+    aliases: ["synapse illustrations"],
+    keywords: ["synapse", "illustrations", "reference"]
+  },
+  {
+    title: "Cell modeling instructions (shortcut)",
+    url: "drive_docs_output/Triage-Additions/Skeletonization/Cell%20modeling%20instructions%20(shortcut).html",
+    section: "Archive \u00b7 Skeletonization",
+    description: "Cell modeling instructions (Drive shortcut; link-out).",
+    aliases: ["cell modeling instructions"],
+    keywords: ["cell modeling", "skeletonization"]
+  }
     ];
 
     /* ----------------------------------------------------------------------

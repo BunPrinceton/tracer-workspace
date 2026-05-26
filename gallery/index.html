@@ -798,6 +798,21 @@
             z-index: 10000;
             font-weight: 600;
         }
+
+        /* Featured collection panel — pulls a sub-gallery up to page top */
+        .featured-collection {
+            display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem;
+            background: #eff6ff; border: 2px solid #bfdbfe; border-radius: 8px;
+            padding: 1.25rem 1.5rem; margin-bottom: 1.5rem;
+        }
+        .featured-collection .featured-text { flex: 1 1 320px; }
+        .featured-collection h2 { font-size: 1.125rem; color: #1a1a1a; font-weight: 700; margin: 0 0 0.25rem; }
+        .featured-collection p { font-size: 0.9375rem; color: #525252; margin: 0; }
+        .featured-collection .featured-link {
+            color: #ffffff; background: #2563eb; padding: 0.5rem 1rem; border-radius: 6px;
+            font-weight: 600; font-size: 0.875rem; text-decoration: none; white-space: nowrap;
+        }
+        .featured-collection .featured-link:hover { background: #1d4ed8; }
     </style>
 </head>
 <body>
@@ -829,6 +844,17 @@
         <h1>Gallery</h1>
         <p>Annotated examples, training images, and reference materials organized by dataset and category.</p>
     </div>
+
+    <!-- ============================================================
+         FEATURED COLLECTION — Reference Figures
+         ============================================================ -->
+    <aside class="featured-collection" aria-labelledby="featured-ref-figs">
+        <div class="featured-text">
+            <h2 id="featured-ref-figs">Reference Figures</h2>
+            <p>185 figures extracted from archived training and reference docs — EM examples, cell-type diagrams, visual glossaries.</p>
+        </div>
+        <a class="featured-link" href="reference-figures/">Browse all 185 figures →</a>
+    </aside>
 
     <!-- ============================================================
          FILTER CONTROLS

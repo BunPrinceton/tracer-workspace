@@ -1,0 +1,238 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Optional - Fly synapses (re-sync 2026) - Tracer Archive (recreation)</title><!-- Archived recreation. Source: https://docs.google.com/document/d/1tNeG-SIOlSAORXn_m8bKdjcIM80ksPAtyOk8u2CXj_4/edit | retrieved 2026-05-26 --><style>body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;max-width:900px;margin:0 auto;padding:1.5rem;color:#1a1a1a;background:#f5f5f5;}h1{font-size:1.4rem;}pre{white-space:pre-wrap;font:14px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;background:#fff;border:1px solid #d4d4d4;border-radius:6px;padding:1rem;}</style></head><body><div style="font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:#fef3c7;border:1px solid #d97706;border-radius:8px;padding:.75rem 1rem;margin:0 0 1rem;font-size:14px;color:#92400e;line-height:1.5;"><b>Archived source</b> &mdash; recreation of <b>Optional - Fly synapses (re-sync 2026)</b> (flywire@princeton, 2020). &middot; <a href="https://docs.google.com/document/d/1tNeG-SIOlSAORXn_m8bKdjcIM80ksPAtyOk8u2CXj_4/edit" style="color:#92400e;font-weight:700;" target="_blank" rel="noopener">Open the live original ↗</a> &middot; Retrieved 2026-05-26. Point-in-time snapshot.</div><h1>Optional - Fly synapses (re-sync 2026)</h1><p style='color:#525252;font-size:14px;'>Recreation from source (19 pages) &mdash; rendered images with extracted text. Editable original via the source link above.</p><figure style='margin:0 0 1.5rem;'><img src='Optional - Fly synapses (re-sync 2026)_assets/page-001.png' alt='page 1' style='width:100%;border:1px solid #d4d4d4;border-radius:6px;'/><figcaption style='color:#737373;font-size:12px;margin:.25rem 0;'>Page 1 of 19</figcaption><details><summary>Page text</summary><pre>1 
+ 
+Fly Synapses 
+Claire McKellar, Kyle Willie, Ben Silverman, and Jay Gager and Edna Normand 
+Overview 
+Synapses have been automatically detected in the dataset used by FlyWire (see 
+https://flywire.ai/credits for references). You can add these to visualize particular neurons as 
+described here: 
+https://prod.flywire-daf.com/dash/datastack/flywire_fafb_production?middle_auth_url=global.daf-
+apis.com%2Fsticky_auth 
+You can also find a cell’s pre- and postsynaptic partners using FlyWire’s Tools links. 
+If you’re a coder, please see the #synapses channel in the FlyWire Forum for information about 
+programmatic access.  
+ 
+You can look for synapses yourself manually using the biological information below. Annotations 
+can be used to mark synapses you find. 
+ 
+You won’t be tested on this material to gain access to the site. This document is provided in 
+case you want to learn what synapses look like, even though you may only make use of the 
+automatically detected synapses we provide. 
+ 
+To train AI synapse detectors, expert human “tracers” annotate synapses by manually “painting” 
+them in EM images. In the Seung lab, synapses have four possible indicators as described in 
+Zheng et al. 2018: one primary, and three secondary, described in more detail in subsequent 
+sections. 
+ 
+○​ Vesicle cluster (primary, required) 
+○​ Synaptic cleft (secondary) 
+○​ T-bar (secondary) 
+○​ PSD (secondary) 
+ 
+For a synapse to be vetted, the primary indicator (i.e. vesicle cluster) must be present, along 
+with at least two of the secondary indicators. Gap junctions, a different kind of synapse, are 
+unlikely to be visible in this data set.  
+ 
+What follows is a how-to guide on recognizing the features of synapses in the fly data set. 
+Shapes 
+Fly synapses are comprised of a presynaptic axonal body and a postsynaptic dendritic body. 
+(Rare exceptions such as axo-axonal or dendro-dendritic synapses can also be found. For 
+connectivity analysis, synapses originating from a dendrite are usually disregarded since it isn’t 
+known what these do, functionally). Terminals branch off from larger dendritic bodies and grow</pre></details></figure><figure style='margin:0 0 1.5rem;'><img src='Optional - Fly synapses (re-sync 2026)_assets/page-002.png' alt='page 2' style='width:100%;border:1px solid #d4d4d4;border-radius:6px;'/><figcaption style='color:#737373;font-size:12px;margin:.25rem 0;'>Page 2 of 19</figcaption><details><summary>Page text</summary><pre>2 
+towards axons, where they synapse to receive information. In other datasets, we’re used to 
+seeing axons with relatively clear trajectories, swelling and shrinking as they move from one 
+side of the bounding box to another, and moderate to large dendrites with clear terminals. In fly 
+data, we see something a little different. 
+ 
+ 
+Fig.1: Large shot. 
+ 
+In Fig. 1 we see a congregation of amorphously shaped axons, dendrites, and multicellular 
+bodies. Axons are generally large, sweeping structures that branch and pinch as they move 
+throughout the set. Dendritic branches can be just as large and sweeping, often looking very 
+similar in form to the axons around them. What’s distinct here are the shapes of the 
+postsynaptic terminals and the way they interact with axons. They’re often grouped together and 
+surround axons from many sides and in large numbers. 
+ 
+One synapse from a presynaptic axon often touches multiple postsynaptic partners (dyads, 
+triads, etc.), which are considered part of the same single synapse if all postsynaptic partners 
+are touched by the same cleft. There can sometimes be many postsynaptic partners clustered 
+around one synapse, forming a “rosette.”</pre></details></figure><figure style='margin:0 0 1.5rem;'><img src='Optional - Fly synapses (re-sync 2026)_assets/page-003.png' alt='page 3' style='width:100%;border:1px solid #d4d4d4;border-radius:6px;'/><figcaption style='color:#737373;font-size:12px;margin:.25rem 0;'>Page 3 of 19</figcaption><details><summary>Page text</summary><pre>3 
+ 
+ 
+         Fig. 2: Cluster of postsynaptic terminals                   Fig. 3: Cluster of synapsing postsynaptic terminals. 
+ 
+Vesicles 
+A good method to find synapses is to find an axon and look for vesicles. Some axons have lots 
+of vesicles while others have very few. In the sparse cases, keep a keen eye out for little 
+clusters of 1-6 vesicles usually near the cell’s boundaries.  
+ 
+ 
+Fig. 4: An axon with lots of vesicles (left) and an axon with few vesicles (right). 
+ 
+A cluster of vesicles is the one indicator that must be present in every identified synapse. Such 
+clusters should be easy to spot in reasonably clear data, making them a good indicator when 
+looking for synapses. How many axons can you spot with vesicle clusters in the figure below?</pre></details></figure><figure style='margin:0 0 1.5rem;'><img src='Optional - Fly synapses (re-sync 2026)_assets/page-004.png' alt='page 4' style='width:100%;border:1px solid #d4d4d4;border-radius:6px;'/><figcaption style='color:#737373;font-size:12px;margin:.25rem 0;'>Page 4 of 19</figcaption><details><summary>Page text</summary><pre>4 
+ 
+ 
+Fig. 5: Dots label neurons containing vesicle clusters.</pre></details></figure><figure style='margin:0 0 1.5rem;'><img src='Optional - Fly synapses (re-sync 2026)_assets/page-005.png' alt='page 5' style='width:100%;border:1px solid #d4d4d4;border-radius:6px;'/><figcaption style='color:#737373;font-size:12px;margin:.25rem 0;'>Page 5 of 19</figcaption><details><summary>Page text</summary><pre>5 
+ 
+It’s important to note the difference between vesicles that are accumulating around a synaptic 
+area, and vesicles that just happen to be near a border. The Fig.s below show an area in two 
+sequential slices. Note the accumulated cluster forming near the postsynaptic terminals marked 
+red in comparison to the scattered vesicles around the dendrite marked green. 
+ 
+  
+ 
+Fig. 6: relative concentration. 
+ 
+This second but similar example even has a darkened area around the green dendrite. 
+However, notice the difference in concentration between the two regions. While there may be 
+some cases where a small, dark formation as seen in Fig. 9, could indicate a possible synapse, 
+here we see no other indicators that would be necessary for annotation.</pre></details></figure><figure style='margin:0 0 1.5rem;'><img src='Optional - Fly synapses (re-sync 2026)_assets/page-006.png' alt='page 6' style='width:100%;border:1px solid #d4d4d4;border-radius:6px;'/><figcaption style='color:#737373;font-size:12px;margin:.25rem 0;'>Page 6 of 19</figcaption><details><summary>Page text</summary><pre>6 
+ 
+Fig. 7: relative concentration. 
+ 
+Be careful not to confuse dense core vesicles with a vesicle cluster. Dense core vesicles are 
+larger and darker than normal vesicles. Both are labeled in the figure below. 
+ 
+ 
+Fig. 8: dense core vesicles (DCVs) compared to a cluster of regular vesicles. 
+ 
+ 
+ 
+Synaptic Clefts/Gaps 
+With the fixation and staining used in this data set, synaptic clefts are visible as a thicker region 
+of membranes where the presynaptic axonal body and the postsynaptic dendritic body meet, 
+often with a thin sliver of space between the two cells. One synapse is defined as the region 
+covered by one cleft; outside of the synapse, the two membranes come back together. When 
+looking for synapses, clefts are the second-easiest feature to spot aside from vesicle clusters.  
+ 
+When our tracers annotate synapses to train the AI, they don’t worry about covering all of the 
+pixels that make up the cleft, but are careful to prevent extending the length of the annotation to 
+include membrane that isn’t part of the synapse. Fly synapses are generally less than 1um in 
+length.</pre></details></figure><figure style='margin:0 0 1.5rem;'><img src='Optional - Fly synapses (re-sync 2026)_assets/page-007.png' alt='page 7' style='width:100%;border:1px solid #d4d4d4;border-radius:6px;'/><figcaption style='color:#737373;font-size:12px;margin:.25rem 0;'>Page 7 of 19</figcaption><details><summary>Page text</summary><pre>7 
+ 
+Fig. 9: Annotated Cleft. Arrows indicate the end points of the cleft. 
+ 
+ 
+Fig. 10: Clear example of a cleft in sequential slides.</pre></details></figure><figure style='margin:0 0 1.5rem;'><img src='Optional - Fly synapses (re-sync 2026)_assets/page-008.png' alt='page 8' style='width:100%;border:1px solid #d4d4d4;border-radius:6px;'/><figcaption style='color:#737373;font-size:12px;margin:.25rem 0;'>Page 8 of 19</figcaption><details><summary>Page text</summary><pre>8 
+Fig. 11: Multiple clefts. 
+ 
+False Clefts (Example) 
+Sometimes you’ll see thin segments that can look like a synaptic cleft but aren’t. In the example 
+video below we follow a cleft through 9 slides. Notice how the area exhibits all the signs of a 
+synapse (cleft, PSD, vesicles, T-bar) but at the transition from slide 6 to 7, we see the cleft drop 
+away and a different segment come up in its place, now lacking any sign of a synapse. 
+ 
+ 
+ 
+Fig. 12: Shows a synaptic cleft disappear and a segment take its place.  
+T-bars 
+T-bars appear as dark objects along the membrane, within the vesicle cluster of a presynaptic 
+axon. In EM images they typically look like a pedestal surmounted by a “table-top,” forming a “T” 
+if viewed from the side (hence their name), but can take a variety of shapes, particularly when 
+viewed en-face. Sometimes they appear as a dark blob or ribbon. They’re usually the darkest of 
+the four synaptic features. Below are some examples, starting with a couple of typical T-bars.</pre></details></figure><figure style='margin:0 0 1.5rem;'><img src='Optional - Fly synapses (re-sync 2026)_assets/page-009.png' alt='page 9' style='width:100%;border:1px solid #d4d4d4;border-radius:6px;'/><figcaption style='color:#737373;font-size:12px;margin:.25rem 0;'>Page 9 of 19</figcaption><details><summary>Page text</summary><pre>9 
+ 
+Fig. 13: Typical T-bar. 
+ 
+ 
+Fig. 14: Typical T-bar. 
+ 
+​
+ 
+Fig. 15: Atypical T-bars.</pre></details></figure><figure style='margin:0 0 1.5rem;'><img src='Optional - Fly synapses (re-sync 2026)_assets/page-010.png' alt='page 10' style='width:100%;border:1px solid #d4d4d4;border-radius:6px;'/><figcaption style='color:#737373;font-size:12px;margin:.25rem 0;'>Page 10 of 19</figcaption><details><summary>Page text</summary><pre>10 
+T-bars can be very short, like dots, or very long (sometimes referred to as “travelling”). 
+ 
+Fig. 16: Short T-bars (left) vs. long T-bar (right). 
+ 
+When our expert tracers annotate T-bars to train the AI, they try to replicate the actual shape of 
+the T-bar without forcing it into the archetypal “T” form. This doesn’t have to be pixel-perfect. 
+ 
+ 
+Fig. 17: T-bar annotation (green), with clefts also marked (red). T-bars are often not T-shaped.</pre></details></figure><figure style='margin:0 0 1.5rem;'><img src='Optional - Fly synapses (re-sync 2026)_assets/page-011.png' alt='page 11' style='width:100%;border:1px solid #d4d4d4;border-radius:6px;'/><figcaption style='color:#737373;font-size:12px;margin:.25rem 0;'>Page 11 of 19</figcaption><details><summary>Page text</summary><pre>11 
+Postsynaptic Density 
+The postsynaptic density is a dark or shaded area that appears in the dendritic body at a 
+synapse point. In fly data its pzxes. Below are some examples, starting with a few that are more 
+apparent, followed by some that are a little harder to see. 
+ 
+ 
+Fig. 18: Prominent PSD. Notice how the membrane on the postsynaptic side of the cleft bumps  
+up in places, indicating an area of darkness beyond the parameters of the membrane.  
+ 
+ 
+Fig. 19: Mixed prominency PSD. Notice how the PSD of the three dendrites on the left look  
+similar to those in Fig. 1, while the two on the right are less prominent.</pre></details></figure><figure style='margin:0 0 1.5rem;'><img src='Optional - Fly synapses (re-sync 2026)_assets/page-012.png' alt='page 12' style='width:100%;border:1px solid #d4d4d4;border-radius:6px;'/><figcaption style='color:#737373;font-size:12px;margin:.25rem 0;'>Page 12 of 19</figcaption><details><summary>Page text</summary><pre>12 
+ 
+Fig. 20: Comparative PSD. The red arrow indicates a PSD, while the green arrow indicates  
+a border that, due or organelles or an issue with the data, looks very similar to a PSD. 
+ 
+Although PSD can be an important indicator of synapse activity, it’s not particularly useful as a 
+first-glance identification feature, since it can vary so much in clarity.  
+ 
+The PSD of a synapse viewed en-face can often look similar to the “shadow” of a “surfacing” 
+neuron (one sliced parallel with the plane of the membrane). Unlike a surfacing neuron, a PSD 
+should be associated with clustered vesicles and possibly a T-bar in nearby slices. PSDs are 
+only found in dendritic tissue, not axonal, since they’re postsynaptic structures. 
+ 
+ 
+Fig. 21: PSDs viewed en-face instead of in cross-section are visible as dark patches and can be tricky to tell apart 
+from a surfacing neuron.</pre></details></figure><figure style='margin:0 0 1.5rem;'><img src='Optional - Fly synapses (re-sync 2026)_assets/page-013.png' alt='page 13' style='width:100%;border:1px solid #d4d4d4;border-radius:6px;'/><figcaption style='color:#737373;font-size:12px;margin:.25rem 0;'>Page 13 of 19</figcaption><details><summary>Page text</summary><pre>13 
+ 
+Fig. 22: An expert’s judgement of PSD locations. Middle: correct. Right: incorrect. 
+Top-Down/Surfacing synapses 
+The majority of synapses that you’ll encounter will be lateral, or viewed from the side in 
+cross-section. Sometimes, however, you’ll come upon synapses on membranes that have been 
+sliced parallel to the Z plane, viewed en-face. These instances require you to look through the Z 
+plane by stepping through slices to uncover the cleft and T-bar that are revealed once the 
+postsynaptic bodies have moved out of the way, kind of like digging in sand. 
+ 
+ 
+Fig. 23: Top-down synapse. The postsynaptic dendritic bodies are marked here in green. Notice  
+how they disperse as the axon comes up from below. Can you spot the cleft and T-bar?</pre></details></figure><figure style='margin:0 0 1.5rem;'><img src='Optional - Fly synapses (re-sync 2026)_assets/page-014.png' alt='page 14' style='width:100%;border:1px solid #d4d4d4;border-radius:6px;'/><figcaption style='color:#737373;font-size:12px;margin:.25rem 0;'>Page 14 of 19</figcaption><details><summary>Page text</summary><pre>14 
+   
+Fig. 24: Top-down synapse with annotated cleft (red) and T-bar (green). 
+ 
+It can be helpful to look at orthogonal views (XZ or YZ) to make out the features of en-face 
+synapses, depending on the image resolution. To bring up the 4-panel view in FlyWire, press 
+Spacebar. To return to 2-panel view, hover over the XY view with your mouse and press 
+Shift+Spacebar.</pre></details></figure><figure style='margin:0 0 1.5rem;'><img src='Optional - Fly synapses (re-sync 2026)_assets/page-015.png' alt='page 15' style='width:100%;border:1px solid #d4d4d4;border-radius:6px;'/><figcaption style='color:#737373;font-size:12px;margin:.25rem 0;'>Page 15 of 19</figcaption><details><summary>Page text</summary><pre>15 
+Yes, a synapse!  
+--Edna Normand​
+​
+**Each row below shows a different synapse. Images in the same row are sequential slices of 
+the same area. These show synapses that are a bit less obvious than the clear examples below.</pre></details></figure><figure style='margin:0 0 1.5rem;'><img src='Optional - Fly synapses (re-sync 2026)_assets/page-016.png' alt='page 16' style='width:100%;border:1px solid #d4d4d4;border-radius:6px;'/><figcaption style='color:#737373;font-size:12px;margin:.25rem 0;'>Page 16 of 19</figcaption><details><summary>Page text</summary><pre>16 
+ 
+​
+Low confidence synapse: has T-bar, synaptic cleft, and postsynaptic density, but vesicles are not clear.  
+This is most likely a synapse that wasn’t active during this snapshot of the brain. 
+​
+Example of a synapse​</pre></details></figure><figure style='margin:0 0 1.5rem;'><img src='Optional - Fly synapses (re-sync 2026)_assets/page-017.png' alt='page 17' style='width:100%;border:1px solid #d4d4d4;border-radius:6px;'/><figcaption style='color:#737373;font-size:12px;margin:.25rem 0;'>Page 17 of 19</figcaption><details><summary>Page text</summary><pre>17 
+​
+Another example of a synapse 
+​
+Another example of a synapse</pre></details></figure><figure style='margin:0 0 1.5rem;'><img src='Optional - Fly synapses (re-sync 2026)_assets/page-018.png' alt='page 18' style='width:100%;border:1px solid #d4d4d4;border-radius:6px;'/><figcaption style='color:#737373;font-size:12px;margin:.25rem 0;'>Page 18 of 19</figcaption><details><summary>Page text</summary><pre>18 
+No, not our synapse! 
+--Edna Normand 
+ 
+​
+First slice not a synapse with our highlighted cell, because it’s gone in the subsequent slice, and because  
+there’s no clear T-bar, synaptic cleft, or postsynaptic density. And unclear whether darkness is vesicles. 
+ 
+​
+First slice looks like the cell on the left might end up synapsing with our highlighted cell. But subsequent slices  
+show that the left cell synapses with another cell, not ours. 
+ 
+​
+Middle slice looks like it might be a synapse, but the slices before and after don’t contain that density, and  
+there aren’t clear synaptic components in even that middle slice.​
+​</pre></details></figure><figure style='margin:0 0 1.5rem;'><img src='Optional - Fly synapses (re-sync 2026)_assets/page-019.png' alt='page 19' style='width:100%;border:1px solid #d4d4d4;border-radius:6px;'/><figcaption style='color:#737373;font-size:12px;margin:.25rem 0;'>Page 19 of 19</figcaption><details><summary>Page text</summary><pre>19 
+​
+First slice looks like there might be a synapse with our highlighted cell. However, this disappears in subsequent 
+slices, and this might instead be a synapse with the cell in between, or not at all. 
+ 
+​
+Not enough information to classify as a synapse. No clear vesicle cluster, T-bar, or postsynaptic  
+density, despite there being an appearance of a potential cleft. Check subsequent slices;  
+if more criteria aren’t present in those, this isn’t a synapse.</pre></details></figure></body></html>

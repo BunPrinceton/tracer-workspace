@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Proofreading core cells in Minnie - Tracer Archive (text recreation)</title><!-- Archived recreation. Source: https://docs.google.com/document/d/1Fx9rVHmpw-bdtPR2m0UM9iSbg9m4WyzjvD2387QooYA/edit | retrieved 2026-05-26 --><style>body{font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;max-width:900px;margin:0 auto;padding:1.5rem;color:#1a1a1a;background:#f5f5f5;}h1{font-size:1.4rem;}pre{white-space:pre-wrap;font:14px/1.6 ui-monospace,SFMono-Regular,Menlo,monospace;background:#fff;border:1px solid #d4d4d4;border-radius:6px;padding:1rem;}</style></head><body><div style="font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:#fef3c7;border:1px solid #d97706;border-radius:8px;padding:.75rem 1rem;margin:0 0 1rem;font-size:14px;color:#92400e;line-height:1.5;"><b>Archived source</b> &mdash; recreation of <b>Proofreading core cells in Minnie</b> (Sven Dorkenwald, 2020). &middot; <a href="https://docs.google.com/document/d/1Fx9rVHmpw-bdtPR2m0UM9iSbg9m4WyzjvD2387QooYA/edit" style="color:#92400e;font-weight:700;" target="_blank" rel="noopener">Open the live original ↗</a> &middot; Retrieved 2026-05-26. Point-in-time snapshot.</div><h1>Proofreading core cells in Minnie</h1><p style='color:#525252;font-size:14px;'>Text recreation (extracted content). Figures/formatting are in the live original linked above.</p><pre>Proofreading instructions for core cells in Minnie65
+
+Goal / background: Proofreading pyramidal cells without proofreading spine heads. These cells will be the centerpiece of future analyses and were selected because they were well measured in the functional imaging part of the experiment. They are situated in a &quot;column&quot; in V1 or RL, potentially allowing analyses testing hypotheses for columnar organisation and connectivity.
+
+ROUND-SPECIFIC NOTES
+
+Round 1: Proofreading dendritic arbors
+- Search for false mergers and false ends guided by the mesh. Check EM for correction.
+- Do not attach cutoff spine heads.
+- Extend dendrites through missing sections.
+- Use annotations for:
+    - soma branch [SB]: branch points where dendrites exit soma; locate 5 microns away from soma, or just soma-side of first branch point, whichever is less.
+    - neuron branch [NB]: branch points for later checking other unvisited branches during the session.
+    - true end [TE]: ends of a branch.
+    - incomplete end [IE]: terminations due to dataset boundaries.
+    - unsure end [UE]: endpoints may stop here but proofreader is not 100% sure.
+    - revisit [RV]: error identified or branch must be extended but couldn&#x27;t be fixed within the time frame (10 min) due to bad data, system timeouts, etc.
+    - Axon Initial Segment [AIS]: where the axon branches off (soma or dendrite); locate 5 microns down the axon from soma or branch point.
+    - other layers that may be pre-populated or user-added: centroid [C] (soma centroid); annotation [annotation] (local user-added layers such as &quot;breadcrumbs&quot;).
+- Do not correct wrong merges with objects less than ~5 microns (3x the dendrite diameter).
+
+Round 2: Proofreading axonal arbor
+- Search for false mergers and false ends guided by the mesh. Check EM for correction.
+- Fix all false mergers before extending the axon.
+- Extend axons through missing sections, but do not merge to the original cell until complete (larger objects take longer to process).
+- Use annotations for: soma branch [SB] (where the axon exits soma); neuron branch [NB]; true end [TE]; incomplete end [IE]; unsure end [UE]; revisit [RV] (as above).
+
+GENERAL NOTES
+- Proofreading order: dendrites are proofread before axons. Pick an axon or dendrite task by entering your name in the Proofreader column.
+- Cell selection: the starter link contains an annotation at the right coordinate; the underlying cell is the one to be proofread.
+- How much time to spend on difficult locations: max 10 min at any location (e.g. difficult splits, extending through artifacts/missing data). If unresolved in that time, mark as revisit.
+- Keep track of proofreading time: note the time in minutes in the appropriate column (used for planning and future publications).
+- Temporary links: leave a link with the current status in the spreadsheet at the end of the day.
+
+COMMON ERROR MESSAGES
+- &quot;Split (or Merge) failed: int() argument must be a string, a bytes-like object or a number, not &#x27;NoneType&#x27;&quot; — cause/solution left blank in source.
+- &quot;Merge error [400]: Could not determine supervoxel ID for coordinates [...]&quot; — cause: merging in 3D (mesh) view, a null segmentation may be adjacent to a merge point, or a problem assigning points to supervoxels. Workaround: enter merge mode but select the segmentation in the EM imagery view, choosing the desired supervoxels directly.
+
+GENERAL TIPS AND TRICKS
+- Adjusting mesh opacity can aid visualization of annotations and split/merge operations. For best results, update display drivers and check browser rendering options.
+- Local vs. server saved state (noted as needing a more knowledgeable comment).
+- Some prefer orthographic vs. perspective view (or switching between them depending on the region). Keypress &#x27;o&#x27; to switch.</pre></body></html>
