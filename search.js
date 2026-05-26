@@ -1413,23 +1413,29 @@
         var params = parseLandingHash();
 
         // If a bare anchor target is in the hash, open it (and any containing
-        // <details>) up front. Lets us land on the right accordion section
-        // before the highlight pass runs.
+        // <details>) up front. Also use it as the SCOPE for the highlight
+        // search below — without scoping, the page's first "synapse" might
+        // be in a different figure than the one the user actually clicked.
+        var scope = document.body;
+        var targetEl = null;
         if (params.target) {
-            var targetEl = document.getElementById(params.target);
+            targetEl = document.getElementById(params.target);
             if (targetEl) {
-                var anc = targetEl;
-                while (anc && anc !== document.body) {
-                    if (anc.tagName === 'DETAILS' && !anc.hasAttribute('open')) anc.open = true;
-                    anc = anc.parentNode;
+                var ancT = targetEl;
+                while (ancT && ancT !== document.body) {
+                    if (ancT.tagName === 'DETAILS' && !ancT.hasAttribute('open')) ancT.open = true;
+                    ancT = ancT.parentNode;
                 }
-                if (!params.q && targetEl.scrollIntoView) {
-                    setTimeout(function () { targetEl.scrollIntoView({ block: 'start' }); }, 50);
-                }
+                scope = targetEl;
             }
         }
 
-        if (!params.q) return;
+        if (!params.q) {
+            if (targetEl && targetEl.scrollIntoView) {
+                setTimeout(function () { targetEl.scrollIntoView({ block: 'start' }); }, 50);
+            }
+            return;
+        }
         var query = params.q;
 
         var terms = [];
@@ -1437,11 +1443,26 @@
         for (var i = 0; i < tokens.length; i++) {
             if (tokens[i].length >= 2) terms.push(tokens[i]);
         }
-        if (!terms.length) return;
+        if (!terms.length) {
+            // Operator-only query (e.g. just "section:gallery") — scroll to
+            // target so the user at least lands in the right place.
+            if (targetEl && targetEl.scrollIntoView) {
+                setTimeout(function () { targetEl.scrollIntoView({ block: 'start' }); }, 50);
+            }
+            return;
+        }
 
         var rx = new RegExp('(' + terms.map(escapeRegex).join('|') + ')', 'i');
-        var found = findFirstTextMatch(document.body, rx);
-        if (!found) return;
+        var found = findFirstTextMatch(scope, rx);
+        if (!found) {
+            // Term doesn't appear within the targeted element (e.g. the match
+            // was in keywords/aliases, not visible body text) — fall back to
+            // scrolling to the target itself with no highlight.
+            if (targetEl && targetEl.scrollIntoView) {
+                setTimeout(function () { targetEl.scrollIntoView({ block: 'center' }); }, 50);
+            }
+            return;
+        }
 
         // Expand any containing <details> elements so the match is visible.
         var anc = found.node.parentNode;
