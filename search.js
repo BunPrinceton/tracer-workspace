@@ -812,12 +812,18 @@
     /* ----------------------------------------------------------------------
        DOM CONSTRUCTION — adds a <li class="nav-search"> to the existing
        navigation <ul> so the search input sits on the right of the top bar.
+       Auto-creates a <ul> if the page's <nav> is minimal (e.g. just a single
+       "← Back" link with no list), so leaf doc pages can host the bar too.
        ---------------------------------------------------------------------- */
     function injectSearchBar() {
         var nav = document.querySelector('nav');
         if (!nav) return null;
         var ul = nav.querySelector('ul');
-        if (!ul) return null;
+        if (!ul) {
+            ul = document.createElement('ul');
+            ul.setAttribute('data-injected-by', 'site-search');
+            nav.appendChild(ul);
+        }
 
         var li = document.createElement('li');
         li.className = 'nav-search';
