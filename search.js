@@ -337,12 +337,36 @@
     keywords: ["archive", "documents", "recreations", "index"]
   },
   {
-    title: "Reference Figures Gallery",
-    url: "gallery/reference-figures/",
+    title: "Cell Segmentation Visual Glossary",
+    url: "gallery/#visual-glossary",
     section: "Gallery \u00b7 Reference Figures",
-    description: "185 figures extracted from archived training/reference docs (EM examples, cell-type diagrams).",
-    aliases: ["reference figures", "extracted figures"],
-    keywords: ["figures", "gallery", "EM", "diagrams", "visual glossary", "optic lobe"]
+    description: "82-figure visual reference for hand-painting cell segmentations: myelin, membranes, glia, mitochondria, synapses, and imaging defects.",
+    aliases: ["visual glossary", "segmentation glossary", "cell segmentation glossary"],
+    keywords: ["visual glossary", "voxel painting", "cell segmentation", "myelin", "membrane", "glia", "mitochondria", "soma", "synapse", "vesicle", "blood vessel", "fat globule", "axon", "dendrite", "bouton", "defect", "reference", "figures"]
+  },
+  {
+    title: "Optic Lobe Cell Name Guide",
+    url: "gallery/#ol-cell-name-guide",
+    section: "Gallery \u00b7 Reference Figures",
+    description: "58-figure naming reference for Drosophila optic-lobe cell types, with Fischbach atlas plates and 3D examples.",
+    aliases: ["optic lobe cell name guide", "cell name guide", "cell naming"],
+    keywords: ["optic lobe", "cell naming", "cell types", "Fischbach", "medulla", "lamina", "lobula", "Dm", "Tm", "TmY", "Tm5", "LC", "Y11", "photoreceptor", "Drosophila", "reference", "figures"]
+  },
+  {
+    title: "Fly Synapses (reference figures)",
+    url: "gallery/#fly-synapses",
+    section: "Gallery \u00b7 Reference Figures",
+    description: "29 EM examples of fly synapses and their indicators: dense vesicle clusters, clefts, T-bars, and postsynaptic densities.",
+    aliases: ["fly synapse figures", "synapse reference figures"],
+    keywords: ["fly synapse", "synapse", "vesicle", "dense core vesicle", "cleft", "T-bar", "PSD", "postsynaptic density", "ground truth", "EM", "reference", "figures"]
+  },
+  {
+    title: "FlyWire Cheatsheet (figures)",
+    url: "gallery/#flywire-cheatsheet",
+    section: "Gallery \u00b7 Reference Figures",
+    description: "16 quick-reference pages of FlyWire proofreading keyboard shortcuts and commands.",
+    aliases: ["flywire cheatsheet", "proofreading cheatsheet", "shortcuts"],
+    keywords: ["FlyWire", "cheatsheet", "proofreading", "shortcuts", "commands", "keyboard", "reference", "figures"]
   },
   // --- Round-2 triage additions (Kyle Willie folder): 7 docs + optic-lobe gallery ---
   {
@@ -403,7 +427,7 @@
   },
   {
     title: "Optic Lobe Cell Diagrams",
-    url: "gallery/optic-lobe-diagrams/",
+    url: "gallery/#optic-lobe-diagrams",
     section: "Gallery \u00b7 Optic Lobe Diagrams",
     description: "16 full-resolution Drosophila optic-lobe cell-type morphology renders (Dm, Tm, Mti, SDm, Y, LPi).",
     aliases: ["optic lobe cell diagrams", "optic lobe diagrams", "cell diagrams"],
