@@ -344,6 +344,71 @@
     aliases: ["reference figures", "extracted figures"],
     keywords: ["figures", "gallery", "EM", "diagrams", "visual glossary", "optic lobe"]
   },
+  // --- Round-2 triage additions (Kyle Willie folder): 7 docs + optic-lobe gallery ---
+  {
+    title: "Ground Truth Errors",
+    url: "drive_docs_output/Triage-Additions/Ground-truth/Ground%20Truth%20Errors.html",
+    section: "Archive \u00b7 Ground Truth",
+    description: "Illustrated ground-truth annotation error example (ambiguous segment border).",
+    aliases: ["ground truth errors"],
+    keywords: ["ground truth", "error", "ambiguous border", "segmentation", "annotation"]
+  },
+  {
+    title: "Vesicle Check List",
+    url: "drive_docs_output/Triage-Additions/Synapse-GT/Vesicle%20Check%20List.html",
+    section: "Archive \u00b7 Synapse Ground Truth",
+    description: "Step-by-step vesicle-tracing checklist for synapse annotation (Vast auto-fill + conditional painting).",
+    aliases: ["vesicle check list", "vesicle tracing"],
+    keywords: ["vesicle", "synapse", "tracing", "Vast", "conditional painting", "cleft"]
+  },
+  {
+    title: "Synapses in Fly",
+    url: "drive_docs_output/Triage-Additions/Synapse-GT/Synapses%20in%20Fly.html",
+    section: "Archive \u00b7 Synapse Ground Truth",
+    description: "Slide update on identifying synapses in fly EM.",
+    aliases: ["synapses in fly"],
+    keywords: ["synapse", "fly", "FlyWire", "T-bar", "vesicle", "EM"]
+  },
+  {
+    title: "How-to: Mammalian/Zfish Synapses",
+    url: "drive_docs_output/Triage-Additions/Synapse-GT/How-to%20Mammalian-Zfish%20Synapses.html",
+    section: "Archive \u00b7 Synapse Ground Truth",
+    description: "How-to for annotating synapses in mammalian and zebrafish EM (general morphology + annotation method).",
+    aliases: ["mammalian synapses", "zebrafish synapses", "zfish synapses"],
+    keywords: ["synapse", "mammal", "zebrafish", "morphology", "annotation", "PSD", "cleft"]
+  },
+  {
+    title: "How to: Fly Synapse",
+    url: "drive_docs_output/Triage-Additions/Synapse-GT/How%20to%20Fly%20Synapse.html",
+    section: "Archive \u00b7 Synapse Ground Truth",
+    description: "Detailed fly-synapse annotation guide: indicators, shapes, vesicles, clefts/gaps, T-bars, PSDs, tracing method.",
+    aliases: ["fly synapse how to", "how to fly synapse"],
+    keywords: ["synapse", "fly", "T-bar", "vesicle", "cleft", "postsynaptic density", "tracing"]
+  },
+  {
+    title: "Focused Annotation: How to",
+    url: "drive_docs_output/Triage-Additions/Annotation/Focused%20Annotation%20How%20to.html",
+    section: "Archive \u00b7 Annotation",
+    description: "How-to guide for focused annotation.",
+    aliases: ["focused annotation"],
+    keywords: ["focused annotation", "annotation", "how-to", "proofreading"]
+  },
+  {
+    title: "Large_Fragment Label Policy",
+    url: "drive_docs_output/Triage-Additions/Semantic-labeling/Large_Fragment%20Label%20Policy.html",
+    section: "Archive \u00b7 Semantic Labeling",
+    description: "Policy for labeling large fragments during semantic segmentation.",
+    aliases: ["large fragment label policy", "large fragment policy"],
+    keywords: ["large fragment", "label policy", "semantic segmentation", "labeling", "voxel painting"]
+  },
+  {
+    title: "Optic Lobe Cell Diagrams",
+    url: "gallery/optic-lobe-diagrams/",
+    section: "Gallery \u00b7 Optic Lobe Diagrams",
+    description: "16 full-resolution Drosophila optic-lobe cell-type morphology renders (Dm, Tm, Mti, SDm, Y, LPi).",
+    aliases: ["optic lobe cell diagrams", "optic lobe diagrams", "cell diagrams"],
+    keywords: ["optic lobe", "cell types", "Dm", "Tm", "Mti", "SDm", "LPi", "morphology", "diagrams", "Drosophila", "gallery"]
+  },
   {
     title: "Seung lab proofreading-annotation empire operation manual",
     url: "drive_docs_output/Triage-Additions/Proofreading/Seung%20lab%20proofreading-annotation%20empire%20operation%20manual.html",
@@ -1263,7 +1328,17 @@
             // Narrow screens: drop the absolute position, let the search sit below the
             // nav links on its own row, full width.
             '@media (max-width:700px){nav{position:static;}.nav-search{position:static;transform:none;display:block;width:100%;margin-top:0.5rem;padding:0 0.5rem;box-sizing:border-box;}#site-search{width:100%;}.site-search-results{left:0;right:0;min-width:0;max-width:none;}}' +
-            '@media print{.nav-search{display:none;}}';
+            // Back-to-top button — floats bottom-right, fades in once the user has
+            // scrolled past ~2 viewport heights, smooth-scrolls to the top. Injected
+            // on every page (see injectBackToTop) so no per-page edits are needed.
+            // Sits below the search dropdown (z-index 1001) so it never overlaps it.
+            '.site-backtotop{position:fixed;bottom:1.25rem;right:1.25rem;z-index:998;display:inline-flex;align-items:center;gap:0.375rem;padding:0.5rem 0.85rem;font:inherit;font-size:0.8125rem;font-weight:600;color:#ffffff;background-color:#1a1a1a;border:1px solid #444;border-radius:999px;box-shadow:0 2px 10px rgba(0,0,0,0.25);cursor:pointer;opacity:0;transform:translateY(8px);pointer-events:none;transition:opacity .2s ease,transform .2s ease,background-color .15s ease,border-color .15s ease;}' +
+            '.site-backtotop.visible{opacity:1;transform:translateY(0);pointer-events:auto;}' +
+            '.site-backtotop:hover{background-color:#333333;border-color:#666;}' +
+            '.site-backtotop:focus-visible{outline:none;box-shadow:0 0 0 3px rgba(147,197,253,0.5);}' +
+            '.site-backtotop .bt-arrow{font-size:0.95rem;line-height:1;}' +
+            '@media (prefers-reduced-motion: reduce){.site-backtotop{transition:opacity .2s ease;transform:none;}.site-backtotop:not(.visible){transform:none;}}' +
+            '@media print{.nav-search,.site-backtotop{display:none;}}';
         document.head.appendChild(style);
     }
 
@@ -1292,6 +1367,43 @@
             '</div>';
         ul.appendChild(li);
         return li;
+    }
+
+    /* ----------------------------------------------------------------------
+       BACK-TO-TOP — a floating button appended to <body> on every page. Stays
+       hidden until the user has scrolled past ~2 viewport heights, then fades
+       in at the bottom-right. Click smooth-scrolls to the top (honours
+       prefers-reduced-motion). Scroll handler is rAF-throttled.
+       ---------------------------------------------------------------------- */
+    function injectBackToTop() {
+        if (document.querySelector('.site-backtotop')) return null;
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'site-backtotop';
+        btn.setAttribute('aria-label', 'Back to top');
+        btn.innerHTML = '<span class="bt-arrow" aria-hidden="true">↑</span> Top';
+        document.body.appendChild(btn);
+
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        btn.addEventListener('click', function () {
+            window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+        });
+
+        var ticking = false;
+        function onScroll() {
+            if (ticking) return;
+            ticking = true;
+            window.requestAnimationFrame(function () {
+                var y = window.pageYOffset || document.documentElement.scrollTop || 0;
+                if (y > window.innerHeight * 2) btn.classList.add('visible');
+                else btn.classList.remove('visible');
+                ticking = false;
+            });
+        }
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll, { passive: true });
+        onScroll();
+        return btn;
     }
 
     function escapeHTML(s) {
@@ -1532,6 +1644,7 @@
         injectStyles();
         lockNavLinkWidths();
         handleSearchLanding();
+        injectBackToTop();
         var bar = injectSearchBar();
         if (!bar) return;
 
