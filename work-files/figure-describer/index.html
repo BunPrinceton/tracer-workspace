@@ -1,0 +1,1707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figure Describer · Princeton Tracers</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{font-size:17px;}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#f5f5f5;color:#1a1a1a;line-height:1.5;}
+  header{background:#1a1a1a;color:#fff;padding:.6rem 1.25rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
+  header h1{font-size:1rem;font-weight:600;margin-right:auto;}
+  .counts{display:flex;gap:.5rem;font-size:.8rem;}
+  .pill{padding:.2rem .55rem;border-radius:999px;font-weight:600;}
+  .pill.done{background:#15803d;color:#fff;}
+  .pill.left{background:#404040;color:#e5e5e5;}
+  .progress{height:6px;background:#e5e5e5;}
+  .progress > div{height:100%;background:#15803d;width:0;transition:width .2s ease;}
+  main{max-width:1080px;margin:0 auto;padding:1.25rem;}
+  .instructions{background:#fff;border:1px solid #d4d4d4;border-radius:8px;padding:.75rem 1rem;font-size:.85rem;color:#525252;margin-bottom:1rem;}
+  .instructions b{color:#1a1a1a;}
+  .instructions kbd{background:#1a1a1a;color:#fff;border-radius:4px;padding:.05rem .4rem;font-size:.75rem;font-family:inherit;}
+  .toolbar{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;margin-bottom:1rem;}
+  .toolbar select{font:inherit;font-size:.85rem;padding:.4rem .6rem;border:1px solid #d4d4d4;border-radius:8px;background:#fff;}
+  .toolbar .spacer{margin-left:auto;}
+
+  .card{background:#fff;border:2px solid #d4d4d4;border-radius:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+  .card.enter{animation:enter .2s ease;}
+  @keyframes enter{from{opacity:0;transform:scale(.98);}to{opacity:1;transform:scale(1);}}
+  .badges{display:flex;flex-wrap:wrap;gap:.4rem;padding:.85rem 1.1rem 0;}
+  .badge{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.03em;padding:.2rem .5rem;border-radius:4px;background:#e5e7eb;color:#374151;}
+  .badge.coll{background:#dbeafe;color:#1e40af;}
+  .badge.has{background:#dcfce7;color:#15803d;}
+  .preview{background:#fafafa;text-align:center;padding:1rem;border-bottom:1px solid #eee;border-top:1px solid #eee;margin-top:.85rem;}
+  .preview img{max-width:100%;max-height:52vh;border-radius:6px;box-shadow:0 1px 6px rgba(0,0,0,.15);}
+  .preview .file{display:block;margin-top:.5rem;font-size:.75rem;color:#737373;font-family:ui-monospace,Menlo,Consolas,monospace;}
+  .fields{padding:1.1rem;display:grid;gap:.9rem;}
+  .field label{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;color:#737373;font-weight:700;margin-bottom:.3rem;}
+  .field input,.field textarea{width:100%;font:inherit;font-size:.9rem;padding:.55rem .7rem;border:1px solid #d4d4d4;border-radius:8px;background:#fff;resize:vertical;}
+  .field textarea{min-height:4.5rem;}
+  .field .hint{font-size:.72rem;color:#a3a3a3;margin-top:.25rem;}
+  .field input:focus,.field textarea:focus{outline:none;border-color:#15803d;box-shadow:0 0 0 2px rgba(21,128,61,.18);}
+
+  .nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:1rem;gap:.5rem;flex-wrap:wrap;}
+  button.nav{border:1px solid #d4d4d4;background:#fff;border-radius:8px;padding:.55rem .9rem;font-size:.9rem;cursor:pointer;font-family:inherit;color:#1a1a1a;font-weight:600;}
+  button.nav:hover{border-color:#737373;}
+  button.nav:disabled{opacity:.4;cursor:default;}
+  .nav-row .right{display:flex;gap:.5rem;}
+  .finish{background:#15803d;color:#fff;border:0;border-radius:8px;padding:.6rem 1rem;font-weight:600;cursor:pointer;font-family:inherit;}
+
+  .review{background:#fff;border:2px solid #d4d4d4;border-radius:12px;padding:1.25rem;}
+  .review h2{font-size:1.3rem;margin-bottom:.25rem;}
+  .review .sub{color:#737373;font-size:.85rem;margin-bottom:1rem;}
+  table{width:100%;border-collapse:collapse;font-size:.82rem;}
+  th,td{text-align:left;padding:.45rem .5rem;border-bottom:1px solid #eee;vertical-align:top;}
+  th{font-size:.7rem;text-transform:uppercase;letter-spacing:.04em;color:#737373;}
+  td.seeds{color:#15803d;}
+  td.empty{color:#c2410c;font-style:italic;}
+  .review-actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1.1rem;}
+  .review-actions button{border:0;border-radius:8px;padding:.6rem 1rem;font-weight:600;cursor:pointer;font-family:inherit;}
+  .btn-primary{background:#15803d;color:#fff;}
+  .btn-secondary{background:#e5e7eb;color:#1a1a1a;}
+  .btn-ghost{background:#fff;border:1px solid #d4d4d4 !important;color:#525252;}
+  .hidden{display:none !important;}
+  .toast{position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:.6rem 1rem;border-radius:8px;font-size:.85rem;opacity:0;transition:opacity .2s;z-index:50;}
+  .toast.show{opacity:1;}
+  footer{max-width:1080px;margin:0 auto;padding:0 1.25rem 2rem;color:#a3a3a3;font-size:.75rem;}
+</style>
+</head>
+<body>
+<header>
+  <h1>🖼️ Figure Describer</h1>
+  <div class="counts">
+    <span class="pill done" id="c-done">Described 0</span>
+    <span class="pill left" id="c-left">Left 0</span>
+  </div>
+</header>
+<div class="progress"><div id="bar"></div></div>
+
+<main>
+  <div class="instructions" id="howto">
+    <b>How to use:</b> for each figure, type a few <b>seed words</b> describing what it shows — just enough for Claude to expand into a full caption.
+    The <b>source</b> is pre-filled and kept with every description. <kbd>←</kbd>/<kbd>→</kbd> move · <kbd>Ctrl+Enter</kbd> next.
+    Progress autosaves in this browser. Hit <b>Finish &amp; Export</b> to download JSON or copy a Claude-ready list.
+  </div>
+
+  <div class="toolbar">
+    <label for="jump" style="font-size:.8rem;color:#525252;">Jump to collection:</label>
+    <select id="jump"></select>
+    <span class="spacer"></span>
+    <button class="finish" id="btnFinish">Finish &amp; Export</button>
+  </div>
+
+  <!-- DECK -->
+  <div id="deck">
+    <div class="card enter" id="card">
+      <div class="badges" id="badges"></div>
+      <div class="preview" id="preview"></div>
+      <div class="fields">
+        <div class="field">
+          <label for="f-title">Short title <span style="font-weight:400;text-transform:none;color:#a3a3a3;">(optional — a better name than "fig N")</span></label>
+          <input type="text" id="f-title" placeholder="e.g. Myelin padding rules">
+        </div>
+        <div class="field">
+          <label for="f-seeds">Seed words <span style="font-weight:400;text-transform:none;color:#c2410c;">— the part you fill in</span></label>
+          <textarea id="f-seeds" placeholder="e.g. myelin tongue, padding around axon, where NOT to paint"></textarea>
+          <div class="hint">A few words/phrases is enough. Claude expands these into a 1–2 sentence description.</div>
+        </div>
+        <div class="field">
+          <label for="f-source">Source (kept in the description)</label>
+          <input type="text" id="f-source">
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="nav" id="btnPrev">‹ Prev</button>
+      <div class="right">
+        <button class="nav" id="btnSkip">Skip →</button>
+        <button class="nav" id="btnNext">Save &amp; Next ›</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVIEW -->
+  <div id="review" class="review hidden">
+    <h2>Review &amp; Export</h2>
+    <div class="sub" id="reviewSub"></div>
+    <div style="overflow-x:auto;">
+      <table>
+        <thead><tr><th>#</th><th>Collection</th><th>File</th><th>Title</th><th>Seeds</th></tr></thead>
+        <tbody id="reviewBody"></tbody>
+      </table>
+    </div>
+    <div class="review-actions">
+      <button class="btn-primary" id="exportJson">⬇ Export JSON</button>
+      <button class="btn-secondary" id="copyClaude">📋 Copy Claude-ready list</button>
+      <button class="btn-ghost" id="backToDeck">‹ Back to figures</button>
+      <button class="btn-ghost" id="resetAll" style="margin-left:auto;color:#b45309;">Reset all</button>
+    </div>
+  </div>
+</main>
+
+<footer>Local tool · seeds stored only in this browser (localStorage) · nothing is sent anywhere · images served from ../../gallery/</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+// Figures live at gallery/<src_dir>/<file>; this tool sits at work-files/figure-describer/,
+// so image src = ../../gallery/<src_dir>/<file>. Manifest embedded to avoid file:// fetch limits.
+// Regenerate with: node (see work-files/figure-manifest.json) if gallery image paths ever change.
+const FIGURES = [
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-001.png",
+    "num": 1,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-002.png",
+    "num": 2,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-003.png",
+    "num": 3,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-004.png",
+    "num": 4,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-005.png",
+    "num": 5,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-006.png",
+    "num": 6,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-007.png",
+    "num": 7,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-008.png",
+    "num": 8,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-009.png",
+    "num": 9,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-010.png",
+    "num": 10,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-011.png",
+    "num": 11,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-012.png",
+    "num": 12,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-013.png",
+    "num": 13,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-014.png",
+    "num": 14,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-015.png",
+    "num": 15,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-016.png",
+    "num": 16,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-017.png",
+    "num": 17,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-018.png",
+    "num": 18,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-019.png",
+    "num": 19,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-020.png",
+    "num": 20,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-021.png",
+    "num": 21,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-022.png",
+    "num": 22,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-023.png",
+    "num": 23,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-024.png",
+    "num": 24,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-025.png",
+    "num": 25,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-026.png",
+    "num": 26,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-027.png",
+    "num": 27,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-028.png",
+    "num": 28,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-029.png",
+    "num": 29,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-030.png",
+    "num": 30,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-031.png",
+    "num": 31,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-032.png",
+    "num": 32,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-033.png",
+    "num": 33,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-034.png",
+    "num": 34,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-035.png",
+    "num": 35,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-036.png",
+    "num": 36,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-037.png",
+    "num": 37,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-038.png",
+    "num": 38,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-039.png",
+    "num": 39,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-040.png",
+    "num": 40,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-041.png",
+    "num": 41,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-042.png",
+    "num": 42,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-043.png",
+    "num": 43,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-044.png",
+    "num": 44,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-045.png",
+    "num": 45,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-046.png",
+    "num": 46,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-047.png",
+    "num": 47,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-048.png",
+    "num": 48,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-049.png",
+    "num": 49,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-050.png",
+    "num": 50,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-051.png",
+    "num": 51,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-052.png",
+    "num": 52,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-053.png",
+    "num": 53,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-054.png",
+    "num": 54,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-055.png",
+    "num": 55,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-056.png",
+    "num": 56,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-057.png",
+    "num": 57,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-058.png",
+    "num": 58,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-059.png",
+    "num": 59,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-060.png",
+    "num": 60,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-061.png",
+    "num": 61,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-062.png",
+    "num": 62,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-063.png",
+    "num": 63,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-064.png",
+    "num": 64,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-065.png",
+    "num": 65,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-066.png",
+    "num": 66,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-067.png",
+    "num": 67,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-068.png",
+    "num": 68,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-069.png",
+    "num": 69,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-070.png",
+    "num": 70,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-071.png",
+    "num": 71,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-072.png",
+    "num": 72,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-073.png",
+    "num": 73,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-074.png",
+    "num": 74,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-075.png",
+    "num": 75,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-076.png",
+    "num": 76,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-077.png",
+    "num": 77,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-078.png",
+    "num": 78,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-079.png",
+    "num": 79,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-080.png",
+    "num": 80,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-081.png",
+    "num": 81,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Cell Segmentation Visual Glossary",
+    "src_dir": "reference-figures",
+    "file": "visual-glossary-082.png",
+    "num": 82,
+    "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-001.png",
+    "num": 1,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-002.png",
+    "num": 2,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-003.png",
+    "num": 3,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-004.png",
+    "num": 4,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-005.png",
+    "num": 5,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-006.png",
+    "num": 6,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-007.png",
+    "num": 7,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-008.png",
+    "num": 8,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-009.png",
+    "num": 9,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-010.png",
+    "num": 10,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-011.png",
+    "num": 11,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-012.png",
+    "num": 12,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-013.png",
+    "num": 13,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-014.png",
+    "num": 14,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-015.png",
+    "num": 15,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-016.png",
+    "num": 16,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-017.png",
+    "num": 17,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-018.png",
+    "num": 18,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-019.png",
+    "num": 19,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-020.png",
+    "num": 20,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-021.png",
+    "num": 21,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-022.png",
+    "num": 22,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-023.png",
+    "num": 23,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-024.png",
+    "num": 24,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-025.png",
+    "num": 25,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-026.png",
+    "num": 26,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-027.png",
+    "num": 27,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-028.png",
+    "num": 28,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-029.png",
+    "num": 29,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-030.png",
+    "num": 30,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-031.png",
+    "num": 31,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-032.png",
+    "num": 32,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-033.png",
+    "num": 33,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-034.png",
+    "num": 34,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-035.png",
+    "num": 35,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-036.png",
+    "num": 36,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-037.png",
+    "num": 37,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-038.png",
+    "num": 38,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-039.png",
+    "num": 39,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-040.png",
+    "num": 40,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-041.png",
+    "num": 41,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-042.png",
+    "num": 42,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-043.png",
+    "num": 43,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-044.png",
+    "num": 44,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-045.png",
+    "num": 45,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-046.png",
+    "num": 46,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-047.png",
+    "num": 47,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-048.png",
+    "num": 48,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-049.png",
+    "num": 49,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-050.png",
+    "num": 50,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-051.png",
+    "num": 51,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-052.png",
+    "num": 52,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-053.png",
+    "num": 53,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-054.png",
+    "num": 54,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-055.png",
+    "num": 55,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-056.png",
+    "num": 56,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-057.png",
+    "num": 57,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Name Guide",
+    "src_dir": "reference-figures",
+    "file": "ol-cell-name-guide-058.png",
+    "num": 58,
+    "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-001.png",
+    "num": 1,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-002.png",
+    "num": 2,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-003.png",
+    "num": 3,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-004.png",
+    "num": 4,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-005.png",
+    "num": 5,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-006.png",
+    "num": 6,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-007.png",
+    "num": 7,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-008.png",
+    "num": 8,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-009.png",
+    "num": 9,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-010.png",
+    "num": 10,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-011.png",
+    "num": 11,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-012.png",
+    "num": 12,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-013.png",
+    "num": 13,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-014.png",
+    "num": 14,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-015.png",
+    "num": 15,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-016.png",
+    "num": 16,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-017.png",
+    "num": 17,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-018.png",
+    "num": 18,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-019.png",
+    "num": 19,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-020.png",
+    "num": 20,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-021.png",
+    "num": 21,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-022.png",
+    "num": 22,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-023.png",
+    "num": 23,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-024.png",
+    "num": 24,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-025.png",
+    "num": 25,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-026.png",
+    "num": 26,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-027.png",
+    "num": 27,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-028.png",
+    "num": 28,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "Fly Synapses",
+    "src_dir": "reference-figures",
+    "file": "fly-synapses-029.png",
+    "num": 29,
+    "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+  },
+  {
+    "collection": "FlyWire Cheatsheet",
+    "src_dir": "reference-figures",
+    "file": "flywire-cheatsheet-001.png",
+    "num": 1,
+    "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+  },
+  {
+    "collection": "FlyWire Cheatsheet",
+    "src_dir": "reference-figures",
+    "file": "flywire-cheatsheet-002.png",
+    "num": 2,
+    "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+  },
+  {
+    "collection": "FlyWire Cheatsheet",
+    "src_dir": "reference-figures",
+    "file": "flywire-cheatsheet-003.png",
+    "num": 3,
+    "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+  },
+  {
+    "collection": "FlyWire Cheatsheet",
+    "src_dir": "reference-figures",
+    "file": "flywire-cheatsheet-004.png",
+    "num": 4,
+    "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+  },
+  {
+    "collection": "FlyWire Cheatsheet",
+    "src_dir": "reference-figures",
+    "file": "flywire-cheatsheet-005.png",
+    "num": 5,
+    "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+  },
+  {
+    "collection": "FlyWire Cheatsheet",
+    "src_dir": "reference-figures",
+    "file": "flywire-cheatsheet-006.png",
+    "num": 6,
+    "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+  },
+  {
+    "collection": "FlyWire Cheatsheet",
+    "src_dir": "reference-figures",
+    "file": "flywire-cheatsheet-007.png",
+    "num": 7,
+    "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+  },
+  {
+    "collection": "FlyWire Cheatsheet",
+    "src_dir": "reference-figures",
+    "file": "flywire-cheatsheet-008.png",
+    "num": 8,
+    "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+  },
+  {
+    "collection": "FlyWire Cheatsheet",
+    "src_dir": "reference-figures",
+    "file": "flywire-cheatsheet-009.png",
+    "num": 9,
+    "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+  },
+  {
+    "collection": "FlyWire Cheatsheet",
+    "src_dir": "reference-figures",
+    "file": "flywire-cheatsheet-010.png",
+    "num": 10,
+    "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+  },
+  {
+    "collection": "FlyWire Cheatsheet",
+    "src_dir": "reference-figures",
+    "file": "flywire-cheatsheet-011.png",
+    "num": 11,
+    "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+  },
+  {
+    "collection": "FlyWire Cheatsheet",
+    "src_dir": "reference-figures",
+    "file": "flywire-cheatsheet-012.png",
+    "num": 12,
+    "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+  },
+  {
+    "collection": "FlyWire Cheatsheet",
+    "src_dir": "reference-figures",
+    "file": "flywire-cheatsheet-013.png",
+    "num": 13,
+    "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+  },
+  {
+    "collection": "FlyWire Cheatsheet",
+    "src_dir": "reference-figures",
+    "file": "flywire-cheatsheet-014.png",
+    "num": 14,
+    "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+  },
+  {
+    "collection": "FlyWire Cheatsheet",
+    "src_dir": "reference-figures",
+    "file": "flywire-cheatsheet-015.png",
+    "num": 15,
+    "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+  },
+  {
+    "collection": "FlyWire Cheatsheet",
+    "src_dir": "reference-figures",
+    "file": "flywire-cheatsheet-016.png",
+    "num": 16,
+    "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+  },
+  {
+    "collection": "Optic Lobe Cell Diagrams",
+    "src_dir": "optic-lobe-diagrams",
+    "file": "Dm102b_6.png",
+    "num": 0,
+    "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+  },
+  {
+    "collection": "Optic Lobe Cell Diagrams",
+    "src_dir": "optic-lobe-diagrams",
+    "file": "Dm2a.png",
+    "num": 0,
+    "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+  },
+  {
+    "collection": "Optic Lobe Cell Diagrams",
+    "src_dir": "optic-lobe-diagrams",
+    "file": "Dm2b.png",
+    "num": 0,
+    "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+  },
+  {
+    "collection": "Optic Lobe Cell Diagrams",
+    "src_dir": "optic-lobe-diagrams",
+    "file": "Dm3p.png",
+    "num": 0,
+    "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+  },
+  {
+    "collection": "Optic Lobe Cell Diagrams",
+    "src_dir": "optic-lobe-diagrams",
+    "file": "Dm4.png",
+    "num": 0,
+    "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+  },
+  {
+    "collection": "Optic Lobe Cell Diagrams",
+    "src_dir": "optic-lobe-diagrams",
+    "file": "Dm9.png",
+    "num": 0,
+    "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+  },
+  {
+    "collection": "Optic Lobe Cell Diagrams",
+    "src_dir": "optic-lobe-diagrams",
+    "file": "LPi-T5b-DCH (LPi2-1f).png",
+    "num": 0,
+    "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+  },
+  {
+    "collection": "Optic Lobe Cell Diagrams",
+    "src_dir": "optic-lobe-diagrams",
+    "file": "Mti123_37_anterior.png",
+    "num": 0,
+    "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+  },
+  {
+    "collection": "Optic Lobe Cell Diagrams",
+    "src_dir": "optic-lobe-diagrams",
+    "file": "Mti123_37_side.png",
+    "num": 0,
+    "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+  },
+  {
+    "collection": "Optic Lobe Cell Diagrams",
+    "src_dir": "optic-lobe-diagrams",
+    "file": "Mti123_37_ventral.png",
+    "num": 0,
+    "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+  },
+  {
+    "collection": "Optic Lobe Cell Diagrams",
+    "src_dir": "optic-lobe-diagrams",
+    "file": "Mti123_37.png",
+    "num": 0,
+    "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+  },
+  {
+    "collection": "Optic Lobe Cell Diagrams",
+    "src_dir": "optic-lobe-diagrams",
+    "file": "Mti124_67.png",
+    "num": 0,
+    "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+  },
+  {
+    "collection": "Optic Lobe Cell Diagrams",
+    "src_dir": "optic-lobe-diagrams",
+    "file": "SDm100c_67.png",
+    "num": 0,
+    "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+  },
+  {
+    "collection": "Optic Lobe Cell Diagrams",
+    "src_dir": "optic-lobe-diagrams",
+    "file": "SDm103_34567.png",
+    "num": 0,
+    "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+  },
+  {
+    "collection": "Optic Lobe Cell Diagrams",
+    "src_dir": "optic-lobe-diagrams",
+    "file": "Tm8b.png",
+    "num": 0,
+    "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+  },
+  {
+    "collection": "Optic Lobe Cell Diagrams",
+    "src_dir": "optic-lobe-diagrams",
+    "file": "Y11.png",
+    "num": 0,
+    "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+  }
+];
+
+const IMG_BASE = "../../gallery/";
+const STORE = "figureDescriber_v1";
+let state = JSON.parse(localStorage.getItem(STORE) || "{}");
+let entries = state.entries || {};   // file -> {title, seeds, source}
+let idx = state.idx || 0;
+function save(){ localStorage.setItem(STORE, JSON.stringify({entries, idx})); }
+const $ = s => document.querySelector(s);
+
+function rec(f){ return entries[f.file] || (entries[f.file] = { title:"", seeds:"", source:f.source||"" }); }
+function described(f){ return !!(entries[f.file] && entries[f.file].seeds && entries[f.file].seeds.trim()); }
+
+function counts(){
+  let d=0; FIGURES.forEach(f=>{ if(described(f)) d++; });
+  return { done:d, left:FIGURES.length-d };
+}
+function updateChrome(){
+  const c=counts();
+  $("#c-done").textContent="Described "+c.done;
+  $("#c-left").textContent="Left "+c.left;
+  $("#bar").style.width=(100*c.done/FIGURES.length)+"%";
+}
+
+function buildJump(){
+  const sel=$("#jump"); sel.innerHTML="";
+  const seen={};
+  FIGURES.forEach((f,i)=>{
+    if(seen[f.collection]) return;
+    seen[f.collection]=true;
+    const o=document.createElement("option");
+    o.value=String(i); o.textContent=f.collection;
+    sel.appendChild(o);
+  });
+  sel.onchange=()=>{ idx=parseInt(sel.value,10)||0; render(true); };
+}
+
+function syncJump(){
+  const sel=$("#jump");
+  // highlight the collection the current figure belongs to
+  for(let i=idx;i>=0;i--){ if(FIGURES[i] && [...sel.options].some(o=>+o.value===i)){ sel.value=String(i); break; } }
+}
+
+function render(animate){
+  const f=FIGURES[idx], r=rec(f);
+  $("#badges").innerHTML =
+    '<span class="badge coll">'+f.collection+'</span>'+
+    '<span class="badge">'+(f.num?('fig '+f.num):f.file.replace(/\.png$/i,''))+'</span>'+
+    '<span class="badge">'+(idx+1)+' / '+FIGURES.length+'</span>'+
+    (described(f)?'<span class="badge has">✓ described</span>':'');
+  const src=IMG_BASE+f.src_dir+"/"+encodeURI(f.file);
+  $("#preview").innerHTML='<a href="'+src+'" target="_blank" rel="noopener"><img src="'+src+'" alt="'+f.file+'" loading="lazy"></a><span class="file">'+f.src_dir+'/'+f.file+'</span>';
+  $("#f-title").value=r.title||"";
+  $("#f-seeds").value=r.seeds||"";
+  $("#f-source").value=r.source||f.source||"";
+  $("#btnPrev").disabled=idx===0;
+  $("#btnNext").disabled=idx===FIGURES.length-1 && false;
+  const card=$("#card");
+  if(animate){ card.classList.remove("enter"); void card.offsetWidth; card.classList.add("enter"); }
+  syncJump(); updateChrome(); save();
+}
+
+function commitFields(){
+  const f=FIGURES[idx], r=rec(f);
+  r.title=$("#f-title").value;
+  r.seeds=$("#f-seeds").value;
+  r.source=$("#f-source").value;
+  save();
+}
+["f-title","f-seeds","f-source"].forEach(id=>{
+  document.getElementById(id).addEventListener("input",()=>{ commitFields(); updateChrome();
+    const f=FIGURES[idx]; // live-update the ✓ badge
+    const has=$(".badge.has");
+    if(described(f) && !has){ $("#badges").insertAdjacentHTML("beforeend",'<span class="badge has">✓ described</span>'); }
+    else if(!described(f) && has){ has.remove(); }
+  });
+});
+
+function go(delta){ const n=idx+delta; if(n>=0 && n<FIGURES.length){ commitFields(); idx=n; render(true); } }
+$("#btnPrev").onclick=()=>go(-1);
+$("#btnNext").onclick=()=>{ if(idx<FIGURES.length-1) go(1); else { commitFields(); openReview(); } };
+$("#btnSkip").onclick=()=>{ if(idx<FIGURES.length-1){ idx++; render(true);} else openReview(); };
+$("#btnFinish").onclick=()=>{ commitFields(); openReview(); };
+
+document.addEventListener("keydown",e=>{
+  if(!$("#review").classList.contains("hidden")) return;
+  const t=document.activeElement, typing=t&&(t.tagName==="INPUT"||t.tagName==="TEXTAREA");
+  if(e.key==="Enter" && (e.ctrlKey||e.metaKey)){ e.preventDefault(); go(1); }
+  else if(e.key==="ArrowRight" && !typing){ e.preventDefault(); go(1); }
+  else if(e.key==="ArrowLeft" && !typing){ e.preventDefault(); go(-1); }
+});
+
+function openReview(){
+  const body=$("#reviewBody"); body.innerHTML="";
+  FIGURES.forEach((f,i)=>{
+    const r=entries[f.file]||{};
+    const tr=document.createElement("tr");
+    const seeds=(r.seeds||"").trim();
+    tr.innerHTML='<td>'+(i+1)+'</td><td>'+f.collection+'</td>'+
+      '<td style="font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.75rem;">'+f.file+'</td>'+
+      '<td>'+(r.title?escapeHtml(r.title):'')+'</td>'+
+      '<td class="'+(seeds?'seeds':'empty')+'">'+(seeds?escapeHtml(seeds):'— no seeds —')+'</td>';
+    tr.style.cursor="pointer";
+    tr.onclick=()=>{ idx=i; backToDeck(); };
+    body.appendChild(tr);
+  });
+  const c=counts();
+  $("#reviewSub").textContent=FIGURES.length+" figures · "+c.done+" described · "+c.left+" left. Click a row to jump back to it.";
+  $("#deck").classList.add("hidden"); $("#review").classList.remove("hidden");
+  window.scrollTo(0,0);
+}
+function backToDeck(){ $("#review").classList.add("hidden"); $("#deck").classList.remove("hidden"); render(false); }
+$("#backToDeck").onclick=backToDeck;
+
+function escapeHtml(s){ return (s||"").replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function buildExport(){
+  return FIGURES.filter(f=>described(f)).map(f=>{
+    const r=entries[f.file];
+    return { collection:f.collection, dir:f.src_dir, file:f.file, title:(r.title||"").trim(), seeds:(r.seeds||"").trim(), source:(r.source||f.source||"").trim() };
+  });
+}
+$("#exportJson").onclick=()=>{
+  const data={ tool:"Figure Describer", exportedAt:new Date().toISOString(), described:buildExport() };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="figure-descriptions-seeds.json"; a.click(); URL.revokeObjectURL(a.href);
+  toast("Exported figure-descriptions-seeds.json");
+};
+$("#copyClaude").onclick=async()=>{
+  const ex=buildExport();
+  if(!ex.length){ toast("Nothing described yet"); return; }
+  let out="# Figure descriptions — seeds for elaboration\n";
+  out+="Claude: expand each figure's seeds into a 1–2 sentence gallery description; keep the source attribution intact.\n";
+  let coll="";
+  ex.forEach(e=>{ if(e.collection!==coll){ coll=e.collection; out+="\n## "+coll+"\n"; }
+    out+="- file: "+e.dir+"/"+e.file+"\n"+(e.title?("  title: "+e.title+"\n"):"")+"  seeds: "+e.seeds+"\n  source: "+e.source+"\n"; });
+  try{ await navigator.clipboard.writeText(out); toast("Copied "+ex.length+" figures for Claude"); }
+  catch{ toast("Copy failed — use Export JSON"); }
+};
+$("#resetAll").onclick=()=>{ if(confirm("Clear ALL seeds and titles?")){ entries={}; idx=0; save(); openReview(); updateChrome(); } };
+
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"),1800); }
+
+buildJump();
+render(false);
+updateChrome();
+</script>
+</body>
+</html>
