@@ -1,0 +1,1462 @@
+{
+  "tool": "Figure Describer",
+  "exportedAt": "2026-05-27T21:58:10.740Z",
+  "described": [
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-001.png",
+      "title": "Visual Glossary — fig 1",
+      "seeds": "voxel-painting reference; segmentation rule or example (myelin padding, membrane, glia, mitochondria)",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-002.png",
+      "title": "Visual Glossary — fig 2",
+      "seeds": "voxel-painting reference; segmentation rule or example (e.g. myelin padding, membrane, glia, mitochondria)",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-003.png",
+      "title": "Visual Glossary — fig 3",
+      "seeds": "voxel-painting reference; segmentation rule or example (e.g. myelin padding, membrane, glia, mitochondria)",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-004.png",
+      "title": "Visual Glossary — fig 4",
+      "seeds": "voxel-painting reference; segmentation rule or example (e.g. myelin padding, membrane, glia, mitochondria)",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-005.png",
+      "title": "Visual Glossary — fig 5",
+      "seeds": "voxel-painting reference; myelin padding and membrane structure, glia, high-quality EM image that shows folds between the outer and inner tongue of myelin",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-006.png",
+      "title": "Visual Glossary — fig 6",
+      "seeds": "voxel-painting reference; segmentation rule or example (e.g. myelin padding, membrane, glia, mitochondria, imaging defect) fat globule or membrane swirl no border between segmentation inside another segment. two different segments",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-007.png",
+      "title": "Visual Glossary — fig 7",
+      "seeds": "voxel-painting reference; segmentation rule or example (e.g. myelin padding, membrane, glia, mitochondria, imaging defect)",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-008.png",
+      "title": "Visual Glossary — fig 8",
+      "seeds": "voxel-painting reference; segmentation rule or example (e.g. myelin padding, membrane, glia, mitochondria, imaging defect) looks like an image submitted with the question of how to handle the area circled in yellow.",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-009.png",
+      "title": "Visual Glossary — fig 9",
+      "seeds": "voxel-painting reference; segmentation rule or example (e.g. myelin padding, membrane, glia, mitochondria, imaging defect) looks like a question about the area circled in light purple.",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-010.png",
+      "title": "Visual Glossary — fig 10",
+      "seeds": "voxel-painting reference; segmentation rule or example (e.g. myelin padding, membrane, glia, mitochondria, imaging defect) fat globule possibly or another weird image artifact",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-011.png",
+      "title": "Visual Glossary — fig 11",
+      "seeds": "voxel-painting reference; segmentation rule or example (e.g. myelin padding, membrane, glia, mitochondria, imaging defect) fat globule or another image artifact",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-012.png",
+      "title": "Visual Glossary — fig 12",
+      "seeds": "voxel-painting reference; segmentation rule or example (e.g. myelin padding, membrane, glia, mitochondria, imaging defect) fat globule or another image artifact",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-013.png",
+      "title": "Visual Glossary — fig 13",
+      "seeds": "voxel-painting reference; example (e.g. myelin padding, membrane, glia, mitochondria, imaging defect)",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-014.png",
+      "title": "Visual Glossary — fig 14",
+      "seeds": "voxel-painting reference; example (e.g. myelin padding, membrane, glia, mitochondria, imaging defect)",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-015.png",
+      "title": "Visual Glossary — fig 15",
+      "seeds": "voxel-painting reference; example (e.g. myelin padding, membrane, glia, mitochondria, imaging defect)",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-016.png",
+      "title": "Visual Glossary — fig 16",
+      "seeds": "a 3D segment of probably a very long and thin axon",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-017.png",
+      "title": "Visual Glossary — fig 17",
+      "seeds": "cross section of an axonal bundle perpendicular plane",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-018.png",
+      "title": "Visual Glossary — fig 18",
+      "seeds": "a bouton of an axon highlighted in 2D",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-019.png",
+      "title": "Visual Glossary — fig 19",
+      "seeds": "a 3D neurite of a bouton of an axon",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-020.png",
+      "title": "Visual Glossary — fig 20",
+      "seeds": "an example of a synapse between an axon and the backbone of another cell. presumably dendritic and perhaps an inhibitory synapse",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-021.png",
+      "title": "Visual Glossary — fig 21",
+      "seeds": "a myelinated axon surrounded by other axonal boutons",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-022.png",
+      "title": "Visual Glossary — fig 22",
+      "seeds": "one parallel plane and one perpendicular plane cut axons both wrapped in myelin",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-023.png",
+      "title": "Visual Glossary — fig 23",
+      "seeds": "an annotated EM image of a synapse. vesicles and axon are indicated by the notes",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-024.png",
+      "title": "Visual Glossary — fig 24",
+      "seeds": "another annotated image pointing out vesicles and the axon at a synaptic site",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-025.png",
+      "title": "Visual Glossary — fig 25",
+      "seeds": "another annotated image pointing out vesicles and the axon at a synaptic site",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-026.png",
+      "title": "Visual Glossary — fig 26",
+      "seeds": "a 3D mesh of a portion of a cell rendered in neuroglancer. it looks centered on the backbone of the neuron where there is a branch splitting off. the branches look axonal but it's hard to tell with only the 3D image.",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-027.png",
+      "title": "Visual Glossary — fig 27",
+      "seeds": "a very large slice of a backbone of a cell. you can see microtubules as well as ER and some lysosomes i think, unless they are mitochondria",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-028.png",
+      "title": "Visual Glossary — fig 28",
+      "seeds": "The tips of a neuronal branch of an axon showing a chain of boutons as they branch with a visible branch that has no boutons. likely depicting a site that needs more proofreading",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-029.png",
+      "title": "Visual Glossary — fig 29",
+      "seeds": "some EM image of the a neurite shown inside of a glia probably to show that sometimes a neurite ends because it was being destroyed at the time of imaging by the body. likely autophagy",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-030.png",
+      "title": "Visual Glossary — fig 30",
+      "seeds": "a slender neuronal branch probably axonal 3D",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-031.png",
+      "title": "Visual Glossary — fig 31",
+      "seeds": "2D side by side 3D image of the same neuron showing a perpendicular plane view of the small branch",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-032.png",
+      "title": "Visual Glossary — fig 32",
+      "seeds": "a branch split point 2D and 3D side by side showing possibly the area where the neuronal hillock might be",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-033.png",
+      "title": "Visual Glossary — fig 33",
+      "seeds": "an image with yellow circles highlighting synaptic areas",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-034.png",
+      "title": "Visual Glossary — fig 34",
+      "seeds": "an image with blue arrows pointing to synapses with large PSDs",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-035.png",
+      "title": "Visual Glossary — fig 35",
+      "seeds": "an annotated image that shows the a dendrite an axon, and where they are synapsing",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-036.png",
+      "title": "Visual Glossary — fig 36",
+      "seeds": "an annotated image that shows the a dendrite an axon, and where they are synapsing",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-037.png",
+      "title": "Visual Glossary — fig 37",
+      "seeds": "a 3D view of an a dendritic spine head synapsing onto the backbone of an axon",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-038.png",
+      "title": "Visual Glossary — fig 38",
+      "seeds": "2D image with highlighted axon and dendrite that are synapsing",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-039.png",
+      "title": "Visual Glossary — fig 39",
+      "seeds": "2D image with highlighted axon and dendrite that are synapsing",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-040.png",
+      "title": "Visual Glossary — fig 40",
+      "seeds": "2D image with axon and dendrite that are synapsing without highlighted segmentation overlay",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-041.png",
+      "title": "Visual Glossary — fig 41",
+      "seeds": "2D image with axon and dendrite that are synapsing",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-042.png",
+      "title": "Visual Glossary — fig 42",
+      "seeds": "2D image with axon and dendrite that are synapsing - this image showcases what happens during parallel plane synapses and how they can make a smudge where their gap in the synapse is creating an interesting effect",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-043.png",
+      "title": "Visual Glossary — fig 43",
+      "seeds": "2D image with axon and dendrite that are synapsing in parallel plane highlighted segmentation",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-044.png",
+      "title": "Visual Glossary — fig 44",
+      "seeds": "3D image with axon and dendrite that are synapsing",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-045.png",
+      "title": "Visual Glossary — fig 45",
+      "seeds": "2D image with axon and dendrite that are synapsing with a pink arrow pointing at the synaptic gap/PSD",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-046.png",
+      "title": "Visual Glossary — fig 46",
+      "seeds": "2D image with axon and dendrite that are synapsing with a pink arrow pointing at the synaptic gap/PSD",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-047.png",
+      "title": "Visual Glossary — fig 47",
+      "seeds": "a small bounding box highlighting a synapse",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-048.png",
+      "title": "Visual Glossary — fig 48",
+      "seeds": "a small bounding box highlighting a synapse",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-049.png",
+      "title": "Visual Glossary — fig 49",
+      "seeds": "an annotated 2D EM image of a highlighted segment where the user wasn't sure about the synapse",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-050.png",
+      "title": "Visual Glossary — fig 50",
+      "seeds": "a 2D image of a synapse with the axon highlighted and orange arrow pointing to the identifiable features that reveal it is a synapse (vesicles, psd, etc)",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-051.png",
+      "title": "Visual Glossary — fig 51",
+      "seeds": "a beautiful image of a neuronal soma",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-052.png",
+      "title": "Visual Glossary — fig 52",
+      "seeds": "zoomed in image of soma organelles",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-053.png",
+      "title": "Visual Glossary — fig 53",
+      "seeds": "another zoomed in image of soma organelles.",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-054.png",
+      "title": "Visual Glossary — fig 54",
+      "seeds": "2D and 3D side by side of a soma",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-055.png",
+      "title": "Visual Glossary — fig 55",
+      "seeds": "textbook looking reference image describing cell morphology as well as annotating the 3D renders of many types of glossary words",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-056.png",
+      "title": "Visual Glossary — fig 56",
+      "seeds": "large soma",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-057.png",
+      "title": "Visual Glossary — fig 57",
+      "seeds": "many soma",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-058.png",
+      "title": "Visual Glossary — fig 58",
+      "seeds": "2D and 3D side by side of glia",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-059.png",
+      "title": "Visual Glossary — fig 59",
+      "seeds": "glia in 3D",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-060.png",
+      "title": "Visual Glossary — fig 60",
+      "seeds": "large amount of glia in 3D possibly a merger of many glia",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-061.png",
+      "title": "Visual Glossary — fig 61",
+      "seeds": "a large glia merger",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-062.png",
+      "title": "Visual Glossary — fig 62",
+      "seeds": "dotted outline of glia cell in 2D",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-063.png",
+      "title": "Visual Glossary — fig 63",
+      "seeds": "annotated image of glia cells",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-064.png",
+      "title": "Visual Glossary — fig 64",
+      "seeds": "dotted outline of a glia in 2D",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-065.png",
+      "title": "Visual Glossary — fig 65",
+      "seeds": "large EM image collage of a glia cell from different angles",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-066.png",
+      "title": "Visual Glossary — fig 66",
+      "seeds": "a collage of figures showing synapses and there is highlighted glia in some frames as well showing where it was as a quick reference for identifying the glia at a glance",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-067.png",
+      "title": "Visual Glossary — fig 67",
+      "seeds": "a side by side of the same EM image one with the glia highlighted and one without",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-068.png",
+      "title": "Visual Glossary — fig 68",
+      "seeds": "2D and 3D side by side showing the layers of membranes glia can make when folded into each other",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-069.png",
+      "title": "Visual Glossary — fig 69",
+      "seeds": "a high definition image of a myelinated neuron crosscut 2D",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-070.png",
+      "title": "Visual Glossary — fig 70",
+      "seeds": "a myelinated neuron crosscut 2D",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-071.png",
+      "title": "Visual Glossary — fig 71",
+      "seeds": "an HD myelinated neuron crosscut 2D",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-072.png",
+      "title": "Visual Glossary — fig 72",
+      "seeds": "large image of blood vessel",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-073.png",
+      "title": "Visual Glossary — fig 73",
+      "seeds": "large image of blood vessel",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-074.png",
+      "title": "Visual Glossary — fig 74",
+      "seeds": "2D image of what i think is the soma of a glia cell and an very densely stained organelle inside",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-075.png",
+      "title": "Visual Glossary — fig 75",
+      "seeds": "membrane swirl",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-076.png",
+      "title": "Visual Glossary — fig 76",
+      "seeds": "looks like a membrane swirl or image error possibly involving a fat globule",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-077.png",
+      "title": "Visual Glossary — fig 77",
+      "seeds": "3 cute mitochondria",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-078.png",
+      "title": "Visual Glossary — fig 78",
+      "seeds": "a parallel plane cut mitochondria",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-079.png",
+      "title": "Visual Glossary — fig 79",
+      "seeds": "a perpendicular plane cut mitochondria i think",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-080.png",
+      "title": "Visual Glossary — fig 80",
+      "seeds": "more mitochondira",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-081.png",
+      "title": "Visual Glossary — fig 81",
+      "seeds": "a large arrow field of arrows pointing and several mitochondria for help and training",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Cell Segmentation Visual Glossary",
+      "dir": "reference-figures",
+      "file": "visual-glossary-082.png",
+      "title": "Visual Glossary — fig 82",
+      "seeds": "rec circles highlight questionable dark spot pattern inside a myelinated axon. these are likely image errors caused by fat globules possibly",
+      "source": "Cell Segmentation Visual Glossary v1.0 (Selden Koolman) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-001.png",
+      "title": "OL Cell Name Guide — fig 1",
+      "seeds": "an adorable cartoon of a fly",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-002.png",
+      "title": "OL Cell Name Guide — fig 2",
+      "seeds": "lightbulb menu drop down options list",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-003.png",
+      "title": "OL Cell Name Guide — fig 3",
+      "seeds": "image collage of the various known cell types from the Fischbach paper",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-004.png",
+      "title": "OL Cell Name Guide — fig 4",
+      "seeds": "an image collage of 3D neuro pile and their names with cell types shown in various locations",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-005.png",
+      "title": "OL Cell Name Guide — fig 5",
+      "seeds": "side view of the medulla and lamina and used to show the layering structure of the region and cell types which occupy specific tightly pancakes areas",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-006.png",
+      "title": "OL Cell Name Guide — fig 6",
+      "seeds": "images of DM cells and their structural variations and patterns they create when shown together similar to a lattice",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-007.png",
+      "title": "OL Cell Name Guide — fig 7",
+      "seeds": "a large image of many 3D examples of the different DM types",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-008.png",
+      "title": "OL Cell Name Guide — fig 8",
+      "seeds": "an image from Fischbach paper showing the layers of medulla and the photo receptor cells",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-009.png",
+      "title": "OL Cell Name Guide — fig 9",
+      "seeds": "an image from the Fischbach paper showing medulla intrinsic and trans lobulaplate and lobula intrinsic cells",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-010.png",
+      "title": "OL Cell Name Guide — fig 10",
+      "seeds": "another Fischbach image of Mawf1 and Lawf2 and Lai cells and where they innervate",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-011.png",
+      "title": "OL Cell Name Guide — fig 11",
+      "seeds": "another Fischbach image of Dm cells and well as Pm Lcn Lt TLp cells",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-012.png",
+      "title": "OL Cell Name Guide — fig 12",
+      "seeds": "Fischbach image",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-013.png",
+      "title": "OL Cell Name Guide — fig 13",
+      "seeds": "Fischbach image",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-014.png",
+      "title": "OL Cell Name Guide — fig 14",
+      "seeds": "Fischbach image",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-015.png",
+      "title": "OL Cell Name Guide — fig 15",
+      "seeds": "Fischbach image",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-016.png",
+      "title": "OL Cell Name Guide — fig 16",
+      "seeds": "light microscopy image of various layers and neurons innervating at specific layers",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-017.png",
+      "title": "OL Cell Name Guide — fig 17",
+      "seeds": "images of the small differences of TM5 subtypes 3D",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-018.png",
+      "title": "OL Cell Name Guide — fig 18",
+      "seeds": "Fischbach image",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-019.png",
+      "title": "OL Cell Name Guide — fig 19",
+      "seeds": "Fischbach",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-020.png",
+      "title": "OL Cell Name Guide — fig 20",
+      "seeds": "a whole Tm neuron of some type 3D",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-021.png",
+      "title": "OL Cell Name Guide — fig 21",
+      "seeds": "Fischbach",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-022.png",
+      "title": "OL Cell Name Guide — fig 22",
+      "seeds": "Fischbach",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-023.png",
+      "title": "OL Cell Name Guide — fig 23",
+      "seeds": "Fischbach",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-024.png",
+      "title": "OL Cell Name Guide — fig 24",
+      "seeds": "Fischbach",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-025.png",
+      "title": "OL Cell Name Guide — fig 25",
+      "seeds": "another side by side of a cell this time TmY14 and a possible subtype",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-026.png",
+      "title": "OL Cell Name Guide — fig 26",
+      "seeds": "a cartoon showing how a subtype of TmY can vary by where it innervates",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-027.png",
+      "title": "OL Cell Name Guide — fig 27",
+      "seeds": "TmY14 image",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-028.png",
+      "title": "OL Cell Name Guide — fig 28",
+      "seeds": "TMY15 image",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-029.png",
+      "title": "OL Cell Name Guide — fig 29",
+      "seeds": "TmY15 image",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-030.png",
+      "title": "OL Cell Name Guide — fig 30",
+      "seeds": "TmY16 image",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-031.png",
+      "title": "OL Cell Name Guide — fig 31",
+      "seeds": "TmY18 image",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-032.png",
+      "title": "OL Cell Name Guide — fig 32",
+      "seeds": "A variety of TmY cells all shown together",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-033.png",
+      "title": "OL Cell Name Guide — fig 33",
+      "seeds": "TmY20 cell",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-034.png",
+      "title": "OL Cell Name Guide — fig 34",
+      "seeds": "light microscopy images of Tm cells",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-035.png",
+      "title": "OL Cell Name Guide — fig 35",
+      "seeds": "Fischbach",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-036.png",
+      "title": "OL Cell Name Guide — fig 36",
+      "seeds": "Fischbach",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-037.png",
+      "title": "OL Cell Name Guide — fig 37",
+      "seeds": "Y11 image light microscopy",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-038.png",
+      "title": "OL Cell Name Guide — fig 38",
+      "seeds": "Y12 light microscopy",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-040.png",
+      "title": "OL Cell Name Guide — fig 40",
+      "seeds": "Fischbach",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-041.png",
+      "title": "OL Cell Name Guide — fig 41",
+      "seeds": "Fischbach",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-042.png",
+      "title": "OL Cell Name Guide — fig 42",
+      "seeds": "Fischbach",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-043.png",
+      "title": "OL Cell Name Guide — fig 43",
+      "seeds": "Fischbach LC cells variety",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-044.png",
+      "title": "OL Cell Name Guide — fig 44",
+      "seeds": "Fischbach Mt cells",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-045.png",
+      "title": "OL Cell Name Guide — fig 45",
+      "seeds": "Fischbach",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-046.png",
+      "title": "OL Cell Name Guide — fig 46",
+      "seeds": "Fischbach",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-047.png",
+      "title": "OL Cell Name Guide — fig 47",
+      "seeds": "Fischbach",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Name Guide",
+      "dir": "reference-figures",
+      "file": "ol-cell-name-guide-048.png",
+      "title": "OL Cell Name Guide — fig 48",
+      "seeds": "figure of LC and LT cells",
+      "source": "Optic Lobe Cell Name Guide (Amy Robinson) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-001.png",
+      "title": "Fly Synapse — fig 1",
+      "seeds": "EM image of synaptic region",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-002.png",
+      "title": "Fly Synapse — fig 2",
+      "seeds": "EM image of synaptic region",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-003.png",
+      "title": "Fly Synapse — fig 3",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-004.png",
+      "title": "Fly Synapse — fig 4",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-005.png",
+      "title": "Fly Synapse — fig 5",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-006.png",
+      "title": "Fly Synapse — fig 6",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-007.png",
+      "title": "Fly Synapse — fig 7",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-008.png",
+      "title": "Fly Synapse — fig 8",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-009.png",
+      "title": "Fly Synapse — fig 9",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-010.png",
+      "title": "Fly Synapse — fig 10",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-011.png",
+      "title": "Fly Synapse — fig 11",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD) Dense Core Vesicles",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-012.png",
+      "title": "Fly Synapse — fig 12",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD) vesicles binding",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-013.png",
+      "title": "Fly Synapse — fig 13",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-014.png",
+      "title": "Fly Synapse — fig 14",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-015.png",
+      "title": "Fly Synapse — fig 15",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-016.png",
+      "title": "Fly Synapse — fig 16",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-017.png",
+      "title": "Fly Synapse — fig 17",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-018.png",
+      "title": "Fly Synapse — fig 18",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-019.png",
+      "title": "Fly Synapse — fig 19",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-020.png",
+      "title": "Fly Synapse — fig 20",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-021.png",
+      "title": "Fly Synapse — fig 21",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-022.png",
+      "title": "Fly Synapse — fig 22",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-023.png",
+      "title": "Fly Synapse — fig 23",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-024.png",
+      "title": "Fly Synapse — fig 24",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-025.png",
+      "title": "Fly Synapse — fig 25",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-026.png",
+      "title": "Fly Synapse — fig 26",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD) example of how much to paint for synapse GT ground truth",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-027.png",
+      "title": "Fly Synapse — fig 27",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-028.png",
+      "title": "Fly Synapse — fig 28",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "Fly Synapses",
+      "dir": "reference-figures",
+      "file": "fly-synapses-029.png",
+      "title": "Fly Synapse — fig 29",
+      "seeds": "fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+      "source": "Optional - Fly synapses (FlyWire @ Princeton) — lab Google source"
+    },
+    {
+      "collection": "FlyWire Cheatsheet",
+      "dir": "reference-figures",
+      "file": "flywire-cheatsheet-001.png",
+      "title": "FlyWire Cheatsheet — fig 1",
+      "seeds": "FlyWire proofreading shortcut / command reference",
+      "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+    },
+    {
+      "collection": "FlyWire Cheatsheet",
+      "dir": "reference-figures",
+      "file": "flywire-cheatsheet-002.png",
+      "title": "FlyWire Cheatsheet — fig 2",
+      "seeds": "FlyWire proofreading shortcut / command reference",
+      "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+    },
+    {
+      "collection": "FlyWire Cheatsheet",
+      "dir": "reference-figures",
+      "file": "flywire-cheatsheet-003.png",
+      "title": "FlyWire Cheatsheet — fig 3",
+      "seeds": "FlyWire proofreading shortcut / command reference",
+      "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+    },
+    {
+      "collection": "FlyWire Cheatsheet",
+      "dir": "reference-figures",
+      "file": "flywire-cheatsheet-004.png",
+      "title": "FlyWire Cheatsheet — fig 4",
+      "seeds": "FlyWire proofreading shortcut / command reference",
+      "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+    },
+    {
+      "collection": "FlyWire Cheatsheet",
+      "dir": "reference-figures",
+      "file": "flywire-cheatsheet-005.png",
+      "title": "FlyWire Cheatsheet — fig 5",
+      "seeds": "FlyWire proofreading shortcut / command reference",
+      "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+    },
+    {
+      "collection": "FlyWire Cheatsheet",
+      "dir": "reference-figures",
+      "file": "flywire-cheatsheet-006.png",
+      "title": "FlyWire Cheatsheet — fig 6",
+      "seeds": "FlyWire proofreading shortcut / command reference",
+      "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+    },
+    {
+      "collection": "FlyWire Cheatsheet",
+      "dir": "reference-figures",
+      "file": "flywire-cheatsheet-007.png",
+      "title": "FlyWire Cheatsheet — fig 7",
+      "seeds": "FlyWire proofreading shortcut / command reference",
+      "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+    },
+    {
+      "collection": "FlyWire Cheatsheet",
+      "dir": "reference-figures",
+      "file": "flywire-cheatsheet-016.png",
+      "title": "FlyWire Cheatsheet — fig 16",
+      "seeds": "FlyWire proofreading shortcut / command reference",
+      "source": "FlyWire Cheatsheet (flywire@princeton) — lab Google source"
+    },
+    {
+      "collection": "Optic Lobe Cell Diagrams",
+      "dir": "optic-lobe-diagrams",
+      "file": "Dm102b_6.png",
+      "title": "Dm102b_6",
+      "seeds": "Drosophila optic-lobe Dm102b_6 cell-type morphology render",
+      "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+    },
+    {
+      "collection": "Optic Lobe Cell Diagrams",
+      "dir": "optic-lobe-diagrams",
+      "file": "Dm2a.png",
+      "title": "Dm2a",
+      "seeds": "Drosophila optic-lobe Dm2a cell-type morphology render",
+      "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+    },
+    {
+      "collection": "Optic Lobe Cell Diagrams",
+      "dir": "optic-lobe-diagrams",
+      "file": "Dm2b.png",
+      "title": "Dm2b",
+      "seeds": "Drosophila optic-lobe Dm2b cell-type morphology render",
+      "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+    },
+    {
+      "collection": "Optic Lobe Cell Diagrams",
+      "dir": "optic-lobe-diagrams",
+      "file": "Dm3p.png",
+      "title": "Dm3p",
+      "seeds": "Drosophila optic-lobe Dm3p cell-type morphology render",
+      "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+    },
+    {
+      "collection": "Optic Lobe Cell Diagrams",
+      "dir": "optic-lobe-diagrams",
+      "file": "Dm4.png",
+      "title": "Dm4",
+      "seeds": "Drosophila optic-lobe Dm4 cell-type morphology render",
+      "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+    },
+    {
+      "collection": "Optic Lobe Cell Diagrams",
+      "dir": "optic-lobe-diagrams",
+      "file": "Dm9.png",
+      "title": "Dm9",
+      "seeds": "Drosophila optic-lobe Dm9 cell-type morphology render",
+      "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+    },
+    {
+      "collection": "Optic Lobe Cell Diagrams",
+      "dir": "optic-lobe-diagrams",
+      "file": "LPi-T5b-DCH (LPi2-1f).png",
+      "title": "LPi-T5b-DCH (LPi2-1f)",
+      "seeds": "Drosophila optic-lobe LPi-T5b-DCH (LPi2-1f) cell-type morphology render",
+      "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+    },
+    {
+      "collection": "Optic Lobe Cell Diagrams",
+      "dir": "optic-lobe-diagrams",
+      "file": "Mti123_37_anterior.png",
+      "title": "Mti123_37_anterior",
+      "seeds": "Drosophila optic-lobe Mti123_37 cell-type morphology render, anterior view",
+      "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+    },
+    {
+      "collection": "Optic Lobe Cell Diagrams",
+      "dir": "optic-lobe-diagrams",
+      "file": "Mti123_37_side.png",
+      "title": "Mti123_37_side",
+      "seeds": "Drosophila optic-lobe Mti123_37 cell-type morphology render, side view",
+      "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+    },
+    {
+      "collection": "Optic Lobe Cell Diagrams",
+      "dir": "optic-lobe-diagrams",
+      "file": "Mti123_37_ventral.png",
+      "title": "Mti123_37_ventral",
+      "seeds": "Drosophila optic-lobe Mti123_37 cell-type morphology render, ventral view",
+      "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+    },
+    {
+      "collection": "Optic Lobe Cell Diagrams",
+      "dir": "optic-lobe-diagrams",
+      "file": "Mti123_37.png",
+      "title": "Mti123_37",
+      "seeds": "Drosophila optic-lobe Mti123_37 cell-type morphology render",
+      "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+    },
+    {
+      "collection": "Optic Lobe Cell Diagrams",
+      "dir": "optic-lobe-diagrams",
+      "file": "Mti124_67.png",
+      "title": "Mti124_67",
+      "seeds": "Drosophila optic-lobe Mti124_67 cell-type morphology render",
+      "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+    },
+    {
+      "collection": "Optic Lobe Cell Diagrams",
+      "dir": "optic-lobe-diagrams",
+      "file": "SDm100c_67.png",
+      "title": "SDm100c_67",
+      "seeds": "Drosophila optic-lobe SDm100c_67 cell-type morphology render",
+      "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+    },
+    {
+      "collection": "Optic Lobe Cell Diagrams",
+      "dir": "optic-lobe-diagrams",
+      "file": "SDm103_34567.png",
+      "title": "SDm103_34567",
+      "seeds": "Drosophila optic-lobe SDm103_34567 cell-type morphology render",
+      "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+    },
+    {
+      "collection": "Optic Lobe Cell Diagrams",
+      "dir": "optic-lobe-diagrams",
+      "file": "Tm8b.png",
+      "title": "Tm8b",
+      "seeds": "Drosophila optic-lobe Tm8b cell-type morphology render",
+      "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+    },
+    {
+      "collection": "Optic Lobe Cell Diagrams",
+      "dir": "optic-lobe-diagrams",
+      "file": "Y11.png",
+      "title": "Y11",
+      "seeds": "Drosophila optic-lobe Y11 cell-type morphology render",
+      "source": "Diagrams - Layers folder (Kyle Willie) — Drosophila optic-lobe cell-type renders"
+    }
+  ]
+}

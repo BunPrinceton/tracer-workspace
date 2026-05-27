@@ -35,7 +35,10 @@
   .preview img{max-width:100%;max-height:52vh;border-radius:6px;box-shadow:0 1px 6px rgba(0,0,0,.15);}
   .preview .file{display:block;margin-top:.5rem;font-size:.75rem;color:#737373;font-family:ui-monospace,Menlo,Consolas,monospace;}
   .fields{padding:1.1rem;display:grid;gap:.9rem;}
-  .field label{display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;color:#737373;font-weight:700;margin-bottom:.3rem;}
+  .field label{display:flex;align-items:center;flex-wrap:wrap;gap:.4rem;font-size:.72rem;text-transform:uppercase;letter-spacing:.04em;color:#737373;font-weight:700;margin-bottom:.3rem;}
+  .suggest-btn{margin-left:auto;font-size:.7rem;font-weight:700;text-transform:none;letter-spacing:0;color:#15803d;background:#dcfce7;border:1px solid #bbf7d0;border-radius:6px;padding:.18rem .55rem;cursor:pointer;font-family:inherit;}
+  .suggest-btn:hover{background:#bbf7d0;}
+  .suggest-btn:active{transform:translateY(1px);}
   .field input,.field textarea{width:100%;font:inherit;font-size:.9rem;padding:.55rem .7rem;border:1px solid #d4d4d4;border-radius:8px;background:#fff;resize:vertical;}
   .field textarea{min-height:4.5rem;}
   .field .hint{font-size:.72rem;color:#a3a3a3;margin-top:.25rem;}
@@ -98,11 +101,11 @@
       <div class="preview" id="preview"></div>
       <div class="fields">
         <div class="field">
-          <label for="f-title">Short title <span style="font-weight:400;text-transform:none;color:#a3a3a3;">(optional — a better name than "fig N")</span></label>
+          <label for="f-title">Short title <span style="font-weight:400;text-transform:none;color:#a3a3a3;">(optional — a better name than "fig N")</span><button type="button" class="suggest-btn" id="sug-title">✨ use suggestion</button></label>
           <input type="text" id="f-title" placeholder="e.g. Myelin padding rules">
         </div>
         <div class="field">
-          <label for="f-seeds">Seed words <span style="font-weight:400;text-transform:none;color:#c2410c;">— the part you fill in</span></label>
+          <label for="f-seeds">Seed words <span style="font-weight:400;text-transform:none;color:#c2410c;">— the part you fill in</span><button type="button" class="suggest-btn" id="sug-seeds">✨ use suggestion</button></label>
           <textarea id="f-seeds" placeholder="e.g. myelin tongue, padding around axon, where NOT to paint"></textarea>
           <div class="hint">A few words/phrases is enough. Claude expands these into a 1–2 sentence description.</div>
         </div>
@@ -1566,6 +1569,43 @@ let idx = state.idx || 0;
 function save(){ localStorage.setItem(STORE, JSON.stringify({entries, idx})); }
 const $ = s => document.querySelector(s);
 
+// Per-collection (and, for diagrams, per-file) starter suggestions. Shown as
+// the field placeholder and filled in by the "✨ use suggestion" buttons.
+// These are deliberately generic starters — Ben refines them per figure.
+const COLL_SHORT = {
+  "Cell Segmentation Visual Glossary":"Visual Glossary",
+  "Optic Lobe Cell Name Guide":"OL Cell Name Guide",
+  "Fly Synapses":"Fly Synapse",
+  "FlyWire Cheatsheet":"FlyWire Cheatsheet",
+  "Optic Lobe Cell Diagrams":"OL Cell Diagram"
+};
+const COLL_SEEDS = {
+  "Cell Segmentation Visual Glossary":"voxel-painting reference; segmentation rule or example (e.g. myelin padding, membrane, glia, mitochondria, imaging defect)",
+  "Optic Lobe Cell Name Guide":"optic-lobe cell-type naming reference; cell identification example",
+  "Fly Synapses":"fly synapse indicator example (vesicle cluster / cleft / T-bar / PSD)",
+  "FlyWire Cheatsheet":"FlyWire proofreading shortcut / command reference"
+};
+function diagramStem(file){ return file.replace(/\.png$/i,"").replace(/%20/g," "); }
+function suggestTitle(f){
+  if(f.collection==="Optic Lobe Cell Diagrams") return diagramStem(f.file);
+  return (COLL_SHORT[f.collection]||f.collection) + (f.num?(" — fig "+f.num):"");
+}
+function suggestSeeds(f){
+  if(f.collection==="Optic Lobe Cell Diagrams"){
+    const stem=diagramStem(f.file);
+    const view=/(anterior|posterior|side|lateral|ventral|dorsal)/i.exec(stem);
+    const base=stem.replace(/[_ ](anterior|posterior|side|lateral|ventral|dorsal)$/i,"");
+    return "Drosophila optic-lobe "+base+" cell-type morphology render"+(view?(", "+view[1].toLowerCase()+" view"):"");
+  }
+  return COLL_SEEDS[f.collection]||"";
+}
+function fillSuggestion(id){
+  const el=document.getElementById(id);
+  el.value = id==="f-title" ? suggestTitle(FIGURES[idx]) : suggestSeeds(FIGURES[idx]);
+  el.dispatchEvent(new Event("input",{bubbles:true})); // reuse save + badge update
+  el.focus();
+}
+
 function rec(f){ return entries[f.file] || (entries[f.file] = { title:"", seeds:"", source:f.source||"" }); }
 function described(f){ return !!(entries[f.file] && entries[f.file].seeds && entries[f.file].seeds.trim()); }
 
@@ -1611,6 +1651,8 @@ function render(animate){
   $("#f-title").value=r.title||"";
   $("#f-seeds").value=r.seeds||"";
   $("#f-source").value=r.source||f.source||"";
+  $("#f-title").placeholder=suggestTitle(f);     // show the per-figure suggestion as ghost text
+  $("#f-seeds").placeholder=suggestSeeds(f);
   $("#btnPrev").disabled=idx===0;
   $("#btnNext").disabled=idx===FIGURES.length-1 && false;
   const card=$("#card");
@@ -1635,6 +1677,8 @@ function commitFields(){
 });
 
 function go(delta){ const n=idx+delta; if(n>=0 && n<FIGURES.length){ commitFields(); idx=n; render(true); } }
+$("#sug-title").onclick=()=>fillSuggestion("f-title");
+$("#sug-seeds").onclick=()=>fillSuggestion("f-seeds");
 $("#btnPrev").onclick=()=>go(-1);
 $("#btnNext").onclick=()=>{ if(idx<FIGURES.length-1) go(1); else { commitFields(); openReview(); } };
 $("#btnSkip").onclick=()=>{ if(idx<FIGURES.length-1){ idx++; render(true);} else openReview(); };
