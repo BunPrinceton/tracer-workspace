@@ -47,8 +47,12 @@ All pages follow these principles (documented in `index.html` comments):
 /pipeline/           # Pipeline stages
 /tasks/              # Task guides (3 accordion sections; sub-paths are redirect stubs to the index anchors)
 /sop/                # SOPs with versioning (8 subdirectories, plus print.css)
-/gallery/            # Main visual reference gallery (44 figures across BANC / FAFB 2019 / Reference Materials / Image Bounty)
-/gallery/reference-figures/   # Sub-gallery: 185 figures extracted from training/reference docs (4 collections)
+/gallery/            # Single unified gallery (~245 figures, 9 stacked sections): BANC, FAFB 2019,
+                     # Reference Materials, Visual Glossary, OL Cell Name Guide, Fly Synapses,
+                     # FlyWire Cheatsheet, Optic Lobe Diagrams, Image Bounty. Sticky section jump-nav.
+/gallery/reference-figures/   # ORPHANED standalone page (185 figs) — merged into /gallery/ (2026-05-27);
+                     # left intact (preserve-originals), unlinked. Image files still served from here.
+/gallery/optic-lobe-diagrams/ # ORPHANED standalone page (16 diagrams) — likewise merged + unlinked.
 /publications/       # Seung Lab publication stubs (13 papers)
 /archive/            # All Documents index + search-results view (dual-role; see below)
 /archive/<item>/     # Per-item historical pages: vast, omni, eyewire, desktop-annotation,
@@ -64,7 +68,7 @@ All pages follow these principles (documented in `index.html` comments):
 
 `/search.js` is loaded by every HTML page as `<script src=".../search.js" defer></script>` with depth-correct relative path. It is the heart of the site:
 
-- **`INDEX` array** at the top of search.js is the **canonical registry of every page and every searchable artifact** (currently ~105 entries: pages + 44 gallery images + 26 archived docs + per-item archive pages). **Adding a page = adding an INDEX entry**, in the same commit. No other data source.
+- **`INDEX` array** at the top of search.js is the **canonical registry of every page and every searchable artifact** (currently ~116 entries: pages + 44 BANC gallery images + per-collection reference-gallery entries + archived docs + per-item archive pages). The 185 merged reference figures are indexed at the **collection level** (one entry each → `gallery/#<section-anchor>`), not per-figure, to avoid flooding the dropdown. **Adding a page = adding an INDEX entry**, in the same commit. No other data source.
 - **Entry schema**: `{title, url, section, description, aliases, keywords}`. Field weights for scoring: title=10, aliases=8, keywords=6, section=4, description=2 (exact word; fuzzy/transposition variants score 60-80% of these).
 - **Matcher**: hand-rolled (no Fuse.js dep). Substring → prefix → 1-edit-distance → 1-transposition. Plus Google-style operators: `+word` required, `-word` excluded, `"exact phrase"`, `section:name` field filter.
 - **Public API**: `window.SiteSearch = {INDEX, search, scoreEntry, highlight, parseQuery, SITE_ROOT}` — `/archive/` uses these to render its All Documents listing and search-results view from the same source.
