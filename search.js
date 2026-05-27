@@ -1256,6 +1256,116 @@
     }
 
     /* ----------------------------------------------------------------------
+       "DID YOU MEAN" — when a query returns nothing, suggest a correction by
+       swapping each unknown term for its closest fuzzy match in the index
+       vocabulary (titles + aliases + keywords). Returns '' if nothing better
+       was found or the suggestion equals the original.
+       ---------------------------------------------------------------------- */
+    var VOCAB = null;
+    function buildVocab() {
+        if (VOCAB) return VOCAB;
+        var set = {};
+        for (var i = 0; i < INDEX.length; i++) {
+            var e = INDEX[i];
+            var words = tokenize(e.title)
+                .concat(fieldWords(e.aliases || []))
+                .concat(fieldWords(e.keywords || []));
+            for (var w = 0; w < words.length; w++) {
+                if (words[w].length >= 3) set[words[w]] = true;
+            }
+        }
+        VOCAB = Object.keys(set);
+        return VOCAB;
+    }
+
+    function suggestQuery(query) {
+        var terms = tokenize(query);
+        if (!terms.length) return '';
+        var vocab = buildVocab();
+        var changed = false;
+        var out = [];
+        for (var i = 0; i < terms.length; i++) {
+            var term = terms[i];
+            // Already a substring of a known word? Keep it as typed.
+            var known = false;
+            for (var v = 0; v < vocab.length; v++) {
+                if (vocab[v].indexOf(term) !== -1) { known = true; break; }
+            }
+            if (known || term.length < 3) { out.push(term); continue; }
+            var best = null;
+            for (var v2 = 0; v2 < vocab.length; v2++) {
+                if (within1Edit(term, vocab[v2]) || oneTransposition(term, vocab[v2])) { best = vocab[v2]; break; }
+            }
+            if (best) { out.push(best); changed = true; } else out.push(term);
+        }
+        if (!changed) return '';
+        var suggestion = out.join(' ');
+        return suggestion.toLowerCase() === query.trim().toLowerCase() ? '' : suggestion;
+    }
+
+    /* ----------------------------------------------------------------------
+       SNIPPET HELPERS — for the dropdown result rows.
+         snippetWindow   trims a long description to a window around the match
+         textContainsTerm whether any query term is visible in given text
+         matchedTags     keyword/alias phrases a query hit (shows *why* a row
+                         matched when the term isn't visible in title/desc)
+       ---------------------------------------------------------------------- */
+    function snippetWindow(text, query, radius) {
+        if (!text || text.length <= radius * 2 + 20) return text || '';
+        var lower = text.toLowerCase();
+        var terms = tokenize(query);
+        var pos = -1;
+        for (var i = 0; i < terms.length; i++) {
+            if (terms[i].length < 2) continue;
+            var p = lower.indexOf(terms[i]);
+            if (p !== -1 && (pos === -1 || p < pos)) pos = p;
+        }
+        if (pos === -1) return text.slice(0, radius * 2) + '…';
+        var start = Math.max(0, pos - radius);
+        var end = Math.min(text.length, pos + radius);
+        var out = text.slice(start, end);
+        if (start > 0) out = '…' + out;
+        if (end < text.length) out = out + '…';
+        return out;
+    }
+
+    function textContainsTerm(text, query) {
+        var terms = tokenize(query);
+        var words = tokenize(text);
+        for (var t = 0; t < terms.length; t++) {
+            var term = terms[t];
+            if (term.length < 2) continue;
+            for (var w = 0; w < words.length; w++) {
+                if (words[w].indexOf(term) !== -1 || (term.length >= 3 && fuzzyMatch(term, words[w]))) return true;
+            }
+        }
+        return false;
+    }
+
+    function matchedTags(entry, query) {
+        var terms = tokenize(query);
+        if (!terms.length) return [];
+        var tags = (entry.aliases || []).concat(entry.keywords || []);
+        var hits = [];
+        var seen = {};
+        for (var i = 0; i < tags.length; i++) {
+            var tag = tags[i];
+            var tagWords = tokenize(tag);
+            var hit = false;
+            for (var t = 0; t < terms.length && !hit; t++) {
+                var term = terms[t];
+                if (term.length < 2) continue;
+                for (var w = 0; w < tagWords.length; w++) {
+                    var tw = tagWords[w];
+                    if (tw.indexOf(term) !== -1 || (term.length >= 3 && fuzzyMatch(term, tw))) { hit = true; break; }
+                }
+            }
+            if (hit && !seen[tag.toLowerCase()]) { hits.push(tag); seen[tag.toLowerCase()] = true; }
+        }
+        return hits;
+    }
+
+    /* ----------------------------------------------------------------------
        PUBLIC API
        Exposed so other pages (notably the Archive / All Documents page) can
        render from the same source of truth instead of duplicating data.
@@ -1307,7 +1417,16 @@
             '.site-search-results .result-title{font-weight:600;font-size:0.9375rem;color:#1a1a1a;}' +
             '.site-search-results .result-section{font-size:0.75rem;color:#2563eb;margin-left:0.5rem;}' +
             '.site-search-results .result-desc{font-size:0.8125rem;color:#525252;margin-top:0.125rem;line-height:1.4;}' +
+            // Italic "matches: …" line shown when the hit was in a keyword/alias
+            // rather than the visible title/description.
+            '.site-search-results .result-tags{font-size:0.75rem;color:#737373;margin-top:0.1875rem;font-style:italic;}' +
+            // Count header at the top of the dropdown ("12 matches" / "Showing top 8 of 12").
+            '.site-search-count{font-size:0.6875rem;color:#737373;padding:0.375rem 0.875rem;background-color:#fafafa;border-bottom:1px solid #f0f0f0;text-transform:uppercase;letter-spacing:0.03em;}' +
             '.site-search-empty{padding:0.875rem;font-size:0.875rem;color:#737373;text-align:center;}' +
+            // "Did you mean <suggestion>?" row on a no-results query.
+            '.site-search-suggest-wrap{padding:0.625rem 0.875rem;font-size:0.875rem;color:#525252;text-align:center;}' +
+            '.site-search-suggest{color:#2563eb;font-weight:600;text-decoration:none;}' +
+            '.site-search-suggest:hover{text-decoration:underline;}' +
             // Highlighted matched text inside results (Ctrl-F style). Scoped so
             // we never restyle <mark> used elsewhere on the site.
             // No horizontal padding — otherwise the background extends past the
@@ -1381,7 +1500,7 @@
         btn.type = 'button';
         btn.className = 'site-backtotop';
         btn.setAttribute('aria-label', 'Back to top');
-        btn.innerHTML = '<span class="bt-arrow" aria-hidden="true">↑</span> Top';
+        btn.innerHTML = '<span class="bt-arrow" aria-hidden="true">↑</span> Back to top';
         document.body.appendChild(btn);
 
         var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1412,14 +1531,33 @@
         });
     }
 
-    function renderResults(results, listEl, query) {
+    function renderResults(results, listEl, query, total, suggestion) {
         listEl.innerHTML = '';
         var queryStr = (query || '').trim();
+        total = (typeof total === 'number') ? total : results.length;
+
+        // Count header — only when there are results.
+        if (results.length) {
+            var countLi = document.createElement('li');
+            countLi.className = 'site-search-count';
+            countLi.textContent = total > results.length
+                ? ('Showing top ' + results.length + ' of ' + total + ' matches')
+                : (total + (total === 1 ? ' match' : ' matches'));
+            listEl.appendChild(countLi);
+        }
+
         if (!results.length) {
             var empty = document.createElement('li');
             empty.className = 'site-search-empty';
-            empty.textContent = 'No matches. Press Enter to view full results.';
+            empty.innerHTML = 'No matches for <strong>' + escapeHTML(queryStr) + '</strong>.';
             listEl.appendChild(empty);
+            if (suggestion) {
+                var sug = document.createElement('li');
+                sug.className = 'site-search-suggest-wrap';
+                sug.innerHTML = 'Did you mean <a href="#" class="site-search-suggest" data-suggest="' +
+                    escapeHTML(suggestion) + '">' + escapeHTML(suggestion) + '</a>?';
+                listEl.appendChild(sug);
+            }
         } else {
             for (var i = 0; i < results.length; i++) {
                 var r = results[i];
@@ -1428,10 +1566,22 @@
                 li.dataset.index = String(i);
                 var a = document.createElement('a');
                 a.href = appendSearchHash(SITE_ROOT + r.entry.url, queryStr);
-                a.innerHTML =
+                var descText = snippetWindow(r.entry.description || '', queryStr, 70);
+                var html =
                     '<span class="result-title">' + highlight(r.entry.title, queryStr) + '</span>' +
                     '<span class="result-section">' + escapeHTML(r.entry.section) + '</span>' +
-                    '<div class="result-desc">' + highlight(r.entry.description, queryStr) + '</div>';
+                    '<div class="result-desc">' + highlight(descText, queryStr) + '</div>';
+                // When the query term isn't visible in the title/description,
+                // surface the keyword/alias that actually matched so the row's
+                // relevance is obvious (e.g. searching "dense" → "matches: dense cluster").
+                if (!textContainsTerm((r.entry.title || '') + ' ' + (r.entry.description || ''), queryStr)) {
+                    var tags = matchedTags(r.entry, queryStr);
+                    if (tags.length) {
+                        html += '<div class="result-tags">matches: ' +
+                            highlight(tags.slice(0, 4).join(', '), queryStr) + '</div>';
+                    }
+                }
+                a.innerHTML = html;
                 li.appendChild(a);
                 listEl.appendChild(li);
             }
@@ -1676,8 +1826,12 @@
                 userNavigated = false;
                 return;
             }
-            currentResults = search(q, MAX_RESULTS);
-            renderResults(currentResults, list, q);
+            // Run unlimited once to get the true match count, then slice for display.
+            var all = search(q);
+            var total = all.length;
+            currentResults = all.slice(0, MAX_RESULTS);
+            var suggestion = total === 0 ? suggestQuery(q) : '';
+            renderResults(currentResults, list, q, total, suggestion);
             list.classList.add('open');
             // Visually highlight the top result, but treat it as "not user-selected"
             // so plain Enter still routes to the archive search-results page.
@@ -1726,6 +1880,17 @@
             } else if (e.key === 'Escape') {
                 input.blur();
                 list.classList.remove('open');
+            }
+        });
+
+        // "Did you mean" — clicking a suggestion re-runs the search with it.
+        list.addEventListener('click', function (e) {
+            var sug = e.target.closest && e.target.closest('.site-search-suggest');
+            if (sug) {
+                e.preventDefault();
+                input.value = sug.getAttribute('data-suggest') || '';
+                input.focus();
+                update();
             }
         });
 
