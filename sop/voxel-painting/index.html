@@ -12,8 +12,7 @@
 
         /* Navigation */
         nav { background-color: #1a1a1a; padding: 0.75rem 1.5rem; }
-        nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; max-width: 1200px; margin: 0 auto; }
-            justify-content: center;
+        nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; justify-content: center; max-width: 1200px; margin: 0 auto; }
         nav a { color: #e5e5e5; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0; display: inline-block; }
         nav a:hover, nav a:focus { text-decoration: underline; text-underline-offset: 4px; }
         nav a[aria-current="page"] { color: #ffffff; font-weight: 600; }
@@ -77,11 +76,6 @@
 
         /* Main content */
         main { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
-
-        /* Breadcrumb */
-        .breadcrumb { font-size: 0.875rem; color: #525252; margin-bottom: 1.5rem; }
-        .breadcrumb a { color: #2563eb; text-decoration: none; }
-        .breadcrumb a:hover { text-decoration: underline; }
 
         /* Page header */
         .page-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #d4d4d4; }
@@ -164,10 +158,6 @@
 </nav>
 
 <main id="main-content" role="main">
-
-    <nav class="breadcrumb" aria-label="Breadcrumb">
-        <a href="../../">Dashboard</a> &rsaquo; <a href="../../ground-truth/">Ground Truth</a> &rsaquo; <a href="../">SOP</a> &rsaquo; Voxel Painting v1.2
-    </nav>
 
     <header class="page-header">
         <h1>Voxel Painting Cell Segmentation Protocol <span class="version-badge">v1.2</span></h1>

@@ -174,25 +174,6 @@
             font-size: 1.0625rem;
         }
 
-        /* Legend */
-        .legend {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-            padding: 1rem;
-            background-color: #ffffff;
-            border: 2px solid #d4d4d4;
-            border-radius: 8px;
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-size: 0.875rem;
-        }
-
         /* Status badges */
         .status-badge {
             display: inline-block;
@@ -350,51 +331,6 @@
             color: #2563eb;
         }
 
-        /* Source documents section */
-        .source-docs {
-            background-color: #ffffff;
-            border: 2px solid #d4d4d4;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-        }
-
-        .source-docs h2 {
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #e5e5e5;
-        }
-
-        .source-docs ul {
-            list-style: none;
-        }
-
-        .source-docs li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #e5e5e5;
-        }
-
-        .source-docs li:last-child {
-            border-bottom: none;
-        }
-
-        .source-docs a {
-            color: #2563eb;
-            text-decoration: none;
-        }
-
-        .source-docs a:hover {
-            text-decoration: underline;
-        }
-
-        .source-label {
-            font-size: 0.75rem;
-            color: #737373;
-            margin-left: 0.5rem;
-        }
-
         /* Footer */
         footer {
             max-width: 1000px;
@@ -534,22 +470,6 @@
     <div class="page-header">
         <h1>Standard Operating Procedures</h1>
         <p>Official procedures for Ground Truth annotation, verification, and quality control. Each SOP includes version history and change logs.</p>
-    </div>
-
-    <!-- Legend -->
-    <div class="legend" role="note" aria-label="Status legend">
-        <div class="legend-item">
-            <span class="status-badge status-badge--current">Current</span>
-            <span>Active procedure - use this version</span>
-        </div>
-        <div class="legend-item">
-            <span class="status-badge status-badge--deprecated">Deprecated</span>
-            <span>Historical reference only</span>
-        </div>
-        <div class="legend-item">
-            <span class="status-badge status-badge--draft">Draft</span>
-            <span>Under review - not yet effective</span>
-        </div>
     </div>
 
     <!-- Current SOPs Table -->
@@ -708,109 +628,6 @@
                 </tr>
             </tbody>
         </table>
-    </section>
-
-
-    <!-- Deprecated SOPs Table -->
-    <section class="sop-section" aria-labelledby="deprecated-heading">
-        <div class="sop-section-header">
-            <h2 id="deprecated-heading">Deprecated Procedures</h2>
-            <span class="sop-count">2 archived</span>
-        </div>
-
-        <table class="sop-table">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Last Version</th>
-                    <th scope="col">Deprecated</th>
-                    <th scope="col">Replaced By</th>
-                    <th scope="col">Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="sop-id">SOP-D001</td>
-                    <td class="sop-title"><a href="omni-export/">Omni Export Procedure</a></td>
-                    <td class="sop-version">v1.2</td>
-                    <td class="sop-date">2024-12-01</td>
-                    <td class="sop-owner">
-                        <a href="../archive/#omni">Archive: Omni Tools</a>
-                    </td>
-                    <td><span class="status-badge status-badge--deprecated">Deprecated</span></td>
-                </tr>
-                <tr>
-                    <td class="sop-id">SOP-D002</td>
-                    <td class="sop-title"><a href="vast-annotation/">VAST Annotation</a></td>
-                    <td class="sop-version">v2.0</td>
-                    <td class="sop-date">2024-06-01</td>
-                    <td class="sop-owner">
-                        <a href="../archive/#vast">Archive: VAST Tools</a>
-                    </td>
-                    <td><span class="status-badge status-badge--deprecated">Deprecated</span></td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
-
-
-    <!-- Source Documents -->
-    <section class="source-docs" aria-labelledby="source-heading">
-        <h2 id="source-heading">Source Documents</h2>
-        <p style="font-size: 0.875rem; color: #525252; margin-bottom: 1rem;">
-            Original Google Docs and reference materials that inform current SOPs.
-        </p>
-        <ul>
-            <li>
-                <a href="../drive_docs_output/Ground-Truth-Protocol-History/Copy of Standard Operating Procedure Ground Truth GT Task Handling.html">
-                    GT Task Handling SOP
-                </a>
-                <span class="source-label">HTML export</span>
-            </li>
-            <li>
-                <a href="../New Documentation Styles-Templates-Files/Ground Truth/Standard Operating Procedure_ Ground Truth (GT) Task Handling.docx">
-                    GT Task Handling SOP
-                </a>
-                <span class="source-label">DOCX</span>
-            </li>
-            <li>
-                <a href="../drive_docs_output/Ground-Truth-Protocol-History/Copy of Ground Truth Protocol Guidelines Revised.html">
-                    GT Protocol Guidelines Revised
-                </a>
-                <span class="source-label">HTML export</span>
-            </li>
-            <li>
-                <a href="../drive_docs_output/Ground-Truth-Protocol-History/Copy of How to verify ground truth tasks.html">
-                    How to Verify GT Tasks
-                </a>
-                <span class="source-label">HTML export</span>
-            </li>
-            <li>
-                <a href="../drive_docs_output/Ground-Truth-Protocol-History/Copy of Updated Ground Truth Checklist.html">
-                    Updated GT Checklist
-                </a>
-                <span class="source-label">HTML export</span>
-            </li>
-            <li>
-                <a href="../drive_docs_output/Misc/Copy of Protocols for naming files.html">
-                    File Naming Protocols
-                </a>
-                <span class="source-label">HTML export</span>
-            </li>
-            <li>
-                <a href="../New Documentation Styles-Templates-Files/HTML Versions/tommy_macrina_FINAL.html">
-                    Tommy Macrina Protocol Reference
-                </a>
-                <span class="source-label">Reference</span>
-            </li>
-            <li>
-                <a href="../index-legacy.html#ground-truth">
-                    Legacy GT Documentation
-                </a>
-                <span class="source-label">Archive</span>
-            </li>
-        </ul>
     </section>
 
 </main>
