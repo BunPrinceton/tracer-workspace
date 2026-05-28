@@ -23,7 +23,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **No build system.** Pure static HTML served directly by GitHub Pages. No Jekyll, no bundler, no templating engine. This has major implications:
 
-- **CSS is duplicated in every page** via inline `<style>` blocks. The only shared stylesheets are `sop/print.css` (print rules) and `/search.js` injects a `<style>` at runtime for shared search UI bits. Updating the design system otherwise means editing every HTML file.
+- **CSS is duplicated in every page** via inline `<style>` blocks. Shared stylesheets are the exception: `sop/print.css` (print rules) and `sop/sidebar.css` (the SOP-section left-rail + Procedure/Details layout, linked on every `/sop/` page); `/search.js` also injects a `<style>` at runtime for shared search UI bits. Updating the design system otherwise means editing every HTML file.
 - **Navigation is duplicated in every page.** `_includes/nav.html` exists as a reference template only — it cannot be auto-included. Adding a nav item requires editing every page. Top-level nav links are centered (`justify-content: center`); the top-right search bar is absolutely positioned and doesn't shift the link layout.
 - **External links open in new tabs** (`target="_blank" rel="noopener noreferrer"`), including "Suggest an edit" footer links which are built dynamically via JavaScript.
 - **Deployment is just `git push` to `master`.** No build step, no CI/CD, no GitHub Actions. GitHub Pages rebuild takes 30-90s.
@@ -46,7 +46,8 @@ All pages follow these principles (documented in `index.html` comments):
 /                    # Dashboard (index.html) — hero image + mission statement
 /pipeline/           # Pipeline stages
 /tasks/              # Task guides (3 accordion sections; sub-paths are redirect stubs to the index anchors)
-/sop/                # SOPs with versioning (8 subdirectories, plus print.css)
+/sop/                # SOPs — left-rail layout (sidebar.js/.css): Overview landing + per-SOP
+                     # Procedure/Details views; versioned subdirs. See "SOP Section" below.
 /gallery/            # Single unified gallery (~245 figures, 9 stacked sections): BANC, FAFB 2019,
                      # Reference Materials, Visual Glossary, OL Cell Name Guide, Fly Synapses,
                      # FlyWire Cheatsheet, Optic Lobe Diagrams, Image Bounty. Sticky section jump-nav.
@@ -98,13 +99,25 @@ Historical content (deprecated tools, glossary, evolution timeline, legacy workf
 - **Heading hierarchy**: H1 for page title only, H2 for sections, H3 for subsections
 - **When adding pages**: also add the INDEX entry in `search.js` in the same commit so the search system stays consistent with the file tree.
 
-### SOP Version Structure
+### SOP Section (`/sop/`)
 
+Redesigned 2026-05-28 into a Google-docs-style layout — the first on the site, **scoped to `/sop/` as a test** (candidate to extend site-wide). Two shared assets, both loaded on every SOP page:
+- **`sop/sidebar.css`** — linked in `<head>` (like `print.css`). Owns the left-rail + two-column layout + de-carded header (`.sop-page-header`) + view-card (`.sop-card`) + table/callout styling. Class-based selectors so they override the global dark `nav`.
+- **`sop/sidebar.js`** — injected like `search.js`. **Single source of truth for the SOP list** (the `GROUPS` array). Renders the rail into `<aside id="sop-sidebar">`, depth-resolves links (works on `file://` + Pages), marks the active item, and — on a page that declares in-page views — builds a nested **Procedure / Details** sub-menu and toggles which view shows (hash-driven: `#procedure` / `#details`). Caret affordance ▸/▾.
+
+Rail groups (chronological): **Current** (GT Task Handling SOP-001, Voxel Painting SOP-006 — both WebKnossos; Voxel Painting is the current GT method) · **Recent** (GT Protocol Guidelines SOP-005) · **Older** (GT Verification SOP-002, GT Checklist SOP-003, File Naming SOP-004 — VAST/Omni-era, still valid, not archived).
+
+- **Landing (`sop/index.html`)** is an **Overview** (scope + a described, linked SOP list), not the old metadata table.
+- **Each SOP page** de-cards its header (title like other pages, not boxed) and splits its body into two views: `<div class="sop-view sop-card active" data-view="procedure" data-view-label="Procedure">` (clean default) and `<div class="sop-view sop-card" data-view="details" data-view-label="Details">` (purpose, scope, version history, change log, related). The `active` class is the no-JS default.
+- **To add an SOP**: add an entry to `GROUPS` in `sidebar.js`; wrap `<main>` in `<div class="sop-shell"><aside id="sop-sidebar">…</aside><main>…</main></div>`; give it the two `.sop-view` divs; link `sidebar.css` + `sidebar.js`; and add the INDEX entry in `search.js` (same commit).
+- **NOT redesigned** (keep their own inline CSS): `sop/omni-export/`, `sop/vast-annotation/` (deprecated, archive-linked) and the `vX.Y.html` version stubs.
+
+**Versioning (unchanged):** never delete old versions; create new `vX.Y.html`.
 ```
 sop/gt-task-handling/
-├── index.html     # Always current version
+├── index.html     # Always current version (two-view layout)
 ├── v2.0.html      # Redirect stub to index.html (preserves search-result hash on its way through)
-├── v1.0.html      # Deprecated (full content; never delete)
+├── v1.0.html      # Deprecated (full content; never delete — keeps its own inline CSS)
 ```
 
 ### Task Page Pattern
