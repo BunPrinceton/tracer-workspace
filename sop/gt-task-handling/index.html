@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SOP-001: GT Task Handling - Princeton Tracers</title>
     <link rel="stylesheet" href="../print.css" media="print">
+    <link rel="stylesheet" href="../sidebar.css">
     <style>
         *, *::before, *::after {
             box-sizing: border-box;
@@ -418,78 +419,19 @@
     </ul>
 </nav>
 
+<div class="sop-shell">
+<aside id="sop-sidebar" class="sop-sidebar" aria-label="SOP section navigation"></aside>
 <main id="main-content" role="main">
 
 
-    <!-- SOP Header with metadata -->
-    <header class="sop-header">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
-            <div>
-                <h1>GT Task Handling</h1>
-                <p class="sop-id">SOP-001</p>
-            </div>
-            <span class="status-badge status-badge--current">Current</span>
-        </div>
-
-        <div class="sop-meta">
-            <div class="meta-item">
-                <span class="meta-label">Version</span>
-                <span class="meta-value">2.0</span>
-            </div>
-            <div class="meta-item">
-                <span class="meta-label">Effective Date</span>
-                <span class="meta-value">2026-01-01</span>
-            </div>
-            <div class="meta-item">
-                <span class="meta-label">Owner</span>
-                <span class="meta-value">GT Team Lead</span>
-            </div>
-            <div class="meta-item">
-                <span class="meta-label">Last Review</span>
-                <span class="meta-value">2025-12-15</span>
-            </div>
-        </div>
+    <!-- SOP header (de-carded; presented like other page titles) -->
+    <header class="sop-page-header">
+        <h1>GT Task Handling <span class="status-badge status-badge--current">Current</span></h1>
+        <p class="sop-meta-line"><span class="sop-id">SOP-001</span> &middot; Version 2.0 &middot; Effective 2026-01-01 &middot; Owner: GT Team Lead &middot; Last review 2025-12-15</p>
     </header>
 
-    <!-- Version History -->
-    <aside class="version-history">
-        <h2>Version History</h2>
-        <ul>
-            <li>
-                <a href="v2.0.html">v2.0</a>
-                <span class="status-badge status-badge--current">Current</span>
-                <span style="color: #737373;">2026-01-01</span>
-            </li>
-            <li>
-                <a href="v1.0.html">v1.0</a>
-                <span class="status-badge status-badge--deprecated">Deprecated</span>
-                <span style="color: #737373;">2025-06-01</span>
-            </li>
-        </ul>
-    </aside>
-
-    <!-- Purpose -->
-    <section class="sop-content">
-        <h2>Purpose</h2>
-        <p>This Standard Operating Procedure establishes the workflow for handling Ground Truth (GT) annotation tasks from assignment through submission and review. It ensures consistent quality and traceability across all GT work.</p>
-    </section>
-
-    <!-- Scope -->
-    <section class="sop-content">
-        <h2>Scope</h2>
-        <p>This procedure applies to all annotators working on Ground Truth tasks, including:</p>
-        <ul>
-            <li>Synapse identification and annotation</li>
-            <li>Vesicle tracing</li>
-            <li>Segment proofreading</li>
-            <li>Quality assurance reviews</li>
-        </ul>
-    </section>
-
-    <!-- Procedure -->
-    <section class="sop-content">
-        <h2>Procedure</h2>
-
+    <!-- PROCEDURE (default view) -->
+    <div class="sop-view sop-card active" data-view="procedure" data-view-label="Procedure">
         <h3>1. Task Assignment</h3>
         <ol>
             <li>Check the task queue in WebKnossos for assigned tasks</li>
@@ -526,55 +468,59 @@
             <li>Flag any issues requiring reviewer attention</li>
             <li>Notify team lead if task required significant deviations from protocol</li>
         </ol>
-    </section>
+    </div>
 
-    <!-- References -->
-    <section class="sop-content">
-        <h2>Related Documents</h2>
+    <!-- DETAILS (purpose, scope, related docs, version history, change log) -->
+    <div class="sop-view sop-card" data-view="details" data-view-label="Details">
+        <h2>Purpose</h2>
+        <p>This Standard Operating Procedure establishes the workflow for handling Ground Truth (GT) annotation tasks from assignment through submission and review. It ensures consistent quality and traceability across all GT work.</p>
+
+        <h2>Scope</h2>
+        <p>This procedure applies to all annotators working on Ground Truth tasks, including:</p>
+        <ul>
+            <li>Synapse identification and annotation</li>
+            <li>Vesicle tracing</li>
+            <li>Segment proofreading</li>
+            <li>Quality assurance reviews</li>
+        </ul>
+
+        <h2>Related documents</h2>
         <ul>
             <li><a href="../gt-verification/">SOP-002: GT Verification</a></li>
             <li><a href="../gt-checklist/">SOP-003: GT Checklist</a></li>
             <li><a href="../file-naming/">SOP-004: File Naming</a></li>
             <li><a href="../../tasks/quality-assurance/">Task Guide: Quality Assurance</a></li>
         </ul>
-    </section>
 
-    <!-- Change Log -->
-    <section class="change-log">
-        <h2>Change Log</h2>
+        <h2>Version history</h2>
+        <ul class="sop-versions">
+            <li><a href="v2.0.html">v2.0</a> <span class="status-badge status-badge--current">Current</span> <span class="date">2026-01-01</span></li>
+            <li><a href="v1.0.html">v1.0</a> <span class="status-badge status-badge--deprecated">Deprecated</span> <span class="date">2025-06-01</span></li>
+        </ul>
 
-        <div class="change-log-entry">
-            <div class="change-log-version">
-                v2.0
-                <span class="status-badge status-badge--current">Current</span>
-            </div>
-            <div class="change-log-date">Effective: 2026-01-01</div>
-            <div class="change-log-notes">
-                <ul>
-                    <li>Added WebKnossos-specific workflow steps</li>
-                    <li>Integrated cross-references to related SOPs</li>
-                    <li>Updated submission procedure with new task status options</li>
-                    <li>Added quality check section as mandatory pre-submission step</li>
-                </ul>
-            </div>
+        <h2>Change log</h2>
+        <div class="sop-changelog-entry">
+            <div class="sop-changelog-head">v2.0 <span class="status-badge status-badge--current">Current</span></div>
+            <div class="sop-changelog-date">Effective: 2026-01-01</div>
+            <ul>
+                <li>Added WebKnossos-specific workflow steps</li>
+                <li>Integrated cross-references to related SOPs</li>
+                <li>Updated submission procedure with new task status options</li>
+                <li>Added quality check section as mandatory pre-submission step</li>
+            </ul>
         </div>
-
-        <div class="change-log-entry">
-            <div class="change-log-version">
-                v1.0
-                <span class="status-badge status-badge--deprecated">Deprecated</span>
-            </div>
-            <div class="change-log-date">Effective: 2025-06-01</div>
-            <div class="change-log-notes">
-                <ul>
-                    <li>Initial release</li>
-                    <li>Basic task handling workflow established</li>
-                </ul>
-            </div>
+        <div class="sop-changelog-entry">
+            <div class="sop-changelog-head">v1.0 <span class="status-badge status-badge--deprecated">Deprecated</span></div>
+            <div class="sop-changelog-date">Effective: 2025-06-01</div>
+            <ul>
+                <li>Initial release</li>
+                <li>Basic task handling workflow established</li>
+            </ul>
         </div>
-    </section>
+    </div>
 
 </main>
+</div>
 
 <footer>
     <div class="footer-nav">
@@ -583,6 +529,7 @@
     </div>
 </footer>
 
+<script src="../sidebar.js" defer></script>
 <script src="../../search.js" defer></script>
 </body>
 </html>

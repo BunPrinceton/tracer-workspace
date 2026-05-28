@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SOP-004: File Naming - Princeton Tracers</title>
     <link rel="stylesheet" href="../print.css" media="print">
+    <link rel="stylesheet" href="../sidebar.css">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { font-size: 18px; line-height: 1.6; }
@@ -119,54 +120,73 @@
     </ul>
 </nav>
 
+<div class="sop-shell">
+<aside id="sop-sidebar" class="sop-sidebar" aria-label="SOP section navigation"></aside>
 <main id="main-content" role="main">
 
-    <!-- PLACEHOLDER SOP: Content pending. Task pages will link here once authoritative content is published. -->
-    <div class="placeholder-banner" role="alert">
-        <p><strong>Placeholder &mdash; Not Yet Authoritative</strong></p>
-        <p>This SOP is reserved but does not yet contain authoritative procedures. Content is pending consolidation from source documents. Do not rely on this page for procedural guidance until the status changes to "Current."</p>
-    </div>
-
-    <header class="sop-header">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
-            <div>
-                <h1>File Naming</h1>
-                <p class="sop-id">SOP-004</p>
-            </div>
-            <span class="status-badge status-badge--placeholder">Placeholder</span>
-        </div>
+    <!-- SOP header (de-carded) -->
+    <header class="sop-page-header">
+        <h1>File Naming</h1>
+        <p class="sop-meta-line"><span class="sop-id">SOP-004</span> &middot; Older method</p>
     </header>
 
-    <section class="content-section">
+    <!-- PROCEDURE (default view) -->
+    <div class="sop-view sop-card active" data-view="procedure" data-view-label="Procedure">
+        <p>When naming a file, keep three things in mind: the <strong>project name</strong>, the <strong>type of work</strong> the file contains, and the <strong>volume</strong> it belongs to. Spaces aren't allowed, so join the parts with underscores:</p>
+        <p><code>Project_Type_Volume_Any-other-relevant-info</code></p>
+        <p>For example, a synaptic annotation file for Vol.&nbsp;30 in the Pinky project is named <code>Pinky_Synapses_Vol.30</code>. For projects without a settled naming protocol, add any other relevant information to the end of the name.</p>
+
+        <h3>Duplicates, practice &amp; experiments</h3>
+        <p>When multiple copies of a file exist (experimenting without overwriting the output, or several people training on the same set), include the tracer's name and a word indicating practice or experiment &mdash; for example <code>Pinky_Annotation_vol.202_Ben_Experiment</code>. Save all practice/experiment sets and saved-state duplicates in the project's <strong>Archive</strong> folder, and clean up once the task is complete so each file lives in the right place.</p>
+
+        <h3>Type abbreviations</h3>
+        <table>
+            <thead><tr><th scope="col">Type</th><th scope="col">Name</th></tr></thead>
+            <tbody>
+                <tr><td>Raw EM</td><td>EM</td></tr>
+                <tr><td>Semantic Annotation</td><td>Seg</td></tr>
+                <tr><td>Synaptic Annotation</td><td>Synapses</td></tr>
+                <tr><td>Vesicles</td><td>Vesicles</td></tr>
+                <tr><td>Mitochondria</td><td>Mito</td></tr>
+                <tr><td>Semantic Labeling</td><td>Semantic Labeling</td></tr>
+                <tr><td>Blood Vessels</td><td>Blood Vessels</td></tr>
+            </tbody>
+        </table>
+
+        <h3>Examples</h3>
+        <table>
+            <thead><tr><th scope="col">Type</th><th scope="col">Info</th><th scope="col">Name</th><th scope="col">Folder</th></tr></thead>
+            <tbody>
+                <tr><td>Semantic Annotation</td><td>Pinky Volume 24, completed by Ben</td><td>Pinky_vol.24_seg_Ben</td><td>Cell_Segmentation</td></tr>
+                <tr><td>Synapses</td><td>AIBS Volume 19, stitched set</td><td>AIBS_vol.19_synapses_stitched</td><td>PSD/Synapses</td></tr>
+                <tr><td>Mitochondria</td><td>Allen Volume 06, Merlin practice</td><td>Allen_vol.06_Mito_MM_practice</td><td>Mitochondria</td></tr>
+                <tr><td>Vesicles</td><td>AIBS Volume 22</td><td>AIBS_vol.22_vesicles</td><td>Vesicles/Vesicle Cloud</td></tr>
+            </tbody>
+        </table>
+
+        <div class="sop-callout"><strong>Note:</strong> Omni files are an exception &mdash; they are automatically named after the project title, so there's no need to create duplicates.</div>
+    </div>
+
+    <!-- DETAILS -->
+    <div class="sop-view sop-card" data-view="details" data-view-label="Details">
         <h2>Purpose</h2>
-        <p>Establishes standard conventions for naming files, annotations, and exports across all project workflows.</p>
-    </section>
+        <p>Establishes standard conventions for naming annotation files, exports, and datasets.</p>
 
-    <section class="content-section">
         <h2>Scope</h2>
-        <p>Applies to all file naming within the project, including:</p>
-        <ul>
-            <li>Annotation file exports</li>
-            <li>Dataset identifiers</li>
-            <li>Documentation file names</li>
-        </ul>
-    </section>
+        <p>Applies to file naming across project workflows &mdash; annotation exports, dataset identifiers, and documentation.</p>
 
-    <section class="content-section">
-        <h2>Current Status</h2>
-        <p>This SOP is pending consolidation from the following source documents:</p>
+        <h2>Source document</h2>
         <ul>
             <li><a href="../../drive_docs_output/Misc/Copy of Protocols for naming files.html">Protocols for Naming Files</a></li>
         </ul>
-    </section>
 
-    <section class="content-section">
-        <h2>Related Tasks</h2>
+        <h2>Related</h2>
         <ul>
             <li><a href="../gt-task-handling/">GT Task Handling (SOP-001)</a></li>
         </ul>
-    </section>
+    </div>
 </main>
+</div>
 
 <footer>
     <div class="footer-nav">
@@ -175,6 +195,7 @@
     </div>
 </footer>
 
+<script src="../sidebar.js" defer></script>
 <script src="../../search.js" defer></script>
 </body>
 </html>

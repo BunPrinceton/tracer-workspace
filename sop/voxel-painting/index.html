@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voxel Painting Cell Segmentation Protocol v1.2 - Princeton Tracers</title>
     <link rel="stylesheet" href="../print.css" media="print">
+    <link rel="stylesheet" href="../sidebar.css">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { font-size: 18px; line-height: 1.6; }
@@ -157,6 +158,8 @@
     </ul>
 </nav>
 
+<div class="sop-shell">
+<aside id="sop-sidebar" class="sop-sidebar" aria-label="SOP section navigation"></aside>
 <main id="main-content" role="main">
 
     <header class="page-header">
@@ -169,20 +172,9 @@
         </div>
     </header>
 
-    <!-- Release Notes -->
-    <div class="release-notes">
-        <h2>Changes from v1.1</h2>
-        <ul>
-            <li>Clarify that cell segmentation should paint over defects as best as possible</li>
-            <li>Change fat globule handling: removed from defect segmentation, added to cell segmentation. Fat globules touching myelin are considered part of the myelin object.</li>
-            <li>Clarify that tears should be marked as a single segment</li>
-            <li>Add "misaligned sections" as a defect class</li>
-        </ul>
-    </div>
-
-    <!-- Desired Output Overview -->
-    <section class="content-section">
-        <h2>Desired Output</h2>
+    <!-- PROCEDURE (default view) -->
+    <div class="sop-view sop-card active" data-view="procedure" data-view-label="Procedure">
+        <h2>Desired output</h2>
         <p>Each cutout (bounding box) must produce three segmentations:</p>
         <ol>
             <li><strong>Cell segmentation</strong> with semantic classification</li>
@@ -190,12 +182,8 @@
             <li><strong>Defect segmentation</strong> with semantic classification</li>
         </ol>
         <p>Each cutout must be reviewed, unless otherwise noted. The review must inspect the 3D mesh and semantic class of each object in each segmentation. There must be proof-of-work for the review (spreadsheet or Neuroglancer link).</p>
-    </section>
 
-    <!-- Cell Segmentation -->
-    <section class="content-section" id="cell-segmentation">
-        <h2>1. Cell Segmentation</h2>
-
+        <h2 id="cell-segmentation">1. Cell segmentation</h2>
         <h3>Rules</h3>
         <ul>
             <li>Paint fully over mitochondria &mdash; do not oversegment mitochondria</li>
@@ -203,8 +191,7 @@
             <li>Objects that span defects should be treated as a single object (a defect should not "split" an object)</li>
             <li>Note uncertain segments: make sure any uncertain regions are included later in the defect segmentation as "uncertain" segments</li>
         </ul>
-
-        <h3>Fat Globule Handling</h3>
+        <h3>Fat globule handling</h3>
         <ul>
             <li>Oversegment (paint as separate segments) fat globules that are <strong>not</strong> connected to myelin</li>
             <li>Make sure there is no boundary between a fat globule and surrounding segments</li>
@@ -212,10 +199,8 @@
             <li>Leave a boundary between myelin and neighboring objects</li>
             <li>If the fat globule touches myelin, consider that fat globule part of the myelin object</li>
         </ul>
-
-        <h3>Semantic Classes</h3>
+        <h3>Semantic classes</h3>
         <p>Use <em>segment name</em> to label each segment's compartment type based on the <strong>mesh of the object</strong>.</p>
-
         <table class="class-table">
             <thead>
                 <tr>
@@ -278,23 +263,16 @@
                 </tr>
             </tbody>
         </table>
-    </section>
 
-    <!-- Mitochondria Segmentation -->
-    <section class="content-section" id="mitochondria-segmentation">
-        <h2>2. Mitochondria Segmentation</h2>
+        <h2 id="mitochondria-segmentation">2. Mitochondria segmentation</h2>
         <ul>
             <li>Paint the mitochondria <strong>and its membrane</strong>. Do not overpaint into the cytoplasm of the parent cell.</li>
             <li>If necessary, underpainting the mitochondria's membrane is okay.</li>
             <li>If an object is a questionable mitochondria, add it and set <em>segment name</em> to "uncertain".</li>
         </ul>
-    </section>
 
-    <!-- Defect Segmentation -->
-    <section class="content-section" id="defect-segmentation">
-        <h2>3. Defect Segmentation</h2>
+        <h2 id="defect-segmentation">3. Defect segmentation</h2>
         <p>Paint the following defects, with a <strong>different color for each instance</strong> (e.g., each fold gets a different color):</p>
-
         <table class="class-table">
             <thead>
                 <tr>
@@ -325,24 +303,31 @@
                 </tr>
             </tbody>
         </table>
-
         <div class="callout">
             <strong>Important:</strong> When painting defects, it is better to overpaint than underpaint.
         </div>
-
         <p>Use <em>segment name</em> to label each segment with its semantic category from the list above.</p>
-    </section>
+    </div>
 
-    <!-- References -->
-    <section class="content-section" id="references">
-        <h2>References</h2>
+    <!-- DETAILS -->
+    <div class="sop-view sop-card" data-view="details" data-view-label="Details">
+        <h2>Changes from v1.1</h2>
+        <ul>
+            <li>Clarify that cell segmentation should paint over defects as best as possible</li>
+            <li>Change fat globule handling: removed from defect segmentation, added to cell segmentation. Fat globules touching myelin are considered part of the myelin object.</li>
+            <li>Clarify that tears should be marked as a single segment</li>
+            <li>Add "misaligned sections" as a defect class</li>
+        </ul>
+
+        <h2 id="references">References</h2>
         <ul>
             <li>Cell Segmentation Visual Glossary v1.0</li>
             <li>Voxel Painting Cell Segmentation Work Instructions &mdash; WebKnossos v1.0</li>
         </ul>
-    </section>
+    </div>
 
 </main>
+</div>
 
 <footer>
     <div class="footer-nav">
@@ -365,6 +350,7 @@
     }
 })();
 </script>
+<script src="../sidebar.js" defer></script>
 <script src="../../search.js" defer></script>
 </body>
 </html>

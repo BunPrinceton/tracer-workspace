@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SOP-005: GT Protocol Guidelines - Princeton Tracers</title>
     <link rel="stylesheet" href="../print.css" media="print">
+    <link rel="stylesheet" href="../sidebar.css">
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { font-size: 18px; line-height: 1.6; }
@@ -119,57 +120,84 @@
     </ul>
 </nav>
 
+<div class="sop-shell">
+<aside id="sop-sidebar" class="sop-sidebar" aria-label="SOP section navigation"></aside>
 <main id="main-content" role="main">
 
-    <!-- PLACEHOLDER SOP: Content pending. Task pages (quality-assurance, proofreading) will link here once authoritative content is published. -->
-    <div class="placeholder-banner" role="alert">
-        <p><strong>Placeholder &mdash; Not Yet Authoritative</strong></p>
-        <p>This SOP is reserved but does not yet contain authoritative procedures. Content is pending consolidation from source documents. Do not rely on this page for procedural guidance until the status changes to "Current."</p>
-    </div>
-
-    <header class="sop-header">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem;">
-            <div>
-                <h1>GT Protocol Guidelines</h1>
-                <p class="sop-id">SOP-005</p>
-            </div>
-            <span class="status-badge status-badge--placeholder">Placeholder</span>
-        </div>
+    <!-- SOP header (de-carded) -->
+    <header class="sop-page-header">
+        <h1>GT Protocol Guidelines</h1>
+        <p class="sop-meta-line"><span class="sop-id">SOP-005</span> &middot; Recent procedure</p>
     </header>
 
-    <section class="content-section">
-        <h2>Purpose</h2>
-        <p>Provides overarching guidelines for Ground Truth annotation protocols, including decision-making frameworks and edge case handling.</p>
-    </section>
+    <!-- PROCEDURE (default view) -->
+    <div class="sop-view sop-card active" data-view="procedure" data-view-label="Procedure">
+        <p>Protocol clarifications and best practices for Ground Truth segmentation, consolidated from the team's directives.</p>
 
-    <section class="content-section">
-        <h2>Scope</h2>
-        <p>Applies to protocol-level decisions across all GT work, including:</p>
+        <h2>Mitochondria segmentation</h2>
         <ul>
-            <li>Annotation decision frameworks</li>
-            <li>Edge case resolution</li>
-            <li>Protocol clarifications</li>
+            <li><strong>Individual segmentation:</strong> each mitochondrion gets its own segment ID and color &mdash; don't paint all mitochondria as one segment.</li>
+            <li><strong>Oversegment:</strong> mitochondria must be oversegmented individually. (An earlier task description saying "do not oversegment mitochondria" was a mistake and should be disregarded.)</li>
+            <li><strong>Membranes:</strong> don't paint mitochondrial membranes; leave a visible border/gap around each mitochondrion.</li>
         </ul>
-    </section>
 
-    <section class="content-section">
-        <h2>Current Status</h2>
-        <p>This SOP is pending consolidation from the following source documents:</p>
+        <h2>Myelin segmentation</h2>
+        <ul>
+            <li><strong>Inner boundary:</strong> no padding between myelin and the cell it ensheathes &mdash; the myelin segment should directly contact the inner cell.</li>
+            <li><strong>Myelin-to-myelin:</strong> no padding between adjacent myelin segments; they may touch.</li>
+            <li><strong>Outer boundary:</strong> myelin should approach but not touch neighboring cell membranes &mdash; keep a small gap.</li>
+        </ul>
+
+        <h2>Upsampled images</h2>
+        <ul>
+            <li><strong>Two-pass labeling:</strong> first paint the original (thicker) sections, then copy labels onto the upsampled (thinner) sections and connect objects naturally.</li>
+            <li><strong>Cross-reference resolutions:</strong> working only from the upsampled image is misleading &mdash; always check against the original image data.</li>
+            <li><strong>Artifacts:</strong> ignore "hallucinations" (artificial structures in upsampled data); focus on anatomically sensible structures.</li>
+        </ul>
+
+        <h2>Ambiguous &amp; edge cases</h2>
+        <ul>
+            <li><strong>Uncertain organelles:</strong> if unsure whether an object is a mitochondrion (vs. peroxisome, lysosome, etc.), segment it as a mitochondrion &mdash; it can be removed during review.</li>
+            <li><strong>EM damage:</strong> follow team consensus for handling damaged regions.</li>
+        </ul>
+
+        <h2>Workflow &amp; quality assurance</h2>
+        <ul>
+            <li><strong>Mandatory peer review:</strong> before marking a task finished, at least one other team member must inspect your work &mdash; prioritize sharing the areas where you struggled.</li>
+            <li><strong>Sharing for review (WebKnossos):</strong> Tasks &rarr; search for tasks under the relevant project &rarr; click the <strong>+</strong> for the task &rarr; <strong>Actions</strong> &rarr; <strong>View</strong>.</li>
+        </ul>
+
+        <h2>WebKnossos tools</h2>
+        <ul>
+            <li><strong>Interpolation:</strong> volume interpolation helps for objects perpendicular to the sectioning plane in higher z-resolution data; may need manual cleanup.</li>
+            <li><strong>3D mesh:</strong> right-click a segment to generate a 3D mesh; press <code>.</code> to toggle between all views and the view under the cursor &mdash; useful for QC.</li>
+            <li><strong>SAM2 (experimental):</strong> AI-assisted segmentation on the experimental server; most effective for larger, convex cross-sections; adjust confidence and erosion parameters, and use existing annotations as hints.</li>
+        </ul>
+    </div>
+
+    <!-- DETAILS -->
+    <div class="sop-view sop-card" data-view="details" data-view-label="Details">
+        <h2>Purpose</h2>
+        <p>Captures overarching protocol clarifications, decision frameworks, and edge-case handling for Ground Truth segmentation.</p>
+
+        <h2>Scope</h2>
+        <p>Applies to protocol-level decisions across Ground Truth segmentation work.</p>
+
+        <h2>Source document</h2>
         <ul>
             <li><a href="../../drive_docs_output/Ground-Truth-Protocol-History/Copy of Ground Truth Protocol Guidelines Revised.html">GT Protocol Guidelines Revised</a></li>
-            <li><a href="../../New Documentation Styles-Templates-Files/HTML Versions/tommy_macrina_FINAL.html">Tommy Macrina Protocol Reference</a></li>
         </ul>
-    </section>
+        <p style="font-size: 0.875rem; color: #737373;">Distilled from the team's protocol directives; the original document's Slack-thread citations are omitted here.</p>
 
-    <section class="content-section">
-        <h2>Related Tasks</h2>
+        <h2>Related</h2>
         <ul>
             <li><a href="../../tasks/quality-assurance/">Quality Assurance</a></li>
             <li><a href="../../tasks/proofreading/">Proofreading</a></li>
             <li><a href="../gt-task-handling/">GT Task Handling (SOP-001)</a></li>
         </ul>
-    </section>
+    </div>
 </main>
+</div>
 
 <footer>
     <div class="footer-nav">
@@ -178,6 +206,7 @@
     </div>
 </footer>
 
+<script src="../sidebar.js" defer></script>
 <script src="../../search.js" defer></script>
 </body>
 </html>

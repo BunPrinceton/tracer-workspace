@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Standard Operating Procedures - Princeton Tracers</title>
     <link rel="stylesheet" href="print.css" media="print">
+    <link rel="stylesheet" href="sidebar.css">
     <!-- ============================================================
          SOP INDEX
 
@@ -465,172 +466,63 @@
     </ul>
 </nav>
 
+<div class="sop-shell">
+<aside id="sop-sidebar" class="sop-sidebar" aria-label="SOP section navigation"></aside>
 <main id="main-content" role="main">
 
     <div class="page-header">
         <h1>Standard Operating Procedures</h1>
-        <p>Official procedures for Ground Truth annotation, verification, and quality control. Each SOP includes version history and change logs.</p>
+        <p>Official procedures for Ground Truth annotation, verification, and quality control. Each SOP is the current, authoritative version and carries its own version history and change log.</p>
     </div>
 
-    <!-- Current SOPs Table -->
-    <section class="sop-section" aria-labelledby="current-heading">
-        <div class="sop-section-header">
-            <h2 id="current-heading">Current Procedures</h2>
-            <span class="sop-count">6 active</span>
-        </div>
+    <article class="sop-overview">
+        <p>Standard Operating Procedures (SOPs) define how we carry out the core, repeatable parts of our annotation work, so that results stay consistent and traceable across tracers, datasets, and tools. Pick a procedure from the list on the left, or follow a link below.</p>
 
-        <table class="sop-table">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Title</th>
-                    <th scope="col">Version</th>
-                    <th scope="col">Effective</th>
-                    <th scope="col">Owner</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">History</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="sop-id">SOP-001</td>
-                    <td class="sop-title"><a href="gt-task-handling/">GT Task Handling</a></td>
-                    <td class="sop-version">v2.0</td>
-                    <td class="sop-date">2026-01-01</td>
-                    <td class="sop-owner">GT Team Lead</td>
-                    <td><span class="status-badge status-badge--current">Current</span></td>
-                    <td class="sop-history">
-                        <details>
-                            <summary>2 versions</summary>
-                            <ul>
-                                <li>
-                                    <a href="gt-task-handling/v2.0.html">v2.0</a>
-                                    <span class="status-badge status-badge--current">Current</span>
-                                </li>
-                                <li>
-                                    <a href="gt-task-handling/v1.0.html">v1.0</a>
-                                    <span class="status-badge status-badge--deprecated">Deprecated</span>
-                                </li>
-                            </ul>
-                        </details>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="sop-id">SOP-002</td>
-                    <td class="sop-title"><a href="gt-verification/">GT Verification</a></td>
-                    <td class="sop-version">v1.1</td>
-                    <td class="sop-date">2025-11-15</td>
-                    <td class="sop-owner">QA Lead</td>
-                    <td><span class="status-badge status-badge--current">Current</span></td>
-                    <td class="sop-history">
-                        <details>
-                            <summary>2 versions</summary>
-                            <ul>
-                                <li>
-                                    <a href="gt-verification/v1.1.html">v1.1</a>
-                                    <span class="status-badge status-badge--current">Current</span>
-                                </li>
-                                <li>
-                                    <a href="gt-verification/v1.0.html">v1.0</a>
-                                    <span class="status-badge status-badge--deprecated">Deprecated</span>
-                                </li>
-                            </ul>
-                        </details>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="sop-id">SOP-003</td>
-                    <td class="sop-title"><a href="gt-checklist/">GT Checklist</a></td>
-                    <td class="sop-version">v1.2</td>
-                    <td class="sop-date">2025-12-01</td>
-                    <td class="sop-owner">GT Team Lead</td>
-                    <td><span class="status-badge status-badge--current">Current</span></td>
-                    <td class="sop-history">
-                        <details>
-                            <summary>3 versions</summary>
-                            <ul>
-                                <li>
-                                    <a href="gt-checklist/v1.2.html">v1.2</a>
-                                    <span class="status-badge status-badge--current">Current</span>
-                                </li>
-                                <li>
-                                    <a href="gt-checklist/v1.1.html">v1.1</a>
-                                    <span class="status-badge status-badge--deprecated">Deprecated</span>
-                                </li>
-                                <li>
-                                    <a href="gt-checklist/v1.0.html">v1.0</a>
-                                    <span class="status-badge status-badge--deprecated">Deprecated</span>
-                                </li>
-                            </ul>
-                        </details>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="sop-id">SOP-004</td>
-                    <td class="sop-title"><a href="file-naming/">File Naming</a></td>
-                    <td class="sop-version">v1.0</td>
-                    <td class="sop-date">2025-06-01</td>
-                    <td class="sop-owner">Data Team</td>
-                    <td><span class="status-badge status-badge--current">Current</span></td>
-                    <td class="sop-history">
-                        <details>
-                            <summary>1 version</summary>
-                            <ul>
-                                <li>
-                                    <a href="file-naming/v1.0.html">v1.0</a>
-                                    <span class="status-badge status-badge--current">Current</span>
-                                </li>
-                            </ul>
-                        </details>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="sop-id">SOP-005</td>
-                    <td class="sop-title"><a href="gt-protocol-guidelines/">GT Protocol Guidelines</a></td>
-                    <td class="sop-version">v1.1</td>
-                    <td class="sop-date">2025-10-01</td>
-                    <td class="sop-owner">Protocol Committee</td>
-                    <td><span class="status-badge status-badge--current">Current</span></td>
-                    <td class="sop-history">
-                        <details>
-                            <summary>2 versions</summary>
-                            <ul>
-                                <li>
-                                    <a href="gt-protocol-guidelines/v1.1.html">v1.1</a>
-                                    <span class="status-badge status-badge--current">Current</span>
-                                </li>
-                                <li>
-                                    <a href="gt-protocol-guidelines/v1.0.html">v1.0</a>
-                                    <span class="status-badge status-badge--deprecated">Deprecated</span>
-                                </li>
-                            </ul>
-                        </details>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="sop-id">SOP-006</td>
-                    <td class="sop-title"><a href="voxel-painting/">Voxel Painting Cell Segmentation</a></td>
-                    <td class="sop-version">v1.2</td>
-                    <td class="sop-date">2026-02-18</td>
-                    <td class="sop-owner">Selden Koolman</td>
-                    <td><span class="status-badge status-badge--current">Current</span></td>
-                    <td class="sop-history">
-                        <details>
-                            <summary>1 version</summary>
-                            <ul>
-                                <li>
-                                    <a href="voxel-painting/v1.2.html">v1.2</a>
-                                    <span class="status-badge status-badge--current">Current</span>
-                                </li>
-                            </ul>
-                        </details>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </section>
+        <h2>Current procedures</h2>
+        <p>What we use now, in WebKnossos.</p>
+        <ul class="sop-overview-list">
+            <li>
+                <a href="gt-task-handling/index.html">GT Task Handling</a><span class="sop-overview-id">SOP-001</span><br>
+                Workflow for handling Ground Truth (GT) tasks from assignment through submission and review.
+            </li>
+            <li>
+                <a href="voxel-painting/index.html">Voxel Painting Cell Segmentation</a><span class="sop-overview-id">SOP-006</span><br>
+                Our current Ground Truth method &mdash; producing voxel-painted training data for the cell-segmentation pipeline.
+            </li>
+        </ul>
+
+        <h2>Recent procedures</h2>
+        <p>Recent guidance that is still largely current.</p>
+        <ul class="sop-overview-list">
+            <li>
+                <a href="gt-protocol-guidelines/index.html">GT Protocol Guidelines</a><span class="sop-overview-id">SOP-005</span><br>
+                Protocol clarifications, decision frameworks, and edge-case handling.
+            </li>
+        </ul>
+
+        <h2>Older procedures</h2>
+        <p>Procedures for tools we don't routinely use now (e.g. VAST, Omni). Still valid &mdash; kept on hand in case we return to them.</p>
+        <ul class="sop-overview-list">
+            <li>
+                <a href="gt-verification/index.html">GT Verification</a><span class="sop-overview-id">SOP-002</span><br>
+                How completed Ground Truth tasks are verified before acceptance (VAST / Omni).
+            </li>
+            <li>
+                <a href="gt-checklist/index.html">GT Checklist</a><span class="sop-overview-id">SOP-003</span><br>
+                The segmentation checklist to confirm before marking a task complete.
+            </li>
+            <li>
+                <a href="file-naming/index.html">File Naming</a><span class="sop-overview-id">SOP-004</span><br>
+                Naming conventions for annotation files, exports, and datasets.
+            </li>
+        </ul>
+
+        <h2>Versioning</h2>
+        <p>Every SOP keeps its history. Links always point to the current version; deprecated versions remain available from each SOP's version history and are never deleted. Fully retired tooling (for example the standalone Omni and VAST programs) lives in the <a href="../archive/">Archive</a>.</p>
+    </article>
 
 </main>
+</div>
 
 <footer>
     <div class="footer-nav">
@@ -650,6 +542,7 @@
     }
 })();
 </script>
+<script src="sidebar.js" defer></script>
 <script src="../search.js" defer></script>
 </body>
 </html>
