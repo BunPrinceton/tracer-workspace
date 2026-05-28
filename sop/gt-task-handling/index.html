@@ -124,21 +124,6 @@
             padding: 2rem 1.5rem 4rem;
         }
 
-        /* SOP Header */
-        .sop-header {
-            background-color: #ffffff;
-            border: 2px solid #d4d4d4;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .sop-header h1 {
-            font-size: 1.75rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
         .sop-id {
             font-family: ui-monospace, "SF Mono", monospace;
             font-size: 0.875rem;
@@ -165,158 +150,6 @@
         .status-badge--deprecated {
             background-color: #737373;
             color: #ffffff;
-        }
-
-        /* Metadata grid */
-        .sop-meta {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #e5e5e5;
-        }
-
-        .meta-item {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-
-        .meta-label {
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #737373;
-        }
-
-        .meta-value {
-            font-size: 0.9375rem;
-        }
-
-        /* Content sections */
-        .sop-content {
-            background-color: #ffffff;
-            border: 2px solid #d4d4d4;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .sop-content h2 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #e5e5e5;
-        }
-
-        .sop-content h3 {
-            font-size: 1.0625rem;
-            font-weight: 600;
-            margin: 1.25rem 0 0.75rem;
-        }
-
-        .sop-content p {
-            margin-bottom: 0.75rem;
-        }
-
-        .sop-content ul,
-        .sop-content ol {
-            margin-left: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .sop-content li {
-            margin-bottom: 0.5rem;
-        }
-
-        /* Change log */
-        .change-log {
-            background-color: #ffffff;
-            border: 2px solid #d4d4d4;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .change-log h2 {
-            font-size: 1.125rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #e5e5e5;
-        }
-
-        .change-log-entry {
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #e5e5e5;
-        }
-
-        .change-log-entry:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .change-log-version {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-        }
-
-        .change-log-date {
-            font-size: 0.875rem;
-            color: #737373;
-        }
-
-        .change-log-notes {
-            font-size: 0.875rem;
-            color: #525252;
-            margin-top: 0.5rem;
-        }
-
-        .change-log-notes ul {
-            margin-left: 1.5rem;
-            margin-top: 0.25rem;
-        }
-
-        /* Version history link */
-        .version-history {
-            background-color: #fafafa;
-            border: 2px solid #e5e5e5;
-            border-radius: 8px;
-            padding: 1rem 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .version-history h2 {
-            font-size: 1rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
-
-        .version-history ul {
-            list-style: none;
-        }
-
-        .version-history li {
-            padding: 0.5rem 0;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            font-size: 0.875rem;
-        }
-
-        .version-history a {
-            color: #2563eb;
-            text-decoration: none;
-        }
-
-        .version-history a:hover {
-            text-decoration: underline;
         }
 
         /* Footer */
@@ -352,18 +185,6 @@
 
             main {
                 padding: 1.5rem 1rem;
-            }
-        }
-
-        /* Print */
-        @media print {
-            nav, footer, .version-history {
-                display: none;
-            }
-
-            .sop-header, .sop-content, .change-log {
-                border: 1px solid #000;
-                break-inside: avoid;
             }
         }
 

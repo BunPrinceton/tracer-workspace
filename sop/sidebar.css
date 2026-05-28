@@ -143,3 +143,12 @@
     .sop-side-nav { position: static; }
     .sop-shell > main { padding-top: 1.5rem; }
 }
+
+/* --- Print: hide the rail, expand to full width, show all views --- */
+@media print {
+    .sop-sidebar { display: none; }
+    .sop-shell { display: block; max-width: none; padding: 0; }
+    .sop-shell > main { max-width: none; padding: 0; }
+    .sop-view { display: block; }
+    .sop-card { border: 1px solid #000; break-inside: avoid; }
+}
