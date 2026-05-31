@@ -170,6 +170,14 @@
             aliases: ['contribute', 'feedback', 'edit', 'suggest', 'pull request', 'pr', 'issue'],
             keywords: ['github issues', 'issue template', 'how to help']
         },
+        {
+            title: 'Sandy Pong',
+            url: 'games/sandy-pong/',
+            section: 'Games',
+            description: 'Two-player online Pong with invite-only room codes. Off-topic; for fun.',
+            aliases: ['pong', 'sandy pong', 'game', 'ping pong', 'racket'],
+            keywords: ['multiplayer', 'game', 'pong', 'off-topic', 'fun']
+        },
 
         /* ---- Task subpages ---- */
         {
