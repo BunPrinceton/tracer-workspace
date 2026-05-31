@@ -61,6 +61,10 @@ All pages follow these principles (documented in `index.html` comments):
 /contribute/         # How to suggest changes
 /ground-truth/       # Ground Truth Hub
 /experimental/       # Experimental tools (Gen 2 scripts)
+/games/sandy-pong/   # OFF-TOPIC: 2-player Pong + bot mode. Single self-contained HTML.
+                     # Talks to a separate Socket.IO server (github.com/BunPrinceton/sandy-pong,
+                     # deployed on Render free as sandy-pong-server.onrender.com). Linked from
+                     # the More dropdown. See "Sandy Pong" below.
 /drive_docs_output/  # Curated archived Google Docs (FlyWire-Training, Triage-Additions, etc.)
 /search.js           # Site-wide search system — INDEX is the canonical page registry
 ```
@@ -127,6 +131,18 @@ sop/gt-task-handling/
 ### Suggestion System
 
 Every page footer has JavaScript that builds a GitHub Issues URL dynamically from the page title and URL, with `target="_blank"` set both in HTML and JS. Templates in `.github/ISSUE_TEMPLATE/` (content, SOP, gallery, correction). The `/contribute/` page explains the process.
+
+### Sandy Pong (`/games/sandy-pong/`)
+
+**Off-topic addition (2026-05-31)** — a 2-player Pong game in the More dropdown. Not connectomics content; kept intentionally minimal to be easy to remove later.
+
+- **Single self-contained HTML file** at `games/sandy-pong/index.html` (~880 lines). Inline `<style>` and `<script>`, matching borkbook's no-build pattern. Borkbook's standard nav + footer wrap the page; the game area itself uses a dark luxury (black/gold) theme inside `<main>`. Google Fonts (Cormorant Garamond, JetBrains Mono) loaded from CDN.
+- **Multiplayer** runs through a separate Socket.IO server: repo `github.com/BunPrinceton/sandy-pong`, deployed on Render free as `sandy-pong-server.onrender.com`. Server is authoritative (owns ball + paddles + scoring at 60 Hz); clients only send `'up'/'down'/null` paddle input. Invite-only via 5-char room codes.
+- **Bot mode** is entirely client-side — the server physics is duplicated in the page so single-player works offline (handy when Render is sleeping). Tradeoff is the small physics duplication.
+- **Server URL override** for testing: `?ws=https://your-server.example.com` query param on the page URL. Default lives in `DEFAULT_WS` constant near the top of the inline script.
+- **Hardening on the server**: CORS locked to borkbook + bunprinceton.github.io + localhost; per-IP rate limits (5 creates/min, 15 joins/min); 200-room cap; 1 KB payload max; regex-validated room codes; host-only `start`/`rematch`; auto-cleanup (empty 60 s, idle 15 min, unstarted lobby 30 min); `/health` returns `{ok, rooms, ips}`.
+- **Free-tier cold start**: Render sleeps the server after 15 min idle. First request after sleep takes ~30 s; the page shows a "Waking the rally" overlay only when the user actually clicks Create/Join — bot mode is reachable instantly.
+- **To remove later**: delete `games/sandy-pong/` and its 20 nav entries (one per page) + the INDEX entry in `search.js`, then delete the Render service, then archive/delete `BunPrinceton/sandy-pong`.
 
 ## tracer_tools
 
