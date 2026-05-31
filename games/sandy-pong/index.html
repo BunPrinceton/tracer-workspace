@@ -191,6 +191,13 @@
             border: 1px solid rgba(242, 232, 213, 0.25);
         }
         button.secondary:hover { border-color: #C9A24A; color: #F4C26A; }
+        button.ghost {
+            background: transparent;
+            color: #8a8170;
+            border: 1px dashed rgba(242, 232, 213, 0.18);
+            width: 100%;
+        }
+        button.ghost:hover { color: #F2E8D5; border-color: rgba(242, 232, 213, 0.35); }
 
         .divider {
             display: flex;
@@ -521,6 +528,8 @@
                 <input id="input-join" placeholder="ROOM CODE" maxlength="5" autocomplete="off" />
                 <button class="sp-btn secondary" id="btn-join">Join</button>
             </div>
+            <div class="divider"><span>solo</span></div>
+            <button class="sp-btn ghost" id="btn-bot">Play vs Bot &rarr;</button>
             <p id="home-error" class="error hidden"></p>
             <p class="status-line" style="justify-content:center;margin-top:24px;">
                 <span class="dot" id="conn-dot"></span>
@@ -599,20 +608,23 @@
     'use strict';
 
     // ===== Config =====
-    // Override with ?ws=https://your-server.example.com for testing
     var DEFAULT_WS = 'https://sandy-pong-server.onrender.com';
     var WS_URL = new URLSearchParams(window.location.search).get('ws') || DEFAULT_WS;
 
     var WIDTH = 800, HEIGHT = 500, PADDLE_W = 12, PADDLE_H = 90, BALL_R = 8;
+    var PADDLE_SPEED = 7, WIN_SCORE = 7;
 
-    // ===== State =====
-    var socket = null;
+    // ===== Mode + state =====
+    var mode = null;          // 'multi' | 'bot'
     var view = 'home';
-    var side = null;
+    var side = null;          // for multi: 'left'|'right'; for bot: 'left'
     var room = null;
     var state = null;
+    var socket = null;
+    var connected = false;
+    var localTickId = null;
+    var localInputs = { left: null, right: null };
 
-    // ===== DOM helpers =====
     function $(id) { return document.getElementById(id); }
     function show(id) { $(id).classList.remove('hidden'); }
     function hide(id) { $(id).classList.add('hidden'); }
@@ -648,68 +660,86 @@
         var dot = $('conn-dot');
         var text = $('conn-text');
         dot.className = 'dot';
-        if (s === 'connected') { dot.classList.add('connected'); text.textContent = 'Connected'; }
-        else if (s === 'connecting') { dot.classList.add('connecting'); text.textContent = 'Connecting…'; }
-        else { text.textContent = 'Offline'; }
+        if (s === 'connected') { dot.classList.add('connected'); text.textContent = 'Server connected'; }
+        else if (s === 'connecting') { dot.classList.add('connecting'); text.textContent = 'Reaching server…'; }
+        else { text.textContent = 'Offline (bot mode still works)'; }
     }
 
-    // ===== Connection =====
+    // ===== Connection (multiplayer only; bot mode bypasses) =====
     setConnStatus('connecting');
-    setOverlay('Waking the rally', 'Free-tier servers nap when idle. This can take up to 30 seconds the first time.', null);
-
     socket = io(WS_URL, { transports: ['websocket', 'polling'], reconnection: true });
 
-    socket.on('connect', function () {
-        setConnStatus('connected');
-        hideOverlay();
-    });
-    socket.on('disconnect', function () {
-        setConnStatus('connecting');
-    });
-    socket.on('connect_error', function () {
-        setConnStatus('connecting');
-        setOverlay('Reaching server…', 'Still trying. If this persists, the server may be down.', null);
-    });
+    socket.on('connect', function () { connected = true; setConnStatus('connected'); });
+    socket.on('disconnect', function () { connected = false; setConnStatus('connecting'); });
+    socket.on('connect_error', function () { connected = false; setConnStatus('connecting'); });
+
     socket.on('joined', function (data) {
+        mode = 'multi';
         side = data.side;
         setError('');
         setView('lobby');
         $('room-code').textContent = data.code;
     });
     socket.on('roomState', function (r) {
+        if (mode !== 'multi') return;
         room = r;
         state = r.state;
         renderLobby();
         if (r.state.running) setView('game');
     });
     socket.on('state', function (s) {
+        if (mode !== 'multi') return;
         state = s;
         if (view === 'game') {
             renderScore();
             drawCourt();
-            if (s.winner) showWinner();
+            if (s.winner) showWinnerMulti();
         }
     });
-    socket.on('error_msg', function (msg) {
-        setError(msg);
-    });
+    socket.on('error_msg', function (msg) { setError(msg); });
     socket.on('opponent_left', function () {
+        if (mode !== 'multi') return;
         if (state && state.winner) return;
         setOverlay('Opponent left', 'Refresh to start a new match.', null);
     });
 
+    function requireServer(callback) {
+        if (connected) { callback(); return; }
+        setOverlay(
+            'Waking the rally',
+            'The free-tier server wakes from idle. This can take up to 30 seconds the first time.',
+            null
+        );
+        var t = setInterval(function () {
+            if (connected) {
+                clearInterval(t);
+                hideOverlay();
+                callback();
+            }
+        }, 250);
+        setTimeout(function () {
+            clearInterval(t);
+            if (!connected) {
+                setOverlay('Could not reach server', 'Multiplayer is offline. Bot mode still works — close this and click Play vs Bot.', 'Close', hideOverlay);
+            }
+        }, 45000);
+    }
+
     // ===== UI wiring =====
     $('btn-create').onclick = function () {
         setError('');
-        hideOverlay();
-        socket.emit('create');
+        requireServer(function () { socket.emit('create'); });
     };
     $('btn-join').onclick = function () {
         var code = $('input-join').value.toUpperCase().trim();
         if (code.length < 4) { setError('Enter a valid room code'); return; }
         setError('');
+        requireServer(function () { socket.emit('join', code); });
+    };
+    $('btn-bot').onclick = function () {
+        setError('');
         hideOverlay();
-        socket.emit('join', code);
+        startBotGame();
     };
     $('input-join').addEventListener('input', function (e) {
         e.target.value = e.target.value.toUpperCase();
@@ -754,10 +784,14 @@
         if (!state) return;
         $('score-left').textContent = state.scores.left;
         $('score-right').textContent = state.scores.right;
-        $('side-label').textContent = side === 'left' ? 'Left' : 'Right';
+        if (mode === 'bot') {
+            $('side-label').textContent = 'You · vs Bot';
+        } else {
+            $('side-label').textContent = side === 'left' ? 'Left' : 'Right';
+        }
     }
 
-    function showWinner() {
+    function showWinnerMulti() {
         var won = state.winner === side;
         var rematchHandler = (side === 'left')
             ? function () { hideOverlay(); socket.emit('rematch'); }
@@ -772,6 +806,181 @@
             $('overlay-msg').textContent = 'Final · ' + state.scores.left + ' – ' + state.scores.right + ' · Waiting for host to start a rematch…';
         }
     }
+
+    // ===== Bot mode (local physics) =====
+    function newGameState() {
+        return {
+            ball: {
+                x: WIDTH / 2,
+                y: HEIGHT / 2,
+                vx: 5 * (Math.random() < 0.5 ? -1 : 1),
+                vy: Math.random() * 4 - 2
+            },
+            paddles: { left: HEIGHT / 2 - PADDLE_H / 2, right: HEIGHT / 2 - PADDLE_H / 2 },
+            scores: { left: 0, right: 0 },
+            running: true,
+            winner: null
+        };
+    }
+    function resetBall(s, dir) {
+        s.ball.x = WIDTH / 2;
+        s.ball.y = HEIGHT / 2;
+        s.ball.vx = 5 * dir;
+        s.ball.vy = Math.random() * 4 - 2;
+    }
+    function localTick() {
+        var s = state;
+        if (!s || !s.running) return;
+
+        // Bot AI: predict ball y when it arrives at bot paddle, with imperfection
+        localInputs.right = botDecide(s);
+
+        for (var side2 = 0; side2 < 2; side2++) {
+            var key = side2 === 0 ? 'left' : 'right';
+            var input = localInputs[key];
+            if (input === 'up') s.paddles[key] -= PADDLE_SPEED;
+            if (input === 'down') s.paddles[key] += PADDLE_SPEED;
+            s.paddles[key] = Math.max(0, Math.min(HEIGHT - PADDLE_H, s.paddles[key]));
+        }
+
+        s.ball.x += s.ball.vx;
+        s.ball.y += s.ball.vy;
+
+        if (s.ball.y - BALL_R < 0) { s.ball.y = BALL_R; s.ball.vy *= -1; }
+        if (s.ball.y + BALL_R > HEIGHT) { s.ball.y = HEIGHT - BALL_R; s.ball.vy *= -1; }
+
+        if (s.ball.x - BALL_R < PADDLE_W && s.ball.vx < 0) {
+            if (s.ball.y > s.paddles.left && s.ball.y < s.paddles.left + PADDLE_H) {
+                s.ball.x = PADDLE_W + BALL_R;
+                s.ball.vx = -s.ball.vx * 1.05;
+                var relL = (s.ball.y - (s.paddles.left + PADDLE_H / 2)) / (PADDLE_H / 2);
+                s.ball.vy += relL * 2;
+            }
+        }
+        if (s.ball.x + BALL_R > WIDTH - PADDLE_W && s.ball.vx > 0) {
+            if (s.ball.y > s.paddles.right && s.ball.y < s.paddles.right + PADDLE_H) {
+                s.ball.x = WIDTH - PADDLE_W - BALL_R;
+                s.ball.vx = -s.ball.vx * 1.05;
+                var relR = (s.ball.y - (s.paddles.right + PADDLE_H / 2)) / (PADDLE_H / 2);
+                s.ball.vy += relR * 2;
+            }
+        }
+
+        s.ball.vx = Math.max(-14, Math.min(14, s.ball.vx));
+        s.ball.vy = Math.max(-10, Math.min(10, s.ball.vy));
+
+        if (s.ball.x < -BALL_R) {
+            s.scores.right++;
+            if (s.scores.right >= WIN_SCORE) { s.winner = 'right'; s.running = false; }
+            else resetBall(s, 1);
+        } else if (s.ball.x > WIDTH + BALL_R) {
+            s.scores.left++;
+            if (s.scores.left >= WIN_SCORE) { s.winner = 'left'; s.running = false; }
+            else resetBall(s, -1);
+        }
+    }
+
+    // Bot recomputes target ~5 times/sec to feel human, with noise.
+    var botTarget = HEIGHT / 2;
+    var botRetargetTick = 0;
+    function botDecide(s) {
+        botRetargetTick++;
+        if (botRetargetTick >= 12) { // ~every 200ms at 60Hz
+            botRetargetTick = 0;
+            if (s.ball.vx > 0) {
+                // Predict ball y at bot x (ignoring wall bounces — keeps it beatable)
+                var dx = (WIDTH - PADDLE_W - BALL_R) - s.ball.x;
+                var tFrames = dx / Math.max(0.1, s.ball.vx);
+                var predicted = s.ball.y + s.ball.vy * tFrames;
+                // Reflect off walls naively
+                var range = HEIGHT - 2 * BALL_R;
+                predicted = ((predicted - BALL_R) % (2 * range) + 2 * range) % (2 * range);
+                if (predicted > range) predicted = 2 * range - predicted;
+                predicted += BALL_R;
+                // Add noise so it whiffs sometimes
+                botTarget = predicted + (Math.random() - 0.5) * 50;
+            } else {
+                // Ball moving away — drift to center
+                botTarget = HEIGHT / 2 + (Math.random() - 0.5) * 30;
+            }
+        }
+        var center = s.paddles.right + PADDLE_H / 2;
+        var dz = 10;
+        if (center < botTarget - dz) return 'down';
+        if (center > botTarget + dz) return 'up';
+        return null;
+    }
+
+    function startBotGame() {
+        mode = 'bot';
+        side = 'left';
+        localInputs = { left: null, right: null };
+        state = newGameState();
+        room = null;
+        botTarget = HEIGHT / 2;
+        botRetargetTick = 0;
+        currentDir = null;
+        setView('game');
+        renderScore();
+        drawCourt();
+        if (localTickId) clearInterval(localTickId);
+        localTickId = setInterval(function () {
+            localTick();
+            if (view !== 'game') return;
+            renderScore();
+            drawCourt();
+            if (state.winner) {
+                clearInterval(localTickId);
+                localTickId = null;
+                showWinnerBot();
+            }
+        }, 1000 / 60);
+    }
+
+    function stopBotGame() {
+        if (localTickId) { clearInterval(localTickId); localTickId = null; }
+        mode = null;
+        side = null;
+        state = null;
+        localInputs = { left: null, right: null };
+        setView('home');
+        hideOverlay();
+    }
+
+    function showWinnerBot() {
+        var won = state.winner === 'left';
+        var msg = 'Final · ' + state.scores.left + ' – ' + state.scores.right;
+        $('overlay-title').textContent = won ? 'Victory' : 'Defeat';
+        $('overlay-msg').textContent = msg;
+        // Two buttons: Play Again + Back to Menu. Reuse single overlay-btn for Play Again,
+        // and inject a second action via the message line.
+        var btn = $('overlay-btn');
+        btn.textContent = 'Play Again';
+        btn.classList.remove('hidden');
+        btn.onclick = function () { hideOverlay(); startBotGame(); };
+        show('overlay');
+        // Add a "back to menu" link under the button if not already present
+        if (!$('overlay-back')) {
+            var back = document.createElement('button');
+            back.id = 'overlay-back';
+            back.className = 'sp-btn secondary';
+            back.style.marginTop = '4px';
+            back.textContent = 'Back to Menu';
+            back.onclick = stopBotGame;
+            $('overlay').appendChild(back);
+        } else {
+            $('overlay-back').classList.remove('hidden');
+            $('overlay-back').onclick = stopBotGame;
+        }
+    }
+
+    // Hide the back button whenever overlay is hidden
+    var _origHideOverlay = hideOverlay;
+    hideOverlay = function () {
+        _origHideOverlay();
+        var back = $('overlay-back');
+        if (back) back.classList.add('hidden');
+    };
 
     // ===== Canvas =====
     var canvas = $('court');
@@ -822,13 +1031,18 @@
     function sendInput(dir) {
         if (dir === currentDir) return;
         currentDir = dir;
-        socket.emit('input', dir);
+        if (mode === 'bot') {
+            localInputs.left = dir;
+        } else if (mode === 'multi') {
+            socket.emit('input', dir);
+        }
     }
     window.addEventListener('keydown', function (e) {
         if (view !== 'game') return;
         var k = e.key.toLowerCase();
         if (k === 'arrowup' || k === 'w') { sendInput('up'); e.preventDefault(); }
         else if (k === 'arrowdown' || k === 's') { sendInput('down'); e.preventDefault(); }
+        else if (k === 'escape' && mode === 'bot') { stopBotGame(); }
     });
     window.addEventListener('keyup', function (e) {
         if (view !== 'game') return;
@@ -838,7 +1052,7 @@
         }
     });
 
-    // Touch controls (drag on canvas)
+    // Touch controls
     var touchActive = false;
     function touchPos(e) {
         var rect = canvas.getBoundingClientRect();
@@ -854,7 +1068,8 @@
         if (!touchActive || view !== 'game' || !state) return;
         e.preventDefault();
         var y = touchPos(e);
-        var myPaddle = state.paddles[side];
+        var mySide = mode === 'bot' ? 'left' : side;
+        var myPaddle = state.paddles[mySide];
         var center = myPaddle + PADDLE_H / 2;
         if (y < center - 6) sendInput('up');
         else if (y > center + 6) sendInput('down');
