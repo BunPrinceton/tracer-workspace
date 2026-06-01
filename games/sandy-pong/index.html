@@ -99,8 +99,8 @@
                 radial-gradient(ellipse at top, #1a1408 0%, #0a0a0a 60%);
             background-attachment: fixed;
             color: #F2E8D5;
-            min-height: calc(100vh - 56px - 110px);
-            padding: 48px 24px 60px;
+            min-height: calc(100vh - 56px);
+            padding: 32px 24px 32px;
         }
         .sp-wrap {
             max-width: 980px;
@@ -108,7 +108,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 36px;
+            gap: 24px;
         }
 
         .brand {
@@ -415,31 +415,27 @@
 
         .hidden { display: none !important; }
 
-        /* Footer (inverted for the Sandy Pong dark theme — sits on the same
-           dark gradient as main, with white text + gold hover) */
-        footer {
-            background: #0a0a0a;
-            border-top: 1px solid rgba(201, 162, 74, 0.18);
-            font-size: 0.875rem;
-            color: #8a8170;
-        }
-        .footer-nav {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
+        /* Side links flanking the home panel (replace the bottom footer bar
+           so the page fits in one viewport). Aligned to the Play vs Bot row. */
+        .home-row {
             display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 1rem;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 28px;
+            width: 100%;
+            max-width: 980px;
         }
-        footer a {
+        .side-link {
             color: #F2E8D5;
+            font-size: 0.875rem;
             text-decoration: underline;
             text-underline-offset: 4px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-bottom: 110px; /* aligns roughly with Play vs Bot row */
+            transition: color 0.15s;
         }
-        footer a:hover { color: #F4C26A; }
-        .suggest-edit { color: #F2E8D5; font-size: 0.8125rem; }
-        .suggest-edit:hover { color: #F4C26A; }
+        .side-link:hover { color: #F4C26A; }
 
         :focus-visible { outline: 2px solid #C9A24A; outline-offset: 2px; }
 
@@ -468,6 +464,8 @@
             .court { width: 100%; }
             .brand-text h1 { font-size: 36px; }
             .score { font-size: 56px; }
+            .home-row { flex-direction: column; align-items: center; gap: 16px; }
+            .side-link { margin-bottom: 0; }
         }
     </style>
 </head>
@@ -524,22 +522,26 @@
         </header>
 
         <!-- HOME -->
-        <section id="view-home" class="panel">
-            <h2>Play a Match</h2>
-            <p class="muted">Invite only &mdash; create a code or enter one to join.</p>
-            <button class="sp-btn primary" id="btn-create">Create Room</button>
-            <div class="divider"><span>or</span></div>
-            <div class="join-row">
-                <input id="input-join" placeholder="ROOM CODE" maxlength="5" autocomplete="off" />
-                <button class="sp-btn secondary" id="btn-join">Join</button>
+        <section id="view-home" class="home-row">
+            <a class="side-link" href="../../">Back to Dashboard</a>
+            <div class="panel">
+                <h2>Play a Match</h2>
+                <p class="muted">Invite only &mdash; create a code or enter one to join.</p>
+                <button class="sp-btn primary" id="btn-create">Create Room</button>
+                <div class="divider"><span>or</span></div>
+                <div class="join-row">
+                    <input id="input-join" placeholder="ROOM CODE" maxlength="5" autocomplete="off" />
+                    <button class="sp-btn secondary" id="btn-join">Join</button>
+                </div>
+                <div class="divider"><span>solo</span></div>
+                <button class="sp-btn ghost" id="btn-bot">Play vs Bot &rarr;</button>
+                <p id="home-error" class="error hidden"></p>
+                <p class="status-line" style="justify-content:center;margin-top:24px;">
+                    <span class="dot" id="conn-dot"></span>
+                    <span id="conn-text">Connecting&hellip;</span>
+                </p>
             </div>
-            <div class="divider"><span>solo</span></div>
-            <button class="sp-btn ghost" id="btn-bot">Play vs Bot &rarr;</button>
-            <p id="home-error" class="error hidden"></p>
-            <p class="status-line" style="justify-content:center;margin-top:24px;">
-                <span class="dot" id="conn-dot"></span>
-                <span id="conn-text">Connecting&hellip;</span>
-            </p>
+            <a class="side-link" href="#" id="suggest-edit-link" target="_blank" rel="noopener noreferrer">Please Suggest Edits</a>
         </section>
 
         <!-- LOBBY -->
@@ -588,12 +590,6 @@
     </div>
 </main>
 
-<footer>
-    <div class="footer-nav">
-        <a href="../../">Back to Dashboard</a>
-        <a href="#" id="suggest-edit-link" class="suggest-edit" target="_blank" rel="noopener noreferrer">Please Suggest Edits</a>
-    </div>
-</footer>
 
 <script>
 (function() {
