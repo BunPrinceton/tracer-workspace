@@ -711,7 +711,7 @@
             Every page on Princeton Tracers, sorted alphabetically. This list and the site search share the same source of truth — adding a page to the index makes it discoverable from both.
         </p>
         <div class="doc-filter-wrap">
-            <input type="text" id="doc-filter" placeholder="Filter by name or keyword…" autocomplete="off" aria-label="Filter documents">
+            <input type="text" id="doc-filter" placeholder="Filter the list, or press Enter to search…" autocomplete="off" aria-label="Filter documents — press Enter to open the full search-results view">
             <span id="doc-filter-meta"></span>
         </div>
         <ul class="all-docs-list" id="all-docs-list" aria-live="polite"></ul>
@@ -851,6 +851,12 @@
                 var filtered = scored.map(function (r) { return r.entry; })
                     .filter(isDocument).sort(alphaSort);
                 paint(filtered);
+            });
+            filterEl.addEventListener('keydown', function (e) {
+                if (e.key !== 'Enter') return;
+                var query = filterEl.value.trim();
+                if (!query) return;
+                window.location.href = '?q=' + encodeURIComponent(query);
             });
         }
     }
