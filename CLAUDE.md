@@ -142,7 +142,7 @@ Every page footer has JavaScript that builds a GitHub Issues URL dynamically fro
 - **Server URL override** for testing: `?ws=https://your-server.example.com` query param on the page URL. Default lives in `DEFAULT_WS` constant near the top of the inline script.
 - **Hardening on the server**: CORS locked to borkbook + bunprinceton.github.io + localhost; per-IP rate limits (5 creates/min, 15 joins/min); 200-room cap; 1 KB payload max; regex-validated room codes; host-only `start`/`rematch`; auto-cleanup (empty 60 s, idle 15 min, unstarted lobby 30 min); `/health` returns `{ok, rooms, ips}`.
 - **Free-tier cold start**: Render sleeps the server after 15 min idle. First request after sleep takes ~30 s; the page shows a "Waking the rally" overlay only when the user actually clicks Create/Join — bot mode is reachable instantly.
-- **To remove later**: delete `games/sandy-pong/` and its 20 nav entries (one per page) + the INDEX entry in `search.js`, then delete the Render service, then archive/delete `BunPrinceton/sandy-pong`.
+- **To remove later**: delete `games/sandy-pong/` and its 28 nav entries (one per page, including the 8 archive pages) + the INDEX entry in `search.js`, then delete the Render service, then archive/delete `BunPrinceton/sandy-pong`.
 
 ## tracer_tools
 
