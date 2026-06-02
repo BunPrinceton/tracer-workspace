@@ -1516,6 +1516,17 @@
             // Narrow screens: drop the absolute position, let the search sit below the
             // nav links on its own row, full width.
             '@media (max-width:700px){nav{position:static;}.nav-search{position:static;transform:none;display:block;width:100%;margin-top:0.5rem;padding:0 0.5rem;box-sizing:border-box;}#site-search{width:100%;}.site-search-results{left:0;right:0;min-width:0;max-width:none;}}' +
+            // Touch devices (no real hover): the More dropdown's CSS :hover/:focus-within
+            // open is unreliable on tap, so we drive it explicitly with a JS-toggled class
+            // (see initMoreDropdown). Scoped entirely inside @media (hover:none) so mouse /
+            // laptop users keep the exact original hover behaviour — nothing here applies to them.
+            '@media (hover:none){.nav-more:hover .nav-more-menu,.nav-more:focus-within .nav-more-menu{display:none;}.nav-more.nav-more-open .nav-more-menu{display:block;}}' +
+            // iOS Safari auto-zooms to any focused input whose font-size is < 16px. The
+            // search input is 0.8125rem (~13px), so tapping it zooms the page in — jarring,
+            // and it leaves the viewport in a scale state where double-tap-to-reset misfires.
+            // Bumping to exactly 16px on touch devices prevents the auto-zoom outright.
+            // Mouse/desktop users keep the smaller 0.8125rem (this block never matches them).
+            '@media (hover:none){#site-search{font-size:16px;}}' +
             // Back-to-top button — floats bottom-right, fades in once the user has
             // scrolled past ~2 viewport heights, smooth-scrolls to the top. Injected
             // on every page (see injectBackToTop) so no per-page edits are needed.
@@ -1857,11 +1868,59 @@
     }
 
     /* ----------------------------------------------------------------------
+       MORE DROPDOWN (touch only) — the per-page nav opens the More menu purely
+       via CSS :hover/:focus-within, which is unreliable on touchscreens (a tap
+       may or may not register as focus). On touch devices we take over: tap the
+       button to toggle, tap outside or press Escape to close, with aria-expanded
+       kept in sync. Gated on (hover:none) so mouse/laptop users get NO new
+       behaviour and NO extra listeners — their hover dropdown is unchanged.
+       ---------------------------------------------------------------------- */
+    function initMoreDropdown() {
+        if (!window.matchMedia || !window.matchMedia('(hover: none)').matches) return;
+        var nav = document.querySelector('nav');
+        if (!nav) return;
+        var wrap = nav.querySelector('.nav-more');
+        var btn = wrap && wrap.querySelector('.nav-more-btn');
+        if (!wrap || !btn) return;
+
+        function close() {
+            wrap.classList.remove('nav-more-open');
+            btn.setAttribute('aria-expanded', 'false');
+        }
+        function open() {
+            wrap.classList.add('nav-more-open');
+            btn.setAttribute('aria-expanded', 'true');
+        }
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (wrap.classList.contains('nav-more-open')) close();
+            else open();
+        });
+        // Tap anywhere outside the menu closes it.
+        document.addEventListener('click', function(e) {
+            if (!wrap.contains(e.target)) close();
+        });
+        // Escape closes it (keyboard / assistive tech).
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' || e.keyCode === 27) close();
+        });
+        // Following a menu link closes it (harmless; the page is navigating anyway).
+        var menu = wrap.querySelector('.nav-more-menu');
+        if (menu) {
+            menu.addEventListener('click', function(e) {
+                if (e.target.closest && e.target.closest('a')) close();
+            });
+        }
+    }
+
+    /* ----------------------------------------------------------------------
        INIT
        ---------------------------------------------------------------------- */
     function init() {
         injectStyles();
         lockNavLinkWidths();
+        initMoreDropdown();
         handleSearchLanding();
         injectBackToTop();
         var bar = injectSearchBar();
