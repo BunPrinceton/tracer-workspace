@@ -367,6 +367,46 @@
             margin: 0 3px;
         }
 
+        /* Touch paddle pad — shown ONLY on touch devices (display:none otherwise),
+           so the desktop/laptop layout is completely unchanged. Lets phone players
+           slide their paddle from the dark space below the court instead of covering
+           the field with their finger. touch-action:none stops the page from scrolling
+           while sliding. */
+        .touchpad { display: none; }
+        @media (hover: none) {
+            .touchpad {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+                max-width: 800px;
+                height: clamp(150px, 30vh, 320px);
+                margin-top: 2px;
+                border-radius: 12px;
+                border: 1px dashed rgba(201, 162, 74, 0.30);
+                background:
+                    linear-gradient(180deg, rgba(244, 194, 106, 0.05), rgba(244, 194, 106, 0)),
+                    rgba(255, 255, 255, 0.015);
+                touch-action: none;
+                -webkit-user-select: none;
+                user-select: none;
+                -webkit-tap-highlight-color: transparent;
+            }
+            .touchpad.active {
+                border-color: rgba(244, 194, 106, 0.55);
+                background:
+                    linear-gradient(180deg, rgba(244, 194, 106, 0.09), rgba(244, 194, 106, 0)),
+                    rgba(255, 255, 255, 0.03);
+            }
+            .touchpad-hint {
+                font-size: 11px;
+                text-transform: uppercase;
+                letter-spacing: 3px;
+                color: #6b6456;
+                pointer-events: none;
+            }
+        }
+
         .overlay {
             position: fixed;
             inset: 0;
@@ -578,6 +618,9 @@
             <div class="controls">
                 <span>Controls <kbd>W</kbd>/<kbd>S</kbd> or <kbd>&uarr;</kbd>/<kbd>&darr;</kbd></span>
                 <span>You are <strong id="side-label">&mdash;</strong></span>
+            </div>
+            <div class="touchpad" id="touchpad" aria-hidden="true">
+                <span class="touchpad-hint">&#8597; Slide here to move your paddle</span>
             </div>
         </section>
 
@@ -1078,6 +1121,44 @@
         else sendInput(null);
     }, { passive: false });
     canvas.addEventListener('touchend', function () { touchActive = false; sendInput(null); });
+
+    // Touchpad below the court (phone only) — slide here to move the paddle without
+    // covering the field. Maps the finger's position across the pad height onto the
+    // full court height, then nudges the paddle toward it (same chase feel as the
+    // on-court control). The element is display:none on desktop, so this never fires
+    // there; touch-action:none + preventDefault stop the page from scrolling.
+    var touchpad = $('touchpad');
+    function chaseToward(y) {
+        if (!state) return;
+        var mySide = mode === 'bot' ? 'left' : side;
+        var center = state.paddles[mySide] + PADDLE_H / 2;
+        if (y < center - 6) sendInput('up');
+        else if (y > center + 6) sendInput('down');
+        else sendInput(null);
+    }
+    function padTargetY(e) {
+        var rect = touchpad.getBoundingClientRect();
+        var t = e.touches[0] || e.changedTouches[0];
+        var frac = (t.clientY - rect.top) / rect.height;
+        if (frac < 0) frac = 0; else if (frac > 1) frac = 1;
+        return frac * HEIGHT;
+    }
+    if (touchpad) {
+        touchpad.addEventListener('touchstart', function (e) {
+            if (view !== 'game') return;
+            touchpad.classList.add('active');
+            e.preventDefault();
+            chaseToward(padTargetY(e));
+        }, { passive: false });
+        touchpad.addEventListener('touchmove', function (e) {
+            if (view !== 'game' || !state) return;
+            e.preventDefault();
+            chaseToward(padTargetY(e));
+        }, { passive: false });
+        function padEnd() { touchpad.classList.remove('active'); sendInput(null); }
+        touchpad.addEventListener('touchend', padEnd);
+        touchpad.addEventListener('touchcancel', padEnd);
+    }
 })();
 </script>
 <script src="../../search.js" defer></script>
