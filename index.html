@@ -229,43 +229,6 @@
         }
 
         /* ============================================================
-           FOOTER
-           ============================================================ */
-        footer {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
-            border-top: 1px solid #e5e5e5;
-            font-size: 0.875rem;
-            color: #737373;
-        }
-
-        footer a {
-            color: #525252;
-        }
-
-        footer a:hover,
-        footer a:focus {
-            color: #1a1a1a;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: space-between;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .suggest-edit {
-            color: #737373;
-            font-size: 0.8125rem;
-        }
-
-        .suggest-edit:hover {
-            color: #2563eb;
-        }
-
-        /* ============================================================
            RESPONSIVE ADJUSTMENTS
            ============================================================ */
         @media (max-width: 600px) {
@@ -286,7 +249,7 @@
            PRINT STYLES
            ============================================================ */
         @media print {
-            nav, footer {
+            nav {
                 display: none;
             }
 
@@ -341,6 +304,7 @@
                 <li><a href="./experimental/">Experimental</a></li>
                 <li><a href="./archive/">Archive</a></li>
                 <li><a href="./games/sandy-pong/">Sandy Pong</a></li>
+                <li><a href="https://github.com/BunPrinceton/tracer-workspace" target="_blank" rel="noopener noreferrer">GitHub</a></li>
             </ul>
         </li>
     </ul>
@@ -369,23 +333,6 @@
 
 </main>
 
-<footer>
-    <div class="footer-links">        <a href="#" id="suggest-edit-link" class="suggest-edit" target="_blank" rel="noopener noreferrer">Please Suggest Edits</a>
-        <a target="_blank" rel="noopener noreferrer" href="https://github.com/BunPrinceton/tracer-workspace">GitHub</a>
-    </div>
-</footer>
-
-<script>
-(function() {
-    var link = document.getElementById('suggest-edit-link');
-    if (link) {
-        var title = encodeURIComponent('[Content] ' + document.title.replace(' - Princeton Tracers', ''));
-        link.href = 'https://github.com/BunPrinceton/tracer-workspace/issues/new?template=content-suggestion.yml&title=' + title + '&body=' + encodeURIComponent('**Page:** ' + window.location.href + '\n\n**Section:** \n\n**Suggestion:**\n');
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
-    }
-})();
-</script>
 <script src="search.js" defer></script>
 </body>
 </html>
