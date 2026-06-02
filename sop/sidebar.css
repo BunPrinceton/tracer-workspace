@@ -6,10 +6,11 @@
 
 /* --- Layout: rail sits in the left gutter; the content card keeps its width --- */
 .sop-shell {
-    max-width: 1460px;
+    max-width: 1760px;
     margin: 0 auto;
     padding: 0 1.5rem;
     display: flex;
+    justify-content: center;
     gap: 3rem;
     align-items: flex-start;
 }
@@ -17,12 +18,19 @@
     max-width: 1100px;
     margin: 0;
     padding: 2rem 0 4rem;
-    flex: 1 1 auto;
+    flex: 0 1 1100px;
     min-width: 0;
 }
 .sop-sidebar {
     flex: 0 0 240px;
     padding: 2rem 0 1rem;
+}
+/* Phantom right spacer mirrors the sidebar so the content column is centered in
+   the viewport on its own — the rail sits in the left gutter and is NOT counted
+   in the centering. Hidden when the rail stacks on top (narrow) and in print. */
+.sop-shell::after {
+    content: "";
+    flex: 0 0 240px;
 }
 
 /* --- Rail: light and open, blends into the page (overrides the dark top-nav) --- */
@@ -139,6 +147,7 @@
 /* --- Responsive: stack the rail above the content on narrow screens --- */
 @media (max-width: 900px) {
     .sop-shell { flex-direction: column; gap: 0; padding: 0 1rem; }
+    .sop-shell::after { display: none; }
     .sop-sidebar { flex-basis: auto; width: 100%; padding: 1rem 0 0; }
     .sop-side-nav { position: static; }
     .sop-shell > main { padding-top: 1.5rem; }
@@ -147,6 +156,7 @@
 /* --- Print: hide the rail, expand to full width, show all views --- */
 @media print {
     .sop-sidebar { display: none; }
+    .sop-shell::after { display: none; }
     .sop-shell { display: block; max-width: none; padding: 0; }
     .sop-shell > main { max-width: none; padding: 0; }
     .sop-view { display: block; }
