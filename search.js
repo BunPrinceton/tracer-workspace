@@ -182,24 +182,24 @@
         /* ---- Task subpages ---- */
         {
             title: 'Proofreading (Tracing)',
-            url: 'tasks/proofreading/',
-            section: 'Tasks · TASK-01',
+            url: 'sop/proofreading/',
+            section: 'SOPs · TASK-01',
             description: 'Verifying and correcting AI-generated neuron segmentations. Includes split and merge operations.',
             aliases: ['proofreading', 'tracing', 'core task', 'task 1', 'task-01'],
             keywords: ['split', 'merge', 'split merge', 'segmentation correction', 'neuron tracing', 'three round triage', 'flywire', 'banc']
         },
         {
             title: 'Semantic Segmentation',
-            url: 'tasks/semantic-segmentation/',
-            section: 'Tasks · TASK-02',
+            url: 'sop/semantic-segmentation/',
+            section: 'SOPs · TASK-02',
             description: 'Painting and labeling tissue types and cellular structures in EM data.',
             aliases: ['semantic segmentation', 'painting', 'labeling', 'task 2', 'task-02'],
             keywords: ['voxel painting', 'soma', 'axon', 'dendrite', 'glia', 'myelin', 'mitochondria', 'synapse', 't-bar', 'tbar', 'vesicles', 'extracellular', 'classification']
         },
         {
             title: 'Skeletonization',
-            url: 'tasks/skeletonization/',
-            section: 'Tasks · TASK-03',
+            url: 'sop/skeletonization/',
+            section: 'SOPs · TASK-03',
             description: 'Skeletal centerline representations of neuron morphology.',
             aliases: ['skeletonization', 'skeletonisation', 'skeleton', 'centerline', 'task 3', 'task-03'],
             keywords: ['teasar', 'kimimaro', 'swc', 'morphology', 'centerline tracing']

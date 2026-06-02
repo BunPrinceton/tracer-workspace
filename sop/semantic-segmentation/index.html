@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semantic Segmentation - Princeton Tracers</title>
+    <link rel="stylesheet" href="../print.css" media="print">
+    <link rel="stylesheet" href="../sidebar.css">
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #1a1a1a;
+            padding: 0.75rem 1.5rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem 1.5rem;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav a {
+            color: #e5e5e5;
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            display: inline-block;
+        }
+
+        nav a:hover,
+        nav a:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        nav a[aria-current="page"] {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* More dropdown */
+        .nav-more {
+            position: relative;
+        }
+
+        .nav-more-btn {
+            background: none;
+            border: none;
+            color: #e5e5e5;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .nav-more-btn:hover,
+        .nav-more-btn:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .nav-more-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 0.25rem 0;
+            min-width: 160px;
+            z-index: 1000;
+            list-style: none;
+        }
+
+        .nav-more-menu li {
+            padding: 0;
+        }
+
+        .nav-more-menu a {
+            display: block;
+            padding: 0.5rem 1rem;
+            white-space: nowrap;
+        }
+
+        .nav-more-menu a:hover,
+        .nav-more-menu a:focus {
+            background-color: #333;
+        }
+
+        .nav-more:hover .nav-more-menu,
+        .nav-more:focus-within .nav-more-menu {
+            display: block;
+        }
+
+        /* Main content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        /* Task-guide content components (ported from the Task Guides page) */
+        .tools-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.75rem; }
+        .tool-badge { font-size: 0.8125rem; background-color: #f5f5f5; color: #525252; padding: 0.25rem 0.625rem; border-radius: 3px; border: 1px solid #e5e5e5; }
+        .label-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.5rem; margin-bottom: 0.75rem; }
+        .label-item { font-size: 0.875rem; padding: 0.375rem 0.75rem; background-color: #fafafa; border: 1px solid #e5e5e5; border-radius: 4px; }
+        .label-item strong { color: #1a1a1a; }
+        .failure-list li { position: relative; padding-left: 0.25rem; }
+        .sop-card ol.procedure-steps { counter-reset: step; list-style: none; margin-left: 0; }
+        .sop-card ol.procedure-steps li { counter-increment: step; padding-left: 2rem; position: relative; margin-bottom: 0.5rem; }
+        .sop-card ol.procedure-steps li::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #2563eb;
+            background-color: #eff6ff;
+            width: 1.375rem;
+            height: 1.375rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            top: 0.25rem;
+        }
+
+        /* Footer */
+        footer {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            border-top: 1px solid #e5e5e5;
+            font-size: 0.875rem;
+            color: #737373;
+        }
+
+        footer a {
+            color: #525252;
+        }
+
+        footer a:hover {
+            color: #1a1a1a;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .suggest-edit { color: #737373; font-size: 0.8125rem; }
+        .suggest-edit:hover { color: #2563eb; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            html {
+                font-size: 16px;
+            }
+
+            main {
+                padding: 1.5rem 1rem;
+            }
+
+            .label-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Focus visible */
+        :focus-visible {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+
+        /* Skip link for keyboard/screen reader users */
+        .skip-link {
+            position: absolute;
+            left: -10000px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+        .skip-link:focus {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: auto;
+            height: auto;
+            padding: 1rem;
+            background: #2563eb;
+            color: #ffffff;
+            z-index: 10000;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Main navigation">
+    <ul>
+        <li><a href="../../">Dashboard</a></li>
+        <li><a href="../../gallery/">Gallery</a></li>
+        <li><a href="../../tasks/">Task Guides</a></li>
+        <li><a href="../../sop/" aria-current="page">SOPs</a></li>
+        <li><a href="../../ground-truth/">Ground Truth</a></li>
+        <li><a href="../../pipeline/">Pipeline</a></li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">More &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../../publications/">Publications</a></li>
+                <li><a href="../../experimental/">Experimental</a></li>
+                <li><a href="../../archive/">Archive</a></li>
+                <li><a href="../../games/sandy-pong/">Sandy Pong</a></li>
+                <li><a href="https://github.com/BunPrinceton/tracer-workspace" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+
+<div class="sop-shell">
+<aside id="sop-sidebar" class="sop-sidebar" aria-label="SOP section navigation"></aside>
+<main id="main-content" role="main">
+
+    <header class="sop-page-header">
+        <h1>Semantic Segmentation</h1>
+        <p class="sop-meta-line"><span class="sop-id">TASK-02</span> &middot; Task Guide &middot; Painting &amp; labeling structures</p>
+    </header>
+
+    <div class="sop-card">
+        <h2>What is Semantic Segmentation?</h2>
+        <p>
+            Semantic segmentation is the process of labeling tissue types and cellular structures in electron microscopy data. This encompasses two related activities: <strong>voxel painting</strong> (hand-painting specific structures in 3D) and <strong>classification labeling</strong> (identifying and naming structures like axons, dendrites, and somata).
+        </p>
+        <p>
+            We have a storied history of hand-painting neurons, mitochondria, vesicles, synapses, T-bars, errors, membranes, and more. The tools and software have changed rapidly over the years as technology capabilities evolve, but the core skill of identifying and labeling biological structures in EM imagery remains the same.
+        </p>
+
+        <h2>Structure Labels</h2>
+        <div class="label-grid">
+            <div class="label-item"><strong>Soma</strong> — Cell body</div>
+            <div class="label-item"><strong>Axon</strong> — Output process</div>
+            <div class="label-item"><strong>Dendrite</strong> — Input process</div>
+            <div class="label-item"><strong>Glia</strong> — Support cells</div>
+            <div class="label-item"><strong>Myelin</strong> — Insulating sheath</div>
+            <div class="label-item"><strong>Mitochondria</strong> — Organelle</div>
+            <div class="label-item"><strong>Synapse / T-bar</strong> — Connection</div>
+            <div class="label-item"><strong>Vesicles</strong> — Transport bodies</div>
+            <div class="label-item"><strong>Extracellular</strong> — Outside cells</div>
+            <div class="label-item"><strong>Artifact / Defect</strong> — Imaging error</div>
+        </div>
+        <p>
+            Note that the distinction between painting and labeling can be confusing for newer tracers. Painting means coloring in the actual voxels of a structure. Labeling means assigning a classification name (like "axon" or "dendrite") to an already-segmented object.
+        </p>
+
+        <h2>Defect Annotation</h2>
+        <p>
+            Defect annotation is a specialized form of semantic segmentation focused on marking imaging artifacts, tissue damage, and data quality issues. Defects include section tears, folds, staining artifacts, missing slices, and other preparation problems. Accurate defect annotation prevents these regions from corrupting downstream analysis. See the <a href="../../gallery/#banc">Gallery</a> for visual examples of common defects.
+        </p>
+
+        <h2>Procedure</h2>
+        <ol class="procedure-steps">
+            <li>Load the assigned volume or task in the annotation tool</li>
+            <li>Orient yourself — identify major landmarks and the region of interest</li>
+            <li>Select the appropriate label/brush for the structure you're painting</li>
+            <li>Paint or label structures systematically, working through Z-slices</li>
+            <li>Cross-check your labels in orthogonal views (XY, XZ, YZ) for consistency</li>
+            <li>Submit for review when complete</li>
+        </ol>
+
+        <h2>Common Failure Modes</h2>
+        <ul class="failure-list">
+            <li>Confusing axons with dendrites in ambiguous cross-sections</li>
+            <li>Missing myelin wrapping around processes</li>
+            <li>Inconsistent labeling across Z-slices (label drift)</li>
+            <li>Guessing in damaged or low-contrast regions instead of flagging</li>
+            <li>Boundary leakage when painting — extending labels past structure edges</li>
+        </ul>
+
+        <h2>Tools Used</h2>
+        <div class="tools-row">
+            <span class="tool-badge">WebKnossos</span>
+            <span class="tool-badge">Neuroglancer</span>
+            <span class="tool-badge">CAVE</span>
+            <span class="tool-badge">VAST (legacy)</span>
+            <span class="tool-badge">Omni (legacy)</span>
+        </div>
+
+        <h2>Related Documentation</h2>
+        <ul>
+            <li><a href="../gt-protocol-guidelines/">GT Protocol Guidelines</a></li>
+            <li><a href="../voxel-painting/">Voxel Painting Protocol</a></li>
+            <li><a href="../../pipeline/#annotation">Pipeline: Annotation Stage</a></li>
+            <li><a href="../../gallery/#banc">Gallery: BANC Dataset Examples</a></li>
+        </ul>
+    </div>
+
+</main>
+</div>
+
+<footer>
+    <div class="footer-nav">
+        <a href="../">Back to SOP Index</a>
+        <a href="#" id="suggest-edit-link" class="suggest-edit" target="_blank" rel="noopener noreferrer">Please Suggest Edits</a>
+    </div>
+</footer>
+
+<script>
+(function() {
+    var link = document.getElementById('suggest-edit-link');
+    if (link) {
+        var title = encodeURIComponent('[Content] ' + document.title.replace(' - Princeton Tracers', ''));
+        link.href = 'https://github.com/BunPrinceton/tracer-workspace/issues/new?template=content-suggestion.yml&title=' + title + '&body=' + encodeURIComponent('**Page:** ' + window.location.href + '\n\n**Section:** \n\n**Suggestion:**\n');
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+    }
+})();
+</script>
+<script src="../sidebar.js" defer></script>
+<script src="../../search.js" defer></script>
+</body>
+</html>

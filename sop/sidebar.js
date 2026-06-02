@@ -17,7 +17,14 @@
     if (!container) return;
 
     // Display order == rail order. `dir` is relative to /sop/.
+    // caret:false suppresses the Procedure/Details affordance for items that
+    // don't (yet) declare in-page views — e.g. the descriptive task guides.
     var GROUPS = [
+        { label: 'Task guides', items: [
+            { id: 'TASK-01', title: 'Proofreading (Tracing)',    dir: 'proofreading/',          caret: false },
+            { id: 'TASK-02', title: 'Semantic Segmentation',     dir: 'semantic-segmentation/', caret: false },
+            { id: 'TASK-03', title: 'Skeletonization',           dir: 'skeletonization/',       caret: false }
+        ] },
         { label: 'Current procedures', items: [
             { id: 'SOP-001', title: 'GT Task Handling',                 dir: 'gt-task-handling/' },
             { id: 'SOP-006', title: 'Voxel Painting Cell Segmentation', dir: 'voxel-painting/' }
@@ -69,7 +76,7 @@
         html += '<div class="sop-side-group">' + g.label + '</div><ul class="sop-side-list">';
         g.items.forEach(function (s) {
             var active = dir === s.dir;
-            html += '<li>' + railLink(up + s.dir + 'index.html', active, s.title, s.id, true);
+            html += '<li>' + railLink(up + s.dir + 'index.html', active, s.title, s.id, s.caret !== false);
             if (active && views.length) { html += subMenu(); }
             html += '</li>';
         });
