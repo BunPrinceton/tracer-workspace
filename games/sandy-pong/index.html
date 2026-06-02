@@ -457,8 +457,7 @@
 
         .hidden { display: none !important; }
 
-        /* Side links flanking the home panel (replace the bottom footer bar
-           so the page fits in one viewport). Aligned to the Play vs Bot row. */
+        /* Wrapper that centres the home panel. */
         .home-row {
             display: flex;
             align-items: flex-end;
@@ -467,17 +466,6 @@
             width: 100%;
             max-width: 980px;
         }
-        .side-link {
-            color: #F2E8D5;
-            font-size: 0.875rem;
-            text-decoration: underline;
-            text-underline-offset: 4px;
-            white-space: nowrap;
-            flex-shrink: 0;
-            margin-bottom: 110px; /* aligns roughly with Play vs Bot row */
-            transition: color 0.15s;
-        }
-        .side-link:hover { color: #F4C26A; }
 
         :focus-visible { outline: 2px solid #C9A24A; outline-offset: 2px; }
 
@@ -507,7 +495,6 @@
             .brand-text h1 { font-size: 36px; }
             .score { font-size: 56px; }
             .home-row { flex-direction: column; align-items: center; gap: 16px; }
-            .side-link { margin-bottom: 0; }
         }
     </style>
 </head>
@@ -566,7 +553,6 @@
 
         <!-- HOME -->
         <section id="view-home" class="home-row">
-            <a class="side-link" href="../../">Back to Dashboard</a>
             <div class="panel">
                 <h2>Play a Match</h2>
                 <p class="muted">Invite only &mdash; create a code or enter one to join.</p>
@@ -584,7 +570,6 @@
                     <span id="conn-text">Connecting&hellip;</span>
                 </p>
             </div>
-            <a class="side-link" href="#" id="suggest-edit-link" target="_blank" rel="noopener noreferrer">Please Suggest Edits</a>
         </section>
 
         <!-- LOBBY -->
@@ -635,19 +620,6 @@
 
     </div>
 </main>
-
-
-<script>
-(function() {
-    var link = document.getElementById('suggest-edit-link');
-    if (link) {
-        var title = encodeURIComponent('[Content] ' + document.title.replace(' - Princeton Tracers', ''));
-        link.href = 'https://github.com/BunPrinceton/tracer-workspace/issues/new?template=content-suggestion.yml&title=' + title + '&body=' + encodeURIComponent('**Page:** ' + window.location.href + '\n\n**Section:** \n\n**Suggestion:**\n');
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
-    }
-})();
-</script>
 
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js" crossorigin="anonymous"></script>
 <script>
