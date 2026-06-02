@@ -216,9 +216,10 @@
         }
         .divider span { padding: 0 14px; }
 
-        .join-row { display: flex; gap: 10px; }
+        .join-row { display: flex; gap: 10px; align-items: stretch; }
         .join-row input {
-            flex: 1;
+            flex: 1 1 auto;
+            min-width: 0;
             background: rgba(0, 0, 0, 0.45);
             border: 1px solid rgba(242, 232, 213, 0.15);
             color: #F2E8D5;
@@ -236,6 +237,7 @@
             color: rgba(138, 129, 112, 0.6);
             letter-spacing: 4px;
         }
+        .join-row .sp-btn { flex: 0 0 auto; white-space: nowrap; }
 
         .code-btn {
             background: rgba(0, 0, 0, 0.4);
