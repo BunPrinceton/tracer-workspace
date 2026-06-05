@@ -21,8 +21,8 @@
     // don't (yet) declare in-page views — e.g. the descriptive task guides.
     var GROUPS = [
         { label: 'Task guides', items: [
-            { id: 'TASK-01', title: 'Proofreading (Tracing)',    dir: 'proofreading/',          caret: false },
-            { id: 'TASK-02', title: 'Semantic Segmentation',     dir: 'semantic-segmentation/', caret: false },
+            { id: 'TASK-01', title: 'Proofreading 3D (Tracing)', dir: 'proofreading/',          caret: false },
+            { id: 'TASK-02', title: 'Semantic Segmentation (Labeling)', dir: 'semantic-segmentation/', caret: false },
             { id: 'TASK-03', title: 'Skeletonization',           dir: 'skeletonization/',       caret: false }
         ] },
         { label: 'Current procedures', items: [

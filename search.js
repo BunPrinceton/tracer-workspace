@@ -43,14 +43,6 @@
             keywords: ['princeton tracers', 'connectomics', 'overview']
         },
         {
-            title: 'Task Guides',
-            url: 'tasks/',
-            section: 'Tasks',
-            description: 'Overview of every annotation task type the team performs.',
-            aliases: ['tasks', 'annotation tasks', 'task list', 'guides'],
-            keywords: ['task hub', 'what we do']
-        },
-        {
             title: 'Standard Operating Procedures',
             url: 'sop/',
             section: 'SOPs',
@@ -173,19 +165,19 @@
 
         /* ---- Task subpages ---- */
         {
-            title: 'Proofreading (Tracing)',
+            title: 'Proofreading 3D (Tracing)',
             url: 'sop/proofreading/',
             section: 'SOPs · TASK-01',
             description: 'Verifying and correcting AI-generated neuron segmentations. Includes split and merge operations.',
-            aliases: ['proofreading', 'tracing', 'core task', 'task 1', 'task-01'],
+            aliases: ['proofreading', 'proofreading 3d', 'tracing', '3d tracing', 'core task', 'task 1', 'task-01'],
             keywords: ['split', 'merge', 'split merge', 'segmentation correction', 'neuron tracing', 'three round triage', 'flywire', 'banc']
         },
         {
-            title: 'Semantic Segmentation',
+            title: 'Semantic Segmentation (Labeling)',
             url: 'sop/semantic-segmentation/',
             section: 'SOPs · TASK-02',
             description: 'Painting and labeling tissue types and cellular structures in EM data.',
-            aliases: ['semantic segmentation', 'painting', 'labeling', 'task 2', 'task-02'],
+            aliases: ['semantic segmentation', 'semantic segmentation labeling', 'painting', 'labeling', 'task 2', 'task-02'],
             keywords: ['voxel painting', 'soma', 'axon', 'dendrite', 'glia', 'myelin', 'mitochondria', 'synapse', 't-bar', 'tbar', 'vesicles', 'extracellular', 'classification']
         },
         {

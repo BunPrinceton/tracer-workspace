@@ -45,7 +45,12 @@ All pages follow these principles (documented in `index.html` comments):
 ```
 /                    # Dashboard (index.html) — hero image + mission statement
 /pipeline/           # Pipeline stages
-/tasks/              # Task guides (3 accordion sections; sub-paths are redirect stubs to the index anchors)
+/tasks/              # ORPHANED — removed from the top nav (2026-06-05); the canonical task guides now
+                     # live in the SOP rail (sop/proofreading/, sop/semantic-segmentation/,
+                     # sop/skeletonization/). Left intact (preserve-originals), unlinked + de-indexed.
+                     # 3 accordion sections; sub-paths are redirect stubs to the index anchors. NOTE:
+                     # ~15 body links across SOP "Related documents"/footers + pipeline/archive still
+                     # point into /tasks/ — they still resolve; not yet repointed to the SOP versions.
 /sop/                # SOPs — left-rail layout (sidebar.js/.css): Overview landing + per-SOP
                      # Procedure/Details views; versioned subdirs. See "SOP Section" below.
 /gallery/            # Single unified gallery (~245 figures, 9 stacked sections): BANC, FAFB 2019,
