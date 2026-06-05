@@ -17,13 +17,13 @@
     if (!container) return;
 
     // Display order == rail order. `dir` is relative to /sop/.
-    // caret:false suppresses the Procedure/Details affordance for items that
-    // don't (yet) declare in-page views — e.g. the descriptive task guides.
+    // Every item's page declares in-page views (Overview/Procedure + Details),
+    // so the rail renders each one's nested sub-menu and caret affordance.
     var GROUPS = [
         { label: 'Task guides', items: [
-            { id: 'TASK-01', title: 'Proofreading 3D (Tracing)', dir: 'proofreading/',          caret: false },
-            { id: 'TASK-02', title: 'Semantic Segmentation (Labeling)', dir: 'semantic-segmentation/', caret: false },
-            { id: 'TASK-03', title: 'Skeletonization',           dir: 'skeletonization/',       caret: false }
+            { id: 'TASK-01', title: 'Proofreading 3D (Tracing)',        dir: 'proofreading/' },
+            { id: 'TASK-02', title: 'Semantic Segmentation (Labeling)', dir: 'semantic-segmentation/' },
+            { id: 'TASK-03', title: 'Skeletonization',                  dir: 'skeletonization/' }
         ] },
         { label: 'Current procedures', items: [
             { id: 'SOP-001', title: 'GT Task Handling',                 dir: 'gt-task-handling/' },

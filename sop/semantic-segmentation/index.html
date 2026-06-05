@@ -253,7 +253,7 @@
         <p class="sop-meta-line"><span class="sop-id">TASK-02</span> &middot; Task Guide &middot; Painting &amp; labeling structures</p>
     </header>
 
-    <div class="sop-card">
+    <div class="sop-view sop-card active" data-view="overview" data-view-label="Overview">
         <h2>What is Semantic Segmentation?</h2>
         <p>
             Semantic segmentation is the process of labeling tissue types and cellular structures in electron microscopy data. This encompasses two related activities: <strong>voxel painting</strong> (hand-painting specific structures in 3D) and <strong>classification labeling</strong> (identifying and naming structures like axons, dendrites, and somata).
@@ -312,7 +312,26 @@
             <span class="tool-badge">Omni (legacy)</span>
         </div>
 
-        <h2>Related Documentation</h2>
+    </div>
+
+    <div class="sop-view sop-card" data-view="details" data-view-label="Details">
+        <h2>Purpose</h2>
+        <p>Explain semantic segmentation &mdash; painting and labeling tissue types and cellular structures in EM data &mdash; including voxel painting, classification labeling, and defect annotation.</p>
+
+        <h2>Scope</h2>
+        <p>Applies to tracers painting or labeling structures across our datasets. The current voxel-painting method has its own step-by-step procedure in <a href="../voxel-painting/">SOP-006: Voxel Painting Cell Segmentation</a>; this guide is the broader task overview.</p>
+
+        <h2>Original documentation</h2>
+        <p>The source material this guide distills &mdash; original team docs kept here for reference.</p>
+        <ul>
+            <li><a href="../../drive_docs_output/Misc/Copy of How to semantic segmentation.html">How to Semantic Segmentation</a></li>
+            <li><a href="../../drive_docs_output/Triage-Additions/Semantic-labeling/Large_Fragment Label Policy.html">Large-Fragment Label Policy</a></li>
+            <li><a href="../../drive_docs_output/Triage-Additions/Annotation/Focused Annotation How to.html">Focused Annotation How-To</a></li>
+            <li><a href="../../drive_docs_output/Triage-Additions/Defect-annotation/How to create masking layer for image defects.html">How to Create a Masking Layer for Image Defects</a></li>
+            <li><a href="../../drive_docs_output/Triage-Additions/Defect-annotation/Cleft Annotation Comparison Protocol - Easy-Seg vs Synaptor-Seg.html">Cleft Annotation Comparison Protocol (Easy-Seg vs Synaptor-Seg)</a></li>
+        </ul>
+
+        <h2>Related</h2>
         <ul>
             <li><a href="../gt-protocol-guidelines/">GT Protocol Guidelines</a></li>
             <li><a href="../voxel-painting/">Voxel Painting Protocol</a></li>

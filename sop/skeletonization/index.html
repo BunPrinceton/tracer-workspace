@@ -249,7 +249,7 @@
         <p class="sop-meta-line"><span class="sop-id">TASK-03</span> &middot; Task Guide &middot; Neuron morphology tracing</p>
     </header>
 
-    <div class="sop-card">
+    <div class="sop-view sop-card active" data-view="overview" data-view-label="Overview">
         <h2>What is Skeletonization?</h2>
         <p>
             Skeletonization creates skeletal (centerline) representations of neuron morphology from 3D segmentations. These skeletons capture the branching structure and spatial extent of neurons in a compact format useful for analysis.
@@ -276,7 +276,22 @@
         </div>
         <p>Output formats: SWC, JSON, Precomputed meshes</p>
 
-        <h2>Related Documentation</h2>
+    </div>
+
+    <div class="sop-view sop-card" data-view="details" data-view-label="Details">
+        <h2>Purpose</h2>
+        <p>Explain skeletonization &mdash; creating skeletal (centerline) representations of neuron morphology from 3D segmentations.</p>
+
+        <h2>Scope</h2>
+        <p>Skeletonization is usually automated (TEASAR / Kimimaro); manual work is mostly reviewing and correcting automated skeletons rather than tracing from scratch. This guide covers when and how that manual correction happens.</p>
+
+        <h2>Original documentation</h2>
+        <p>The source material this guide distills &mdash; original team docs kept here for reference.</p>
+        <ul>
+            <li><a href="../../drive_docs_output/Triage-Additions/Skeletonization/Cell modeling instructions (shortcut).html">Cell Modeling Instructions (shortcut)</a></li>
+        </ul>
+
+        <h2>Related</h2>
         <ul>
             <li><a href="../../pipeline/#analysis">Pipeline: Analysis Stage</a></li>
         </ul>
