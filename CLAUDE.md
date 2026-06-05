@@ -59,7 +59,9 @@ All pages follow these principles (documented in `index.html` comments):
 /archive/<item>/     # Per-item historical pages: vast, omni, eyewire, desktop-annotation,
                      # manual-id-tracking, glossary, tool-evolution
 /contribute/         # How to suggest changes
-/ground-truth/       # Ground Truth Hub
+/ground-truth/       # ORPHANED standalone hub — removed from the top nav (2026-06-05); left intact
+                     # (preserve-originals), unlinked + de-indexed. Its "How These SOPs Fit Together"
+                     # lifecycle was redesigned into the Details view of SOP-001 (sop/gt-task-handling/).
 /experimental/       # Experimental tools (Gen 2 scripts)
 /games/sandy-pong/   # OFF-TOPIC: 2-player Pong + bot mode. Single self-contained HTML.
                      # Talks to a separate Socket.IO server (github.com/BunPrinceton/sandy-pong,

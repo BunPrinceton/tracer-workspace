@@ -83,14 +83,6 @@
             keywords: ['connectomics pipeline', 'data flow']
         },
         {
-            title: 'Ground Truth Hub',
-            url: 'ground-truth/',
-            section: 'Ground Truth',
-            description: 'Ground truth task documentation and shared resources.',
-            aliases: ['ground truth', 'gt hub', 'gt'],
-            keywords: ['gt resources', 'training data']
-        },
-        {
             title: 'Archive · All Documents',
             url: 'archive/',
             section: 'Archive',
