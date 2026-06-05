@@ -178,7 +178,7 @@
             section: 'SOPs · TASK-02',
             description: 'Painting and labeling tissue types and cellular structures in EM data.',
             aliases: ['semantic segmentation', 'semantic segmentation labeling', 'painting', 'labeling', 'task 2', 'task-02'],
-            keywords: ['voxel painting', 'soma', 'axon', 'dendrite', 'glia', 'myelin', 'mitochondria', 'synapse', 't-bar', 'tbar', 'vesicles', 'extracellular', 'classification']
+            keywords: ['voxel painting', 'soma', 'axon', 'dendrite', 'glia', 'blood vessel', 'myelin', 'inner tongue', 'outer tongue', 'mitochondria', 'synapse', 't-bar', 'tbar', 'vesicles', 'extracellular', 'classification', 'defect', 'crack', 'fold', 'tear', 'fat globule', 'membrane swirl']
         },
         {
             title: 'Skeletonization',
