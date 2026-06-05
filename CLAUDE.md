@@ -70,6 +70,10 @@ All pages follow these principles (documented in `index.html` comments):
 /experimental/       # Experimental tools (Gen 2 scripts)
 /thoughts/           # "Save for later" holding area — content parked from other pages but worth keeping
                      # (e.g. the SOP-005 "Upsampled images" aside). Search-indexed + linked from the More dropdown.
+/glossary/           # Jargon/terms glossary (distinct from the gallery "Visual Glossary" and archive/glossary/).
+                     # Each term has an #anchor; in-doc Wikipedia-style links deep-link to it; terms with live
+                     # protocol carry a "Current protocol →" link. Its search.js INDEX entry sets boost:3 so it
+                     # ranks first for its terms (scoreEntry multiplies by entry.boost). Linked from More.
 /games/sandy-pong/   # OFF-TOPIC: 2-player Pong + bot mode. Single self-contained HTML.
                      # Talks to a separate Socket.IO server (github.com/BunPrinceton/sandy-pong,
                      # deployed on Render free as sandy-pong-server.onrender.com). Linked from

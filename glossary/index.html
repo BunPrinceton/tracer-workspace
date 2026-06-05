@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thoughts - Princeton Tracers</title>
+    <title>Glossary - Princeton Tracers</title>
     <style>
         *, *::before, *::after {
             box-sizing: border-box;
@@ -15,6 +15,11 @@
             font-size: 18px;
             line-height: 1.6;
             scrollbar-gutter: stable;
+            scroll-behavior: smooth;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
         }
 
         body {
@@ -117,14 +122,14 @@
 
         /* Main content */
         main {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 2rem 1.5rem 4rem;
         }
 
         /* Page Header */
         .page-header {
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             padding-bottom: 1.5rem;
             border-bottom: 2px solid #d4d4d4;
         }
@@ -140,43 +145,49 @@
             font-size: 1.0625rem;
         }
 
-        /* Content sections (parked items) */
-        .content-section {
+        /* Glossary terms */
+        .glossary-term {
             background-color: #ffffff;
-            border: 2px solid #d4d4d4;
+            border: 1px solid #e5e5e5;
             border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1rem;
+            scroll-margin-top: 1rem;
         }
 
-        .content-section h2 {
-            font-size: 1.25rem;
+        .glossary-term h2 {
+            font-size: 1.1875rem;
             font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+
+        .glossary-term p {
+            color: #1a1a1a;
             margin-bottom: 0.5rem;
         }
 
-        .parked-meta {
-            font-size: 0.8125rem;
-            color: #737373;
-            margin-bottom: 1rem;
-        }
-
-        .parked-meta a {
-            color: #2563eb;
-            text-decoration: none;
-        }
-
-        .parked-meta a:hover {
-            text-decoration: underline;
-        }
-
-        .content-section ul {
-            margin-left: 1.5rem;
+        .glossary-term p:last-child {
             margin-bottom: 0;
         }
 
-        .content-section li {
-            margin-bottom: 0.5rem;
+        .term-protocol {
+            font-size: 0.875rem;
+        }
+
+        .term-protocol a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .term-protocol a:hover {
+            text-decoration: underline;
+        }
+
+        /* Landing-highlight pulse when arriving via #anchor (respects reduced motion) */
+        .glossary-term:target {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px #dbeafe;
         }
 
         /* Footer */
@@ -253,9 +264,9 @@
                 <li><a href="../publications/">Publications</a></li>
                 <li><a href="../experimental/">Experimental</a></li>
                 <li><a href="../archive/">Archive</a></li>
-                <li><a href="../glossary/">Glossary</a></li>
+                <li><a href="../glossary/" aria-current="page">Glossary</a></li>
                 <li><a href="../games/sandy-pong/">Sandy Pong</a></li>
-                <li><a href="../thoughts/" aria-current="page">Thoughts</a></li>
+                <li><a href="../thoughts/">Thoughts</a></li>
                 <li><a href="https://github.com/BunPrinceton/tracer-workspace" target="_blank" rel="noopener noreferrer">GitHub</a></li>
             </ul>
         </li>
@@ -265,19 +276,62 @@
 <main id="main-content" role="main">
 
     <header class="page-header">
-        <h1>Thoughts</h1>
-        <p>A holding area &mdash; ideas and content pulled out of pages where they didn't quite belong, but worth keeping. Saved for later, kept searchable.</p>
+        <h1>Glossary</h1>
+        <p>Plain-language definitions of the jargon used across the tracer docs &mdash; anatomy, imaging artifacts, and annotation terms. Where a term has a current protocol, it links straight to it.</p>
     </header>
 
-    <!-- Parked from SOP-005 (2026-06-05): a useful aside, but more thinking-out-loud than protocol. -->
-    <section class="content-section">
-        <h2>Upsampled images</h2>
-        <p class="parked-meta">Parked from <a href="../sop/gt-protocol-guidelines/">WebKnossos - General GT Protocol Guidelines (SOP-005)</a> &middot; 2026-06-05 &mdash; read as a useful train of thought rather than protocol.</p>
-        <ul>
-            <li><strong>Two-pass labeling:</strong> first paint the original (thicker) sections, then copy labels onto the upsampled (thinner) sections and connect objects naturally.</li>
-            <li><strong>Cross-reference resolutions:</strong> working only from the upsampled image is misleading &mdash; always check against the original image data.</li>
-            <li><strong>Artifacts:</strong> ignore "hallucinations" (artificial structures in upsampled data); focus on anatomically sensible structures.</li>
-        </ul>
+    <section class="glossary-term" id="annotation">
+        <h2>Annotation</h2>
+        <p>Marking or labeling structures in image data &mdash; painting voxels, tracing, tagging, or otherwise recording what is where. The umbrella term for most of the team's ground-truth work.</p>
+    </section>
+
+    <section class="glossary-term" id="bounding-box">
+        <h2>Bounding box</h2>
+        <p>The 3D box defining the extent of your assigned volume &mdash; the borders within which you segment. Often called the volume border; watch its edges for small segments that just barely pass through.</p>
+    </section>
+
+    <section class="glossary-term" id="defects">
+        <h2>Defects</h2>
+        <p>Imaging artifacts and tissue-quality problems &mdash; cracks, folds, tears, fat globules, membrane swirls, missing slices, and staining issues. They should not be mistaken for biological structure.</p>
+        <p class="term-protocol">Current protocol &rarr; <a href="../sop/voxel-painting/">WebKnossos - GT Semantic Segmentation Protocol (SOP-006)</a> &mdash; defect segmentation &amp; masking.</p>
+    </section>
+
+    <section class="glossary-term" id="er">
+        <h2>ER (Endoplasmic Reticulum)</h2>
+        <p>A membrane network inside cells &mdash; an internal organelle. It can be mistaken for a separate object or boundary, so investigate carefully before segmenting around it.</p>
+    </section>
+
+    <section class="glossary-term" id="extracellular-space">
+        <h2>Extracellular space</h2>
+        <p>The space outside cells. Under the older Omni-era checklist this was collapsed into a single segment; defer to the current protocol for how it is handled today.</p>
+    </section>
+
+    <section class="glossary-term" id="fat-globule">
+        <h2>Fat globule</h2>
+        <p>A lipid-droplet artifact in the EM tissue. Color it separately and as accurately as possible rather than absorbing it into a neighboring cell.</p>
+        <p class="term-protocol">Current protocol &rarr; <a href="../sop/voxel-painting/">WebKnossos - GT Semantic Segmentation Protocol (SOP-006)</a> &mdash; defect labels.</p>
+    </section>
+
+    <section class="glossary-term" id="invaginations">
+        <h2>Invaginations</h2>
+        <p>Infoldings of a cell membrane that push inward into the cell. They are easy to misread as a separate object or as a boundary between cells &mdash; look closely before splitting.</p>
+    </section>
+
+    <section class="glossary-term" id="membrane-swirl">
+        <h2>Membrane swirl</h2>
+        <p>A swirled or whorled membrane artifact (also described as ER-membrane swirling). Segment it separately rather than letting it merge into surrounding structure.</p>
+        <p class="term-protocol">Current protocol &rarr; <a href="../sop/voxel-painting/">WebKnossos - GT Semantic Segmentation Protocol (SOP-006)</a> &mdash; defect labels.</p>
+    </section>
+
+    <section class="glossary-term" id="myelin">
+        <h2>Myelin</h2>
+        <p>The insulating sheath that wraps axons, formed by glial cells. In current semantic segmentation we distinguish the <strong>inner tongue</strong> (the innermost wrap, next to the axon) from the <strong>outer tongue</strong> (the outermost wrap, on the glial side). Plain "myelin" is still a valid label when the inner/outer distinction is ambiguous.</p>
+        <p class="term-protocol">Current protocol &rarr; <a href="../sop/voxel-painting/">WebKnossos - GT Semantic Segmentation Protocol (SOP-006)</a> &mdash; myelin segmentation.</p>
+    </section>
+
+    <section class="glossary-term" id="organelles">
+        <h2>Organelles</h2>
+        <p>Internal cell structures such as mitochondria and ER. Be careful not to mistake an organelle for a separate cell or for a boundary when segmenting.</p>
     </section>
 
 </main>

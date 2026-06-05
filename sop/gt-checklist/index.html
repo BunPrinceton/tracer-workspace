@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SOP-003: GT Checklist - Princeton Tracers</title>
+    <title>SOP-003: Old Omni Checklist - Princeton Tracers</title>
     <link rel="stylesheet" href="../print.css" media="print">
     <link rel="stylesheet" href="../sidebar.css">
     <style>
@@ -99,6 +99,7 @@
                 <li><a href="../../publications/">Publications</a></li>
                 <li><a href="../../experimental/">Experimental</a></li>
                 <li><a href="../../archive/">Archive</a></li>
+                <li><a href="../../glossary/">Glossary</a></li>
                 <li><a href="../../games/sandy-pong/">Sandy Pong</a></li>
                 <li><a href="../../thoughts/">Thoughts</a></li>
                 <li><a href="https://github.com/BunPrinceton/tracer-workspace" target="_blank" rel="noopener noreferrer">GitHub</a></li>
@@ -113,7 +114,7 @@
 
     <!-- SOP header (de-carded) -->
     <header class="sop-page-header">
-        <h1>GT Checklist</h1>
+        <h1>Old Omni Checklist</h1>
         <p class="sop-meta-line"><span class="sop-id">SOP-003</span> &middot; Older method</p>
     </header>
 
@@ -121,25 +122,25 @@
     <div class="sop-view sop-card active" data-view="procedure" data-view-label="Procedure">
         <p>Points to confirm while segmenting Ground Truth volumes, before marking a task complete.</p>
         <ul>
-            <li>Use <strong>one segment</strong> for all extracellular space.</li>
-            <li>Use <strong>one segment</strong> for objects that connect 20 slices outside the boundaries.</li>
+            <li><del>Use <strong>one segment</strong> for all extracellular space.</del></li>
+            <li><del>Use <strong>one segment</strong> for objects that connect 20 slices outside the boundaries.</del></li>
             <li>Give parallel-plane boundaries the area they need &mdash; be careful not to overcolor them, and leave space for the boundary.</li>
-            <li>When segmenting thin lines of glia or extracellular space, it's okay to bend the parallel-boundary rule and segment slightly darker-than-normal areas, so long as you believe they are part of those objects.</li>
-            <li>Be cognizant of invaginations, and be careful of internal objects such as organelles / ER &mdash; always use a keen eye when investigating them.</li>
-            <li>Watch the borders of your volume and check for small segments that just barely pass by; these are important and should be segmented.</li>
-            <li>Myelin should be its own segment.</li>
+            <li>When segmenting thin lines of glia OR <a href="../../glossary/#extracellular-space">extracellular space</a>, it's okay to bend the parallel-boundary rule and segment slightly darker-than-normal areas, so long as you believe they are part of those objects.</li>
+            <li>Be cognizant of <a href="../../glossary/#invaginations">invaginations</a>, and be careful of internal objects such as <a href="../../glossary/#organelles">organelles</a> / <a href="../../glossary/#er">ER</a> &mdash; always use a keen eye when investigating them.</li>
+            <li>Watch the borders/<a href="../../glossary/#bounding-box">bounding box</a> of your volume and check for small segments that just barely pass by; these are important and should be segmented.</li>
+            <li><a href="../../glossary/#myelin">Myelin</a> should be its own segment.</li>
         </ul>
 
-        <h3>Dust, defects &amp; fat globules</h3>
+        <h3>Dust, <a href="../../glossary/#defects">defects</a> &amp; <a href="../../glossary/#fat-globule">fat globules</a></h3>
         <ul>
-            <li>If dust/defects are (nearly) fully contained within a single cell, color over them.</li>
-            <li>If dust/defects span multiple cells:
+            <li><del>If dust/defects are (nearly) fully contained within a single cell, color over them.</del></li>
+            <li><del>If dust/defects span multiple cells:
                 <ul>
                     <li>if small enough that it's easy to draw an imaginary boundary between the involved cells, do so;</li>
                     <li>if too large for that, create a separate <strong>defect mask</strong> that can safely cover the dust or defects.</li>
-                </ul>
+                </ul></del>
             </li>
-            <li>For fat globules (or ER-membrane swirling, whichever applies), color them separately and as accurately as possible.</li>
+            <li>For fat globules (or ER-<a href="../../glossary/#membrane-swirl">membrane swirling</a>, whichever applies), color them separately and as accurately as possible.</li>
         </ul>
 
         <p>Always check with the project leader when you have questions, and keep a collection of images to illustrate tough areas you want clarified. These rules change &mdash; ask for help when you aren't sure.</p>

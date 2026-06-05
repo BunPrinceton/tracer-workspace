@@ -99,6 +99,7 @@
                 <li><a href="../../publications/">Publications</a></li>
                 <li><a href="../../experimental/">Experimental</a></li>
                 <li><a href="../../archive/">Archive</a></li>
+                <li><a href="../../glossary/">Glossary</a></li>
                 <li><a href="../../games/sandy-pong/">Sandy Pong</a></li>
                 <li><a href="../../thoughts/">Thoughts</a></li>
                 <li><a href="https://github.com/BunPrinceton/tracer-workspace" target="_blank" rel="noopener noreferrer">GitHub</a></li>
@@ -119,12 +120,14 @@
 
     <!-- PROCEDURE (default view) -->
     <div class="sop-view sop-card active" data-view="procedure" data-view-label="Procedure">
-        <p>When naming a file, keep three things in mind: the <strong>project name</strong>, the <strong>type of work</strong> the file contains, and the <strong>volume</strong> it belongs to. Spaces aren't allowed, so join the parts with underscores:</p>
+        <p>These days we're typically <strong>not</strong> responsible for naming task files &mdash; assigned work usually lives in WebKnossos or Google Drive and is named for you. This convention still matters for your own experiments and exports, and reflects how VAST-era files were named.</p>
+        <p>When naming a file, keep three things in mind: the <strong>project name</strong>, the <strong>type of work</strong> the file contains, and the <strong>volume</strong> it belongs to. Spaces aren't allowed, so join the parts with underscores &mdash; spaces and special characters trip up some tools (Python scripts, for instance), and operating systems disagree on path syntax (Windows separates folders with <code>\</code>, Linux and macOS with <code>/</code>):</p>
         <p><code>Project_Type_Volume_Any-other-relevant-info</code></p>
         <p>For example, a synaptic annotation file for Vol.&nbsp;30 in the Pinky project is named <code>Pinky_Synapses_Vol.30</code>. For projects without a settled naming protocol, add any other relevant information to the end of the name.</p>
 
         <h3>Duplicates, practice &amp; experiments</h3>
         <p>When multiple copies of a file exist (experimenting without overwriting the output, or several people training on the same set), include the tracer's name and a word indicating practice or experiment &mdash; for example <code>Pinky_Annotation_vol.202_Ben_Experiment</code>. Save all practice/experiment sets and saved-state duplicates in the project's <strong>Archive</strong> folder, and clean up once the task is complete so each file lives in the right place.</p>
+        <p>The <strong>Archive</strong> folder here is really a <em>mental model</em> for good file hygiene rather than a required location. It began as a local folder inside each volume's directory back when we downloaded volumes locally (the VAST era). Now that assigned work stays in Google Drive or WebKnossos and is rarely downloaded, this mostly applies to your own experiments and exports &mdash; keep a named folder structure you understand and tidy up after yourself. For ~99% of assigned tasks you won't need local storage at all.</p>
 
         <h3>Type abbreviations</h3>
         <table>
@@ -151,7 +154,7 @@
             </tbody>
         </table>
 
-        <div class="sop-callout"><strong>Note:</strong> Omni files are an exception &mdash; they are automatically named after the project title, so there's no need to create duplicates.</div>
+        <p><strong>Note:</strong> Omni files are an exception &mdash; they are automatically named after the project title, so there's no need to create duplicates.</p>
     </div>
 
     <!-- DETAILS -->

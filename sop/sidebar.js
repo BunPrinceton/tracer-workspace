@@ -33,8 +33,8 @@
             { id: 'SOP-005', title: 'WebKnossos - General GT Protocol Guidelines', dir: 'gt-protocol-guidelines/' }
         ] },
         { label: 'Older procedures', items: [
-            { id: 'SOP-002', title: 'GT Verification',                  dir: 'gt-verification/' },
-            { id: 'SOP-003', title: 'GT Checklist',                     dir: 'gt-checklist/' },
+            { id: 'SOP-002', title: 'General GT Verification/Review',   dir: 'gt-verification/' },
+            { id: 'SOP-003', title: 'Old Omni Checklist',               dir: 'gt-checklist/' },
             { id: 'SOP-004', title: 'File Naming',                      dir: 'file-naming/' }
         ] }
     ];

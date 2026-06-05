@@ -83,6 +83,15 @@
             keywords: ['upsampled images', 'two-pass labeling', 'scratch', 'holding area', 'parked']
         },
         {
+            title: 'Glossary',
+            url: 'glossary/',
+            section: 'Glossary',
+            description: 'Definitions of the jargon used across the tracer docs — anatomy, artifacts, and annotation terms, with links to current protocol where one exists.',
+            boost: 3,
+            aliases: ['glossary', 'terms', 'definitions', 'jargon'],
+            keywords: ['annotation', 'invaginations', 'organelles', 'er', 'endoplasmic reticulum', 'myelin', 'inner tongue', 'outer tongue', 'defects', 'fat globule', 'membrane swirl', 'extracellular space', 'bounding box']
+        },
+        {
             title: 'Archive · All Documents',
             url: 'archive/',
             section: 'Archive',
@@ -247,19 +256,19 @@
             keywords: ['deprecated', 'old version', 'v1.0']
         },
         {
-            title: 'SOP-002: GT Verification',
+            title: 'SOP-002: General GT Verification/Review',
             url: 'sop/gt-verification/',
             section: 'SOPs · SOP-002',
             description: 'Verification procedures for ground truth annotations — checking synapses and other structures.',
-            aliases: ['gt verification', 'verification', 'synapse verification', 'sop 2', 'sop-002', 'sop002'],
+            aliases: ['gt verification', 'verification', 'review', 'gt review', 'synapse verification', 'sop 2', 'sop-002', 'sop002'],
             keywords: ['verify', 'qa', 'sanity check', 'gt qa', 'synapse', 'synapse check', 'verification protocol']
         },
         {
-            title: 'SOP-003: GT Checklist',
+            title: 'SOP-003: Old Omni Checklist',
             url: 'sop/gt-checklist/',
             section: 'SOPs · SOP-003',
-            description: 'Pre-submission checklist for ground truth tasks.',
-            aliases: ['gt checklist', 'checklist', 'sop 3', 'sop-003', 'sop003'],
+            description: 'Pre-submission checklist for ground truth tasks (older Omni-era method).',
+            aliases: ['gt checklist', 'old omni checklist', 'omni checklist', 'checklist', 'sop 3', 'sop-003', 'sop003'],
             keywords: ['pre-submission', 'task checklist', 'submission checklist']
         },
         {
@@ -1136,6 +1145,9 @@
             // Reward entries that cover more query terms
             total *= (0.5 + 0.5 * (matched / terms.length));
         }
+        // Per-entry ranking multiplier (e.g. the glossary boosts itself to the
+        // top for the jargon terms it defines). Only affects entries that opt in.
+        if (entry.boost) total *= entry.boost;
         return total;
     }
 
