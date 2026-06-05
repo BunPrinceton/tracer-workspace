@@ -75,6 +75,14 @@
             keywords: ['connectomics pipeline', 'data flow']
         },
         {
+            title: 'Thoughts',
+            url: 'thoughts/',
+            section: 'Thoughts',
+            description: 'A holding area for ideas and content parked from other pages — kept searchable, saved for later.',
+            aliases: ['thoughts', 'misc', 'parking lot', 'save for later', 'notes'],
+            keywords: ['upsampled images', 'two-pass labeling', 'scratch', 'holding area', 'parked']
+        },
+        {
             title: 'Archive · All Documents',
             url: 'archive/',
             section: 'Archive',
@@ -215,7 +223,7 @@
 
         /* ---- SOPs ---- */
         {
-            title: 'SOP-001: GT Task Handling',
+            title: 'SOP-001: WebKnossos - GT Segmentation Task Handling',
             url: 'sop/gt-task-handling/',
             section: 'SOPs · SOP-001',
             description: 'How to receive, work on, and submit ground truth tasks (current version).',
@@ -263,7 +271,7 @@
             keywords: ['file names', 'naming', 'naming standard']
         },
         {
-            title: 'SOP-005: GT Protocol Guidelines',
+            title: 'SOP-005: WebKnossos - General GT Protocol Guidelines',
             url: 'sop/gt-protocol-guidelines/',
             section: 'SOPs · SOP-005',
             description: 'Overall ground truth protocol guidelines.',
@@ -271,7 +279,7 @@
             keywords: ['guidelines', 'protocol']
         },
         {
-            title: 'Voxel Painting Cell Segmentation Protocol',
+            title: 'WebKnossos - GT Semantic Segmentation Protocol',
             url: 'sop/voxel-painting/',
             section: 'SOPs · Voxel Painting',
             description: 'How to hand-paint cells and structures in voxel space (current version, v1.2).',

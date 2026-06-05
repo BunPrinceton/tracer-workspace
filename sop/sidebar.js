@@ -26,11 +26,11 @@
             { id: 'TASK-03', title: 'Skeletonization',                  dir: 'skeletonization/' }
         ] },
         { label: 'Current procedures', items: [
-            { id: 'SOP-001', title: 'GT Task Handling',                 dir: 'gt-task-handling/' },
-            { id: 'SOP-006', title: 'Voxel Painting Cell Segmentation', dir: 'voxel-painting/' }
+            { id: 'SOP-001', title: 'WebKnossos - GT Segmentation Task Handling', dir: 'gt-task-handling/' },
+            { id: 'SOP-006', title: 'WebKnossos - GT Semantic Segmentation Protocol', dir: 'voxel-painting/' }
         ] },
         { label: 'Recent procedures', items: [
-            { id: 'SOP-005', title: 'GT Protocol Guidelines',           dir: 'gt-protocol-guidelines/' }
+            { id: 'SOP-005', title: 'WebKnossos - General GT Protocol Guidelines', dir: 'gt-protocol-guidelines/' }
         ] },
         { label: 'Older procedures', items: [
             { id: 'SOP-002', title: 'GT Verification',                  dir: 'gt-verification/' },

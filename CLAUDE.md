@@ -68,6 +68,8 @@ All pages follow these principles (documented in `index.html` comments):
                      # (preserve-originals), unlinked + de-indexed. Its "How These SOPs Fit Together"
                      # lifecycle was redesigned into the Details view of SOP-001 (sop/gt-task-handling/).
 /experimental/       # Experimental tools (Gen 2 scripts)
+/thoughts/           # "Save for later" holding area — content parked from other pages but worth keeping
+                     # (e.g. the SOP-005 "Upsampled images" aside). Search-indexed + linked from the More dropdown.
 /games/sandy-pong/   # OFF-TOPIC: 2-player Pong + bot mode. Single self-contained HTML.
                      # Talks to a separate Socket.IO server (github.com/BunPrinceton/sandy-pong,
                      # deployed on Render free as sandy-pong-server.onrender.com). Linked from
@@ -116,7 +118,7 @@ Redesigned 2026-05-28 into a Google-docs-style layout — the first on the site,
 - **`sop/sidebar.css`** — linked in `<head>` (like `print.css`). Owns the left-rail + two-column layout + de-carded header (`.sop-page-header`) + view-card (`.sop-card`) + table/callout styling. Class-based selectors so they override the global dark `nav`.
 - **`sop/sidebar.js`** — injected like `search.js`. **Single source of truth for the SOP list** (the `GROUPS` array). Renders the rail into `<aside id="sop-sidebar">`, depth-resolves links (works on `file://` + Pages), marks the active item, and — on a page that declares in-page views — builds a nested **Procedure / Details** sub-menu and toggles which view shows (hash-driven: `#procedure` / `#details`). Caret affordance ▸/▾.
 
-Rail groups (chronological): **Current** (GT Task Handling SOP-001, Voxel Painting SOP-006 — both WebKnossos; Voxel Painting is the current GT method) · **Recent** (GT Protocol Guidelines SOP-005) · **Older** (GT Verification SOP-002, GT Checklist SOP-003, File Naming SOP-004 — VAST/Omni-era, still valid, not archived).
+Rail groups (chronological): **Current** (WebKnossos - GT Segmentation Task Handling SOP-001, WebKnossos - GT Semantic Segmentation Protocol SOP-006 — both WebKnossos; SOP-006 (formerly "Voxel Painting Cell Segmentation") is the current GT method) · **Recent** (WebKnossos - General GT Protocol Guidelines SOP-005) · **Older** (GT Verification SOP-002, GT Checklist SOP-003, File Naming SOP-004 — VAST/Omni-era, still valid, not archived). Note: SOP-00X cross-reference labels on other pages keep the short pre-rename names by design (canonical surfaces only).
 
 - **Landing (`sop/index.html`)** is an **Overview** (scope + a described, linked SOP list), not the old metadata table.
 - **Each SOP page** de-cards its header (title like other pages, not boxed) and splits its body into two views: `<div class="sop-view sop-card active" data-view="procedure" data-view-label="Procedure">` (clean default) and `<div class="sop-view sop-card" data-view="details" data-view-label="Details">` (purpose, scope, version history, change log, related). The `active` class is the no-JS default.
