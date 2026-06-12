@@ -273,6 +273,33 @@
             border-radius: 3px;
         }
 
+        /* Stage header: hand-drawn icon + heading */
+        .stage-head {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .stage-head h3 {
+            margin-bottom: 0;
+        }
+
+        .stage-icon {
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            /* Structural linework inherits this via stroke="currentColor".
+               Accent fills are hardcoded per stage and stay fixed. */
+            color: #525252;
+        }
+
+        .stage-icon svg {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
         .stage-desc {
             color: #525252;
             margin-bottom: 1rem;
@@ -660,10 +687,23 @@
 
         <!-- Stage 1: Sample Preparation -->
         <article class="stage-section" id="sample-prep">
-            <h3>
-                <span class="stage-badge">Stage 1</span>
-                Sample Preparation
-            </h3>
+            <div class="stage-head">
+                <span class="stage-icon">
+                    <svg viewBox="0 0 100 100" fill="none" stroke-linejoin="round" role="img" aria-labelledby="icon-sample-prep-title">
+                        <title id="icon-sample-prep-title">Sample preparation: tissue block and ultrathin sections</title>
+                        <path d="M20 28 L62 28 L54 36 L28 36 Z" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-width="2"/>
+                        <rect x="26" y="38" width="48" height="44" rx="6" stroke="currentColor" stroke-width="2.5" fill="#BA7517" fill-opacity="0.08"/>
+                        <path d="M40 54c-4 2-6 8-2 12s12 4 16-1 0-12-5-13-6 0-9 2z" fill="#BA7517" fill-opacity="0.85"/>
+                        <circle cx="44" cy="60" r="1.6" fill="#fff" fill-opacity="0.75"/>
+                        <circle cx="52" cy="65" r="1.6" fill="#fff" fill-opacity="0.75"/>
+                        <circle cx="58" cy="58" r="1.6" fill="#fff" fill-opacity="0.75"/>
+                    </svg>
+                </span>
+                <h3>
+                    <span class="stage-badge">Stage 1</span>
+                    Sample Preparation
+                </h3>
+            </div>
             <p class="stage-desc">
                 Biological tissue is prepared for electron microscopy imaging through fixation, staining, and embedding.
             </p>
@@ -696,10 +736,23 @@
 
         <!-- Stage 2: EM Imaging -->
         <article class="stage-section" id="em-imaging">
-            <h3>
-                <span class="stage-badge">Stage 2</span>
-                EM Imaging
-            </h3>
+            <div class="stage-head">
+                <span class="stage-icon">
+                    <svg viewBox="0 0 100 100" fill="none" stroke-linejoin="round" role="img" aria-labelledby="icon-em-imaging-title">
+                        <title id="icon-em-imaging-title">Electron microscopy imaging</title>
+                        <path d="M44 16 H56 L53 26 H47 Z" fill="#378ADD" fill-opacity="0.85" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M50 26 L40 74 L60 74 Z" fill="#378ADD" fill-opacity="0.12"/>
+                        <line x1="50" y1="26" x2="50" y2="74" stroke="#378ADD" stroke-width="1.5" stroke-dasharray="3 3"/>
+                        <ellipse cx="50" cy="42" rx="16" ry="4" stroke="currentColor" stroke-width="2.5"/>
+                        <ellipse cx="50" cy="58" rx="12" ry="3.5" stroke="currentColor" stroke-width="2.5"/>
+                        <rect x="32" y="74" width="36" height="8" rx="2" fill="#378ADD" fill-opacity="0.2" stroke="currentColor" stroke-width="2.5"/>
+                    </svg>
+                </span>
+                <h3>
+                    <span class="stage-badge">Stage 2</span>
+                    EM Imaging
+                </h3>
+            </div>
             <p class="stage-desc">
                 Serial section electron microscopy captures high-resolution images of the tissue volume.
             </p>
@@ -731,10 +784,23 @@
 
         <!-- Stage 3: Image Processing -->
         <article class="stage-section" id="image-processing">
-            <h3>
-                <span class="stage-badge">Stage 3</span>
-                Image Processing
-            </h3>
+            <div class="stage-head">
+                <span class="stage-icon">
+                    <svg viewBox="0 0 100 100" fill="none" role="img" aria-labelledby="icon-image-processing-title">
+                        <title id="icon-image-processing-title">Image processing: stitching and alignment</title>
+                        <rect x="24" y="40" width="40" height="40" rx="4" stroke="currentColor" stroke-width="2" fill="#1D9E75" fill-opacity="0.06"/>
+                        <rect x="30" y="32" width="40" height="40" rx="4" stroke="currentColor" stroke-width="2" fill="#1D9E75" fill-opacity="0.10"/>
+                        <rect x="36" y="24" width="40" height="40" rx="4" stroke="currentColor" stroke-width="2.5" fill="#1D9E75" fill-opacity="0.14"/>
+                        <circle cx="56" cy="44" r="7" stroke="#1D9E75" stroke-width="2"/>
+                        <line x1="56" y1="33" x2="56" y2="55" stroke="#1D9E75" stroke-width="1.5"/>
+                        <line x1="45" y1="44" x2="67" y2="44" stroke="#1D9E75" stroke-width="1.5"/>
+                    </svg>
+                </span>
+                <h3>
+                    <span class="stage-badge">Stage 3</span>
+                    Image Processing
+                </h3>
+            </div>
             <p class="stage-desc">
                 Raw images are stitched, aligned, and corrected to create a contiguous 3D volume.
             </p>
@@ -767,10 +833,22 @@
 
         <!-- Stage 4: Segmentation -->
         <article class="stage-section" id="segmentation">
-            <h3>
-                <span class="stage-badge">Stage 4</span>
-                Segmentation
-            </h3>
+            <div class="stage-head">
+                <span class="stage-icon">
+                    <svg viewBox="0 0 100 100" fill="none" stroke-linecap="round" role="img" aria-labelledby="icon-segmentation-title">
+                        <title id="icon-segmentation-title">Segmentation: distinct objects colored separately</title>
+                        <path d="M18 30 C35 35, 40 55, 30 78" stroke="#7F77DD" stroke-width="5"/>
+                        <path d="M40 20 C50 40, 45 60, 58 82" stroke="#1D9E75" stroke-width="5"/>
+                        <path d="M62 22 C55 45, 72 55, 64 80" stroke="#EF9F27" stroke-width="5"/>
+                        <path d="M82 28 C70 42, 78 62, 84 78" stroke="#D4537E" stroke-width="5"/>
+                        <path d="M26 50 C44 48, 60 52, 82 50" stroke="#378ADD" stroke-width="5"/>
+                    </svg>
+                </span>
+                <h3>
+                    <span class="stage-badge">Stage 4</span>
+                    Segmentation
+                </h3>
+            </div>
             <p class="stage-desc">
                 Machine learning models identify and label individual neurons and cellular structures in the volume.
             </p>
@@ -803,10 +881,21 @@
 
         <!-- Stage 5: Proofreading -->
         <article class="stage-section" id="proofreading">
-            <h3>
-                <span class="stage-badge">Stage 5</span>
-                Proofreading
-            </h3>
+            <div class="stage-head">
+                <span class="stage-icon">
+                    <svg viewBox="0 0 100 100" fill="none" stroke-linecap="round" role="img" aria-labelledby="icon-proofreading-title">
+                        <title id="icon-proofreading-title">Proofreading: inspect and correct errors</title>
+                        <path d="M18 70 C35 50, 50 60, 72 36" stroke="currentColor" stroke-width="4" opacity="0.4"/>
+                        <circle cx="52" cy="46" r="18" stroke="#D85A30" stroke-width="3" fill="#D85A30" fill-opacity="0.06"/>
+                        <line x1="65" y1="59" x2="79" y2="73" stroke="#D85A30" stroke-width="4"/>
+                        <path d="M44 47 l5 5 l10 -12" stroke="#D85A30" stroke-width="3" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+                <h3>
+                    <span class="stage-badge">Stage 5</span>
+                    Proofreading
+                </h3>
+            </div>
             <p class="stage-desc">
                 Human annotators correct segmentation errors—splits and mergers—to produce accurate neuron reconstructions. <strong>Primary tracer team activity.</strong>
             </p>
@@ -840,10 +929,24 @@
 
         <!-- Stage 6: Annotation -->
         <article class="stage-section" id="annotation">
-            <h3>
-                <span class="stage-badge">Stage 6</span>
-                Annotation
-            </h3>
+            <div class="stage-head">
+                <span class="stage-icon">
+                    <svg viewBox="0 0 100 100" fill="none" stroke-linecap="round" role="img" aria-labelledby="icon-annotation-title">
+                        <title id="icon-annotation-title">Annotation: labeling features along a neuron</title>
+                        <path d="M16 66 C36 66, 42 46, 60 44 C74 42, 80 54, 86 54" stroke="currentColor" stroke-width="4" opacity="0.4"/>
+                        <line x1="32" y1="46" x2="32" y2="60" stroke="#D4537E" stroke-width="2"/>
+                        <circle cx="32" cy="42" r="5" fill="#D4537E"/>
+                        <line x1="54" y1="30" x2="54" y2="44" stroke="#D4537E" stroke-width="2"/>
+                        <circle cx="54" cy="26" r="5" fill="#D4537E"/>
+                        <line x1="76" y1="40" x2="76" y2="54" stroke="#D4537E" stroke-width="2"/>
+                        <circle cx="76" cy="36" r="5" fill="#D4537E"/>
+                    </svg>
+                </span>
+                <h3>
+                    <span class="stage-badge">Stage 6</span>
+                    Annotation
+                </h3>
+            </div>
             <p class="stage-desc">
                 Synapses, cell types, and other biological features are labeled on the proofread segmentation. <strong>Primary tracer team activity.</strong>
             </p>
@@ -878,10 +981,30 @@
 
         <!-- Stage 7: Analysis -->
         <article class="stage-section" id="analysis">
-            <h3>
-                <span class="stage-badge">Stage 7</span>
-                Analysis
-            </h3>
+            <div class="stage-head">
+                <span class="stage-icon">
+                    <svg viewBox="0 0 100 100" fill="none" role="img" aria-labelledby="icon-analysis-title">
+                        <title id="icon-analysis-title">Analysis: connectivity graph</title>
+                        <g stroke="currentColor" stroke-width="2" opacity="0.5">
+                            <line x1="30" y1="32" x2="60" y2="26"/>
+                            <line x1="30" y1="32" x2="28" y2="64"/>
+                            <line x1="60" y1="26" x2="74" y2="52"/>
+                            <line x1="28" y1="64" x2="52" y2="74"/>
+                            <line x1="74" y1="52" x2="52" y2="74"/>
+                            <line x1="60" y1="26" x2="30" y2="32"/>
+                        </g>
+                        <circle cx="30" cy="32" r="6" fill="#639922"/>
+                        <circle cx="60" cy="26" r="7" fill="#639922"/>
+                        <circle cx="74" cy="52" r="6" fill="#639922" fill-opacity="0.5"/>
+                        <circle cx="28" cy="64" r="6" fill="#639922" fill-opacity="0.5"/>
+                        <circle cx="52" cy="74" r="6" fill="#639922"/>
+                    </svg>
+                </span>
+                <h3>
+                    <span class="stage-badge">Stage 7</span>
+                    Analysis
+                </h3>
+            </div>
             <p class="stage-desc">
                 Connectivity data is queried, analyzed, and visualized to understand neural circuits.
             </p>
@@ -916,10 +1039,31 @@
 
         <!-- Stage 8: Publication -->
         <article class="stage-section" id="publication">
-            <h3>
-                <span class="stage-badge">Stage 8</span>
-                Publication
-            </h3>
+            <div class="stage-head">
+                <span class="stage-icon">
+                    <svg viewBox="0 0 100 100" fill="none" stroke-linejoin="round" role="img" aria-labelledby="icon-publication-title">
+                        <title id="icon-publication-title">Publication: paper with figures</title>
+                        <path d="M28 18 H60 L74 32 V82 H28 Z" fill="#185FA5" fill-opacity="0.05" stroke="currentColor" stroke-width="2.5"/>
+                        <path d="M60 18 V32 H74" stroke="currentColor" stroke-width="2.5"/>
+                        <g stroke="#185FA5" stroke-width="1.5">
+                            <line x1="38" y1="44" x2="50" y2="40"/>
+                            <line x1="50" y1="40" x2="60" y2="48"/>
+                            <line x1="38" y1="44" x2="48" y2="52"/>
+                        </g>
+                        <circle cx="38" cy="44" r="2.6" fill="#185FA5"/>
+                        <circle cx="50" cy="40" r="2.6" fill="#185FA5"/>
+                        <circle cx="60" cy="48" r="2.6" fill="#185FA5"/>
+                        <circle cx="48" cy="52" r="2.6" fill="#185FA5"/>
+                        <line x1="36" y1="64" x2="66" y2="64" stroke="currentColor" stroke-width="2" opacity="0.4"/>
+                        <line x1="36" y1="71" x2="66" y2="71" stroke="currentColor" stroke-width="2" opacity="0.4"/>
+                        <line x1="36" y1="78" x2="56" y2="78" stroke="currentColor" stroke-width="2" opacity="0.4"/>
+                    </svg>
+                </span>
+                <h3>
+                    <span class="stage-badge">Stage 8</span>
+                    Publication
+                </h3>
+            </div>
             <p class="stage-desc">
                 Findings are documented and shared through papers, preprints, and public data releases.
             </p>
