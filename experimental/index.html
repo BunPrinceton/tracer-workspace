@@ -375,6 +375,7 @@
             <ul class="nav-more-menu">
                 <li><a href="../publications/">Publications</a></li>
                 <li><a href="../experimental/" aria-current="page">Experimental</a></li>
+                <li><a href="../link-restore/">Link Restorer</a></li>
                 <li><a href="../archive/">Archive</a></li>
                 <li><a href="../glossary/">Glossary</a></li>
                 <li><a href="../games/sandy-pong/">Sandy Pong</a></li>
@@ -403,6 +404,21 @@
     </div>
 
     <div class="tool-list">
+
+        <!-- Link Restorer (browser tool) -->
+        <article class="tool-card" id="link-restorer">
+            <div class="tool-header">
+                <h2><a href="../link-restore/" style="color:#2563eb; text-decoration:none;">FlyWire Link Restorer</a></h2>
+                <span class="tool-badge" style="background:#2563eb;">Browser Tool</span>
+            </div>
+            <p class="tool-desc">
+                Revives old FlyWire / Neuroglancer share links that fail with <code style="display:inline; font-size:inherit;">Error retrieving metadata for volume graphene://&hellip;/fly_v31 &mdash; HTTP error 0</code>. Adds the <code style="display:inline; font-size:inherit;">middleauth+</code> prefix, rewrites inline-state URLs, rebuilds short links for the authenticated viewer, and ships a built-in self-test. Runs entirely client-side &mdash; no data leaves the page.
+            </p>
+            <div class="tool-meta">
+                <span><strong>Open:</strong> <a href="../link-restore/" style="color:#2563eb">/link-restore/</a></span>
+                <span><strong>Use case:</strong> resurrecting dead share links</span>
+            </div>
+        </article>
 
         <!-- fast_validate_ids.py -->
         <article class="tool-card" id="fast-validate-ids">

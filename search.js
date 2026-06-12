@@ -164,6 +164,14 @@
             keywords: ['fast_validate_ids', 'fast_get_coords', 'parallel scripts', 'threadpool']
         },
         {
+            title: 'FlyWire Link Restorer',
+            url: 'link-restore/',
+            section: 'Experimental',
+            description: 'Revive old FlyWire / Neuroglancer share links that fail to load the segmentation (the "HTTP error 0" / fly_v31 metadata error). Adds the middleauth+ prefix, handles inline-state URLs, short links, and raw graphene sources. Runs entirely in the browser.',
+            aliases: ['link restorer', 'restore link', 'fix link', 'broken link', 'dead link', 'middleauth', 'http error 0', 'link restoration'],
+            keywords: ['flywire', 'neuroglancer', 'graphene', 'fly_v31', 'prodv1', 'flywire-daf', 'middleauth', 'http error 0', 'metadata error', 'share link', 'json_url', 'nglstate', 'segmentation not loading', 'fafbseg', 'expand url']
+        },
+        {
             title: 'How to Suggest Changes',
             url: 'contribute/',
             section: 'Contribute',

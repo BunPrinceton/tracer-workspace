@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlyWire Link Restorer - Princeton Tracers</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { font-size: 18px; line-height: 1.6; scrollbar-gutter: stable; }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav { background-color: #1a1a1a; padding: 0.75rem 1.5rem; }
+        nav ul {
+            list-style: none; display: flex; flex-wrap: wrap;
+            gap: 0.25rem 1.5rem; justify-content: center;
+            max-width: 1200px; margin: 0 auto;
+        }
+        nav a {
+            color: #e5e5e5; text-decoration: none; font-size: 0.875rem;
+            padding: 0.5rem 0; display: inline-block;
+        }
+        nav a:hover, nav a:focus { text-decoration: underline; text-underline-offset: 4px; }
+        nav a[aria-current="page"] { color: #ffffff; font-weight: 600; }
+
+        .nav-more { position: relative; }
+        .nav-more-btn {
+            background: none; border: none; color: #e5e5e5; font-size: 0.875rem;
+            padding: 0.5rem 0; cursor: pointer; font-family: inherit;
+        }
+        .nav-more-btn:hover, .nav-more-btn:focus { text-decoration: underline; text-underline-offset: 4px; }
+        .nav-more-menu {
+            display: none; position: absolute; top: 100%; left: 50%;
+            transform: translateX(-50%); background-color: #2a2a2a;
+            border: 1px solid #444; border-radius: 4px; padding: 0.25rem 0;
+            min-width: 160px; z-index: 1000; list-style: none;
+        }
+        .nav-more-menu li { padding: 0; }
+        .nav-more-menu a { display: block; padding: 0.5rem 1rem; white-space: nowrap; }
+        .nav-more-menu a:hover, .nav-more-menu a:focus { background-color: #333; }
+        .nav-more:hover .nav-more-menu, .nav-more:focus-within .nav-more-menu { display: block; }
+
+        /* Main content */
+        main { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+        .page-header { margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 2px solid #d4d4d4; }
+        .page-header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .page-header p { color: #525252; font-size: 1.0625rem; }
+
+        a { color: #2563eb; }
+
+        /* Diagnosis callout */
+        .callout {
+            background-color: #eff6ff; border: 2px solid #2563eb; border-radius: 8px;
+            padding: 1rem 1.25rem; margin-bottom: 2rem;
+        }
+        .callout h2 { font-size: 1rem; margin-bottom: 0.5rem; color: #1e40af; }
+        .callout p { font-size: 0.9375rem; color: #1e3a5f; margin-bottom: 0.5rem; }
+        .callout p:last-child { margin-bottom: 0; }
+        .callout code {
+            font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+            font-size: 0.85em; background: #dbeafe; padding: 0.1em 0.35em; border-radius: 3px;
+            word-break: break-all;
+        }
+
+        /* Tool panel */
+        .panel {
+            background-color: #ffffff; border: 2px solid #d4d4d4;
+            border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;
+        }
+        .panel h2 { font-size: 1.25rem; margin-bottom: 0.25rem; }
+        .panel > p.hint { font-size: 0.9rem; color: #525252; margin-bottom: 1rem; }
+
+        label { display: block; font-size: 0.8125rem; font-weight: 700; text-transform: uppercase;
+                letter-spacing: 0.05em; color: #737373; margin-bottom: 0.4rem; }
+
+        textarea {
+            width: 100%; min-height: 130px; resize: vertical;
+            font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+            font-size: 0.8125rem; line-height: 1.5; padding: 0.75rem;
+            border: 1px solid #cbd5e1; border-radius: 6px; background: #fafafa;
+            color: #1a1a1a;
+        }
+        textarea:focus { outline: 2px solid #2563eb; outline-offset: 1px; border-color: #2563eb; }
+
+        .btn-row { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin-top: 1rem; }
+        button.action {
+            font-family: inherit; font-size: 0.9375rem; font-weight: 600;
+            padding: 0.6rem 1.25rem; border-radius: 6px; cursor: pointer;
+            border: 2px solid transparent;
+        }
+        button.primary { background: #2563eb; color: #fff; }
+        button.primary:hover { background: #1d4ed8; }
+        button.secondary { background: #fff; color: #2563eb; border-color: #2563eb; }
+        button.secondary:hover { background: #eff6ff; }
+        button.ghost { background: none; color: #525252; border-color: #cbd5e1; font-size: 0.8125rem; padding: 0.4rem 0.75rem; }
+        button.ghost:hover { background: #f1f5f9; }
+
+        .options { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; margin-top: 1rem; font-size: 0.875rem; }
+        .options label { display: inline-flex; align-items: center; gap: 0.4rem;
+                         text-transform: none; letter-spacing: 0; font-weight: 400;
+                         color: #1a1a1a; font-size: 0.875rem; margin-bottom: 0; cursor: pointer; }
+        .options input[type=checkbox] { width: 1rem; height: 1rem; }
+
+        /* Samples */
+        .samples { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+
+        /* Output */
+        .out-block { margin-top: 1.25rem; display: none; }
+        .out-block.show { display: block; }
+        .out-label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
+        .out-pre {
+            font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+            font-size: 0.8125rem; line-height: 1.5; padding: 0.75rem;
+            border: 1px solid #cbd5e1; border-radius: 6px; background: #f0fdf4;
+            color: #14532d; white-space: pre-wrap; word-break: break-all;
+        }
+        .out-pre.warn { background: #fffbeb; color: #92400e; border-color: #fcd34d; }
+
+        .badge {
+            display: inline-block; font-size: 0.6875rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.05em; padding: 0.2rem 0.5rem; border-radius: 3px; margin-left: 0.5rem;
+        }
+        .badge.kind { background: #2563eb; color: #fff; }
+        .badge.ok { background: #16a34a; color: #fff; }
+        .badge.nochange { background: #d97706; color: #fff; }
+
+        .changes { margin-top: 1rem; }
+        .changes h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;
+                      color: #737373; margin-bottom: 0.4rem; }
+        .changes ul { list-style: none; padding: 0; }
+        .changes li { font-size: 0.875rem; padding: 0.2rem 0 0.2rem 1.25rem; position: relative; color: #334155; }
+        .changes li::before { content: "\2713"; position: absolute; left: 0; color: #16a34a; font-weight: 700; }
+        .changes li.none::before { content: "\2014"; color: #d97706; }
+
+        /* Self-test */
+        .test-result { font-family: "SFMono-Regular", Consolas, Menlo, monospace; font-size: 0.8125rem;
+                       white-space: pre-wrap; margin-top: 1rem; padding: 0.75rem; border-radius: 6px;
+                       background: #fafafa; border: 1px solid #e5e5e5; display: none; }
+        .test-result.show { display: block; }
+        .test-pass { color: #166534; }
+        .test-fail { color: #b91c1c; font-weight: 700; }
+
+        details.ref { margin-top: 1rem; }
+        details.ref summary { cursor: pointer; font-weight: 600; font-size: 0.9375rem; }
+        details.ref div { padding: 0.75rem 0 0; font-size: 0.9rem; color: #334155; }
+        details.ref code { font-family: "SFMono-Regular", Consolas, Menlo, monospace; font-size: 0.85em;
+                           background: #f1f5f9; padding: 0.1em 0.35em; border-radius: 3px; word-break: break-all; }
+        details.ref ol { padding-left: 1.25rem; margin-top: 0.5rem; }
+        details.ref li { margin-bottom: 0.4rem; }
+
+        /* Footer */
+        footer { max-width: 1000px; margin: 0 auto; padding: 2rem 1.5rem;
+                 border-top: 1px solid #e5e5e5; font-size: 0.875rem; color: #737373; }
+        footer a { color: #525252; }
+        footer a:hover { color: #1a1a1a; }
+        .footer-nav { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+        .suggest-edit { color: #737373; font-size: 0.8125rem; }
+        .suggest-edit:hover { color: #2563eb; }
+
+        @media (max-width: 768px) { html { font-size: 16px; } main { padding: 1.5rem 1rem; } }
+        :focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+        .skip-link { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+        .skip-link:focus { position: fixed; top: 0; left: 0; width: auto; height: auto; padding: 1rem;
+                           background: #2563eb; color: #fff; z-index: 10000; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Main navigation">
+    <ul>
+        <li><a href="../">Dashboard</a></li>
+        <li><a href="../gallery/">Gallery</a></li>
+        <li><a href="../sop/">SOPs</a></li>
+        <li><a href="../pipeline/">Pipeline</a></li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">More &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../publications/">Publications</a></li>
+                <li><a href="../experimental/">Experimental</a></li>
+                <li><a href="../link-restore/" aria-current="page">Link Restorer</a></li>
+                <li><a href="../archive/">Archive</a></li>
+                <li><a href="../glossary/">Glossary</a></li>
+                <li><a href="../games/sandy-pong/">Sandy Pong</a></li>
+                <li><a href="../thoughts/">Thoughts</a></li>
+                <li><a href="https://github.com/BunPrinceton/tracer-workspace" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+
+<main id="main-content" role="main">
+
+    <div class="page-header">
+        <h1>FlyWire Link Restorer</h1>
+        <p>Revive old FlyWire / Neuroglancer share links that fail to load the segmentation. Paste a dead link below to get a corrected, authentication-ready one. Everything runs in your browser &mdash; nothing is sent anywhere.</p>
+    </div>
+
+    <div class="callout">
+        <h2>Why old links break &mdash; &ldquo;HTTP error 0&rdquo;</h2>
+        <p>
+            <code>Error retrieving metadata for volume graphene://&hellip;/fly_v31: Fetching "" resulted in HTTP error 0</code>
+            does <strong>not</strong> mean the data is gone. The <code>fly_v31</code> production segmentation is still live.
+            <strong>HTTP error 0</strong> means the browser's fetch never completed &mdash; an auth/CORS handshake was blocked before a real request was even formed (note the empty <code>""</code> URL).
+        </p>
+        <p>
+            Old share links predate FlyWire's <strong>middleauth</strong> layer, so they embed a bare source
+            (<code>graphene://https://prodv1.flywire-daf.com/&hellip;</code>). The current servers expect the
+            <code>middleauth+</code> prefix and a logged-in token. This tool adds that prefix; the steps below cover the login side.
+        </p>
+    </div>
+
+    <!-- Restorer -->
+    <div class="panel">
+        <h2>Restore a link</h2>
+        <p class="hint">Accepts a full Neuroglancer URL (<code>&hellip;/#!{&hellip;}</code>), a short link (<code>?json_url=&hellip;</code>), a raw <code>graphene://</code> source, or a pasted JSON state.</p>
+
+        <label for="input">Old / broken link or source</label>
+        <textarea id="input" placeholder="Paste here, e.g.&#10;graphene://https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31"></textarea>
+
+        <div class="samples">
+            <button class="action ghost" data-sample="source">Sample: bare source</button>
+            <button class="action ghost" data-sample="state">Sample: inline state URL</button>
+            <button class="action ghost" data-sample="short">Sample: short link</button>
+        </div>
+
+        <div class="options">
+            <label><input type="checkbox" id="opt-rebase"> Also rebase viewer to <code>ngl.flywire.ai</code></label>
+        </div>
+
+        <div class="btn-row">
+            <button class="action primary" id="restore-btn">Restore</button>
+            <button class="action ghost" id="clear-btn">Clear</button>
+        </div>
+
+        <div class="out-block" id="out-block">
+            <div class="out-label-row">
+                <label style="margin:0">Restored output <span id="kind-badge"></span><span id="status-badge"></span></label>
+                <button class="action secondary" id="copy-btn" style="padding:0.35rem 0.9rem; font-size:0.8125rem;">Copy</button>
+            </div>
+            <div class="out-pre" id="output"></div>
+
+            <div class="out-block" id="open-block" style="margin-top:0.75rem;">
+                <a id="open-link" href="#" target="_blank" rel="noopener noreferrer">Open restored link in a new tab &rarr;</a>
+            </div>
+
+            <div class="changes" id="changes"></div>
+        </div>
+    </div>
+
+    <!-- The login side -->
+    <div class="panel">
+        <h2>If it still won't load after restoring</h2>
+        <p class="hint">The <code>middleauth+</code> prefix is only half the fix &mdash; the viewer also needs your FlyWire token. Do these in order:</p>
+        <details class="ref" open>
+            <summary>Full recovery checklist</summary>
+            <div>
+                <ol>
+                    <li><strong>Log in first.</strong> Open the FlyWire production site and authenticate with your FlyWire-authorized Google account (the one with FAFB / <code>prodv1</code> access). Then re-open the link in the <em>same</em> browser so the token/cookie is present.</li>
+                    <li><strong>Use the current viewer.</strong> Open it in FlyWire's own Neuroglancer (<code>ngl.flywire.ai</code>), not a generic <code>neuroglancer.org</code> / Spelunker tab &mdash; a generic viewer won't perform the middleauth handshake and will reliably throw error 0. (Use the &ldquo;rebase viewer&rdquo; checkbox above.)</li>
+                    <li><strong>Edit the source by hand</strong> if needed: in the layer's data-source field, prepend <code>middleauth+</code> so it reads <code>graphene://middleauth+https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31</code> and reload the layer.</li>
+                    <li><strong>Batch / programmatic rescue</strong> for many links: use <code>fafbseg</code> to parse the old short link, extract the scene + segment IDs, and regenerate a fresh authed URL &mdash; R: <code>fafbseg::flywire_expandurl()</code>; Python: the <code>fafbseg.flywire</code> URL helpers.</li>
+                </ol>
+                <p style="margin-top:0.75rem;"><strong>Caveat:</strong> if the link references a very old materialization, its root IDs may have since been edited (merges/splits). The scene will load but some IDs may show as &ldquo;outdated&rdquo; &mdash; <code>fafbseg</code> can update them to their latest roots. Fix the volume loading first.</p>
+            </div>
+        </details>
+    </div>
+
+    <!-- Self-test -->
+    <div class="panel">
+        <h2>Self-test</h2>
+        <p class="hint">Runs the restoration logic against built-in cases so you can confirm it behaves before trusting it on a real link.</p>
+        <div class="btn-row" style="margin-top:0;">
+            <button class="action secondary" id="test-btn">Run self-test</button>
+        </div>
+        <div class="test-result" id="test-result"></div>
+    </div>
+
+</main>
+
+<footer>
+    <div class="footer-nav">
+        <a href="../">Back to Dashboard</a>
+        <a href="#" id="suggest-edit-link" class="suggest-edit" target="_blank" rel="noopener noreferrer">Please Suggest Edits</a>
+    </div>
+</footer>
+
+<script>
+(function () {
+    "use strict";
+
+    // ---- Core restoration logic (pure, testable) -------------------------
+
+    // Add middleauth+ to any graphene source that lacks it.
+    function addMiddleauth(text) {
+        var changes = [];
+        var out = text.replace(/graphene:\/\/(?!middleauth\+)(https?:\/\/)/g, function (m, scheme) {
+            changes.push('Added middleauth+ to a graphene segmentation source');
+            return 'graphene://middleauth+' + scheme;
+        });
+        return { out: out, changed: changes.length > 0, changes: changes };
+    }
+
+    var FLYWIRE_VIEWER = 'https://ngl.flywire.ai';
+
+    // Classify and restore an arbitrary pasted blob.
+    // Returns { kind, output, changed, changes[], openUrl|null, warn|null }
+    function restore(raw, opts) {
+        opts = opts || {};
+        var input = (raw || '').trim();
+        var changes = [];
+
+        if (!input) {
+            return { kind: 'empty', output: '', changed: false, changes: [], openUrl: null, warn: 'Nothing to restore — paste a link or source first.' };
+        }
+
+        // --- Short link (stored state on the state server) ---
+        // e.g. ...?json_url=https://globalv1.flywire-daf.com/nglstate/api/v1/<id>
+        // or a bare nglstate URL.
+        var jsonUrlMatch = input.match(/[?&]json_url=([^&#\s]+)/);
+        var bareNglState = /^https?:\/\/[^\s]*nglstate[^\s]*$/i.test(input) ? input : null;
+        if (jsonUrlMatch || bareNglState) {
+            var stateUrl = jsonUrlMatch ? decodeURIComponent(jsonUrlMatch[1]) : bareNglState;
+            var rebuilt = FLYWIRE_VIEWER + '/?json_url=' + encodeURIComponent(stateUrl);
+            changes.push('Detected a short link (stored state) — rebuilt it to open in the authenticated FlyWire viewer');
+            changes.push('The middleauth fix happens server-side once you are logged in; the stored JSON is not modified');
+            return {
+                kind: 'short link',
+                output: rebuilt,
+                changed: true,
+                changes: changes,
+                openUrl: rebuilt,
+                warn: 'Short links point to a state stored on the FlyWire server. This tool cannot fetch it cross-origin, so it cannot rewrite the embedded source directly — but opening it in the logged-in viewer (link below) lets middleauth resolve it. Log in first (see checklist).'
+            };
+        }
+
+        // --- Inline-state URL ( .../#!{json} or .../#!encoded ) ---
+        var hashIdx = input.indexOf('#!');
+        if (hashIdx !== -1 && /^https?:\/\//i.test(input)) {
+            var base = input.slice(0, hashIdx);
+            var hash = input.slice(hashIdx + 2);
+            var jsonStr;
+            try { jsonStr = decodeURIComponent(hash); }
+            catch (e) { jsonStr = hash; }
+
+            var res = addMiddleauth(jsonStr);
+            changes = changes.concat(res.changes);
+
+            if (opts.rebase) {
+                var newBase = FLYWIRE_VIEWER + '/';
+                if (base.replace(/\/+$/, '') !== FLYWIRE_VIEWER) {
+                    changes.push('Rebased viewer to ngl.flywire.ai');
+                }
+                base = newBase;
+            }
+
+            var rebuiltUrl = base + (base.indexOf('#!') === -1 ? '' : '') + '#!' + encodeURIComponent(res.out);
+            return {
+                kind: 'inline state',
+                output: rebuiltUrl,
+                changed: res.changed || (opts.rebase),
+                changes: changes,
+                openUrl: rebuiltUrl,
+                warn: res.changed ? null : 'No bare graphene source found in this state — it may already use middleauth, or the problem is login/viewer-side (see checklist).'
+            };
+        }
+
+        // --- Raw JSON state ---
+        if (input.charAt(0) === '{') {
+            var jres = addMiddleauth(input);
+            changes = changes.concat(jres.changes);
+            return {
+                kind: 'json state',
+                output: jres.out,
+                changed: jres.changed,
+                changes: changes,
+                openUrl: jres.changed ? FLYWIRE_VIEWER + '/#!' + encodeURIComponent(jres.out) : null,
+                warn: jres.changed ? null : 'No bare graphene source found — already middleauth, or the issue is login/viewer-side (see checklist).'
+            };
+        }
+
+        // --- Raw source string / anything containing graphene:// ---
+        if (input.indexOf('graphene://') !== -1) {
+            var sres = addMiddleauth(input);
+            changes = changes.concat(sres.changes);
+            return {
+                kind: 'raw source',
+                output: sres.out,
+                changed: sres.changed,
+                changes: changes,
+                openUrl: null,
+                warn: sres.changed ? null : 'This source already has the middleauth+ prefix — the problem is most likely login/viewer-side (see checklist).'
+            };
+        }
+
+        return {
+            kind: 'unrecognized',
+            output: input,
+            changed: false,
+            changes: [],
+            openUrl: null,
+            warn: 'Could not recognize a FlyWire link or graphene source in this input. Paste the full share URL or the layer source string.'
+        };
+    }
+
+    // ---- UI wiring -------------------------------------------------------
+
+    var SAMPLES = {
+        source: 'graphene://https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31',
+        state: 'https://neuroglancer-demo.appspot.com/#!{"layers":[{"type":"image","source":"precomputed://gs://microns-seunglab/drosophila_v0/alignment/image_rechunked","name":"EM"},{"type":"segmentation_with_graph","source":"graphene://https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31","name":"fly_v31"}],"layout":"xy-3d"}',
+        short: 'https://ngl.flywire.ai/?json_url=https://globalv1.flywire-daf.com/nglstate/api/v1/4753860907040768'
+    };
+
+    var $ = function (id) { return document.getElementById(id); };
+
+    function renderResult(r) {
+        $('out-block').classList.add('show');
+        $('kind-badge').textContent = r.kind;
+        $('kind-badge').className = 'badge kind';
+        $('status-badge').textContent = r.changed ? 'restored' : 'no change';
+        $('status-badge').className = 'badge ' + (r.changed ? 'ok' : 'nochange');
+
+        var out = $('output');
+        out.textContent = r.output || r.warn || '';
+        out.className = 'out-pre' + (r.warn ? ' warn' : '');
+
+        // Open link
+        var ob = $('open-block');
+        if (r.openUrl) {
+            ob.classList.add('show');
+            $('open-link').href = r.openUrl;
+        } else {
+            ob.classList.remove('show');
+        }
+
+        // Changes + warning
+        var c = $('changes');
+        var html = '';
+        if (r.warn && r.output) {
+            html += '<h3>Note</h3><ul><li class="none">' + escapeHtml(r.warn) + '</li></ul>';
+        }
+        if (r.changes && r.changes.length) {
+            html += '<h3>What changed</h3><ul>';
+            r.changes.forEach(function (ch) { html += '<li>' + escapeHtml(ch) + '</li>'; });
+            html += '</ul>';
+        } else if (!r.warn) {
+            html += '<h3>What changed</h3><ul><li class="none">No changes were necessary</li></ul>';
+        }
+        c.innerHTML = html;
+    }
+
+    function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, function (m) {
+            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+        });
+    }
+
+    $('restore-btn').addEventListener('click', function () {
+        var r = restore($('input').value, { rebase: $('opt-rebase').checked });
+        renderResult(r);
+    });
+
+    $('clear-btn').addEventListener('click', function () {
+        $('input').value = '';
+        $('out-block').classList.remove('show');
+        $('input').focus();
+    });
+
+    document.querySelectorAll('[data-sample]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            $('input').value = SAMPLES[btn.getAttribute('data-sample')];
+            $('input').focus();
+        });
+    });
+
+    $('copy-btn').addEventListener('click', function () {
+        var text = $('output').textContent;
+        if (!text) return;
+        navigator.clipboard.writeText(text).then(function () {
+            var b = $('copy-btn');
+            var old = b.textContent;
+            b.textContent = 'Copied!';
+            setTimeout(function () { b.textContent = old; }, 1500);
+        });
+    });
+
+    // ---- Self-test -------------------------------------------------------
+
+    function runTests() {
+        var tests = [
+            {
+                name: 'bare source gets middleauth+',
+                run: function () { return restore(SAMPLES.source, {}); },
+                check: function (r) {
+                    return r.kind === 'raw source' && r.changed === true &&
+                        r.output === 'graphene://middleauth+https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31';
+                }
+            },
+            {
+                name: 'already-middleauth source is left unchanged',
+                run: function () { return restore('graphene://middleauth+https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31', {}); },
+                check: function (r) { return r.kind === 'raw source' && r.changed === false && !!r.warn; }
+            },
+            {
+                name: 'inline state URL rewrites the embedded source',
+                run: function () { return restore(SAMPLES.state, {}); },
+                check: function (r) {
+                    return r.kind === 'inline state' && r.changed === true &&
+                        r.openUrl.indexOf(encodeURIComponent('graphene://middleauth+https://prodv1.flywire-daf.com')) !== -1 &&
+                        r.openUrl.indexOf(encodeURIComponent('graphene://https://')) === -1;
+                }
+            },
+            {
+                name: 'short link rebuilt to authed viewer',
+                run: function () { return restore(SAMPLES.short, {}); },
+                check: function (r) {
+                    return r.kind === 'short link' && r.changed === true &&
+                        r.output.indexOf('ngl.flywire.ai/?json_url=') !== -1;
+                }
+            },
+            {
+                name: 'raw JSON state rewrites source',
+                run: function () { return restore('{"layers":[{"source":"graphene://https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31"}]}', {}); },
+                check: function (r) {
+                    return r.kind === 'json state' && r.changed === true &&
+                        r.output.indexOf('graphene://middleauth+https://') !== -1;
+                }
+            },
+            {
+                name: 'rebase option swaps the viewer host',
+                run: function () { return restore(SAMPLES.state, { rebase: true }); },
+                check: function (r) { return r.output.indexOf('https://ngl.flywire.ai/#!') === 0; }
+            },
+            {
+                name: 'empty input is handled gracefully',
+                run: function () { return restore('   ', {}); },
+                check: function (r) { return r.kind === 'empty' && !!r.warn; }
+            },
+            {
+                name: 'unrecognized input is flagged',
+                run: function () { return restore('hello world', {}); },
+                check: function (r) { return r.kind === 'unrecognized' && !!r.warn; }
+            }
+        ];
+
+        var lines = [];
+        var passed = 0;
+        tests.forEach(function (t, i) {
+            var ok = false, err = '';
+            try { ok = t.check(t.run()); } catch (e) { err = ' (' + e.message + ')'; }
+            if (ok) passed++;
+            lines.push((ok ? 'PASS' : 'FAIL') + '  ' + t.name + err);
+        });
+        var summary = passed + ' / ' + tests.length + ' passed';
+        var el = $('test-result');
+        el.classList.add('show');
+        el.innerHTML = '<span class="' + (passed === tests.length ? 'test-pass' : 'test-fail') + '">' +
+            escapeHtml(summary) + '</span>\n\n' +
+            lines.map(function (l) {
+                var cls = l.indexOf('PASS') === 0 ? 'test-pass' : 'test-fail';
+                return '<span class="' + cls + '">' + escapeHtml(l) + '</span>';
+            }).join('\n');
+    }
+
+    $('test-btn').addEventListener('click', runTests);
+
+})();
+</script>
+
+<script>
+(function () {
+    var link = document.getElementById('suggest-edit-link');
+    if (link) {
+        var title = encodeURIComponent('[Content] ' + document.title.replace(' - Princeton Tracers', ''));
+        link.href = 'https://github.com/BunPrinceton/tracer-workspace/issues/new?template=content-suggestion.yml&title=' + title + '&body=' + encodeURIComponent('**Page:** ' + window.location.href + '\n\n**Section:** \n\n**Suggestion:**\n');
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+    }
+})();
+</script>
+<script src="../search.js" defer></script>
+</body>
+</html>
