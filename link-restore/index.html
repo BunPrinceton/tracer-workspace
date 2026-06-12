@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FlyWire Link Restorer - Princeton Tracers</title>
+    <title>FlyWire Link Troubleshooting - Princeton Tracers</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -56,113 +56,49 @@
 
         a { color: #2563eb; }
 
+        code {
+            font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+            font-size: 0.85em; background: #f1f5f9; padding: 0.1em 0.35em; border-radius: 3px;
+            word-break: break-all;
+        }
+
         /* Diagnosis callout */
         .callout {
             background-color: #eff6ff; border: 2px solid #2563eb; border-radius: 8px;
-            padding: 1rem 1.25rem; margin-bottom: 2rem;
+            padding: 1rem 1.25rem; margin-bottom: 1.5rem;
         }
         .callout h2 { font-size: 1rem; margin-bottom: 0.5rem; color: #1e40af; }
         .callout p { font-size: 0.9375rem; color: #1e3a5f; margin-bottom: 0.5rem; }
         .callout p:last-child { margin-bottom: 0; }
-        .callout code {
-            font-family: "SFMono-Regular", Consolas, Menlo, monospace;
-            font-size: 0.85em; background: #dbeafe; padding: 0.1em 0.35em; border-radius: 3px;
-            word-break: break-all;
-        }
+        .callout code { background: #dbeafe; }
 
-        /* Tool panel */
+        /* Green tip callout */
+        .tip {
+            background-color: #f0fdf4; border: 2px solid #16a34a; border-radius: 8px;
+            padding: 1rem 1.25rem; margin-bottom: 1.5rem;
+        }
+        .tip h2 { font-size: 1rem; margin-bottom: 0.5rem; color: #166534; }
+        .tip p { font-size: 0.9375rem; color: #14532d; margin-bottom: 0; }
+        .tip code { background: #dcfce7; }
+
+        /* Panels */
         .panel {
             background-color: #ffffff; border: 2px solid #d4d4d4;
             border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem;
         }
-        .panel h2 { font-size: 1.25rem; margin-bottom: 0.25rem; }
-        .panel > p.hint { font-size: 0.9rem; color: #525252; margin-bottom: 1rem; }
+        .panel h2 { font-size: 1.25rem; margin-bottom: 0.5rem; }
+        .panel > p { margin-bottom: 0.75rem; }
+        .panel > p:last-child { margin-bottom: 0; }
+        .panel ol, .panel ul { padding-left: 1.25rem; margin: 0.5rem 0; }
+        .panel li { margin-bottom: 0.6rem; }
+        .panel li:last-child { margin-bottom: 0; }
 
-        label { display: block; font-size: 0.8125rem; font-weight: 700; text-transform: uppercase;
-                letter-spacing: 0.05em; color: #737373; margin-bottom: 0.4rem; }
-
-        textarea {
-            width: 100%; min-height: 130px; resize: vertical;
-            font-family: "SFMono-Regular", Consolas, Menlo, monospace;
-            font-size: 0.8125rem; line-height: 1.5; padding: 0.75rem;
-            border: 1px solid #cbd5e1; border-radius: 6px; background: #fafafa;
-            color: #1a1a1a;
-        }
-        textarea:focus { outline: 2px solid #2563eb; outline-offset: 1px; border-color: #2563eb; }
-
-        .btn-row { display: flex; flex-wrap: wrap; gap: 0.75rem; align-items: center; margin-top: 1rem; }
-        button.action {
-            font-family: inherit; font-size: 0.9375rem; font-weight: 600;
-            padding: 0.6rem 1.25rem; border-radius: 6px; cursor: pointer;
-            border: 2px solid transparent;
-        }
-        button.primary { background: #2563eb; color: #fff; }
-        button.primary:hover { background: #1d4ed8; }
-        button.secondary { background: #fff; color: #2563eb; border-color: #2563eb; }
-        button.secondary:hover { background: #eff6ff; }
-        button.ghost { background: none; color: #525252; border-color: #cbd5e1; font-size: 0.8125rem; padding: 0.4rem 0.75rem; }
-        button.ghost:hover { background: #f1f5f9; }
-
-        a.bookmarklet {
-            display: inline-block; background: #2563eb; color: #ffffff !important;
-            text-decoration: none; font-weight: 700; font-size: 0.95rem;
-            padding: 0.55rem 1.1rem; border-radius: 6px; cursor: grab;
-            border: 2px solid #1d4ed8; user-select: all;
-        }
-        a.bookmarklet:hover { background: #1d4ed8; }
-
-        .options { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; margin-top: 1rem; font-size: 0.875rem; }
-        .options label { display: inline-flex; align-items: center; gap: 0.4rem;
-                         text-transform: none; letter-spacing: 0; font-weight: 400;
-                         color: #1a1a1a; font-size: 0.875rem; margin-bottom: 0; cursor: pointer; }
-        .options input[type=checkbox] { width: 1rem; height: 1rem; }
-
-        /* Samples */
-        .samples { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
-
-        /* Output */
-        .out-block { margin-top: 1.25rem; display: none; }
-        .out-block.show { display: block; }
-        .out-label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
-        .out-pre {
-            font-family: "SFMono-Regular", Consolas, Menlo, monospace;
-            font-size: 0.8125rem; line-height: 1.5; padding: 0.75rem;
-            border: 1px solid #cbd5e1; border-radius: 6px; background: #f0fdf4;
-            color: #14532d; white-space: pre-wrap; word-break: break-all;
-        }
-        .out-pre.warn { background: #fffbeb; color: #92400e; border-color: #fcd34d; }
-
-        .badge {
-            display: inline-block; font-size: 0.6875rem; font-weight: 700; text-transform: uppercase;
-            letter-spacing: 0.05em; padding: 0.2rem 0.5rem; border-radius: 3px; margin-left: 0.5rem;
-        }
-        .badge.kind { background: #2563eb; color: #fff; }
-        .badge.ok { background: #16a34a; color: #fff; }
-        .badge.nochange { background: #d97706; color: #fff; }
-
-        .changes { margin-top: 1rem; }
-        .changes h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;
-                      color: #737373; margin-bottom: 0.4rem; }
-        .changes ul { list-style: none; padding: 0; }
-        .changes li { font-size: 0.875rem; padding: 0.2rem 0 0.2rem 1.25rem; position: relative; color: #334155; }
-        .changes li::before { content: "\2713"; position: absolute; left: 0; color: #16a34a; font-weight: 700; }
-        .changes li.none::before { content: "\2014"; color: #d97706; }
-
-        /* Self-test */
-        .test-result { font-family: "SFMono-Regular", Consolas, Menlo, monospace; font-size: 0.8125rem;
-                       white-space: pre-wrap; margin-top: 1rem; padding: 0.75rem; border-radius: 6px;
-                       background: #fafafa; border: 1px solid #e5e5e5; display: none; }
-        .test-result.show { display: block; }
-        .test-pass { color: #166534; }
-        .test-fail { color: #b91c1c; font-weight: 700; }
-
-        details.ref { margin-top: 1rem; }
+        details.ref { margin-top: 1rem; border-top: 1px solid #e5e5e5; padding-top: 1rem; }
         details.ref summary { cursor: pointer; font-weight: 600; font-size: 0.9375rem; }
-        details.ref div { padding: 0.75rem 0 0; font-size: 0.9rem; color: #334155; }
-        details.ref code { font-family: "SFMono-Regular", Consolas, Menlo, monospace; font-size: 0.85em;
-                           background: #f1f5f9; padding: 0.1em 0.35em; border-radius: 3px; word-break: break-all; }
-        details.ref ol { padding-left: 1.25rem; margin-top: 0.5rem; }
+        details.ref > div { padding: 0.75rem 0 0; font-size: 0.9rem; color: #334155; }
+        details.ref ol, details.ref ul { padding-left: 1.25rem; margin-top: 0.5rem; }
         details.ref li { margin-bottom: 0.4rem; }
+        details.ref p { margin-bottom: 0.6rem; }
 
         /* Footer */
         footer { max-width: 1000px; margin: 0 auto; padding: 2rem 1.5rem;
@@ -195,7 +131,7 @@
             <ul class="nav-more-menu">
                 <li><a href="../publications/">Publications</a></li>
                 <li><a href="../experimental/">Experimental</a></li>
-                <li><a href="../link-restore/" aria-current="page">Link Restorer</a></li>
+                <li><a href="../link-restore/" aria-current="page">FlyWire Links</a></li>
                 <li><a href="../archive/">Archive</a></li>
                 <li><a href="../glossary/">Glossary</a></li>
                 <li><a href="../games/sandy-pong/">Sandy Pong</a></li>
@@ -209,190 +145,78 @@
 <main id="main-content" role="main">
 
     <div class="page-header">
-        <h1>FlyWire Link Restorer</h1>
-        <p>Revive old FlyWire / Neuroglancer share links that fail to load the segmentation. Paste a dead link below to get a corrected, authentication-ready one. Everything runs in your browser &mdash; nothing is sent anywhere.</p>
+        <h1>FlyWire Link Troubleshooting</h1>
+        <p>Why old FlyWire / Neuroglancer share links sometimes fail to load the segmentation &mdash; and how to fix them. Short version: it's almost always your browser session's <strong>auth token</strong>, not the link.</p>
     </div>
 
     <div class="callout">
-        <h2>Why old links break &mdash; &ldquo;HTTP error 0&rdquo;</h2>
+        <h2>What &ldquo;HTTP error 0&rdquo; actually means</h2>
         <p>
             <code>Error retrieving metadata for volume graphene://&hellip;/fly_v31: Fetching "" resulted in HTTP error 0</code>
             does <strong>not</strong> mean the data is gone. The <code>fly_v31</code> production segmentation is still live.
-            <strong>HTTP error 0</strong> means the browser's fetch never completed &mdash; an auth/CORS handshake was blocked before a real request was even formed (note the empty <code>""</code> URL).
+            <strong>HTTP error 0</strong> means the browser's fetch never completed &mdash; the auth handshake was blocked before a real request was even formed (note the empty <code>""</code> URL).
         </p>
         <p>
-            Old share links predate FlyWire's <strong>middleauth</strong> layer, so they embed a bare source
-            (<code>graphene://https://prodv1.flywire-daf.com/&hellip;</code>). The current servers expect the
-            <code>middleauth+</code> prefix and a logged-in token. This tool adds that prefix; the steps below cover the login side.
+            In a scene, the EM image and brain mesh are <strong>public</strong> sources, so they load regardless. Only the
+            <strong>segmentation</strong> (<code>graphene://&hellip;prodv1.flywire-daf.com/&hellip;</code>) needs authentication &mdash; which is why &ldquo;EM loads, segmentation doesn't&rdquo; is the classic signature.
+        </p>
+        <p>
+            The thing the segmentation needs is a live, per-session <strong>middleauth token</strong> for the <code>prodv1</code> data server. That token is <strong>not stored in the link</strong> &mdash; it lives in your browser session (cookies on the <code>flywire-daf.com</code> / <code>daf-apis.com</code> domains) and is attached when the fetch happens. So an old link isn't carrying a &ldquo;stale token&rdquo;; your session just doesn't have a live one yet.
         </p>
     </div>
 
-    <!-- Restorer -->
+    <div class="tip">
+        <h2>The one-step fix that covers almost every case</h2>
+        <p><strong>Open <em>any</em> FlyWire scene first and let it finish authenticating</strong> (complete any Google login popup). That establishes the <code>prodv1</code> token for your whole session &mdash; then every old link you open afterward loads immediately. The usual failure is opening a specific old link <em>as the very first thing</em>, before your session has a token.</p>
+    </div>
+
     <div class="panel">
-        <h2>Restore a link</h2>
-        <p class="hint">Accepts a full Neuroglancer URL (<code>&hellip;/#!{&hellip;}</code>), a short link (<code>?json_url=&hellip;</code>), a raw <code>graphene://</code> source, or a pasted JSON state.</p>
-
-        <label for="input">Old / broken link or source</label>
-        <textarea id="input" placeholder="Paste here, e.g.&#10;graphene://https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31"></textarea>
-
-        <div class="samples">
-            <button class="action ghost" data-sample="source">Sample: bare source</button>
-            <button class="action ghost" data-sample="state">Sample: inline state URL</button>
-            <button class="action ghost" data-sample="short">Sample: short link</button>
-            <button class="action ghost" data-sample="local">Sample: local_id link</button>
-        </div>
-
-        <div class="options">
-            <label><input type="checkbox" id="opt-rebase"> Also rebase viewer to <code>ngl.flywire.ai</code></label>
-        </div>
-
-        <div class="btn-row">
-            <button class="action primary" id="restore-btn">Restore</button>
-            <button class="action ghost" id="clear-btn">Clear</button>
-        </div>
-
-        <div class="out-block" id="out-block">
-            <div class="out-label-row">
-                <label style="margin:0">Restored output <span id="kind-badge"></span><span id="status-badge"></span></label>
-                <button class="action secondary" id="copy-btn" style="padding:0.35rem 0.9rem; font-size:0.8125rem;">Copy</button>
-            </div>
-            <div class="out-pre" id="output"></div>
-
-            <div class="out-block" id="open-block" style="margin-top:0.75rem;">
-                <a id="open-link" href="#" target="_blank" rel="noopener noreferrer">Open restored link in a new tab &rarr;</a>
-            </div>
-
-            <div class="changes" id="changes"></div>
-        </div>
-    </div>
-
-    <!-- One-click bookmarklet (zero console) -->
-    <div class="panel" id="bookmarklet-panel">
-        <h2>One-click fix: the &ldquo;FlyWire Fix&rdquo; bookmarklet</h2>
-        <p class="hint">Install this once, then fix any broken scene with a single click &mdash; no console, no copy/paste. A <code>local_id</code> scene only exists inside the FlyWire tab, and browser security stops this site from reaching into it &mdash; but a bookmarklet runs <em>inside</em> that tab, so it can read the live scene, inject <code>middleauth+</code>, and reload.</p>
-
-        <p style="margin:1.25rem 0; display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
-            <strong>Drag this to your bookmarks bar &rarr;</strong>
-            <a class="bookmarklet" href="javascript:(function(){try{if(typeof viewer==='undefined'||!viewer.state){alert('FlyWire Fix: viewer not found - open this on an ngl.flywire.ai scene.');return;}var s=JSON.stringify(viewer.state.toJSON());if(s.indexOf('graphene://https://')===-1){alert('FlyWire Fix: nothing to change - no bare graphene source (already middleauth, or a login-side issue).');return;}s=s.split('graphene://https://').join('graphene://middleauth+https://');window.location.href='https://ngl.flywire.ai/#!'+encodeURIComponent(s);}catch(e){alert('FlyWire Fix error: '+e.message);}})();">&#9733; FlyWire Fix</a>
-        </p>
-
-        <div class="btn-row" style="margin-top:0;">
-            <button class="action secondary" id="copy-bookmarklet">Copy bookmarklet code</button>
-        </div>
-
-        <details class="ref" open>
-            <summary>How to install &amp; use</summary>
-            <div>
-                <ol>
-                    <li><strong>Install (once):</strong> drag the &#9733; <strong>FlyWire Fix</strong> button onto your browser's bookmarks bar. No bar showing? Press <code>Ctrl+Shift+B</code>. (Or click <em>Copy bookmarklet code</em>, make a new bookmark, and paste it as the bookmark's <em>URL/Location</em> field.)</li>
-                    <li><strong>Use:</strong> on a broken FlyWire scene &mdash; EM and brain mesh visible but no segmentation (<code>HTTP error 0</code>) &mdash; just click the <strong>FlyWire Fix</strong> bookmark. The page reloads with <code>middleauth+</code> applied; log in if prompted and the 3D segmentation loads.</li>
-                    <li><strong>Make it permanent:</strong> hit <strong>Share</strong> afterward to mint a portable <code>json_url</code> link so the scene survives browser/profile changes.</li>
-                </ol>
-                <p style="margin-top:0.75rem;">It pops <em>&ldquo;viewer not found&rdquo;</em> if clicked on a non-FlyWire page, and <em>&ldquo;nothing to change&rdquo;</em> if the source is already <code>middleauth+</code> (then the issue is login-side &mdash; see the checklists below). The bookmarklet is regex-free and pure ASCII so it can't be mangled.</p>
-            </div>
-        </details>
-    </div>
-
-    <!-- Full automation: Tampermonkey userscript -->
-    <div class="panel">
-        <h2>Full automation: the Tampermonkey userscript</h2>
-        <p class="hint">The zero-effort tier. Install once and old broken links repair themselves: the userscript watches every <code>ngl.flywire.ai</code> scene, detects the un-authenticated <code>graphene://https://</code> source <em>before</em> it errors, injects <code>middleauth+</code>, and reloads &mdash; no bookmark click, no console. It has a reload-loop guard (if the fix doesn't stick because you're logged out, it stops and shows a button instead of looping) and a manual <strong>&#9889; Fix segmentation auth</strong> button as a fallback.</p>
-
-        <p style="margin:1rem 0;">
-            <strong>Requires the <a href="https://www.tampermonkey.net/" target="_blank" rel="noopener noreferrer">Tampermonkey</a> browser extension.</strong>
-            Then <a href="https://borkbook.com/tampermonkey-scripts/flywire-segmentation-auth-fix.user.js" target="_blank" rel="noopener noreferrer">click here to install the script</a> &mdash; Tampermonkey will open its install page automatically (it recognizes the <code>.user.js</code> URL). <em>(Served from borkbook so Brave doesn't block it the way it can block <code>raw.githubusercontent.com</code>.)</em>
-        </p>
+        <h2>If a link still won't load</h2>
+        <p>Work down this list &mdash; they're all about getting a valid <code>prodv1</code> token to the viewer. You do <strong>not</strong> need to edit the link or its source; the native <code>ngl.flywire.ai</code> viewer authenticates the source for you once your session is good.</p>
+        <ol>
+            <li><strong>Confirm you're logged in.</strong> Account icon (top-right) should show your name. Note: being &ldquo;logged in&rdquo; (your Google identity) is <em>not</em> the same as holding a live <code>prodv1</code> token &mdash; see below.</li>
+            <li><strong>Allow popups</strong> for <code>ngl.flywire.ai</code>, then reload. A blocked Google-login popup is the #1 cause of &ldquo;I refreshed and nothing happened.&rdquo;</li>
+            <li><strong>Allow cross-site cookies</strong> for <code>[*.]flywire-daf.com</code> and <code>[*.]daf-apis.com</code>. The token rides on cross-site cookies between these domains; if they're blocked, the handshake dies and you get <code>HTTP error 0</code>.</li>
+            <li><strong>On Brave: drop Shields</strong> (the lion icon) for <code>ngl.flywire.ai</code>. Brave blocks third-party cookies / cross-site requests by default, which severs the handshake. <em>Note: Shields-down is separate from the third-party-cookie setting &mdash; check both.</em></li>
+            <li><strong>Refresh a stale token.</strong> If error 0 returns mid-session, the token expired: account menu &rarr; <strong>Log Out &rarr; Log back in</strong> (mints a fresh token). Or clear site data for <code>flywire-daf.com</code> + <code>daf-apis.com</code> and reload.</li>
+            <li><strong>Use the real viewer.</strong> Open links in FlyWire's own <code>ngl.flywire.ai</code>, not a generic <code>neuroglancer.org</code> / Spelunker tab &mdash; a generic viewer doesn't do the middleauth handshake at all.</li>
+        </ol>
 
         <details class="ref">
-            <summary>How it behaves &amp; how to tune it</summary>
+            <summary>&ldquo;But I <em>am</em> logged in and it still says HTTP error 0&rdquo;</summary>
             <div>
-                <ul style="padding-left:1.25rem;">
-                    <li><strong>Auto-fix on by default.</strong> Open <code>AUTO_FIX: false</code> in the script's <code>CONFIG</code> block if you'd rather click the button each time instead of auto-reloading.</li>
-                    <li><strong>Won't touch healthy scenes</strong> &mdash; it only acts when a bare <code>graphene://https://</code> source is present (already-<code>middleauth+</code> scenes are left alone).</li>
-                    <li><strong>Won't loop.</strong> If a repaired page comes back still-broken within 8&nbsp;s (almost always &ldquo;not logged in&rdquo;), it stops auto-firing and shows the manual button + a login hint.</li>
-                    <li><strong>Still finish with Share</strong> to mint a portable <code>json_url</code> link &mdash; the userscript fixes loading, but Share is what makes a <code>local_id</code> scene durable.</li>
+                <p>Login and token are two different things:</p>
+                <ul>
+                    <li><strong>Login</strong> = your Google identity. One session, shown in the account menu. Shared across every link.</li>
+                    <li><strong>Token</strong> = a <em>per-data-server</em> middleauth credential (here, for <code>prodv1.flywire-daf.com</code>). It's what the segmentation fetch actually uses, it's obtained per session, and it expires on its own &mdash; independent of whether the account menu shows you as logged in.</li>
                 </ul>
-                <p style="margin-top:0.75rem;">Source lives in the workspace repo at <code>tampermonkey-scripts/flywire-segmentation-auth-fix.user.js</code> alongside the WebKnossos userscripts.</p>
-            </div>
-        </details>
-    </div>
-
-    <!-- In-place console fix (for local_id / no Source tab) -->
-    <div class="panel">
-        <h2>Manual alternative: the browser console</h2>
-        <p class="hint">Prefer not to install a bookmarklet? Do the same fix by hand from the console. The FlyWire viewer hides Neuroglancer's raw <em>Source</em> field and a <code>local_id</code> URL has no JSON to paste here, so this runs at the JSON level: it reads the open scene, injects <code>middleauth+</code>, and reloads as a portable inline-state (<code>#!</code>) link.</p>
-
-        <label>One-liner &mdash; paste into the browser console (F12 &rarr; Console) on the open broken scene</label>
-        <div class="out-pre" id="console-snippet" style="background:#0f172a;color:#e2e8f0;border-color:#334155;">window.location.href='https://ngl.flywire.ai/#!'+encodeURIComponent(JSON.stringify(viewer.state.toJSON()).split('graphene://https://').join('graphene://middleauth+https://'));</div>
-        <div class="btn-row" style="margin-top:0.6rem;">
-            <button class="action secondary" id="copy-snippet">Copy console one-liner</button>
-        </div>
-
-        <details class="ref" open>
-            <summary>What it does &amp; what to do after</summary>
-            <div>
-                <ol>
-                    <li>Open the broken scene in <code>ngl.flywire.ai</code>, press <strong>F12</strong>, click <strong>Console</strong>.</li>
-                    <li>Paste the one-liner and hit Enter. The page reloads at a <code>#!</code> inline-state URL with <code>middleauth+</code> added to the segmentation source.</li>
-                    <li>Complete the Google login popup if it appears. The 3D meshes should load and segments become selectable (so you can finally refresh those red outdated IDs).</li>
-                    <li>Click <strong>Share</strong> to mint a portable <code>json_url</code> link &mdash; now the scene survives browser/profile changes and never needs this again.</li>
-                </ol>
-                <p style="margin-top:0.75rem;"><strong>Always use the <em>Copy</em> button above</strong> &mdash; do not copy this line out of a chat window or a doc viewer. Those often substitute &ldquo;smart&rdquo; curly quotes for straight ones, which makes the console throw <code>Invalid or unexpected token</code>. The Copy button hands over exact ASCII. (The snippet also uses plain <code>split/join</code> rather than a regex so escaped slashes can't be mangled either.)</p>
-                <p><strong>If the console prints <code>viewer is not defined</code>:</strong> skip the console. Click <strong>Share</strong> to generate a link, open its <code>json_url</code> address (the <code>&hellip;/nglstate/&hellip;</code> URL) in a new tab while logged in to see the raw JSON, copy all of it, and paste it into the <em>Restore a link</em> box above &mdash; JSON mode injects <code>middleauth+</code> and hands you a ready-to-open <code>#!</code> link.</p>
-            </div>
-        </details>
-    </div>
-
-    <!-- The login side -->
-    <div class="panel">
-        <h2>If it still won't load after restoring</h2>
-        <p class="hint">The <code>middleauth+</code> prefix is only half the fix &mdash; the viewer also needs your FlyWire token. Do these in order:</p>
-        <details class="ref" open>
-            <summary>Full recovery checklist</summary>
-            <div>
-                <ol>
-                    <li><strong>Log in first.</strong> Open the FlyWire production site and authenticate with your FlyWire-authorized Google account (the one with FAFB / <code>prodv1</code> access). Then re-open the link in the <em>same</em> browser so the token/cookie is present.</li>
-                    <li><strong>Use the current viewer.</strong> Open it in FlyWire's own Neuroglancer (<code>ngl.flywire.ai</code>), not a generic <code>neuroglancer.org</code> / Spelunker tab &mdash; a generic viewer won't perform the middleauth handshake and will reliably throw error 0. (Use the &ldquo;rebase viewer&rdquo; checkbox above.)</li>
-                    <li><strong>Edit the source by hand</strong> if needed: in the layer's data-source field, prepend <code>middleauth+</code> so it reads <code>graphene://middleauth+https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31</code> and reload the layer.</li>
-                    <li><strong>Batch / programmatic rescue</strong> for many links: use <code>fafbseg</code> to parse the old short link, extract the scene + segment IDs, and regenerate a fresh authed URL &mdash; R: <code>fafbseg::flywire_expandurl()</code>; Python: the <code>fafbseg.flywire</code> URL helpers.</li>
-                </ol>
-                <p style="margin-top:0.75rem;"><strong>Caveat:</strong> if the link references a very old materialization, its root IDs may have since been edited (merges/splits). The scene will load but some IDs may show as &ldquo;outdated&rdquo; &mdash; <code>fafbseg</code> can update them to their latest roots. Fix the volume loading first.</p>
+                <p>So &ldquo;logged in but error 0&rdquo; = your identity is fine but the <code>prodv1</code> token wasn't established or has gone stale. The levers are steps 3&ndash;5 above (cookies / Brave / log out&ndash;in). All your scenes point at the same <code>prodv1</code> server, so one good token fixes them all at once.</p>
             </div>
         </details>
 
         <details class="ref">
-            <summary>Stuck on &ldquo;You are not logged in. Refresh the page&hellip;&rdquo;?</summary>
+            <summary>What's actually inside these links (and why none of it is &ldquo;broken&rdquo;)</summary>
             <div>
-                <p>That panel is the middleauth Google-OAuth handshake. Fixes, in order of likelihood:</p>
-                <ol>
-                    <li><strong>Allow popups for <code>ngl.flywire.ai</code>, then refresh (F5).</strong> A popup blocker silently eating the Google login popup is the #1 cause of &ldquo;I refreshed and nothing happened.&rdquo;</li>
-                    <li><strong>Allow third-party cookies</strong> for <code>*.flywire-daf.com</code> and <code>daf-apis.com</code>. If they are blocked, the token handoff between the auth server and the viewer fails and you loop forever. (An Incognito window with shields down is a quick test.)</li>
-                    <li><strong>On Brave: drop the Shields.</strong> Click the Shields (lion) icon on <code>ngl.flywire.ai</code> and turn it <em>down</em> for this site. Brave blocks third-party cookies and cross-site requests by default, which severs the middleauth handshake between <code>ngl.flywire.ai</code>, <code>*.flywire-daf.com</code>, and <code>daf-apis.com</code> &mdash; producing <code>HTTP error 0</code> <em>even on a correct <code>middleauth+</code> source and even when you are logged in</em>. This is a common cause that looks exactly like the original bug.</li>
-                    <li><strong>Logging in &ldquo;twice&rdquo; is expected, not a bug.</strong> middleauth grants a token at the <em>global</em> auth layer first, then the specific data server (<code>prodv1</code>) requires its own access grant &mdash; so you legitimately get two prompts. Complete both.</li>
-                    <li><strong>Break a half-authed loop:</strong> clear cookies / site data for the <code>flywire-daf.com</code> and <code>daf-apis.com</code> domains (or use a fresh Incognito window), then load the link again to discard a stale/partial token.</li>
-                </ol>
-                <p style="margin-top:0.75rem;"><strong>On a <code>local_id</code> link this matters extra:</strong> that scene lives only in the browser profile that created it. If it is the original browser, getting past login is all you need. If it is a different browser, login won't help &mdash; there is no server copy to load (see the result note when you paste one above).</p>
+                <ul>
+                    <li><code>?json_url=&hellip;/nglstate/&hellip;</code> &mdash; a <strong>portable</strong> state stored on FlyWire's server. Works anywhere you're authenticated.</li>
+                    <li><code>?local_id=&hellip;</code> &mdash; a scene saved in <strong>only the one browser profile</strong> that created it. Not portable: it won't load on another machine/profile (there's no server copy). If it loads for you but the segmentation errors, that's the token issue above &mdash; not the link.</li>
+                    <li>A bare <code>graphene://https://prodv1&hellip;</code> source is <strong>fine</strong> &mdash; the native viewer authenticates it for you. You do not need to add any prefix or edit the source.</li>
+                </ul>
+                <p><strong>Make a <code>local_id</code> scene durable:</strong> once it loads, hit <strong>Share</strong> to mint a <code>json_url</code> link &mdash; that one survives browser/profile changes.</p>
             </div>
         </details>
 
         <details class="ref">
-            <summary>Scene loads but the segmentation is broken (3D empty, can't select in 2D)?</summary>
+            <summary>Outdated (red) segment IDs after it loads</summary>
             <div>
-                <p>If the EM image and a brain mesh appear but the segmentation layer throws <code>HTTP error 0</code> &mdash; no meshes in 3D, nothing selectable in 2D, &ldquo;outdated&rdquo; IDs you can't refresh &mdash; then <strong>only the graphene segmentation source is failing</strong>. The EM and brain mesh are public sources; the segmentation is the one source that needs auth, and it is stored with the bare <code>graphene://https://&hellip;</code> form. The fix is the <em>layer source</em>, not the page URL &mdash; so re-running a <code>local_id</code> URL through this tool won't help (it carries no editable JSON). Do one of:</p>
-                <p><strong>Quick (live edit):</strong> click the segmentation layer tab (e.g. <em>Production-segmentation_with_graph</em>) &rarr; open its <strong>Source</strong> tab &rarr; change <code>graphene://https://prodv1.flywire-daf.com/&hellip;</code> to <code>graphene://middleauth+https://prodv1.flywire-daf.com/&hellip;</code> and complete the login popup. Re-check &ldquo;Load layer meshes (requires refresh).&rdquo;</p>
-                <p><strong>Robust (also gives a portable link):</strong> open the viewer's <code>{ }</code> JSON-state editor &rarr; copy the whole state &rarr; paste it into the JSON box above to add <code>middleauth+</code> &rarr; copy the result back into the editor and apply &rarr; log in if prompted. Then hit <strong>Share</strong> to mint a <code>json_url</code> link so the scene is portable and won't rot. Once the segmentation loads, you can select/deselect again and refresh the outdated (red) root IDs.</p>
+                <p>Separate issue. Once the segmentation loads and you can select/deselect again, the red &ldquo;outdated&rdquo; root IDs can be refreshed &mdash; FlyWire root IDs change when neurons are merged/split. For bulk updates, <code>fafbseg</code> can map old IDs to their latest roots (R: <code>fafbseg::flywire_latestid()</code> and friends; Python: the <code>fafbseg.flywire</code> helpers). Get the volume loading first.</p>
             </div>
         </details>
     </div>
 
-    <!-- Self-test -->
-    <div class="panel">
-        <h2>Self-test</h2>
-        <p class="hint">Runs the restoration logic against built-in cases so you can confirm it behaves before trusting it on a real link.</p>
-        <div class="btn-row" style="margin-top:0;">
-            <button class="action secondary" id="test-btn">Run self-test</button>
-        </div>
-        <div class="test-result" id="test-result"></div>
+    <div class="callout" style="background:#fafafa; border-color:#d4d4d4;">
+        <h2 style="color:#525252;">History</h2>
+        <p style="color:#525252;">This page used to host a &ldquo;link restorer&rdquo; that rewrote sources to add a <code style="background:#eee;">middleauth+</code> prefix (plus a bookmarklet and a userscript). We removed all of that after discovering the prefix was never the real fix: the native viewer authenticates bare sources itself, and the rewriting/auto-reloading actually <em>interfered</em> with the viewer's own auth. The real cause &mdash; and the real fix &mdash; is the session token, as above. The old tooling lives in git history if ever needed.</p>
     </div>
 
 </main>
@@ -403,342 +227,6 @@
         <a href="#" id="suggest-edit-link" class="suggest-edit" target="_blank" rel="noopener noreferrer">Please Suggest Edits</a>
     </div>
 </footer>
-
-<script>
-(function () {
-    "use strict";
-
-    // ---- Core restoration logic (pure, testable) -------------------------
-
-    // Add middleauth+ to any graphene source that lacks it.
-    function addMiddleauth(text) {
-        var changes = [];
-        var out = text.replace(/graphene:\/\/(?!middleauth\+)(https?:\/\/)/g, function (m, scheme) {
-            changes.push('Added middleauth+ to a graphene segmentation source');
-            return 'graphene://middleauth+' + scheme;
-        });
-        return { out: out, changed: changes.length > 0, changes: changes };
-    }
-
-    var FLYWIRE_VIEWER = 'https://ngl.flywire.ai';
-
-    // Classify and restore an arbitrary pasted blob.
-    // Returns { kind, output, changed, changes[], openUrl|null, warn|null }
-    function restore(raw, opts) {
-        opts = opts || {};
-        var input = (raw || '').trim();
-        var changes = [];
-
-        if (!input) {
-            return { kind: 'empty', output: '', changed: false, changes: [], openUrl: null, warn: 'Nothing to restore — paste a link or source first.' };
-        }
-
-        // --- Browser-local state (local_id) — NOT portable ---
-        // ?local_id=<hex> points at a scene saved in THIS browser profile's local
-        // storage, not on any server. It can only load in the browser that made it.
-        var localIdMatch = input.match(/[?&]local_id=([0-9a-f]+)/i);
-        if (localIdMatch) {
-            return {
-                kind: 'local link',
-                output: input,
-                changed: false,
-                changes: [],
-                openUrl: null,
-                warn: 'This is a local_id link — the scene is stored in the local storage of the ONE browser profile that created it, not on any server. The URL carries no JSON, so this tool cannot rewrite it from here. Two cases: (1) the scene does not load at all on a different browser / cleared storage — it is unrecoverable from the link alone (no server copy). (2) the scene loads but the segmentation throws HTTP error 0 (EM + brain mesh show, 3D empty, nothing selectable) — only the graphene source needs fixing, and the easiest fix is the FlyWire Fix bookmarklet above: open the scene, click the bookmarklet, done. (Or use the console one-liner.) Then Share to mint a portable json_url link.'
-            };
-        }
-
-        // --- Short link (stored state on the state server) ---
-        // e.g. ...?json_url=https://globalv1.flywire-daf.com/nglstate/api/v1/<id>
-        // or a bare nglstate URL.
-        var jsonUrlMatch = input.match(/[?&]json_url=([^&#\s]+)/);
-        var bareNglState = /^https?:\/\/[^\s]*nglstate[^\s]*$/i.test(input) ? input : null;
-        if (jsonUrlMatch || bareNglState) {
-            var stateUrl = jsonUrlMatch ? decodeURIComponent(jsonUrlMatch[1]) : bareNglState;
-            var rebuilt = FLYWIRE_VIEWER + '/?json_url=' + encodeURIComponent(stateUrl);
-            changes.push('Detected a short link (stored state) — rebuilt it to open in the authenticated FlyWire viewer');
-            changes.push('The middleauth fix happens server-side once you are logged in; the stored JSON is not modified');
-            return {
-                kind: 'short link',
-                output: rebuilt,
-                changed: true,
-                changes: changes,
-                openUrl: rebuilt,
-                warn: 'Short links point to a state stored on the FlyWire server. This tool cannot fetch it cross-origin, so it cannot rewrite the embedded source directly — but opening it in the logged-in viewer (link below) lets middleauth resolve it. Log in first (see checklist).'
-            };
-        }
-
-        // --- Inline-state URL ( .../#!{json} or .../#!encoded ) ---
-        var hashIdx = input.indexOf('#!');
-        if (hashIdx !== -1 && /^https?:\/\//i.test(input)) {
-            var base = input.slice(0, hashIdx);
-            var hash = input.slice(hashIdx + 2);
-            var jsonStr;
-            try { jsonStr = decodeURIComponent(hash); }
-            catch (e) { jsonStr = hash; }
-
-            var res = addMiddleauth(jsonStr);
-            changes = changes.concat(res.changes);
-
-            if (opts.rebase) {
-                var newBase = FLYWIRE_VIEWER + '/';
-                if (base.replace(/\/+$/, '') !== FLYWIRE_VIEWER) {
-                    changes.push('Rebased viewer to ngl.flywire.ai');
-                }
-                base = newBase;
-            }
-
-            var rebuiltUrl = base + (base.indexOf('#!') === -1 ? '' : '') + '#!' + encodeURIComponent(res.out);
-            return {
-                kind: 'inline state',
-                output: rebuiltUrl,
-                changed: res.changed || (opts.rebase),
-                changes: changes,
-                openUrl: rebuiltUrl,
-                warn: res.changed ? null : 'No bare graphene source found in this state — it may already use middleauth, or the problem is login/viewer-side (see checklist).'
-            };
-        }
-
-        // --- Raw JSON state ---
-        if (input.charAt(0) === '{') {
-            var jres = addMiddleauth(input);
-            changes = changes.concat(jres.changes);
-            return {
-                kind: 'json state',
-                output: jres.out,
-                changed: jres.changed,
-                changes: changes,
-                openUrl: jres.changed ? FLYWIRE_VIEWER + '/#!' + encodeURIComponent(jres.out) : null,
-                warn: jres.changed ? null : 'No bare graphene source found — already middleauth, or the issue is login/viewer-side (see checklist).'
-            };
-        }
-
-        // --- Raw source string / anything containing graphene:// ---
-        if (input.indexOf('graphene://') !== -1) {
-            var sres = addMiddleauth(input);
-            changes = changes.concat(sres.changes);
-            return {
-                kind: 'raw source',
-                output: sres.out,
-                changed: sres.changed,
-                changes: changes,
-                openUrl: null,
-                warn: sres.changed ? null : 'This source already has the middleauth+ prefix — the problem is most likely login/viewer-side (see checklist).'
-            };
-        }
-
-        return {
-            kind: 'unrecognized',
-            output: input,
-            changed: false,
-            changes: [],
-            openUrl: null,
-            warn: 'Could not recognize a FlyWire link or graphene source in this input. Paste the full share URL or the layer source string.'
-        };
-    }
-
-    // ---- UI wiring -------------------------------------------------------
-
-    var SAMPLES = {
-        source: 'graphene://https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31',
-        state: 'https://neuroglancer-demo.appspot.com/#!{"layers":[{"type":"image","source":"precomputed://gs://microns-seunglab/drosophila_v0/alignment/image_rechunked","name":"EM"},{"type":"segmentation_with_graph","source":"graphene://https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31","name":"fly_v31"}],"layout":"xy-3d"}',
-        short: 'https://ngl.flywire.ai/?json_url=https://globalv1.flywire-daf.com/nglstate/api/v1/4753860907040768',
-        local: 'https://ngl.flywire.ai/?local_id=b841979b9dbeebe34c11304a466ccb62'
-    };
-
-    var $ = function (id) { return document.getElementById(id); };
-
-    function renderResult(r) {
-        $('out-block').classList.add('show');
-        $('kind-badge').textContent = r.kind;
-        $('kind-badge').className = 'badge kind';
-        $('status-badge').textContent = r.changed ? 'restored' : 'no change';
-        $('status-badge').className = 'badge ' + (r.changed ? 'ok' : 'nochange');
-
-        var out = $('output');
-        out.textContent = r.output || r.warn || '';
-        out.className = 'out-pre' + (r.warn ? ' warn' : '');
-
-        // Open link
-        var ob = $('open-block');
-        if (r.openUrl) {
-            ob.classList.add('show');
-            $('open-link').href = r.openUrl;
-        } else {
-            ob.classList.remove('show');
-        }
-
-        // Changes + warning
-        var c = $('changes');
-        var html = '';
-        if (r.warn && r.output) {
-            html += '<h3>Note</h3><ul><li class="none">' + escapeHtml(r.warn) + '</li></ul>';
-        }
-        if (r.changes && r.changes.length) {
-            html += '<h3>What changed</h3><ul>';
-            r.changes.forEach(function (ch) { html += '<li>' + escapeHtml(ch) + '</li>'; });
-            html += '</ul>';
-        } else if (!r.warn) {
-            html += '<h3>What changed</h3><ul><li class="none">No changes were necessary</li></ul>';
-        }
-        c.innerHTML = html;
-    }
-
-    function escapeHtml(s) {
-        return String(s).replace(/[&<>"']/g, function (m) {
-            return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
-        });
-    }
-
-    $('restore-btn').addEventListener('click', function () {
-        var r = restore($('input').value, { rebase: $('opt-rebase').checked });
-        renderResult(r);
-    });
-
-    $('clear-btn').addEventListener('click', function () {
-        $('input').value = '';
-        $('out-block').classList.remove('show');
-        $('input').focus();
-    });
-
-    document.querySelectorAll('[data-sample]').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            $('input').value = SAMPLES[btn.getAttribute('data-sample')];
-            $('input').focus();
-        });
-    });
-
-    $('copy-btn').addEventListener('click', function () {
-        var text = $('output').textContent;
-        if (!text) return;
-        navigator.clipboard.writeText(text).then(function () {
-            var b = $('copy-btn');
-            var old = b.textContent;
-            b.textContent = 'Copied!';
-            setTimeout(function () { b.textContent = old; }, 1500);
-        });
-    });
-
-    var snipBtn = $('copy-snippet');
-    if (snipBtn) {
-        snipBtn.addEventListener('click', function () {
-            navigator.clipboard.writeText($('console-snippet').textContent).then(function () {
-                var old = snipBtn.textContent;
-                snipBtn.textContent = 'Copied!';
-                setTimeout(function () { snipBtn.textContent = old; }, 1500);
-            });
-        });
-    }
-
-    var bmBtn = $('copy-bookmarklet');
-    if (bmBtn) {
-        bmBtn.addEventListener('click', function () {
-            var code = document.querySelector('.bookmarklet').getAttribute('href');
-            navigator.clipboard.writeText(code).then(function () {
-                var old = bmBtn.textContent;
-                bmBtn.textContent = 'Copied!';
-                setTimeout(function () { bmBtn.textContent = old; }, 1500);
-            });
-        });
-    }
-
-    // A clicked bookmarklet on THIS page would run in borkbook's context (no viewer).
-    // Intercept the accidental click and explain instead of firing the alert.
-    var bmLink = document.querySelector('.bookmarklet');
-    if (bmLink) {
-        bmLink.addEventListener('click', function (e) {
-            e.preventDefault();
-            alert('This is meant to be DRAGGED to your bookmarks bar (or copied via "Copy bookmarklet code"), then clicked while you are on a broken ngl.flywire.ai scene — not clicked here.');
-        });
-    }
-
-    // ---- Self-test -------------------------------------------------------
-
-    function runTests() {
-        var tests = [
-            {
-                name: 'bare source gets middleauth+',
-                run: function () { return restore(SAMPLES.source, {}); },
-                check: function (r) {
-                    return r.kind === 'raw source' && r.changed === true &&
-                        r.output === 'graphene://middleauth+https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31';
-                }
-            },
-            {
-                name: 'already-middleauth source is left unchanged',
-                run: function () { return restore('graphene://middleauth+https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31', {}); },
-                check: function (r) { return r.kind === 'raw source' && r.changed === false && !!r.warn; }
-            },
-            {
-                name: 'inline state URL rewrites the embedded source',
-                run: function () { return restore(SAMPLES.state, {}); },
-                check: function (r) {
-                    return r.kind === 'inline state' && r.changed === true &&
-                        r.openUrl.indexOf(encodeURIComponent('graphene://middleauth+https://prodv1.flywire-daf.com')) !== -1 &&
-                        r.openUrl.indexOf(encodeURIComponent('graphene://https://')) === -1;
-                }
-            },
-            {
-                name: 'short link rebuilt to authed viewer',
-                run: function () { return restore(SAMPLES.short, {}); },
-                check: function (r) {
-                    return r.kind === 'short link' && r.changed === true &&
-                        r.output.indexOf('ngl.flywire.ai/?json_url=') !== -1;
-                }
-            },
-            {
-                name: 'local_id link flagged as non-portable',
-                run: function () { return restore(SAMPLES.local, {}); },
-                check: function (r) { return r.kind === 'local link' && r.changed === false && !!r.warn; }
-            },
-            {
-                name: 'raw JSON state rewrites source',
-                run: function () { return restore('{"layers":[{"source":"graphene://https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31"}]}', {}); },
-                check: function (r) {
-                    return r.kind === 'json state' && r.changed === true &&
-                        r.output.indexOf('graphene://middleauth+https://') !== -1;
-                }
-            },
-            {
-                name: 'rebase option swaps the viewer host',
-                run: function () { return restore(SAMPLES.state, { rebase: true }); },
-                check: function (r) { return r.output.indexOf('https://ngl.flywire.ai/#!') === 0; }
-            },
-            {
-                name: 'empty input is handled gracefully',
-                run: function () { return restore('   ', {}); },
-                check: function (r) { return r.kind === 'empty' && !!r.warn; }
-            },
-            {
-                name: 'unrecognized input is flagged',
-                run: function () { return restore('hello world', {}); },
-                check: function (r) { return r.kind === 'unrecognized' && !!r.warn; }
-            }
-        ];
-
-        var lines = [];
-        var passed = 0;
-        tests.forEach(function (t, i) {
-            var ok = false, err = '';
-            try { ok = t.check(t.run()); } catch (e) { err = ' (' + e.message + ')'; }
-            if (ok) passed++;
-            lines.push((ok ? 'PASS' : 'FAIL') + '  ' + t.name + err);
-        });
-        var summary = passed + ' / ' + tests.length + ' passed';
-        var el = $('test-result');
-        el.classList.add('show');
-        el.innerHTML = '<span class="' + (passed === tests.length ? 'test-pass' : 'test-fail') + '">' +
-            escapeHtml(summary) + '</span>\n\n' +
-            lines.map(function (l) {
-                var cls = l.indexOf('PASS') === 0 ? 'test-pass' : 'test-fail';
-                return '<span class="' + cls + '">' + escapeHtml(l) + '</span>';
-            }).join('\n');
-    }
-
-    $('test-btn').addEventListener('click', runTests);
-
-})();
-</script>
 
 <script>
 (function () {

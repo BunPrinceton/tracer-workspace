@@ -164,12 +164,12 @@
             keywords: ['fast_validate_ids', 'fast_get_coords', 'parallel scripts', 'threadpool']
         },
         {
-            title: 'FlyWire Link Restorer',
+            title: 'FlyWire Link Troubleshooting',
             url: 'link-restore/',
             section: 'Experimental',
-            description: 'Revive old FlyWire / Neuroglancer share links that fail to load the segmentation (the "HTTP error 0" / fly_v31 metadata error). Adds the middleauth+ prefix, handles inline-state URLs, short links, and raw graphene sources. Runs entirely in the browser.',
-            aliases: ['link restorer', 'restore link', 'fix link', 'broken link', 'dead link', 'middleauth', 'http error 0', 'link restoration'],
-            keywords: ['flywire', 'neuroglancer', 'graphene', 'fly_v31', 'prodv1', 'flywire-daf', 'middleauth', 'http error 0', 'metadata error', 'share link', 'json_url', 'nglstate', 'segmentation not loading', 'fafbseg', 'expand url']
+            description: 'Why old FlyWire / Neuroglancer share links fail to load the segmentation (the "HTTP error 0" / fly_v31 metadata error) and how to fix them. The real cause is the per-session prodv1 auth token (login, cross-site cookies, Brave Shields) — not the link. Warm up the session by opening any scene first.',
+            aliases: ['flywire links', 'link troubleshooting', 'broken link', 'dead link', 'http error 0', 'flywire not loading', 'segmentation not loading'],
+            keywords: ['flywire', 'neuroglancer', 'graphene', 'fly_v31', 'prodv1', 'flywire-daf', 'daf-apis', 'middleauth', 'http error 0', 'metadata error', 'auth token', 'session token', 'third-party cookies', 'brave shields', 'login', 'share link', 'json_url', 'local_id', 'nglstate', 'fafbseg']
         },
         {
             title: 'How to Suggest Changes',
