@@ -72,7 +72,7 @@
             section: 'Pipeline',
             description: 'End-to-end pipeline stages from imaging to analysis.',
             aliases: ['pipeline', 'workflow', 'stages'],
-            keywords: ['connectomics pipeline', 'data flow']
+            keywords: ['connectomics pipeline', 'data flow', 'ultramicrotome', 'diamond knife', 'TEMCA', 'serial section TEM', 'SEAMLeSS', 'AlignTK', 'alignment', 'CloudVolume', 'flood-filling networks', 'FFN', 'PyChunkedGraph', 'segmentation']
         },
         {
             title: 'Thoughts',
