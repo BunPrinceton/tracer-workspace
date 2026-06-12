@@ -288,6 +288,15 @@
                 <p style="margin-top:0.75rem;"><strong>On a <code>local_id</code> link this matters extra:</strong> that scene lives only in the browser profile that created it. If it is the original browser, getting past login is all you need. If it is a different browser, login won't help &mdash; there is no server copy to load (see the result note when you paste one above).</p>
             </div>
         </details>
+
+        <details class="ref">
+            <summary>Scene loads but the segmentation is broken (3D empty, can't select in 2D)?</summary>
+            <div>
+                <p>If the EM image and a brain mesh appear but the segmentation layer throws <code>HTTP error 0</code> &mdash; no meshes in 3D, nothing selectable in 2D, &ldquo;outdated&rdquo; IDs you can't refresh &mdash; then <strong>only the graphene segmentation source is failing</strong>. The EM and brain mesh are public sources; the segmentation is the one source that needs auth, and it is stored with the bare <code>graphene://https://&hellip;</code> form. The fix is the <em>layer source</em>, not the page URL &mdash; so re-running a <code>local_id</code> URL through this tool won't help (it carries no editable JSON). Do one of:</p>
+                <p><strong>Quick (live edit):</strong> click the segmentation layer tab (e.g. <em>Production-segmentation_with_graph</em>) &rarr; open its <strong>Source</strong> tab &rarr; change <code>graphene://https://prodv1.flywire-daf.com/&hellip;</code> to <code>graphene://middleauth+https://prodv1.flywire-daf.com/&hellip;</code> and complete the login popup. Re-check &ldquo;Load layer meshes (requires refresh).&rdquo;</p>
+                <p><strong>Robust (also gives a portable link):</strong> open the viewer's <code>{ }</code> JSON-state editor &rarr; copy the whole state &rarr; paste it into the JSON box above to add <code>middleauth+</code> &rarr; copy the result back into the editor and apply &rarr; log in if prompted. Then hit <strong>Share</strong> to mint a <code>json_url</code> link so the scene is portable and won't rot. Once the segmentation loads, you can select/deselect again and refresh the outdated (red) root IDs.</p>
+            </div>
+        </details>
     </div>
 
     <!-- Self-test -->
@@ -349,7 +358,7 @@
                 changed: false,
                 changes: [],
                 openUrl: null,
-                warn: 'This is a local_id link — the scene is stored in the local storage of the ONE browser profile that created it, not on any server. It is not portable and cannot be rebuilt into a shareable link (there is nothing server-side to fetch). If this IS the original browser, a blank view just means you are not logged in yet — see the checklist. If it is a different browser / cleared storage, the link alone cannot recover the scene: reopen it in the original browser and use the share / "generate link" button to mint a json_url link (which IS portable), then restore that here if it ever breaks.'
+                warn: 'This is a local_id link — the scene is stored in the local storage of the ONE browser profile that created it, not on any server. The URL carries no JSON, so this tool cannot rewrite it. Two cases: (1) the scene does not load at all on a different browser / cleared storage — it is unrecoverable from the link alone (no server copy). (2) the scene loads but the segmentation layer throws HTTP error 0 (EM + brain mesh show, 3D is empty, nothing selectable) — only the graphene source needs fixing: open the viewer\'s { } JSON-state editor, copy the whole state, paste it into the JSON box above to add middleauth+, paste it back, log in if prompted, then Share to mint a portable json_url link. See "Scene loads but the segmentation is broken" below.'
             };
         }
 
