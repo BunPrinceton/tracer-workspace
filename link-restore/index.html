@@ -103,6 +103,14 @@
         button.ghost { background: none; color: #525252; border-color: #cbd5e1; font-size: 0.8125rem; padding: 0.4rem 0.75rem; }
         button.ghost:hover { background: #f1f5f9; }
 
+        a.bookmarklet {
+            display: inline-block; background: #2563eb; color: #ffffff !important;
+            text-decoration: none; font-weight: 700; font-size: 0.95rem;
+            padding: 0.55rem 1.1rem; border-radius: 6px; cursor: grab;
+            border: 2px solid #1d4ed8; user-select: all;
+        }
+        a.bookmarklet:hover { background: #1d4ed8; }
+
         .options { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; margin-top: 1rem; font-size: 0.875rem; }
         .options label { display: inline-flex; align-items: center; gap: 0.4rem;
                          text-transform: none; letter-spacing: 0; font-weight: 400;
@@ -258,10 +266,37 @@
         </div>
     </div>
 
+    <!-- One-click bookmarklet (zero console) -->
+    <div class="panel" id="bookmarklet-panel">
+        <h2>One-click fix: the &ldquo;FlyWire Fix&rdquo; bookmarklet</h2>
+        <p class="hint">Install this once, then fix any broken scene with a single click &mdash; no console, no copy/paste. A <code>local_id</code> scene only exists inside the FlyWire tab, and browser security stops this site from reaching into it &mdash; but a bookmarklet runs <em>inside</em> that tab, so it can read the live scene, inject <code>middleauth+</code>, and reload.</p>
+
+        <p style="margin:1.25rem 0; display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+            <strong>Drag this to your bookmarks bar &rarr;</strong>
+            <a class="bookmarklet" href="javascript:(function(){try{if(typeof viewer==='undefined'||!viewer.state){alert('FlyWire Fix: viewer not found - open this on an ngl.flywire.ai scene.');return;}var s=JSON.stringify(viewer.state.toJSON());if(s.indexOf('graphene://https://')===-1){alert('FlyWire Fix: nothing to change - no bare graphene source (already middleauth, or a login-side issue).');return;}s=s.split('graphene://https://').join('graphene://middleauth+https://');window.location.href='https://ngl.flywire.ai/#!'+encodeURIComponent(s);}catch(e){alert('FlyWire Fix error: '+e.message);}})();">&#9733; FlyWire Fix</a>
+        </p>
+
+        <div class="btn-row" style="margin-top:0;">
+            <button class="action secondary" id="copy-bookmarklet">Copy bookmarklet code</button>
+        </div>
+
+        <details class="ref" open>
+            <summary>How to install &amp; use</summary>
+            <div>
+                <ol>
+                    <li><strong>Install (once):</strong> drag the &#9733; <strong>FlyWire Fix</strong> button onto your browser's bookmarks bar. No bar showing? Press <code>Ctrl+Shift+B</code>. (Or click <em>Copy bookmarklet code</em>, make a new bookmark, and paste it as the bookmark's <em>URL/Location</em> field.)</li>
+                    <li><strong>Use:</strong> on a broken FlyWire scene &mdash; EM and brain mesh visible but no segmentation (<code>HTTP error 0</code>) &mdash; just click the <strong>FlyWire Fix</strong> bookmark. The page reloads with <code>middleauth+</code> applied; log in if prompted and the 3D segmentation loads.</li>
+                    <li><strong>Make it permanent:</strong> hit <strong>Share</strong> afterward to mint a portable <code>json_url</code> link so the scene survives browser/profile changes.</li>
+                </ol>
+                <p style="margin-top:0.75rem;">It pops <em>&ldquo;viewer not found&rdquo;</em> if clicked on a non-FlyWire page, and <em>&ldquo;nothing to change&rdquo;</em> if the source is already <code>middleauth+</code> (then the issue is login-side &mdash; see the checklists below). The bookmarklet is regex-free and pure ASCII so it can't be mangled.</p>
+            </div>
+        </details>
+    </div>
+
     <!-- In-place console fix (for local_id / no Source tab) -->
     <div class="panel">
-        <h2>No &ldquo;Source&rdquo; tab? Fix a scene that's already open</h2>
-        <p class="hint">The FlyWire viewer (<code>ngl.flywire.ai</code>) hides Neuroglancer's raw <em>Source</em> field, and a <code>local_id</code> URL has no JSON to paste here &mdash; so fix it at the JSON level from the browser console. This reads the open scene, injects <code>middleauth+</code> into the segmentation source, and reloads as a portable inline-state (<code>#!</code>) link.</p>
+        <h2>Manual alternative: the browser console</h2>
+        <p class="hint">Prefer not to install a bookmarklet? Do the same fix by hand from the console. The FlyWire viewer hides Neuroglancer's raw <em>Source</em> field and a <code>local_id</code> URL has no JSON to paste here, so this runs at the JSON level: it reads the open scene, injects <code>middleauth+</code>, and reloads as a portable inline-state (<code>#!</code>) link.</p>
 
         <label>One-liner &mdash; paste into the browser console (F12 &rarr; Console) on the open broken scene</label>
         <div class="out-pre" id="console-snippet" style="background:#0f172a;color:#e2e8f0;border-color:#334155;">window.location.href='https://ngl.flywire.ai/#!'+encodeURIComponent(JSON.stringify(viewer.state.toJSON()).split('graphene://https://').join('graphene://middleauth+https://'));</div>
@@ -384,7 +419,7 @@
                 changed: false,
                 changes: [],
                 openUrl: null,
-                warn: 'This is a local_id link — the scene is stored in the local storage of the ONE browser profile that created it, not on any server. The URL carries no JSON, so this tool cannot rewrite it. Two cases: (1) the scene does not load at all on a different browser / cleared storage — it is unrecoverable from the link alone (no server copy). (2) the scene loads but the segmentation layer throws HTTP error 0 (EM + brain mesh show, 3D is empty, nothing selectable) — only the graphene source needs fixing: open the viewer\'s { } JSON-state editor, copy the whole state, paste it into the JSON box above to add middleauth+, paste it back, log in if prompted, then Share to mint a portable json_url link. See "Scene loads but the segmentation is broken" below.'
+                warn: 'This is a local_id link — the scene is stored in the local storage of the ONE browser profile that created it, not on any server. The URL carries no JSON, so this tool cannot rewrite it from here. Two cases: (1) the scene does not load at all on a different browser / cleared storage — it is unrecoverable from the link alone (no server copy). (2) the scene loads but the segmentation throws HTTP error 0 (EM + brain mesh show, 3D empty, nothing selectable) — only the graphene source needs fixing, and the easiest fix is the FlyWire Fix bookmarklet above: open the scene, click the bookmarklet, done. (Or use the console one-liner.) Then Share to mint a portable json_url link.'
             };
         }
 
@@ -567,6 +602,28 @@
                 snipBtn.textContent = 'Copied!';
                 setTimeout(function () { snipBtn.textContent = old; }, 1500);
             });
+        });
+    }
+
+    var bmBtn = $('copy-bookmarklet');
+    if (bmBtn) {
+        bmBtn.addEventListener('click', function () {
+            var code = document.querySelector('.bookmarklet').getAttribute('href');
+            navigator.clipboard.writeText(code).then(function () {
+                var old = bmBtn.textContent;
+                bmBtn.textContent = 'Copied!';
+                setTimeout(function () { bmBtn.textContent = old; }, 1500);
+            });
+        });
+    }
+
+    // A clicked bookmarklet on THIS page would run in borkbook's context (no viewer).
+    // Intercept the accidental click and explain instead of firing the alert.
+    var bmLink = document.querySelector('.bookmarklet');
+    if (bmLink) {
+        bmLink.addEventListener('click', function (e) {
+            e.preventDefault();
+            alert('This is meant to be DRAGGED to your bookmarks bar (or copied via "Copy bookmarklet code"), then clicked while you are on a broken ngl.flywire.ai scene — not clicked here.');
         });
     }
 
