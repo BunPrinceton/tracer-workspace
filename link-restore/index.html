@@ -258,6 +258,31 @@
         </div>
     </div>
 
+    <!-- In-place console fix (for local_id / no Source tab) -->
+    <div class="panel">
+        <h2>No &ldquo;Source&rdquo; tab? Fix a scene that's already open</h2>
+        <p class="hint">The FlyWire viewer (<code>ngl.flywire.ai</code>) hides Neuroglancer's raw <em>Source</em> field, and a <code>local_id</code> URL has no JSON to paste here &mdash; so fix it at the JSON level from the browser console. This reads the open scene, injects <code>middleauth+</code> into the segmentation source, and reloads as a portable inline-state (<code>#!</code>) link.</p>
+
+        <label>One-liner &mdash; paste into the browser console (F12 &rarr; Console) on the open broken scene</label>
+        <div class="out-pre" id="console-snippet" style="background:#0f172a;color:#e2e8f0;border-color:#334155;">window.location.href='https://ngl.flywire.ai/#!'+encodeURIComponent(JSON.stringify(viewer.state.toJSON()).replace(/graphene:\/\/(?!middleauth\+)(https?:\/\/)/g,'graphene://middleauth+$1'));</div>
+        <div class="btn-row" style="margin-top:0.6rem;">
+            <button class="action secondary" id="copy-snippet">Copy console one-liner</button>
+        </div>
+
+        <details class="ref" open>
+            <summary>What it does &amp; what to do after</summary>
+            <div>
+                <ol>
+                    <li>Open the broken scene in <code>ngl.flywire.ai</code>, press <strong>F12</strong>, click <strong>Console</strong>.</li>
+                    <li>Paste the one-liner and hit Enter. The page reloads at a <code>#!</code> inline-state URL with <code>middleauth+</code> added to the segmentation source.</li>
+                    <li>Complete the Google login popup if it appears. The 3D meshes should load and segments become selectable (so you can finally refresh those red outdated IDs).</li>
+                    <li>Click <strong>Share</strong> to mint a portable <code>json_url</code> link &mdash; now the scene survives browser/profile changes and never needs this again.</li>
+                </ol>
+                <p style="margin-top:0.75rem;"><strong>If the console prints <code>viewer is not defined</code>:</strong> skip the console. Click <strong>Share</strong> to generate a link, open its <code>json_url</code> address (the <code>&hellip;/nglstate/&hellip;</code> URL) in a new tab while logged in to see the raw JSON, copy all of it, and paste it into the <em>Restore a link</em> box above &mdash; JSON mode injects <code>middleauth+</code> and hands you a ready-to-open <code>#!</code> link.</p>
+            </div>
+        </details>
+    </div>
+
     <!-- The login side -->
     <div class="panel">
         <h2>If it still won't load after restoring</h2>
@@ -532,6 +557,17 @@
             setTimeout(function () { b.textContent = old; }, 1500);
         });
     });
+
+    var snipBtn = $('copy-snippet');
+    if (snipBtn) {
+        snipBtn.addEventListener('click', function () {
+            navigator.clipboard.writeText($('console-snippet').textContent).then(function () {
+                var old = snipBtn.textContent;
+                snipBtn.textContent = 'Copied!';
+                setTimeout(function () { snipBtn.textContent = old; }, 1500);
+            });
+        });
+    }
 
     // ---- Self-test -------------------------------------------------------
 
