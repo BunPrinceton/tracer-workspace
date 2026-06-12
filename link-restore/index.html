@@ -293,6 +293,30 @@
         </details>
     </div>
 
+    <!-- Full automation: Tampermonkey userscript -->
+    <div class="panel">
+        <h2>Full automation: the Tampermonkey userscript</h2>
+        <p class="hint">The zero-effort tier. Install once and old broken links repair themselves: the userscript watches every <code>ngl.flywire.ai</code> scene, detects the un-authenticated <code>graphene://https://</code> source <em>before</em> it errors, injects <code>middleauth+</code>, and reloads &mdash; no bookmark click, no console. It has a reload-loop guard (if the fix doesn't stick because you're logged out, it stops and shows a button instead of looping) and a manual <strong>&#9889; Fix segmentation auth</strong> button as a fallback.</p>
+
+        <p style="margin:1rem 0;">
+            <strong>Requires the <a href="https://www.tampermonkey.net/" target="_blank" rel="noopener noreferrer">Tampermonkey</a> browser extension.</strong>
+            Then <a href="https://raw.githubusercontent.com/BunPrinceton/tracer-workspace/master/tampermonkey-scripts/flywire-segmentation-auth-fix.user.js" target="_blank" rel="noopener noreferrer">click here to install the script</a> &mdash; Tampermonkey will open its install page automatically (it recognizes the <code>.user.js</code> URL).
+        </p>
+
+        <details class="ref">
+            <summary>How it behaves &amp; how to tune it</summary>
+            <div>
+                <ul style="padding-left:1.25rem;">
+                    <li><strong>Auto-fix on by default.</strong> Open <code>AUTO_FIX: false</code> in the script's <code>CONFIG</code> block if you'd rather click the button each time instead of auto-reloading.</li>
+                    <li><strong>Won't touch healthy scenes</strong> &mdash; it only acts when a bare <code>graphene://https://</code> source is present (already-<code>middleauth+</code> scenes are left alone).</li>
+                    <li><strong>Won't loop.</strong> If a repaired page comes back still-broken within 8&nbsp;s (almost always &ldquo;not logged in&rdquo;), it stops auto-firing and shows the manual button + a login hint.</li>
+                    <li><strong>Still finish with Share</strong> to mint a portable <code>json_url</code> link &mdash; the userscript fixes loading, but Share is what makes a <code>local_id</code> scene durable.</li>
+                </ul>
+                <p style="margin-top:0.75rem;">Source lives in the workspace repo at <code>tampermonkey-scripts/flywire-segmentation-auth-fix.user.js</code> alongside the WebKnossos userscripts.</p>
+            </div>
+        </details>
+    </div>
+
     <!-- In-place console fix (for local_id / no Source tab) -->
     <div class="panel">
         <h2>Manual alternative: the browser console</h2>
