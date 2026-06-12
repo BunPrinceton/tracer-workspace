@@ -35,8 +35,14 @@ Runs on `https://ngl.flywire.ai/*`, watches the live viewer state, and when it s
 ## Install
 
 1. Install [Tampermonkey](https://www.tampermonkey.net/).
-2. Open the raw script URL — Tampermonkey detects the `.user.js` and offers to install:
-   `https://raw.githubusercontent.com/BunPrinceton/tracer-workspace/master/tampermonkey-scripts/flywire-segmentation-auth-fix.user.js`
+2. Open the script URL — Tampermonkey detects the `.user.js` and offers to install:
+   `https://borkbook.com/tampermonkey-scripts/flywire-segmentation-auth-fix.user.js`
+
+   (Use the borkbook URL, **not** `raw.githubusercontent.com` — Brave can return a 400
+   for raw GitHub requests. borkbook serves the same file from a trusted domain.)
+
+**Fallback (no network):** open the Tampermonkey dashboard → click the installed script →
+select-all, paste the new contents into the editor → Ctrl+S.
 
 ## After it loads
 
