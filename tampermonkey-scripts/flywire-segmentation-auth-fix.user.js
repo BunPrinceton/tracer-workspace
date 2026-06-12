@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         FlyWire Segmentation Auth Fix
 // @namespace    https://borkbook.com/
-// @version      1.0.0
+// @version      1.1.0
 // @description  Auto-repair old FlyWire share links whose graphene segmentation fails to load ("HTTP error 0") by injecting the middleauth+ prefix. Pairs with the borkbook Link Restorer.
 // @author       Bun
 // @match        https://ngl.flywire.ai/*
@@ -56,6 +56,19 @@
     }
 
     function hasBareGraphene(s) { return !!s && s.indexOf(BARE) !== -1; }
+    function hasGrapheneSeg(s) { return !!s && s.indexOf('graphene://') !== -1; }
+
+    // Is the FlyWire "can't load the segmentation" error banner currently on screen?
+    // Used to distinguish "source already fixed but still erroring" (= not logged in)
+    // from a healthy scene.
+    function hasAuthErrorBanner() {
+        try {
+            var t = (document.body && document.body.innerText) || '';
+            return t.indexOf('Error retrieving metadata for volume') !== -1
+                || (t.indexOf('HTTP error') !== -1 && t.indexOf('graphene://') !== -1)
+                || t.indexOf('You are not logged in') !== -1;
+        } catch (e) { return false; }
+    }
 
     function applyFix(stateString) {
         const fixed = stateString.split(BARE).join(FIXED);
@@ -65,7 +78,7 @@
     }
 
     // ===================== UI: notification =====================
-    function showNotification(message, type) {
+    function showNotification(message, type, duration) {
         const colors = { success: '#16a34a', error: '#dc2626', warning: '#d97706', info: '#2563eb' };
         const notice = document.createElement('div');
         notice.textContent = message;
@@ -82,7 +95,7 @@
             notice.style.transition = 'opacity 0.4s';
             notice.style.opacity = '0';
             setTimeout(function () { notice.remove(); }, 400);
-        }, 4000);
+        }, duration || 4000);
     }
 
     // ===================== UI: manual fix button =====================
@@ -116,6 +129,40 @@
         log('Manual "Fix segmentation auth" button added.');
     }
 
+    // ===================== UI: "reload after login" button =====================
+    function showLoginButton() {
+        if (document.getElementById('fw-login-reload-btn')) return;
+        const btn = document.createElement('button');
+        btn.id = 'fw-login-reload-btn';
+        btn.textContent = '↻ I logged in — reload';
+        btn.title = 'The segmentation source is already authenticated (middleauth+) but still '
+                  + 'failing — that means you are not logged in. Sign in via the account menu '
+                  + '(allow popups), then click this to reload.';
+        btn.style.cssText = [
+            'position:fixed', 'bottom:16px', 'left:16px', 'z-index:100000',
+            'background:#d97706', 'color:#fff', 'border:none', 'border-radius:6px',
+            'padding:10px 16px',
+            'font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif',
+            'font-size:14px', 'font-weight:600', 'cursor:pointer',
+            'box-shadow:0 2px 10px rgba(0,0,0,0.4)'
+        ].join(';');
+        btn.addEventListener('mouseenter', function () { btn.style.background = '#b45309'; });
+        btn.addEventListener('mouseleave', function () { btn.style.background = '#d97706'; });
+        btn.addEventListener('click', function () { window.location.reload(); });
+        document.body.appendChild(btn);
+    }
+
+    // Source is already middleauth+ but the segmentation still errors => almost always not logged in.
+    function onAuthLikelyNeeded() {
+        log('Segmentation source is already authenticated (middleauth+) but still erroring — '
+            + 'you are most likely not logged in.');
+        showNotification('Source is fixed (middleauth+) but the segmentation still won\'t load — '
+            + 'you\'re probably not logged in. Open the account menu (top-right) to sign in: allow '
+            + 'popups for ngl.flywire.ai, complete the Google login (you may be prompted twice), '
+            + 'then reload.', 'warning', 9000);
+        showLoginButton();
+    }
+
     // ===================== DETECTION =====================
     function onBrokenDetected(stateString) {
         log('Bare graphene segmentation source detected — this scene will fail with HTTP error 0.');
@@ -139,16 +186,30 @@
     // ===================== POLL FOR STATE =====================
     function start() {
         let tries = 0;
+        let authHintShown = false;
         const maxTries = Math.ceil(CONFIG.POLL_TIMEOUT / CONFIG.POLL_INTERVAL);
         log('Watching for an un-authenticated FlyWire segmentation source…');
         const iv = setInterval(function () {
             tries++;
             const s = getStateString();
+
+            // Case 1: bare graphene source -> repair it (auto or button).
             if (s && hasBareGraphene(s)) {
                 clearInterval(iv);
                 onBrokenDetected(s);
                 return;
             }
+
+            // Case 2: source is already middleauth+ but the seg error banner is up
+            // -> the source is fine, the user just isn't logged in. Surface that
+            // instead of silently doing nothing (the gap people hit after a fix).
+            if (!authHintShown && hasGrapheneSeg(s) && hasAuthErrorBanner()) {
+                authHintShown = true;
+                clearInterval(iv);
+                onAuthLikelyNeeded();
+                return;
+            }
+
             if (tries >= maxTries) {
                 clearInterval(iv);
                 log('No bare graphene source found within timeout — nothing to do.');

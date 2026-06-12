@@ -27,6 +27,10 @@ Runs on `https://ngl.flywire.ai/*`, watches the live viewer state, and when it s
   reload-looping.
 - **Non-invasive**: only acts when a bare source is present; already-`middleauth+` scenes
   are left untouched.
+- **Login-aware (v1.1.0)**: if the source is already `middleauth+` but the segmentation
+  *still* errors (the error banner is up), that means you're not logged in — the script
+  says so and shows a "↻ I logged in — reload" button instead of going silent. (A
+  `middleauth+` source whose token can't be obtained throws the *same* "HTTP error 0".)
 
 ## Install
 
