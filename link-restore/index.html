@@ -231,6 +231,7 @@
             <button class="action ghost" data-sample="source">Sample: bare source</button>
             <button class="action ghost" data-sample="state">Sample: inline state URL</button>
             <button class="action ghost" data-sample="short">Sample: short link</button>
+            <button class="action ghost" data-sample="local">Sample: local_id link</button>
         </div>
 
         <div class="options">
@@ -271,6 +272,20 @@
                     <li><strong>Batch / programmatic rescue</strong> for many links: use <code>fafbseg</code> to parse the old short link, extract the scene + segment IDs, and regenerate a fresh authed URL &mdash; R: <code>fafbseg::flywire_expandurl()</code>; Python: the <code>fafbseg.flywire</code> URL helpers.</li>
                 </ol>
                 <p style="margin-top:0.75rem;"><strong>Caveat:</strong> if the link references a very old materialization, its root IDs may have since been edited (merges/splits). The scene will load but some IDs may show as &ldquo;outdated&rdquo; &mdash; <code>fafbseg</code> can update them to their latest roots. Fix the volume loading first.</p>
+            </div>
+        </details>
+
+        <details class="ref">
+            <summary>Stuck on &ldquo;You are not logged in. Refresh the page&hellip;&rdquo;?</summary>
+            <div>
+                <p>That panel is the middleauth Google-OAuth handshake. Fixes, in order of likelihood:</p>
+                <ol>
+                    <li><strong>Allow popups for <code>ngl.flywire.ai</code>, then refresh (F5).</strong> A popup blocker silently eating the Google login popup is the #1 cause of &ldquo;I refreshed and nothing happened.&rdquo;</li>
+                    <li><strong>Allow third-party cookies</strong> for <code>*.flywire-daf.com</code> and <code>daf-apis.com</code>. If they are blocked, the token handoff between the auth server and the viewer fails and you loop forever. (An Incognito window with shields down is a quick test.)</li>
+                    <li><strong>Logging in &ldquo;twice&rdquo; is expected, not a bug.</strong> middleauth grants a token at the <em>global</em> auth layer first, then the specific data server (<code>prodv1</code>) requires its own access grant &mdash; so you legitimately get two prompts. Complete both.</li>
+                    <li><strong>Break a half-authed loop:</strong> clear cookies / site data for the <code>flywire-daf.com</code> and <code>daf-apis.com</code> domains (or use a fresh Incognito window), then load the link again to discard a stale/partial token.</li>
+                </ol>
+                <p style="margin-top:0.75rem;"><strong>On a <code>local_id</code> link this matters extra:</strong> that scene lives only in the browser profile that created it. If it is the original browser, getting past login is all you need. If it is a different browser, login won't help &mdash; there is no server copy to load (see the result note when you paste one above).</p>
             </div>
         </details>
     </div>
@@ -321,6 +336,21 @@
 
         if (!input) {
             return { kind: 'empty', output: '', changed: false, changes: [], openUrl: null, warn: 'Nothing to restore — paste a link or source first.' };
+        }
+
+        // --- Browser-local state (local_id) — NOT portable ---
+        // ?local_id=<hex> points at a scene saved in THIS browser profile's local
+        // storage, not on any server. It can only load in the browser that made it.
+        var localIdMatch = input.match(/[?&]local_id=([0-9a-f]+)/i);
+        if (localIdMatch) {
+            return {
+                kind: 'local link',
+                output: input,
+                changed: false,
+                changes: [],
+                openUrl: null,
+                warn: 'This is a local_id link — the scene is stored in the local storage of the ONE browser profile that created it, not on any server. It is not portable and cannot be rebuilt into a shareable link (there is nothing server-side to fetch). If this IS the original browser, a blank view just means you are not logged in yet — see the checklist. If it is a different browser / cleared storage, the link alone cannot recover the scene: reopen it in the original browser and use the share / "generate link" button to mint a json_url link (which IS portable), then restore that here if it ever breaks.'
+            };
         }
 
         // --- Short link (stored state on the state server) ---
@@ -417,7 +447,8 @@
     var SAMPLES = {
         source: 'graphene://https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31',
         state: 'https://neuroglancer-demo.appspot.com/#!{"layers":[{"type":"image","source":"precomputed://gs://microns-seunglab/drosophila_v0/alignment/image_rechunked","name":"EM"},{"type":"segmentation_with_graph","source":"graphene://https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31","name":"fly_v31"}],"layout":"xy-3d"}',
-        short: 'https://ngl.flywire.ai/?json_url=https://globalv1.flywire-daf.com/nglstate/api/v1/4753860907040768'
+        short: 'https://ngl.flywire.ai/?json_url=https://globalv1.flywire-daf.com/nglstate/api/v1/4753860907040768',
+        local: 'https://ngl.flywire.ai/?local_id=b841979b9dbeebe34c11304a466ccb62'
     };
 
     var $ = function (id) { return document.getElementById(id); };
@@ -526,6 +557,11 @@
                     return r.kind === 'short link' && r.changed === true &&
                         r.output.indexOf('ngl.flywire.ai/?json_url=') !== -1;
                 }
+            },
+            {
+                name: 'local_id link flagged as non-portable',
+                run: function () { return restore(SAMPLES.local, {}); },
+                check: function (r) { return r.kind === 'local link' && r.changed === false && !!r.warn; }
             },
             {
                 name: 'raw JSON state rewrites source',
