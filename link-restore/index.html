@@ -278,7 +278,7 @@
                     <li>Complete the Google login popup if it appears. The 3D meshes should load and segments become selectable (so you can finally refresh those red outdated IDs).</li>
                     <li>Click <strong>Share</strong> to mint a portable <code>json_url</code> link &mdash; now the scene survives browser/profile changes and never needs this again.</li>
                 </ol>
-                <p style="margin-top:0.75rem;"><strong>Tip:</strong> use the <em>Copy</em> button above rather than retyping &mdash; this snippet uses plain <code>split/join</code> (no regex) precisely so it survives copy/paste into the console intact.</p>
+                <p style="margin-top:0.75rem;"><strong>Always use the <em>Copy</em> button above</strong> &mdash; do not copy this line out of a chat window or a doc viewer. Those often substitute &ldquo;smart&rdquo; curly quotes for straight ones, which makes the console throw <code>Invalid or unexpected token</code>. The Copy button hands over exact ASCII. (The snippet also uses plain <code>split/join</code> rather than a regex so escaped slashes can't be mangled either.)</p>
                 <p><strong>If the console prints <code>viewer is not defined</code>:</strong> skip the console. Click <strong>Share</strong> to generate a link, open its <code>json_url</code> address (the <code>&hellip;/nglstate/&hellip;</code> URL) in a new tab while logged in to see the raw JSON, copy all of it, and paste it into the <em>Restore a link</em> box above &mdash; JSON mode injects <code>middleauth+</code> and hands you a ready-to-open <code>#!</code> link.</p>
             </div>
         </details>
