@@ -7,6 +7,8 @@
 // @match        https://ngl.flywire.ai/*
 // @grant        none
 // @run-at       document-idle
+// @updateURL    https://raw.githubusercontent.com/BunPrinceton/tracer-workspace/master/tampermonkey-scripts/flywire-segmentation-auth-fix.user.js
+// @downloadURL  https://raw.githubusercontent.com/BunPrinceton/tracer-workspace/master/tampermonkey-scripts/flywire-segmentation-auth-fix.user.js
 // ==/UserScript==
 
 (function () {
