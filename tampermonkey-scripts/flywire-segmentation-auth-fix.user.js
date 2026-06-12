@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         FlyWire Segmentation Auth Fix
 // @namespace    https://borkbook.com/
-// @version      1.2.0
+// @version      1.3.0
 // @description  Auto-repair old FlyWire share links whose graphene segmentation fails to load ("HTTP error 0") by injecting the middleauth+ prefix. Pairs with the borkbook Link Restorer.
 // @author       Bun
 // @match        https://ngl.flywire.ai/*
@@ -60,17 +60,21 @@
     function hasBareGraphene(s) { return !!s && s.indexOf(BARE) !== -1; }
     function hasGrapheneSeg(s) { return !!s && s.indexOf('graphene://') !== -1; }
 
-    // Is the FlyWire "can't load the segmentation" error banner currently on screen?
-    // Used to distinguish "source already fixed but still erroring" (= not logged in)
-    // from a healthy scene.
-    function hasAuthErrorBanner() {
-        try {
-            var t = (document.body && document.body.innerText) || '';
-            return t.indexOf('Error retrieving metadata for volume') !== -1
-                || (t.indexOf('HTTP error') !== -1 && t.indexOf('graphene://') !== -1)
-                || t.indexOf('You are not logged in') !== -1;
-        } catch (e) { return false; }
+    function bodyText() {
+        try { return (document.body && document.body.innerText) || ''; } catch (e) { return ''; }
     }
+
+    // Is the FlyWire "can't load the segmentation" error banner currently on screen?
+    // Used to distinguish "source already fixed but still erroring" from a healthy scene.
+    function hasAuthErrorBanner() {
+        var t = bodyText();
+        return t.indexOf('Error retrieving metadata for volume') !== -1
+            || (t.indexOf('HTTP error') !== -1 && t.indexOf('graphene://') !== -1)
+            || t.indexOf('You are not logged in') !== -1;
+    }
+
+    // Does FlyWire explicitly say you are logged out? (distinct from logged-in-but-blocked)
+    function saysLoggedOut() { return bodyText().indexOf('You are not logged in') !== -1; }
 
     function applyFix(stateString) {
         const fixed = stateString.split(BARE).join(FIXED);
@@ -154,15 +158,26 @@
         document.body.appendChild(btn);
     }
 
-    // Source is already middleauth+ but the segmentation still errors => almost always not logged in.
+    // Source is already middleauth+ but the segmentation still errors. Two distinct cases:
+    //  - FlyWire says "not logged in"  -> sign in.
+    //  - You ARE logged in but it still error-0s -> the cross-site auth handshake is blocked,
+    //    almost always Brave Shields / third-party-cookie blocking.
     function onAuthLikelyNeeded() {
-        log('Segmentation source is already authenticated (middleauth+) but still erroring — '
-            + 'you are most likely not logged in.');
-        showNotification('Source is already authenticated (middleauth+) but the segmentation still '
-            + 'won\'t load (HTTP error 0). That means the auth handshake is being blocked: (1) sign in '
-            + 'via the account menu (allow popups; you may be prompted twice), and (2) on BRAVE, drop '
-            + 'Shields for ngl.flywire.ai and allow cross-site cookies — Shields blocks the cross-site '
-            + 'middleauth requests. Then reload.', 'warning', 12000);
+        if (saysLoggedOut()) {
+            log('FlyWire reports you are not logged in.');
+            showNotification('FlyWire says you are not logged in. Open the account menu (top-right) '
+                + 'to sign in — allow popups for ngl.flywire.ai, complete the Google login (you may be '
+                + 'prompted twice) — then reload.', 'warning', 11000);
+        } else {
+            log('Source is authenticated and no "not logged in" banner is present, yet the seg still '
+                + 'errors — the cross-site auth handshake is being blocked (commonly Brave Shields / '
+                + 'third-party cookies).');
+            showNotification('The source is correct (middleauth+) and you appear logged in, but the '
+                + 'segmentation still won\'t load (HTTP error 0) — the cross-site auth handshake is '
+                + 'being blocked. On BRAVE: click the Shields (lion) icon for ngl.flywire.ai, turn '
+                + 'Shields DOWN, and allow cross-site cookies for *.flywire-daf.com / daf-apis.com. '
+                + 'Then reload.', 'warning', 13000);
+        }
         showLoginButton();
     }
 
