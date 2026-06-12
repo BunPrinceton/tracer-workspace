@@ -201,6 +201,7 @@
             min-height: 80px;
             display: flex;
             flex-direction: column;
+            align-items: center;
             justify-content: center;
         }
 
@@ -213,6 +214,24 @@
 
         .stage-link:focus {
             box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Tinted icon medallion in each overview box */
+        .stage-medallion {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 0.5rem;
+            /* Icon linework inherits this via stroke="currentColor".
+               Medallion background tint + number color are set per stage. */
+            color: #525252;
+        }
+
+        .stage-medallion svg {
+            display: block;
         }
 
         .stage-number {
@@ -614,7 +633,15 @@
 
             <div class="pipeline-stage">
                 <a href="#sample-prep" class="stage-link">
-                    <span class="stage-number">1</span>
+                    <span class="stage-medallion" style="background:#BA751714">
+                        <svg width="30" height="30" viewBox="0 0 100 100" fill="none" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M20 28 L62 28 L54 36 L28 36 Z" fill="currentColor" fill-opacity="0.12" stroke="currentColor" stroke-width="2"/>
+                            <rect x="26" y="38" width="48" height="44" rx="6" stroke="currentColor" stroke-width="2.5" fill="#BA7517" fill-opacity="0.10"/>
+                            <path d="M40 54c-4 2-6 8-2 12s12 4 16-1 0-12-5-13-6 0-9 2z" fill="#BA7517" fill-opacity="0.9"/>
+                            <circle cx="44" cy="60" r="1.6" fill="#fff" fill-opacity="0.8"/><circle cx="52" cy="65" r="1.6" fill="#fff" fill-opacity="0.8"/><circle cx="58" cy="58" r="1.6" fill="#fff" fill-opacity="0.8"/>
+                        </svg>
+                    </span>
+                    <span class="stage-number" style="color:#BA7517">1</span>
                     <span class="stage-name">Sample Prep</span>
                 </a>
             </div>
@@ -622,7 +649,17 @@
 
             <div class="pipeline-stage">
                 <a href="#em-imaging" class="stage-link">
-                    <span class="stage-number">2</span>
+                    <span class="stage-medallion" style="background:#378ADD14">
+                        <svg width="30" height="30" viewBox="0 0 100 100" fill="none" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M44 16 H56 L53 26 H47 Z" fill="#378ADD" fill-opacity="0.9" stroke="currentColor" stroke-width="1.5"/>
+                            <path d="M50 26 L40 74 L60 74 Z" fill="#378ADD" fill-opacity="0.14"/>
+                            <line x1="50" y1="26" x2="50" y2="74" stroke="#378ADD" stroke-width="1.5" stroke-dasharray="3 3"/>
+                            <ellipse cx="50" cy="42" rx="16" ry="4" stroke="currentColor" stroke-width="2.5"/>
+                            <ellipse cx="50" cy="58" rx="12" ry="3.5" stroke="currentColor" stroke-width="2.5"/>
+                            <rect x="32" y="74" width="36" height="8" rx="2" fill="#378ADD" fill-opacity="0.22" stroke="currentColor" stroke-width="2.5"/>
+                        </svg>
+                    </span>
+                    <span class="stage-number" style="color:#378ADD">2</span>
                     <span class="stage-name">EM Imaging</span>
                 </a>
             </div>
@@ -630,7 +667,16 @@
 
             <div class="pipeline-stage">
                 <a href="#image-processing" class="stage-link">
-                    <span class="stage-number">3</span>
+                    <span class="stage-medallion" style="background:#1D9E7514">
+                        <svg width="30" height="30" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+                            <rect x="24" y="40" width="40" height="40" rx="4" stroke="currentColor" stroke-width="2" fill="#1D9E75" fill-opacity="0.08"/>
+                            <rect x="30" y="32" width="40" height="40" rx="4" stroke="currentColor" stroke-width="2" fill="#1D9E75" fill-opacity="0.12"/>
+                            <rect x="36" y="24" width="40" height="40" rx="4" stroke="currentColor" stroke-width="2.5" fill="#1D9E75" fill-opacity="0.16"/>
+                            <circle cx="56" cy="44" r="7" stroke="#1D9E75" stroke-width="2"/>
+                            <line x1="56" y1="33" x2="56" y2="55" stroke="#1D9E75" stroke-width="1.5"/><line x1="45" y1="44" x2="67" y2="44" stroke="#1D9E75" stroke-width="1.5"/>
+                        </svg>
+                    </span>
+                    <span class="stage-number" style="color:#1D9E75">3</span>
                     <span class="stage-name">Image Processing</span>
                 </a>
             </div>
@@ -638,7 +684,16 @@
 
             <div class="pipeline-stage">
                 <a href="#segmentation" class="stage-link">
-                    <span class="stage-number">4</span>
+                    <span class="stage-medallion" style="background:#7F77DD14">
+                        <svg width="30" height="30" viewBox="0 0 100 100" fill="none" stroke-linecap="round" aria-hidden="true">
+                            <path d="M18 30 C35 35, 40 55, 30 78" stroke="#7F77DD" stroke-width="6"/>
+                            <path d="M40 20 C50 40, 45 60, 58 82" stroke="#1D9E75" stroke-width="6"/>
+                            <path d="M62 22 C55 45, 72 55, 64 80" stroke="#EF9F27" stroke-width="6"/>
+                            <path d="M82 28 C70 42, 78 62, 84 78" stroke="#D4537E" stroke-width="6"/>
+                            <path d="M26 50 C44 48, 60 52, 82 50" stroke="#378ADD" stroke-width="6"/>
+                        </svg>
+                    </span>
+                    <span class="stage-number" style="color:#7F77DD">4</span>
                     <span class="stage-name">Segmentation</span>
                 </a>
             </div>
@@ -646,7 +701,15 @@
 
             <div class="pipeline-stage">
                 <a href="#proofreading" class="stage-link">
-                    <span class="stage-number">5</span>
+                    <span class="stage-medallion" style="background:#D85A3014">
+                        <svg width="30" height="30" viewBox="0 0 100 100" fill="none" stroke-linecap="round" aria-hidden="true">
+                            <path d="M18 70 C35 50, 50 60, 72 36" stroke="currentColor" stroke-width="4" opacity="0.45"/>
+                            <circle cx="52" cy="46" r="18" stroke="#D85A30" stroke-width="3.5" fill="#D85A30" fill-opacity="0.08"/>
+                            <line x1="65" y1="59" x2="79" y2="73" stroke="#D85A30" stroke-width="4.5"/>
+                            <path d="M44 47 l5 5 l10 -12" stroke="#D85A30" stroke-width="3.5" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                    <span class="stage-number" style="color:#D85A30">5</span>
                     <span class="stage-name">Proofreading</span>
                 </a>
             </div>
@@ -654,7 +717,15 @@
 
             <div class="pipeline-stage">
                 <a href="#annotation" class="stage-link">
-                    <span class="stage-number">6</span>
+                    <span class="stage-medallion" style="background:#D4537E14">
+                        <svg width="30" height="30" viewBox="0 0 100 100" fill="none" stroke-linecap="round" aria-hidden="true">
+                            <path d="M16 66 C36 66, 42 46, 60 44 C74 42, 80 54, 86 54" stroke="currentColor" stroke-width="4" opacity="0.45"/>
+                            <line x1="32" y1="46" x2="32" y2="60" stroke="#D4537E" stroke-width="2.5"/><circle cx="32" cy="42" r="5.5" fill="#D4537E"/>
+                            <line x1="54" y1="30" x2="54" y2="44" stroke="#D4537E" stroke-width="2.5"/><circle cx="54" cy="26" r="5.5" fill="#D4537E"/>
+                            <line x1="76" y1="40" x2="76" y2="54" stroke="#D4537E" stroke-width="2.5"/><circle cx="76" cy="36" r="5.5" fill="#D4537E"/>
+                        </svg>
+                    </span>
+                    <span class="stage-number" style="color:#D4537E">6</span>
                     <span class="stage-name">Annotation</span>
                 </a>
             </div>
@@ -662,7 +733,15 @@
 
             <div class="pipeline-stage">
                 <a href="#analysis" class="stage-link">
-                    <span class="stage-number">7</span>
+                    <span class="stage-medallion" style="background:#63992214">
+                        <svg width="30" height="30" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+                            <g stroke="currentColor" stroke-width="2.5" opacity="0.5">
+                                <line x1="30" y1="32" x2="60" y2="26"/><line x1="30" y1="32" x2="28" y2="64"/><line x1="60" y1="26" x2="74" y2="52"/><line x1="28" y1="64" x2="52" y2="74"/><line x1="74" y1="52" x2="52" y2="74"/>
+                            </g>
+                            <circle cx="30" cy="32" r="6.5" fill="#639922"/><circle cx="60" cy="26" r="7.5" fill="#639922"/><circle cx="74" cy="52" r="6.5" fill="#639922" fill-opacity="0.5"/><circle cx="28" cy="64" r="6.5" fill="#639922" fill-opacity="0.5"/><circle cx="52" cy="74" r="6.5" fill="#639922"/>
+                        </svg>
+                    </span>
+                    <span class="stage-number" style="color:#639922">7</span>
                     <span class="stage-name">Analysis</span>
                 </a>
             </div>
@@ -670,7 +749,16 @@
 
             <div class="pipeline-stage">
                 <a href="#publication" class="stage-link">
-                    <span class="stage-number">8</span>
+                    <span class="stage-medallion" style="background:#185FA514">
+                        <svg width="30" height="30" viewBox="0 0 100 100" fill="none" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M28 18 H60 L74 32 V82 H28 Z" fill="#185FA5" fill-opacity="0.07" stroke="currentColor" stroke-width="2.5"/>
+                            <path d="M60 18 V32 H74" stroke="currentColor" stroke-width="2.5"/>
+                            <g stroke="#185FA5" stroke-width="2"><line x1="38" y1="44" x2="50" y2="40"/><line x1="50" y1="40" x2="60" y2="48"/><line x1="38" y1="44" x2="48" y2="52"/></g>
+                            <circle cx="38" cy="44" r="3" fill="#185FA5"/><circle cx="50" cy="40" r="3" fill="#185FA5"/><circle cx="60" cy="48" r="3" fill="#185FA5"/><circle cx="48" cy="52" r="3" fill="#185FA5"/>
+                            <line x1="36" y1="64" x2="66" y2="64" stroke="currentColor" stroke-width="2.5" opacity="0.4"/><line x1="36" y1="71" x2="66" y2="71" stroke="currentColor" stroke-width="2.5" opacity="0.4"/><line x1="36" y1="78" x2="56" y2="78" stroke="currentColor" stroke-width="2.5" opacity="0.4"/>
+                        </svg>
+                    </span>
+                    <span class="stage-number" style="color:#185FA5">8</span>
                     <span class="stage-name">Publication</span>
                 </a>
             </div>
