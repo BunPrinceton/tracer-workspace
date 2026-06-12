@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         FlyWire Segmentation Auth Fix
 // @namespace    https://borkbook.com/
-// @version      1.1.0
+// @version      1.2.0
 // @description  Auto-repair old FlyWire share links whose graphene segmentation fails to load ("HTTP error 0") by injecting the middleauth+ prefix. Pairs with the borkbook Link Restorer.
 // @author       Bun
 // @match        https://ngl.flywire.ai/*
@@ -158,10 +158,11 @@
     function onAuthLikelyNeeded() {
         log('Segmentation source is already authenticated (middleauth+) but still erroring — '
             + 'you are most likely not logged in.');
-        showNotification('Source is fixed (middleauth+) but the segmentation still won\'t load — '
-            + 'you\'re probably not logged in. Open the account menu (top-right) to sign in: allow '
-            + 'popups for ngl.flywire.ai, complete the Google login (you may be prompted twice), '
-            + 'then reload.', 'warning', 9000);
+        showNotification('Source is already authenticated (middleauth+) but the segmentation still '
+            + 'won\'t load (HTTP error 0). That means the auth handshake is being blocked: (1) sign in '
+            + 'via the account menu (allow popups; you may be prompted twice), and (2) on BRAVE, drop '
+            + 'Shields for ngl.flywire.ai and allow cross-site cookies — Shields blocks the cross-site '
+            + 'middleauth requests. Then reload.', 'warning', 12000);
         showLoginButton();
     }
 
