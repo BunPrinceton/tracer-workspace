@@ -265,12 +265,13 @@
     <!-- Restorer -->
     <div class="panel">
         <h2>Restore a link</h2>
-        <p class="hint">Accepts a full Neuroglancer URL (<code>&hellip;/#!{&hellip;}</code>), a short link (<code>?json_url=&hellip;</code>), a raw <code>graphene://</code> source, or a pasted JSON state.</p>
+        <p class="hint">Accepts a FlyWire link (<code>&hellip;/#!{&hellip;}</code>, <code>?json_url=&hellip;</code>, a raw <code>graphene://</code> source, or pasted JSON state) <strong>and</strong> an old MICrONS / <code>appspot</code> link (<code>neuromancer-seung-import.appspot.com/?json_url=&hellip;dynamicannotationframework.com/nglstate/&lt;id&gt;</code>, or just the numeric state id).</p>
 
         <label for="input">Old / broken link or source</label>
-        <textarea id="input" placeholder="Paste here, e.g.&#10;graphene://https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31"></textarea>
+        <textarea id="input" placeholder="Paste here, e.g.&#10;https://neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/6123190777020416"></textarea>
 
         <div class="samples">
+            <button class="action ghost" data-sample="microns">Sample: old MICrONS link</button>
             <button class="action ghost" data-sample="source">Sample: bare source</button>
             <button class="action ghost" data-sample="state">Sample: inline state URL</button>
             <button class="action ghost" data-sample="short">Sample: short link</button>
@@ -423,7 +424,7 @@
     <!-- MICrONS / appspot links -->
     <div class="panel">
         <h2>Old MICrONS / <code>appspot</code> links (a different problem)</h2>
-        <p class="hint">Everything above is about FlyWire links whose <em>data</em> needs a token. Links shaped like <code>neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/&lt;id&gt;</code> (older MICrONS / Minnie65 scenes) fail for an unrelated reason &mdash; and the restorer above won't help them.</p>
+        <p class="hint">Everything above is about FlyWire links whose <em>data</em> needs a token. Links shaped like <code>neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/&lt;id&gt;</code> (older MICrONS / Minnie65 scenes) fail for an unrelated reason. <strong>The <em>Restore a link</em> box at the top handles these too</strong> &mdash; paste one (or just its numeric state id) and it returns a working Spelunker link. The how/why is below.</p>
         <p style="margin-bottom:0.75rem;">
             <code>www.dynamicannotationframework.com</code> no longer answers at all (the connection is refused), so the viewer fetches the saved state, gets nothing, and shows an empty scene. The <strong>state server's domain was retired</strong> &mdash; the scene wasn't deleted. The same numeric ID still resolves on the current CAVE state server at
             <code>https://global.daf-apis.com/nglstate/api/v1/&lt;id&gt;</code>; it just sits behind a Google/CAVE login now (hitting it un-authenticated redirects to OAuth rather than 404ing).
@@ -513,6 +514,52 @@
                 openUrl: null,
                 warn: 'This is a local_id link — the scene is stored in the local storage of the ONE browser profile that created it, not on any server. The URL carries no JSON, so this tool cannot rewrite it from here. Two cases: (1) the scene does not load at all on a different browser / cleared storage — it is unrecoverable from the link alone (no server copy). (2) the scene loads but the segmentation throws HTTP error 0 (EM + brain mesh show, 3D empty, nothing selectable) — only the graphene source needs fixing, and the easiest fix is the FlyWire Fix bookmarklet above: open the scene, click the bookmarklet, done. (Or use the console one-liner.) Then Share to mint a portable json_url link.'
             };
+        }
+
+        // --- Old MICrONS / appspot state link (retired dynamicannotationframework.com) ---
+        // e.g. neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/<id>
+        // The host is dead; the state migrated to global.daf-apis.com and is now CAVE-auth-gated.
+        // Rebuild as a Spelunker middleauth link so the login handshake runs. This is a DIFFERENT
+        // problem from FlyWire's per-session token — so it must be detected before the short-link branch.
+        var micronsJsonUrl = input.match(/[?&]json_url=([^&#\s]+)/);
+        var micronsCandidate = micronsJsonUrl ? decodeURIComponent(micronsJsonUrl[1]) : input;
+        var isMicrons =
+            /dynamicannotationframework\.com/i.test(micronsCandidate) ||
+            /neuromancer-seung-import\.appspot\.com/i.test(input) ||
+            (/global\.daf-apis\.com/i.test(micronsCandidate) && !/flywire/i.test(micronsCandidate));
+        // A bare numeric state id (no host) is also treated as a MICrONS state id.
+        var bareStateId = /^\d{6,}$/.test(input) ? input : null;
+        if (isMicrons || bareStateId) {
+            var idMatch = micronsCandidate.match(/nglstate\/(?:api\/v1\/)?(\d+)/);
+            var stateId = bareStateId || (idMatch ? idMatch[1] : null);
+
+            if (stateId) {
+                var newStateUrl = 'https://global.daf-apis.com/nglstate/api/v1/' + stateId;
+                var spelunker = 'https://spelunker.cave-explorer.org/#!middleauth+' + newStateUrl;
+                changes.push('Detected an old MICrONS / appspot state link (state id ' + stateId + ')');
+                changes.push('Rewrote the dead host to the live state server: ' + newStateUrl);
+                changes.push('Wrapped it as a Spelunker middleauth+ link so the CAVE login handshake runs');
+                return {
+                    kind: 'MICrONS state',
+                    output: spelunker,
+                    changed: true,
+                    changes: changes,
+                    openUrl: spelunker,
+                    warn: 'You must be logged into CAVE (the Google account with data access) for this to load — the state server is auth-gated now. The old appspot viewer cannot do this handshake, which is why this targets Spelunker. If the scene loads but the layers are empty, those MICrONS data sources may themselves be deprecated (separate from the link).'
+                };
+            }
+
+            // appspot/MICrONS host but no stored-state id → a self-contained inline #! state.
+            if (input.indexOf('#!') !== -1) {
+                return {
+                    kind: 'MICrONS inline state',
+                    output: input,
+                    changed: false,
+                    changes: [],
+                    openUrl: input,
+                    warn: 'This link embeds the whole scene inline (no json_url), so it never touches the retired state server — there is no state id to rewrite. It loads if the seunglab Neuroglancer viewer is still online and the underlying precomputed gs:// layers are still readable; no login is needed. Nothing for this tool to fix.'
+                };
+            }
         }
 
         // --- Short link (stored state on the state server) ---
@@ -607,6 +654,7 @@
     // ---- UI wiring -------------------------------------------------------
 
     var SAMPLES = {
+        microns: 'https://neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/6123190777020416',
         source: 'graphene://https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31',
         state: 'https://neuroglancer-demo.appspot.com/#!{"layers":[{"type":"image","source":"precomputed://gs://microns-seunglab/drosophila_v0/alignment/image_rechunked","name":"EM"},{"type":"segmentation_with_graph","source":"graphene://https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31","name":"fly_v31"}],"layout":"xy-3d"}',
         short: 'https://ngl.flywire.ai/?json_url=https://globalv1.flywire-daf.com/nglstate/api/v1/4753860907040768',
@@ -722,7 +770,35 @@
     // ---- Self-test -------------------------------------------------------
 
     function runTests() {
+        var SPELUNKER_PREFIX = 'https://spelunker.cave-explorer.org/#!middleauth+https://global.daf-apis.com/nglstate/api/v1/';
         var tests = [
+            {
+                name: 'old MICrONS appspot link -> Spelunker middleauth link',
+                run: function () { return restore(SAMPLES.microns, {}); },
+                check: function (r) {
+                    return r.kind === 'MICrONS state' && r.changed === true &&
+                        r.output === SPELUNKER_PREFIX + '6123190777020416';
+                }
+            },
+            {
+                name: 'bare dynamicannotationframework nglstate URL -> Spelunker',
+                run: function () { return restore('https://www.dynamicannotationframework.com/nglstate/4713715008536576', {}); },
+                check: function (r) {
+                    return r.kind === 'MICrONS state' && r.output === SPELUNKER_PREFIX + '4713715008536576';
+                }
+            },
+            {
+                name: 'bare numeric state id -> Spelunker',
+                run: function () { return restore('6432658471518208', {}); },
+                check: function (r) {
+                    return r.kind === 'MICrONS state' && r.output === SPELUNKER_PREFIX + '6432658471518208';
+                }
+            },
+            {
+                name: 'MICrONS detection does not hijack a FlyWire short link',
+                run: function () { return restore(SAMPLES.short, {}); },
+                check: function (r) { return r.kind === 'short link'; }
+            },
             {
                 name: 'bare source gets middleauth+',
                 run: function () { return restore(SAMPLES.source, {}); },
