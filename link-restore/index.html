@@ -265,7 +265,7 @@
     <!-- Restorer -->
     <div class="panel">
         <h2>Restore a link</h2>
-        <p class="hint"><strong>Paste anything and hit Restore — it figures out the job.</strong> It auto-detects the kind of link and routes it: a <strong>FlyWire / FAFB</strong> scene &rarr; the native FlyWire viewer (which authenticates <code>fly_v31</code>); an old <strong>MICrONS / Minnie</strong> <code>appspot</code> link &rarr; Spelunker with <code>middleauth+</code>; a raw <code>graphene://</code> source &rarr; gets the prefix; a <code>local_id</code> &rarr; explained. Works on a full URL, a <code>?json_url=</code>, a bare state id, or pasted JSON. <strong>For the deepest fixes</strong> (repoint a dead Minnie EM, or a guaranteed inline FlyWire link), paste the <em>JSON state</em> from the viewer's <code>{ }</code> editor — a static page can't fetch an auth-gated state from just the URL.</p>
+        <p class="hint"><strong>Paste anything and hit Restore — it figures out the job.</strong> It auto-detects the kind of link and routes it: a <strong>FlyWire / FAFB</strong> scene &rarr; the native FlyWire viewer (which authenticates <code>fly_v31</code>); an old <strong>MICrONS / Minnie</strong> <code>appspot</code> link &rarr; Spelunker with <code>middleauth+</code>; a raw <code>graphene://</code> source &rarr; gets the prefix; a <code>local_id</code> &rarr; explained. Works on a full URL, a <code>?json_url=</code>, a bare state id, or pasted JSON. <strong>Sign in to CAVE</strong> (button below) and it fetches the saved state itself, then routes by the scene's <em>actual contents</em> — so a FlyWire scene hiding on a MICrONS-looking host gets sent to the FlyWire viewer automatically, no JSON pasting. (Pasting the <code>{ }</code> JSON still works if you'd rather not sign in.)</p>
 
         <label for="input">Old / broken link or source</label>
         <textarea id="input" placeholder="Paste here, e.g.&#10;https://neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/6123190777020416"></textarea>
@@ -287,6 +287,22 @@
             <button class="action primary" id="restore-btn">Restore</button>
             <button class="action ghost" id="clear-btn">Clear</button>
         </div>
+
+        <div class="auth-row" style="margin-top:1rem; padding-top:1rem; border-top:1px solid #e5e5e5; display:flex; flex-wrap:wrap; gap:0.75rem; align-items:center;">
+            <button class="action secondary" id="signin-btn">Sign in to CAVE</button>
+            <span id="auth-status" style="font-size:0.85rem; color:#737373;"></span>
+        </div>
+        <details class="ref" style="margin-top:0.5rem;">
+            <summary>Advanced: paste a CAVE token instead of signing in</summary>
+            <div>
+                <p style="font-size:0.875rem; color:#525252; margin:0.5rem 0;">If the sign-in popup doesn't hand back a token, paste one here. Get it in Python with <code>from caveclient import CAVEclient; print(CAVEclient().auth.token)</code>, or read <code>~/.cloudvolume/secrets/cave-secret.json</code>. It's stored only in this browser (localStorage) and sent only to <code>global.daf-apis.com</code>.</p>
+                <input id="token-input" type="password" placeholder="CAVE token" autocomplete="off" style="width:100%; max-width:420px; font-family:monospace; font-size:0.8125rem; padding:0.5rem; border:1px solid #cbd5e1; border-radius:6px;">
+                <div class="btn-row" style="margin-top:0.5rem;">
+                    <button class="action ghost" id="token-save">Save token</button>
+                    <button class="action ghost" id="token-clear">Forget token</button>
+                </div>
+            </div>
+        </details>
 
         <div class="out-block" id="out-block">
             <div class="out-label-row">
@@ -486,6 +502,27 @@
 (function () {
     "use strict";
 
+    // ---- CAVE sign-in return popup ----------------------------------------
+    // When "Sign in to CAVE" opens this page as a popup (?cave_auth_return=1),
+    // the sticky_auth flow lands back here with a token; capture it, hand it to
+    // the opener tab via postMessage, and close. (Same-origin postMessage only.)
+    if (/[?&]cave_auth_return=1/.test(location.search)) {
+        var _p = new URLSearchParams(location.search);
+        var _h = new URLSearchParams((location.hash || '').replace(/^#/, ''));
+        var _tok = _p.get('token') || _p.get('auth_token') || _p.get('middleauth_token') || _p.get('access_token') ||
+                   _h.get('token') || _h.get('access_token') || '';
+        try { if (window.opener) window.opener.postMessage({ caveToken: _tok, raw: location.href }, location.origin); } catch (e) {}
+        document.addEventListener('DOMContentLoaded', function () {
+            var esc = function (s) { return String(s).replace(/[&<>"]/g, function (m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]; }); };
+            document.body.innerHTML = '<div style="font:16px system-ui;max-width:640px;margin:3rem;">' +
+                (_tok ? 'Signed in to CAVE — token captured. You can close this window.'
+                      : 'Sign-in finished but no token was found in the return URL. Use the &ldquo;Advanced: paste a CAVE token&rdquo; option in the tool. (Return URL for debugging:)<br><br><code style="word-break:break-all">' + esc(location.href) + '</code>') +
+                '</div>';
+            if (_tok) { setTimeout(function () { try { window.close(); } catch (e) {} }, 1500); }
+        });
+        return;
+    }
+
     // ---- Core restoration logic (pure, testable) -------------------------
 
     // Add middleauth+ to any graphene source that lacks it.
@@ -655,6 +692,7 @@
                         changed: true,
                         changes: changes,
                         openUrl: fwStateLink,
+                        stateUrl: newStateUrl,
                         warn: truncWarn + 'Be logged into FlyWire. If only 2D loads (the segmentation auth did not complete), open the scene, copy its JSON from the {} editor, and paste it back here — that yields a guaranteed inline FlyWire link. (Allow pop-ups + cross-site cookies for ngl.flywire.ai; Brave: drop Shields.)'
                     };
                 }
@@ -669,6 +707,7 @@
                     changed: true,
                     changes: changes,
                     openUrl: spelunker,
+                    stateUrl: newStateUrl,
                     warn: truncWarn + 'You must be logged into CAVE (the Google account with data access) for this to load — the state server is auth-gated now. The old appspot viewer cannot do this handshake, which is why this targets Spelunker. Note: a "state … not found" error means you ARE authenticated but that id is not on the server (wrong/truncated id, or the old state was never migrated) — it is NOT a login problem. ALSO: if the EM shows in 2D but the segmentation throws a graphene "Expected JSON object, but received: undefined" error (often fly_v31), this is actually a FlyWire scene on a MICrONS-looking host — Spelunker can\'t authenticate it. Open the scene, copy its JSON from the {} editor, and paste it back here; it will re-route to the FlyWire viewer (ngl.flywire.ai). If the scene loads but the layers are empty, those MICrONS data sources may themselves be deprecated (separate from the link).'
                 };
             }
@@ -830,9 +869,60 @@
         });
     }
 
+    // ---- CAVE auth (sign-in token, stored in this browser) ----------------
+    var AUTH_REALM = 'https://global.daf-apis.com/sticky_auth/api/v1/authorize';
+
+    function getToken() { try { return localStorage.getItem('cave_token') || ''; } catch (e) { return ''; } }
+    function setToken(t) { try { if (t) localStorage.setItem('cave_token', t); else localStorage.removeItem('cave_token'); } catch (e) {} updateAuthStatus(); }
+    function updateAuthStatus() {
+        var el = $('auth-status'); if (!el) return;
+        if (getToken()) { el.textContent = 'Signed in — the tool can auto-fetch auth-gated states and route by their contents.'; el.style.color = '#166534'; }
+        else { el.textContent = 'Not signed in — sign in so the tool can fetch the saved state itself (instead of you pasting JSON).'; el.style.color = '#737373'; }
+    }
+    function signIn() {
+        var receiver = location.origin + location.pathname + '?cave_auth_return=1';
+        window.open(AUTH_REALM + '?redirect=' + encodeURIComponent(receiver), 'cave_signin', 'width=520,height=660');
+    }
+    window.addEventListener('message', function (ev) {
+        if (ev.origin !== location.origin) return;
+        if (ev.data && typeof ev.data.caveToken !== 'undefined' && ev.data.caveToken) { setToken(ev.data.caveToken); }
+    });
+    function fetchState(stateUrl) {
+        var tok = getToken();
+        return fetch(stateUrl, { headers: tok ? { 'Authorization': 'Bearer ' + tok } : {} }).then(function (res) {
+            if (res.status === 401 || res.status === 403) { var e = new Error('auth'); e.needAuth = true; throw e; }
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+        });
+    }
+
+    if ($('signin-btn')) $('signin-btn').addEventListener('click', signIn);
+    if ($('token-save')) $('token-save').addEventListener('click', function () { setToken($('token-input').value.trim()); $('token-input').value = ''; });
+    if ($('token-clear')) $('token-clear').addEventListener('click', function () { setToken(''); });
+    updateAuthStatus();
+
     $('restore-btn').addEventListener('click', function () {
         var r = restore($('input').value, { rebase: $('opt-rebase').checked });
-        renderResult(r);
+        // If it's a saved-state URL, try to fetch the actual state and route by its CONTENTS
+        // (this is what turns a host-based guess into the correct viewer — e.g. a FlyWire scene
+        //  hiding on a MICrONS-looking host). Falls back to the host-based link if not signed in.
+        if (!r.stateUrl) { renderResult(r); return; }
+        renderResult(Object.assign({}, r, { warn: 'Fetching the saved state to route by its actual contents…' }));
+        fetchState(r.stateUrl).then(function (st) {
+            var r2 = restore(JSON.stringify(st), {});
+            if (r2.kind === 'FlyWire scene' || r2.kind === 'MICrONS EM fix') {
+                r2.changes = ['Auto-fetched the saved state with your CAVE login and re-routed by its actual contents'].concat(r2.changes || []);
+                renderResult(r2);
+            } else {
+                renderResult(r); // host-based guess was already right (or no deeper fix needed)
+            }
+        }).catch(function (e) {
+            if (e.needAuth) {
+                renderResult(Object.assign({}, r, { warn: 'To auto-fetch this state I need your CAVE login — click "Sign in to CAVE" above (or paste a token under Advanced), then hit Restore again. Showing the host-based link for now. ' + (r.warn || '') }));
+            } else {
+                renderResult(Object.assign({}, r, { warn: 'Could not auto-fetch the state (' + e.message + '); showing the host-based link. ' + (r.warn || '') }));
+            }
+        });
     });
 
     $('clear-btn').addEventListener('click', function () {
