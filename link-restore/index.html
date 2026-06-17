@@ -237,7 +237,7 @@
 
     <div class="page-header">
         <h1>FlyWire Link Restorer</h1>
-        <p>Revive old FlyWire / Neuroglancer share links that fail to load. This page is a <strong>test ground</strong> and keeps several approaches side by side: the recommended session-token fix, an interactive <code>middleauth+</code> restorer (paste a dead link, get a rewritten one), and a section for old MICrONS / <code>appspot</code> links whose state server was retired. Everything here runs in your browser &mdash; nothing is sent anywhere.</p>
+        <p>Revive old FlyWire / Neuroglancer share links that fail to load. <strong>Paste a dead link and hit Restore — the tool auto-detects what kind it is</strong> (FlyWire, MICrONS/Minnie, raw source, <code>local_id</code>&hellip;) and hands back the correct fixed link for the right viewer. This page is also a <strong>test ground</strong> keeping the older approaches side by side (session-token fix, <code>middleauth+</code> bookmarklet/userscript). Everything runs in your browser &mdash; nothing is sent anywhere.</p>
     </div>
 
     <div class="callout">
@@ -265,7 +265,7 @@
     <!-- Restorer -->
     <div class="panel">
         <h2>Restore a link</h2>
-        <p class="hint">Accepts a FlyWire link (<code>&hellip;/#!{&hellip;}</code>, <code>?json_url=&hellip;</code>, a raw <code>graphene://</code> source, or pasted JSON state) <strong>and</strong> an old MICrONS / <code>appspot</code> link (<code>neuromancer-seung-import.appspot.com/?json_url=&hellip;dynamicannotationframework.com/nglstate/&lt;id&gt;</code>, or just the numeric state id). <strong>Black EM after restoring?</strong> Paste the <em>JSON state</em> (Spelunker <code>{ }</code> editor) here and it repoints a dead MICrONS EM image to the public release EM.</p>
+        <p class="hint"><strong>Paste anything and hit Restore — it figures out the job.</strong> It auto-detects the kind of link and routes it: a <strong>FlyWire / FAFB</strong> scene &rarr; the native FlyWire viewer (which authenticates <code>fly_v31</code>); an old <strong>MICrONS / Minnie</strong> <code>appspot</code> link &rarr; Spelunker with <code>middleauth+</code>; a raw <code>graphene://</code> source &rarr; gets the prefix; a <code>local_id</code> &rarr; explained. Works on a full URL, a <code>?json_url=</code>, a bare state id, or pasted JSON. <strong>For the deepest fixes</strong> (repoint a dead Minnie EM, or a guaranteed inline FlyWire link), paste the <em>JSON state</em> from the viewer's <code>{ }</code> editor — a static page can't fetch an auth-gated state from just the URL.</p>
 
         <label for="input">Old / broken link or source</label>
         <textarea id="input" placeholder="Paste here, e.g.&#10;https://neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/6123190777020416"></textarea>
@@ -549,6 +549,39 @@
             };
         }
 
+        // --- FlyWire scene pasted as JSON / inline #! -> open in the native FlyWire viewer ---
+        // A prodv1 / fly_v## graphene segmentation needs FlyWire's own middleauth, which only
+        // ngl.flywire.ai performs (Spelunker shows only 2D). Keep the source BARE — the native
+        // viewer auths it; adding middleauth+ can interfere. (Verified to load the 3D segmentation.)
+        var fwJsonText = null;
+        if (input.charAt(0) === '{') {
+            fwJsonText = input;
+        } else {
+            var fwHashIdx = input.indexOf('#!');
+            if (fwHashIdx !== -1) {
+                try { fwJsonText = decodeURIComponent(input.slice(fwHashIdx + 2)); }
+                catch (e) { fwJsonText = input.slice(fwHashIdx + 2); }
+            }
+        }
+        if (fwJsonText && /flywire-daf\.com|graphene:\/\/[^"'\s]*\/fly_v\d/i.test(fwJsonText)) {
+            var fwState = null;
+            try { fwState = JSON.parse(fwJsonText); } catch (e) { fwState = null; }
+            if (fwState && Array.isArray(fwState.layers)) {
+                var fwInlineUrl = FLYWIRE_VIEWER + '/#!' + encodeURIComponent(JSON.stringify(fwState));
+                changes.push('Detected a FlyWire scene (prodv1 / fly_v## graphene segmentation)');
+                changes.push('Routed to the native FlyWire viewer (ngl.flywire.ai), which authenticates the segmentation');
+                changes.push('Kept the segmentation source bare — the native viewer auths it; middleauth+ can interfere there');
+                return {
+                    kind: 'FlyWire scene',
+                    output: fwInlineUrl,
+                    changed: true,
+                    changes: changes,
+                    openUrl: fwInlineUrl,
+                    warn: 'Log into FlyWire when prompted and the 3D segmentation loads. If only 2D shows: allow pop-ups + cross-site cookies for ngl.flywire.ai (Brave: drop Shields), or open any FlyWire scene first to warm up the session token.'
+                };
+            }
+        }
+
         // --- MICrONS EM fix: pasted JSON state (or inline #! link) with a dead EM image ---
         // Needs the actual state, so paste the JSON (Spelunker {} editor) or an inline #!{...} link.
         // Swaps any garbage-collected microns-seunglab minnie EM for the public release EM, then
@@ -603,15 +636,33 @@
 
             if (stateId) {
                 var newStateUrl = 'https://global.daf-apis.com/nglstate/api/v1/' + stateId;
-                var spelunker = 'https://spelunker.cave-explorer.org/#!middleauth+' + newStateUrl;
-                changes.push('Detected an old MICrONS / appspot state link (state id ' + stateId + ')');
-                changes.push('Rewrote the dead host to the live state server: ' + newStateUrl);
-                changes.push('Wrapped it as a Spelunker middleauth+ link so the CAVE login handshake runs');
                 // CAVE/Datastore state ids are normally ~16 digits. A much shorter id almost
                 // always means the pasted link was truncated (long URLs get cut in chat/docs).
                 var truncWarn = stateId.length < 15
                     ? 'HEADS UP: this state id (' + stateId + ') is only ' + stateId.length + ' digits — real CAVE state ids are ~16 (e.g. 6123190777020416). The pasted link was probably TRUNCATED. Re-paste the complete link or the full id, otherwise the viewer will say "state ... not found". '
                     : '';
+
+                // FlyWire / FAFB state links (host like fafbv2.* or *flywire*) route to the native
+                // FlyWire viewer — only it does the prodv1 middleauth, so Spelunker would show 2D only.
+                if (/fafb|flywire/i.test(micronsCandidate) || /fafb|flywire/i.test(input)) {
+                    var fwStateLink = FLYWIRE_VIEWER + '/?json_url=' + encodeURIComponent(newStateUrl);
+                    changes.push('Detected an old FlyWire / FAFB state link (state id ' + stateId + ')');
+                    changes.push('State migrated to ' + newStateUrl);
+                    changes.push('Routed to the native FlyWire viewer (ngl.flywire.ai) so the fly_v## segmentation authenticates');
+                    return {
+                        kind: 'FlyWire state',
+                        output: fwStateLink,
+                        changed: true,
+                        changes: changes,
+                        openUrl: fwStateLink,
+                        warn: truncWarn + 'Be logged into FlyWire. If only 2D loads (the segmentation auth did not complete), open the scene, copy its JSON from the {} editor, and paste it back here — that yields a guaranteed inline FlyWire link. (Allow pop-ups + cross-site cookies for ngl.flywire.ai; Brave: drop Shields.)'
+                    };
+                }
+
+                var spelunker = 'https://spelunker.cave-explorer.org/#!middleauth+' + newStateUrl;
+                changes.push('Detected an old MICrONS / appspot state link (state id ' + stateId + ')');
+                changes.push('Rewrote the dead host to the live state server: ' + newStateUrl);
+                changes.push('Wrapped it as a Spelunker middleauth+ link so the CAVE login handshake runs');
                 return {
                     kind: 'MICrONS state',
                     output: spelunker,
@@ -868,9 +919,14 @@
                 }
             },
             {
-                name: 'healthy FlyWire JSON is NOT touched by the EM-swap branch',
+                name: 'FlyWire JSON -> ngl.flywire.ai, source kept bare (no middleauth+)',
                 run: function () { return restore('{"layers":[{"type":"segmentation_with_graph","source":"graphene://https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31","name":"fly"}]}', {}); },
-                check: function (r) { return r.kind === 'json state'; }
+                check: function (r) {
+                    return r.kind === 'FlyWire scene' &&
+                        r.output.indexOf('https://ngl.flywire.ai/#!') === 0 &&
+                        r.output.indexOf(encodeURIComponent('graphene://https://prodv1.flywire-daf.com')) !== -1 &&
+                        r.output.indexOf(encodeURIComponent('middleauth+')) === -1;
+                }
             },
             {
                 name: 'old MICrONS appspot link -> Spelunker middleauth link',
@@ -878,6 +934,14 @@
                 check: function (r) {
                     return r.kind === 'MICrONS state' && r.changed === true &&
                         r.output === SPELUNKER_PREFIX + '6123190777020416';
+                }
+            },
+            {
+                name: 'old FAFB appspot link -> ngl.flywire.ai (not Spelunker)',
+                run: function () { return restore('https://neuromancer-seung-import.appspot.com/?json_url=https://fafbv2.dynamicannotationframework.com/nglstate/6527848519106560', {}); },
+                check: function (r) {
+                    return r.kind === 'FlyWire state' &&
+                        r.output === 'https://ngl.flywire.ai/?json_url=' + encodeURIComponent('https://global.daf-apis.com/nglstate/api/v1/6527848519106560');
                 }
             },
             {
@@ -913,12 +977,12 @@
                 check: function (r) { return r.kind === 'raw source' && r.changed === false && !!r.warn; }
             },
             {
-                name: 'inline state URL rewrites the embedded source',
+                name: 'FlyWire inline #! scene -> ngl.flywire.ai, source left bare',
                 run: function () { return restore(SAMPLES.state, {}); },
                 check: function (r) {
-                    return r.kind === 'inline state' && r.changed === true &&
-                        r.openUrl.indexOf(encodeURIComponent('graphene://middleauth+https://prodv1.flywire-daf.com')) !== -1 &&
-                        r.openUrl.indexOf(encodeURIComponent('graphene://https://')) === -1;
+                    return r.kind === 'FlyWire scene' &&
+                        r.output.indexOf('https://ngl.flywire.ai/#!') === 0 &&
+                        r.output.indexOf(encodeURIComponent('graphene://https://prodv1.flywire-daf.com')) !== -1;
                 }
             },
             {
@@ -935,17 +999,17 @@
                 check: function (r) { return r.kind === 'local link' && r.changed === false && !!r.warn; }
             },
             {
-                name: 'raw JSON state rewrites source',
-                run: function () { return restore('{"layers":[{"source":"graphene://https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31"}]}', {}); },
+                name: 'non-FlyWire graphene JSON still gets middleauth+ (json state)',
+                run: function () { return restore('{"layers":[{"source":"graphene://https://example.org/segmentation/1.0/foo"}]}', {}); },
                 check: function (r) {
                     return r.kind === 'json state' && r.changed === true &&
                         r.output.indexOf('graphene://middleauth+https://') !== -1;
                 }
             },
             {
-                name: 'rebase option swaps the viewer host',
+                name: 'FlyWire inline scene opens in ngl.flywire.ai (rebase irrelevant)',
                 run: function () { return restore(SAMPLES.state, { rebase: true }); },
-                check: function (r) { return r.output.indexOf('https://ngl.flywire.ai/#!') === 0; }
+                check: function (r) { return r.kind === 'FlyWire scene' && r.output.indexOf('https://ngl.flywire.ai/#!') === 0; }
             },
             {
                 name: 'empty input is handled gracefully',
