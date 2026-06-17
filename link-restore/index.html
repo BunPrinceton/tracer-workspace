@@ -146,7 +146,7 @@
 
     <div class="page-header">
         <h1>FlyWire Link Troubleshooting</h1>
-        <p>Why old FlyWire / Neuroglancer share links sometimes fail to load the segmentation &mdash; and how to fix them. Short version: it's almost always your browser session's <strong>auth token</strong>, not the link.</p>
+        <p>Why old FlyWire / Neuroglancer share links sometimes fail to load &mdash; and how to fix them. For <strong>FlyWire</strong> links it's almost always your browser session's <strong>auth token</strong>, not the link. For older <strong>MICrONS / <code>appspot</code></strong> links it's usually a <strong>retired state-server domain</strong> &mdash; see the last section.</p>
     </div>
 
     <div class="callout">
@@ -210,6 +210,41 @@
             <summary>Outdated (red) segment IDs after it loads</summary>
             <div>
                 <p>Separate issue. Once the segmentation loads and you can select/deselect again, the red &ldquo;outdated&rdquo; root IDs can be refreshed &mdash; FlyWire root IDs change when neurons are merged/split. For bulk updates, <code>fafbseg</code> can map old IDs to their latest roots (R: <code>fafbseg::flywire_latestid()</code> and friends; Python: the <code>fafbseg.flywire</code> helpers). Get the volume loading first.</p>
+            </div>
+        </details>
+    </div>
+
+    <div class="panel">
+        <h2>Old MICrONS / <code>appspot</code> links (different problem)</h2>
+        <p>
+            Everything above is about <strong>FlyWire</strong> links whose <em>data</em> needs a token. A separate class of old link fails for an unrelated reason: links shaped like
+            <code>neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/&lt;id&gt;</code>
+            (typical of older MICrONS / Minnie65 scenes). These don't load because the <strong>state server's domain was retired</strong> &mdash; not because the scene was deleted.
+        </p>
+        <p>
+            <code>www.dynamicannotationframework.com</code> no longer answers at all (the connection is refused), so the viewer fetches the saved state, gets nothing, and shows an empty scene. But the state itself <strong>still exists</strong>: it migrated to the current CAVE state server. The same numeric ID resolves at
+            <code>https://global.daf-apis.com/nglstate/api/v1/&lt;id&gt;</code> &mdash; it just sits behind a Google/CAVE login now (hitting it un-authenticated redirects to an OAuth page rather than 404ing).
+        </p>
+        <p><strong>To recover one of these links:</strong></p>
+        <ol>
+            <li><strong>Swap the dead host for the live one</strong> &mdash; keep the numeric ID, change the rest:<br>
+                <code>www.dynamicannotationframework.com/nglstate/&lt;id&gt;</code> &rarr; <code>global.daf-apis.com/nglstate/api/v1/&lt;id&gt;</code></li>
+            <li><strong>Be logged into CAVE</strong> first (same Google account you use for the data), so the state server will hand the JSON over.</li>
+            <li><strong>Open it in a current viewer that does middleauth</strong> &mdash; e.g. Spelunker (<code>spelunker.cave-explorer.org</code>). The old <code>appspot</code> viewer predates this auth flow and often can't fetch the migrated state even when you're logged in.</li>
+        </ol>
+        <p>
+            If the link is instead a long self-contained <code>#!%7B&hellip;%7D</code> URL (the whole scene encoded inline, no <code>json_url</code>), there's no state server involved &mdash; it depends only on the viewer still running and the underlying <code>precomputed://gs://&hellip;</code> layers still being readable. Those usually still open.
+        </p>
+
+        <details class="ref">
+            <summary>Pull the state JSON yourself with <code>caveclient</code></summary>
+            <div>
+                <p>Once you're authenticated, you can dump any of these states to disk by ID and reload it into any neuroglancer:</p>
+                <p><code>from caveclient import CAVEclient<br>
+                client = CAVEclient()&nbsp;&nbsp;# uses your ~/.cloudvolume cave-secret.json<br>
+                state = client.state.get_state_json(6123190777020416)<br>
+                # 'state' is the full neuroglancer state dict</code></p>
+                <p><code>client.state</code> is the JSONService and defaults to the <code>global.daf-apis.com</code> server, so the ID from the old link is all you need.</p>
             </div>
         </details>
     </div>
