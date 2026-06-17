@@ -164,11 +164,11 @@
             keywords: ['fast_validate_ids', 'fast_get_coords', 'parallel scripts', 'threadpool']
         },
         {
-            title: 'FlyWire Link Troubleshooting',
+            title: 'FlyWire Link Restorer',
             url: 'link-restore/',
             section: 'Experimental',
-            description: 'Why old FlyWire / Neuroglancer share links fail to load and how to fix them. For FlyWire: the per-session prodv1 auth token (login, cross-site cookies, Brave Shields), not the link — warm up the session by opening any scene first. For older MICrONS / appspot links (dynamicannotationframework.com/nglstate): the state-server domain was retired; rewrite the host to global.daf-apis.com/nglstate/api/v1 and open in Spelunker while logged into CAVE.',
-            aliases: ['flywire links', 'link troubleshooting', 'broken link', 'dead link', 'http error 0', 'flywire not loading', 'segmentation not loading', 'microns links', 'appspot links', 'dynamicannotationframework', 'dead state server'],
+            description: 'Revive old FlyWire / Neuroglancer share links that fail to load. Test ground with several methods: the recommended session-token fix (warm up by opening any scene first), an interactive middleauth+ restorer (paste a dead link / bookmarklet / userscript), and a section for old MICrONS / appspot links (dynamicannotationframework.com/nglstate) whose state-server domain was retired — rewrite the host to global.daf-apis.com/nglstate/api/v1 and open in Spelunker while logged into CAVE.',
+            aliases: ['flywire link restorer', 'link restorer', 'flywire links', 'link troubleshooting', 'broken link', 'dead link', 'http error 0', 'flywire not loading', 'segmentation not loading', 'microns links', 'appspot links', 'dynamicannotationframework', 'dead state server'],
             keywords: ['flywire', 'neuroglancer', 'graphene', 'fly_v31', 'prodv1', 'flywire-daf', 'daf-apis', 'middleauth', 'http error 0', 'metadata error', 'auth token', 'session token', 'third-party cookies', 'brave shields', 'login', 'share link', 'json_url', 'local_id', 'nglstate', 'fafbseg', 'microns', 'minnie', 'minnie65', 'appspot', 'neuromancer-seung-import', 'dynamicannotationframework', 'global.daf-apis.com', 'spelunker', 'caveclient', 'state server', 'json service']
         },
         {
