@@ -539,13 +539,18 @@
                 changes.push('Detected an old MICrONS / appspot state link (state id ' + stateId + ')');
                 changes.push('Rewrote the dead host to the live state server: ' + newStateUrl);
                 changes.push('Wrapped it as a Spelunker middleauth+ link so the CAVE login handshake runs');
+                // CAVE/Datastore state ids are normally ~16 digits. A much shorter id almost
+                // always means the pasted link was truncated (long URLs get cut in chat/docs).
+                var truncWarn = stateId.length < 15
+                    ? 'HEADS UP: this state id (' + stateId + ') is only ' + stateId.length + ' digits — real CAVE state ids are ~16 (e.g. 6123190777020416). The pasted link was probably TRUNCATED. Re-paste the complete link or the full id, otherwise the viewer will say "state ... not found". '
+                    : '';
                 return {
                     kind: 'MICrONS state',
                     output: spelunker,
                     changed: true,
                     changes: changes,
                     openUrl: spelunker,
-                    warn: 'You must be logged into CAVE (the Google account with data access) for this to load — the state server is auth-gated now. The old appspot viewer cannot do this handshake, which is why this targets Spelunker. If the scene loads but the layers are empty, those MICrONS data sources may themselves be deprecated (separate from the link).'
+                    warn: truncWarn + 'You must be logged into CAVE (the Google account with data access) for this to load — the state server is auth-gated now. The old appspot viewer cannot do this handshake, which is why this targets Spelunker. Note: a "state … not found" error means you ARE authenticated but that id is not on the server (wrong/truncated id, or the old state was never migrated) — it is NOT a login problem. If the scene loads but the layers are empty, those MICrONS data sources may themselves be deprecated (separate from the link).'
                 };
             }
 
