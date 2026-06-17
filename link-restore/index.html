@@ -265,13 +265,14 @@
     <!-- Restorer -->
     <div class="panel">
         <h2>Restore a link</h2>
-        <p class="hint">Accepts a FlyWire link (<code>&hellip;/#!{&hellip;}</code>, <code>?json_url=&hellip;</code>, a raw <code>graphene://</code> source, or pasted JSON state) <strong>and</strong> an old MICrONS / <code>appspot</code> link (<code>neuromancer-seung-import.appspot.com/?json_url=&hellip;dynamicannotationframework.com/nglstate/&lt;id&gt;</code>, or just the numeric state id).</p>
+        <p class="hint">Accepts a FlyWire link (<code>&hellip;/#!{&hellip;}</code>, <code>?json_url=&hellip;</code>, a raw <code>graphene://</code> source, or pasted JSON state) <strong>and</strong> an old MICrONS / <code>appspot</code> link (<code>neuromancer-seung-import.appspot.com/?json_url=&hellip;dynamicannotationframework.com/nglstate/&lt;id&gt;</code>, or just the numeric state id). <strong>Black EM after restoring?</strong> Paste the <em>JSON state</em> (Spelunker <code>{ }</code> editor) here and it repoints a dead MICrONS EM image to the public release EM.</p>
 
         <label for="input">Old / broken link or source</label>
         <textarea id="input" placeholder="Paste here, e.g.&#10;https://neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/6123190777020416"></textarea>
 
         <div class="samples">
             <button class="action ghost" data-sample="microns">Sample: old MICrONS link</button>
+            <button class="action ghost" data-sample="deadem">Sample: dead-EM state (JSON)</button>
             <button class="action ghost" data-sample="source">Sample: bare source</button>
             <button class="action ghost" data-sample="state">Sample: inline state URL</button>
             <button class="action ghost" data-sample="short">Sample: short link</button>
@@ -441,6 +442,15 @@
         </p>
 
         <details class="ref">
+            <summary>Scene opens but the EM is black / loads forever (dead EM image)</summary>
+            <div>
+                <p>Some old Minnie65 scenes point their EM image at an <strong>intermediate alignment</strong> on <code>gs://microns-seunglab/minnie_v4/alignment/&hellip;/image_stitch_multi_block_v1</code>. The lab garbage-collected those voxels, but the precomputed <code>info</code> header survives &mdash; so the layer still "loads," forever, as black tiles (the viewer keeps requesting chunks that 404). The <strong>segmentation</strong> still works because its data/meshes are still hosted; only the EM image is dead.</p>
+                <p>The tissue itself isn't gone &mdash; the released public EM (<code>gs://iarpa_microns/minnie/minnie65/em</code>) is alive. <strong>Fix:</strong> open the scene's <code>{ }</code> JSON editor in Spelunker, copy the whole state, and paste it into the <em>Restore a link</em> box above. It repoints the dead EM image to the public release EM and hands back a self-contained Spelunker link (no login &mdash; public data). Segmentation, annotations, and position are left untouched.</p>
+                <p style="margin-top:0.5rem;"><strong>Eyeball the registration</strong> afterward: the public EM is a later alignment of the same data, so if it looks slightly shifted against the segmentation, that old scene used a different alignment version (rare; usually it lines up).</p>
+            </div>
+        </details>
+
+        <details class="ref">
             <summary>Pull the state JSON yourself with <code>caveclient</code></summary>
             <div>
                 <p>Once you're authenticated, dump any of these states to disk by ID and reload it into any neuroglancer:</p>
@@ -489,6 +499,29 @@
     }
 
     var FLYWIRE_VIEWER = 'https://ngl.flywire.ai';
+    var SPELUNKER_VIEWER = 'https://spelunker.cave-explorer.org';
+
+    // Repoint dead MICrONS intermediate EM image sources to the public release EM.
+    // These old microns-seunglab minnie alignment images had their voxel data garbage-collected
+    // (the precomputed `info` header survives, so the layer "exists" and loads forever as black).
+    // The segmentation (type=segmentation) is left untouched — only `image` layers are swapped.
+    function swapDeadMicronsEm(state) {
+        var swapped = [];
+        if (!state || !Array.isArray(state.layers)) return { changed: false, swapped: swapped };
+        state.layers.forEach(function (l) {
+            if (!l || l.type !== 'image') return;
+            var src = (typeof l.source === 'string') ? l.source : (l.source && l.source.url) || '';
+            if (/microns-seunglab/i.test(src) && /minnie/i.test(src)) {
+                var ds = /minnie35/i.test(src) ? 'minnie35' : 'minnie65';
+                var pub = 'precomputed://gs://iarpa_microns/minnie/' + ds + '/em';
+                if (src !== pub) {
+                    if (typeof l.source === 'string') l.source = pub; else l.source.url = pub;
+                    swapped.push((l.name || '(unnamed image)') + ' → ' + ds + '/em');
+                }
+            }
+        });
+        return { changed: swapped.length > 0, swapped: swapped };
+    }
 
     // Classify and restore an arbitrary pasted blob.
     // Returns { kind, output, changed, changes[], openUrl|null, warn|null }
@@ -514,6 +547,41 @@
                 openUrl: null,
                 warn: 'This is a local_id link — the scene is stored in the local storage of the ONE browser profile that created it, not on any server. The URL carries no JSON, so this tool cannot rewrite it from here. Two cases: (1) the scene does not load at all on a different browser / cleared storage — it is unrecoverable from the link alone (no server copy). (2) the scene loads but the segmentation throws HTTP error 0 (EM + brain mesh show, 3D empty, nothing selectable) — only the graphene source needs fixing, and the easiest fix is the FlyWire Fix bookmarklet above: open the scene, click the bookmarklet, done. (Or use the console one-liner.) Then Share to mint a portable json_url link.'
             };
+        }
+
+        // --- MICrONS EM fix: pasted JSON state (or inline #! link) with a dead EM image ---
+        // Needs the actual state, so paste the JSON (Spelunker {} editor) or an inline #!{...} link.
+        // Swaps any garbage-collected microns-seunglab minnie EM for the public release EM, then
+        // returns a self-contained inline Spelunker link (data is public — no login needed).
+        var emJsonText = null;
+        if (input.charAt(0) === '{') {
+            emJsonText = input;
+        } else {
+            var emHashIdx = input.indexOf('#!');
+            if (emHashIdx !== -1) {
+                try { emJsonText = decodeURIComponent(input.slice(emHashIdx + 2)); }
+                catch (e) { emJsonText = input.slice(emHashIdx + 2); }
+            }
+        }
+        if (emJsonText) {
+            var emState = null;
+            try { emState = JSON.parse(emJsonText); } catch (e) { emState = null; }
+            if (emState && Array.isArray(emState.layers)) {
+                var emSwap = swapDeadMicronsEm(emState);
+                if (emSwap.changed) {
+                    var emUrl = SPELUNKER_VIEWER + '/#!' + encodeURIComponent(JSON.stringify(emState));
+                    emSwap.swapped.forEach(function (s) { changes.push('Repointed dead EM image: ' + s); });
+                    changes.push('Rebuilt as a self-contained inline Spelunker link (no login needed — public data)');
+                    return {
+                        kind: 'MICrONS EM fix',
+                        output: emUrl,
+                        changed: true,
+                        changes: changes,
+                        openUrl: emUrl,
+                        warn: 'Segmentation + annotations + position are untouched; only the dead EM image was repointed to the public release EM. Eyeball the registration: if the EM looks shifted against the segmentation, this old scene used a slightly different alignment than the public release. The output URL can be very long — use the Open link / Copy button rather than retyping it.'
+                    };
+                }
+            }
         }
 
         // --- Old MICrONS / appspot state link (retired dynamicannotationframework.com) ---
@@ -660,6 +728,7 @@
 
     var SAMPLES = {
         microns: 'https://neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/6123190777020416',
+        deadem: '{"layers":[{"type":"image","source":"precomputed://gs://microns-seunglab/minnie_v4/alignment/fine/sergiy_multimodel_v1/vector_fixer30_faster_v01/image_stitch_multi_block_v1","name":"Minnie65 (MIP2+)"},{"type":"segmentation","source":"precomputed://gs://microns-seunglab/minnie65/seg_minnie65_1","name":"seg_minnie65_1"}],"layout":"xy-3d"}',
         source: 'graphene://https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31',
         state: 'https://neuroglancer-demo.appspot.com/#!{"layers":[{"type":"image","source":"precomputed://gs://microns-seunglab/drosophila_v0/alignment/image_rechunked","name":"EM"},{"type":"segmentation_with_graph","source":"graphene://https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31","name":"fly_v31"}],"layout":"xy-3d"}',
         short: 'https://ngl.flywire.ai/?json_url=https://globalv1.flywire-daf.com/nglstate/api/v1/4753860907040768',
@@ -777,6 +846,32 @@
     function runTests() {
         var SPELUNKER_PREFIX = 'https://spelunker.cave-explorer.org/#!middleauth+https://global.daf-apis.com/nglstate/api/v1/';
         var tests = [
+            {
+                name: 'dead-EM JSON state -> EM repointed to public release, seg untouched',
+                run: function () { return restore(SAMPLES.deadem, {}); },
+                check: function (r) {
+                    if (r.kind !== 'MICrONS EM fix' || !r.changed) return false;
+                    var json = decodeURIComponent(r.output.split('#!')[1]);
+                    var s = JSON.parse(json);
+                    var img = s.layers.find(function (l) { return l.type === 'image'; });
+                    var seg = s.layers.find(function (l) { return l.type === 'segmentation'; });
+                    return img.source === 'precomputed://gs://iarpa_microns/minnie/minnie65/em' &&
+                        seg.source === 'precomputed://gs://microns-seunglab/minnie65/seg_minnie65_1';
+                }
+            },
+            {
+                name: 'dead-EM as inline #! link -> EM fix returns inline Spelunker link',
+                run: function () { return restore('https://neuromancer-seung-import.appspot.com/#!' + encodeURIComponent(SAMPLES.deadem), {}); },
+                check: function (r) {
+                    return r.kind === 'MICrONS EM fix' && r.output.indexOf('spelunker.cave-explorer.org/#!') !== -1 &&
+                        r.output.indexOf(encodeURIComponent('iarpa_microns/minnie/minnie65/em')) !== -1;
+                }
+            },
+            {
+                name: 'healthy FlyWire JSON is NOT touched by the EM-swap branch',
+                run: function () { return restore('{"layers":[{"type":"segmentation_with_graph","source":"graphene://https://prodv1.flywire-daf.com/segmentation/1.0/fly_v31","name":"fly"}]}', {}); },
+                check: function (r) { return r.kind === 'json state'; }
+            },
             {
                 name: 'old MICrONS appspot link -> Spelunker middleauth link',
                 run: function () { return restore(SAMPLES.microns, {}); },
