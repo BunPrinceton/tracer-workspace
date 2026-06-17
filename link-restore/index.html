@@ -669,7 +669,7 @@
                     changed: true,
                     changes: changes,
                     openUrl: spelunker,
-                    warn: truncWarn + 'You must be logged into CAVE (the Google account with data access) for this to load — the state server is auth-gated now. The old appspot viewer cannot do this handshake, which is why this targets Spelunker. Note: a "state … not found" error means you ARE authenticated but that id is not on the server (wrong/truncated id, or the old state was never migrated) — it is NOT a login problem. If the scene loads but the layers are empty, those MICrONS data sources may themselves be deprecated (separate from the link).'
+                    warn: truncWarn + 'You must be logged into CAVE (the Google account with data access) for this to load — the state server is auth-gated now. The old appspot viewer cannot do this handshake, which is why this targets Spelunker. Note: a "state … not found" error means you ARE authenticated but that id is not on the server (wrong/truncated id, or the old state was never migrated) — it is NOT a login problem. ALSO: if the EM shows in 2D but the segmentation throws a graphene "Expected JSON object, but received: undefined" error (often fly_v31), this is actually a FlyWire scene on a MICrONS-looking host — Spelunker can\'t authenticate it. Open the scene, copy its JSON from the {} editor, and paste it back here; it will re-route to the FlyWire viewer (ngl.flywire.ai). If the scene loads but the layers are empty, those MICrONS data sources may themselves be deprecated (separate from the link).'
                 };
             }
 
