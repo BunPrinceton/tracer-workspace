@@ -123,6 +123,27 @@ const ITEMS = [
     meta: ['Cell typing', 'LM vs EM'], kw: ['figure', 'light microscopy', 'lm', 'em', 'comparison', 'cell type', 'asp4', 'morphology'] },
 ];
 
+// Bulk auth-blocked images downloaded in a second pass. Rendered as cards but
+// indexed only at the collection level (below) to avoid flooding search with
+// ~89 near-identical entries.
+let AUTO = [];
+try { AUTO = require('./auto-contrib-manifest.json'); } catch (e) { /* optional */ }
+const seenSlug = new Set(ITEMS.map(i => i.slug));
+AUTO = AUTO.filter(a => a.slug && !seenSlug.has(a.slug));
+const ALL = ITEMS.concat(AUTO);
+
+// collection-level INDEX entries for the bulk series (point at the section)
+const COLLECTIONS = [
+  { title: "Synapse Annotation Quality-Tier Examples (Great / Fair)",
+    url: "gallery/#tracer-contributions", section: "Gallery \\u00b7 Tracer Contributions",
+    description: "A set of D. virilis EM synapse annotations sorted into “great” and “fair” quality tiers — a training reference for what clear vs. borderline synapse calls look like.",
+    keywords: ["synapse", "annotation", "great", "fair", "quality tier", "training", "d. virilis", "drosophila virilis", "ground truth", "examples"] },
+  { title: "Cell-Type EM vs Light-Microscopy Comparisons",
+    url: "gallery/#tracer-contributions", section: "Gallery \\u00b7 Tracer Contributions",
+    description: "A large set of fly cell types shown as EM reconstructions beside their light-microscopy references (aDT/aIP/aSP/pIP/pMP/pSP families), used to confirm cell-type identity across imaging modalities.",
+    keywords: ["light microscopy", "lm", "em", "comparison", "cell type", "cell typing", "morphology", "fru", "dsx", "figure", "adt", "aip", "asp", "pip", "pmp", "psp"] },
+];
+
 const DRIVE_EXTRAS = [
   ['Extracellular space (ground-truth set) — animation', 'https://drive.google.com/file/d/1eia2O_kXwKvUZGBIWTFOagzJTj6z6UjK/view'],
   ['Ground-truthing error — animation', 'https://drive.google.com/file/d/1xSv5Z1r0V6UjIPVJ2TrReSW_PEKGE_oe/view'],
@@ -156,7 +177,7 @@ ${meta}
 }
 
 function section() {
-  const cards = ITEMS.map(card).join('\n\n');
+  const cards = ALL.map(card).join('\n\n');
   const extras = DRIVE_EXTRAS
     .map(([t, u]) => `            <li><a href="${u}" target="_blank" rel="noopener noreferrer">${esc(t)}</a></li>`).join('\n');
   return `    <!-- tracer-contributions START (generated) -->
@@ -201,6 +222,18 @@ function indexEntry(it) {
         }`;
 }
 
+function collectionEntry(c) {
+  const kw = c.keywords.map(k => `"${k}"`).join(', ');
+  return `        {
+            title: "${c.title.replace(/"/g, '\\"')}",
+            url: "${c.url}",
+            section: "${c.section}",
+            description: "${c.description.replace(/"/g, '\\"')}",
+            aliases: [],
+            keywords: [${kw}]
+        }`;
+}
+
 function run() {
   let g = fs.readFileSync(GAL, 'utf8');
   // CSS badges
@@ -231,12 +264,14 @@ function run() {
   // search INDEX: insert entries for any items not already present
   let s = fs.readFileSync(SEARCH, 'utf8');
   const nl = s.includes('\r\n') ? '\r\n' : '\n';
-  const missing = ITEMS.filter(it => !s.includes(`gallery/#fig-${it.slug}"`));
-  if (!missing.length) { console.log('search.js: no new INDEX entries'); return; }
+  const figMissing = ITEMS.filter(it => !s.includes(`gallery/#fig-${it.slug}"`));
+  const collMissing = COLLECTIONS.filter(c => !s.includes(c.title));
+  const parts = figMissing.map(indexEntry).concat(collMissing.map(collectionEntry));
+  if (!parts.length) { console.log('search.js: no new INDEX entries'); return; }
   const anchor = `var INDEX = [` + nl;
-  const block = missing.map(indexEntry).join(',\n').split('\n').join(nl) + ',' + nl;
+  const block = parts.join(',\n').split('\n').join(nl) + ',' + nl;
   s = s.replace(anchor, anchor + block);
   fs.writeFileSync(SEARCH, s);
-  console.log('search.js: +' + missing.length + ' INDEX entries');
+  console.log('search.js: +' + parts.length + ' INDEX entries (' + figMissing.length + ' figures, ' + collMissing.length + ' collections)');
 }
 run();

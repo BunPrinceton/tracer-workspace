@@ -27,5 +27,11 @@
     {"file": "contrib-lm-em-adt5.png",              "class": "figure",   "contributor": "Austin", "source_folder": "LM Comparison (Final)", "drive_id": "1dGpy2VLzSucQkTrpKxZtdZAc1rrX7-zX"},
     {"file": "contrib-lm-em-pmp5.png",              "class": "figure",   "contributor": "Austin", "source_folder": "LM Comparison (Final)", "drive_id": "1Gz8tmU0Y7RLv_8loIHVDKyJc-EpToolI"},
     {"file": "contrib-lm-em-asp4.png",              "class": "figure",   "contributor": "Austin", "source_folder": "LM Comparison (Final)", "drive_id": "1S-LuF44p8wFY63ldT3epSKOM8tYaRAIa"}
-  ]
+  ],
+  "bulk_series": [
+    {"pattern": "contrib-synapse-great-*.png / contrib-synapse-fair-*.png", "class": "training", "contributor": "Kyle", "source_folder": "great / fair (D. virilis synapse annotation quality tiers)"},
+    {"pattern": "contrib-<face>.png (faces seen in EM)", "class": "funny", "contributor": "team", "source_folder": "F2 team folder / Animals:faces seen in EM"},
+    {"pattern": "contrib-lmc-*.png", "class": "figure", "contributor": "Austin", "source_folder": "F3 Screenshots/LM Comparison (per-cell-type EM vs light-microscopy)"}
+  ],
+  "_excluded_note": "Austin's larger archives were NOT imported (too large for a public Pages repo): Screenshots/Individuals (~337 imgs, 1.6GB), Screenshots/Codex EM Screenshots (~125, 572MB), Screenshots/LM Comparison (Final) (~450, 1.6GB). Available in Drive on request."
 }

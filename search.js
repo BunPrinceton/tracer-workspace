@@ -34,6 +34,22 @@
        ---------------------------------------------------------------------- */
     var INDEX = [
         {
+            title: "Synapse Annotation Quality-Tier Examples (Great / Fair)",
+            url: "gallery/#tracer-contributions",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "A set of D. virilis EM synapse annotations sorted into “great” and “fair” quality tiers — a training reference for what clear vs. borderline synapse calls look like.",
+            aliases: [],
+            keywords: ["synapse", "annotation", "great", "fair", "quality tier", "training", "d. virilis", "drosophila virilis", "ground truth", "examples"]
+        },
+        {
+            title: "Cell-Type EM vs Light-Microscopy Comparisons",
+            url: "gallery/#tracer-contributions",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "A large set of fly cell types shown as EM reconstructions beside their light-microscopy references (aDT/aIP/aSP/pIP/pMP/pSP families), used to confirm cell-type identity across imaging modalities.",
+            aliases: [],
+            keywords: ["light microscopy", "lm", "em", "comparison", "cell type", "cell typing", "morphology", "fru", "dsx", "figure", "adt", "aip", "asp", "pip", "pmp", "psp"]
+        },
+        {
             title: "Hippo",
             url: "gallery/#fig-contrib-hippo",
             section: "Gallery \u00b7 Tracer Contributions",
