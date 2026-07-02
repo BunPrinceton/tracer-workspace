@@ -34,6 +34,105 @@
        ---------------------------------------------------------------------- */
     var INDEX = [
         {
+            title: "Hippo",
+            url: "gallery/#fig-contrib-hippo",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "An EM profile the team saw as a hippo — from the running “faces seen in EM” collection.",
+            aliases: [],
+            keywords: ["funny", "hippo", "face", "pareidolia", "faces seen in em"],
+            text: "funny hippo face pareidolia faces seen in em an em profile the team saw as a hippo — from the running “faces seen in em” collection."
+        },
+        {
+            title: "Icy Thumbs-Up",
+            url: "gallery/#fig-contrib-icy-thumbs-up",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "A frosty-looking segment shaped like a thumbs-up.",
+            aliases: [],
+            keywords: ["funny", "thumbs up", "icy", "pareidolia"],
+            text: "funny thumbs up icy pareidolia a frosty-looking segment shaped like a thumbs-up."
+        },
+        {
+            title: "The Scream",
+            url: "gallery/#fig-contrib-screaming-face",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "Membrane contours that form a wide-mouthed screaming face.",
+            aliases: [],
+            keywords: ["funny", "scream", "screaming", "face", "pareidolia"],
+            text: "funny scream screaming face pareidolia membrane contours that form a wide-mouthed screaming face."
+        },
+        {
+            title: "Big-Nosed Animal",
+            url: "gallery/#fig-contrib-big-nose-animal",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "An EM profile resembling a big-nosed animal.",
+            aliases: [],
+            keywords: ["funny", "animal", "nose", "pareidolia"],
+            text: "funny animal nose pareidolia an em profile resembling a big-nosed animal."
+        },
+        {
+            title: "Crying Face",
+            url: "gallery/#fig-contrib-crying-face",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "A shape that reads as a teary, crying face.",
+            aliases: [],
+            keywords: ["funny", "crying", "face", "pareidolia"],
+            text: "funny crying face pareidolia a shape that reads as a teary, crying face."
+        },
+        {
+            title: "Zombie Thumbs-Up",
+            url: "gallery/#fig-contrib-zombie-thumbs-up",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "A ghoulish thumbs-up spotted in the EM.",
+            aliases: [],
+            keywords: ["funny", "zombie", "thumbs up", "pareidolia"],
+            text: "funny zombie thumbs up pareidolia a ghoulish thumbs-up spotted in the em."
+        },
+        {
+            title: "Big Dipper Cell",
+            url: "gallery/#fig-contrib-big-dipper-cell",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "A cell whose processes trace out the Big Dipper constellation.",
+            aliases: [],
+            keywords: ["funny", "big dipper", "constellation", "cell", "pareidolia"],
+            text: "funny big dipper constellation cell pareidolia a cell whose processes trace out the big dipper constellation."
+        },
+        {
+            title: "Synapse Annotation Layer Stack",
+            url: "gallery/#fig-contrib-synapse-annotation-layers",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "A FlyWire synapse-annotation scene showing the full layer stack an annotator works with: production image, incoming and outgoing synapses, false-positive and false-negative flags, duplicate synapses, and T-bars/clefts, over the segmentation-with-graph and a bounding box.",
+            aliases: [],
+            keywords: ["training", "synapse", "annotation", "layers", "flywire", "incoming", "outgoing", "false positive", "false negative", "duplicate", "t-bar", "cleft", "bounding box"],
+            text: "training synapse annotation layers flywire incoming outgoing false positive false negative duplicate t-bar cleft bounding box a flywire synapse-annotation scene showing the full layer stack an annotator works with: production image, incoming and outgoing synapses, false-positive and false-negative flags, duplicate synapses, and t-bars/clefts, over the segmentation-with-graph and a bounding box."
+        },
+        {
+            title: "Synapse QC — FP/FN Counts",
+            url: "gallery/#fig-contrib-synapse-fp-fn-counts",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "A synapse ground-truth QC view: 138 incoming/outgoing synapses detected, with 39 false positives, 54 false negatives, 30 duplicates, and T-bars/clefts marked — the kind of tally used to score detection quality.",
+            aliases: [],
+            keywords: ["training", "synapse", "qc", "quality control", "false positive", "false negative", "duplicate", "t-bar", "cleft", "counts", "detection", "fp", "fn"],
+            text: "training synapse qc quality control false positive false negative duplicate t-bar cleft counts detection fp fn a synapse ground-truth qc view: 138 incoming/outgoing synapses detected, with 39 false positives, 54 false negatives, 30 duplicates, and t-bars/clefts marked — the kind of tally used to score detection quality."
+        },
+        {
+            title: "Synapse Labeling Sets",
+            url: "gallery/#fig-contrib-synapse-labeling-sets",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "An example of how synapse labeling sets are organized for annotation.",
+            aliases: [],
+            keywords: ["training", "synapse", "labeling", "sets", "annotation", "example"],
+            text: "training synapse labeling sets annotation example an example of how synapse labeling sets are organized for annotation."
+        },
+        {
+            title: "Whole-Brain Cell-Type Illustration",
+            url: "gallery/#fig-contrib-mega-type-illustration",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "A whole-brain “mega” cell-type illustration with a corrected color key — a big-picture reference showing many cell types laid out together.",
+            aliases: [],
+            keywords: ["figure", "whole brain", "cell types", "illustration", "mega type", "key", "morphology"],
+            text: "figure whole brain cell types illustration mega type key morphology a whole-brain “mega” cell-type illustration with a corrected color key — a big-picture reference showing many cell types laid out together."
+        },
+        {
             title: "Wolverine's Claws",
             url: "gallery/#fig-contrib-wolverine-claws",
             section: "Gallery \u00b7 Tracer Contributions",

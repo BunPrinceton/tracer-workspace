@@ -107,3 +107,7 @@ Omni/Omni Visual Aid.pptx
 
 # Windows artifact
 tracer_tools/nul
+
+# Google OAuth token — must never be published (live credential)
+scripts/drive_token.json
+*drive_token*.json

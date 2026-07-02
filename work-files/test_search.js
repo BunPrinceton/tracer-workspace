@@ -70,7 +70,7 @@ console.log(`  findable by first distinctive keyword: ${kwHit}/${kwHave} (${(kwH
 console.log(`\n=== 3. AND-BIAS: full-coverage must outrank partial ===`);
 // each case: query, and a substring that must identify the TOP result's title/url
 const andCases = [
-  ['synapse layer', /glossar|visual/i],          // both-word hit beats single "synapse" hits
+  ['synapse layer', /layer/i],                    // both-word hit (title contains "layer") beats single "synapse" hits
   ['light microscopy comparison', /light microscopy/i],
   ['tracer team workflow', /workflow/i],
   ['dense vesicle', /vesicle|synapse/i],
