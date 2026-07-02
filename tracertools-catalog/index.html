@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tracertools Catalog - Princeton Tracers</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 18px;
+            line-height: 1.6;
+            scrollbar-gutter: stable;
+            scroll-behavior: smooth;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #1a1a1a;
+            padding: 0.75rem 1.5rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem 1.5rem;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav a {
+            color: #e5e5e5;
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            display: inline-block;
+        }
+
+        nav a:hover,
+        nav a:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        nav a[aria-current="page"] {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* More dropdown */
+        .nav-more {
+            position: relative;
+        }
+
+        .nav-more-btn {
+            background: none;
+            border: none;
+            color: #e5e5e5;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .nav-more-btn:hover,
+        .nav-more-btn:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .nav-more-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 0.25rem 0;
+            min-width: 160px;
+            z-index: 1000;
+            list-style: none;
+        }
+
+        .nav-more-menu li {
+            padding: 0;
+        }
+
+        .nav-more-menu a {
+            display: block;
+            padding: 0.5rem 1rem;
+            white-space: nowrap;
+        }
+
+        .nav-more-menu a:hover,
+        .nav-more-menu a:focus {
+            background-color: #333;
+        }
+
+        .nav-more:hover .nav-more-menu,
+        .nav-more:focus-within .nav-more-menu {
+            display: block;
+        }
+
+        /* Main content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        /* Page header */
+        .page-header {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #d4d4d4;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #525252;
+            font-size: 1.0625rem;
+        }
+
+        /* Intro block */
+        .intro {
+            background-color: #ffffff;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .intro p {
+            margin-bottom: 0.75rem;
+        }
+
+        .intro p:last-child {
+            margin-bottom: 0;
+        }
+
+        .intro a {
+            color: #2563eb;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .intro a:hover {
+            text-decoration: underline;
+        }
+
+        .intro code,
+        .fork-note code {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.875rem;
+            background-color: #f0f0f0;
+            border-radius: 3px;
+            padding: 0.05rem 0.35rem;
+        }
+
+        /* Distinction note */
+        .fork-note {
+            background-color: #fef3c7;
+            border: 2px solid #d97706;
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .fork-note p {
+            font-size: 0.9375rem;
+            color: #92400e;
+        }
+
+        .fork-note a {
+            color: #92400e;
+            font-weight: 600;
+        }
+
+        /* Family index (quick jump) */
+        .family-index {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .family-index a {
+            display: inline-block;
+            background-color: #ffffff;
+            border: 1px solid #d4d4d4;
+            border-radius: 6px;
+            padding: 0.4rem 0.75rem;
+            font-size: 0.8125rem;
+            color: #2563eb;
+            text-decoration: none;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+        }
+
+        .family-index a:hover,
+        .family-index a:focus {
+            border-color: #2563eb;
+            text-decoration: underline;
+        }
+
+        .family-index a span {
+            color: #737373;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        /* Family section */
+        .family {
+            margin-bottom: 2.5rem;
+            scroll-margin-top: 1rem;
+        }
+
+        .family h2 {
+            font-size: 1.375rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .family h2 code {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            color: #1e40af;
+        }
+
+        .family-count {
+            color: #737373;
+            font-size: 0.9375rem;
+            font-weight: 400;
+        }
+
+        .family-blurb {
+            color: #525252;
+            font-size: 0.9375rem;
+            margin-bottom: 1rem;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            background-color: #ffffff;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            min-width: 640px;
+        }
+
+        thead th {
+            text-align: left;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #737373;
+            padding: 0.65rem 1rem;
+            border-bottom: 2px solid #e5e5e5;
+            background-color: #fafafa;
+        }
+
+        tbody td {
+            padding: 0.7rem 1rem;
+            border-bottom: 1px solid #eeeeee;
+            font-size: 0.9375rem;
+            vertical-align: top;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        td.fn code {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.8125rem;
+            color: #1a1a1a;
+            white-space: nowrap;
+        }
+
+        td.src a {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 0.8125rem;
+            white-space: nowrap;
+        }
+
+        td.src a:hover,
+        td.src a:focus {
+            text-decoration: underline;
+        }
+
+        .note {
+            display: inline-block;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: #92400e;
+            background-color: #fef3c7;
+            border-radius: 3px;
+            padding: 0.05rem 0.4rem;
+            margin-left: 0.4rem;
+        }
+
+        /* Footer */
+        footer {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            border-top: 1px solid #e5e5e5;
+            font-size: 0.875rem;
+            color: #737373;
+        }
+
+        footer a {
+            color: #525252;
+        }
+
+        footer a:hover {
+            color: #1a1a1a;
+        }
+
+        .footer-nav {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .suggest-edit {
+            color: #737373;
+            font-size: 0.8125rem;
+        }
+
+        .suggest-edit:hover {
+            color: #2563eb;
+        }
+
+        /* Focus visible */
+        :focus-visible {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+
+        /* Skip link */
+        .skip-link {
+            position: absolute;
+            left: -10000px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+        .skip-link:focus {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: auto;
+            height: auto;
+            padding: 1rem;
+            background: #2563eb;
+            color: #ffffff;
+            z-index: 10000;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            html {
+                font-size: 16px;
+            }
+
+            main {
+                padding: 1.5rem 1rem;
+            }
+        }
+
+        /* Print */
+        @media print {
+            nav, footer {
+                display: none;
+            }
+
+            .family {
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Main navigation">
+    <ul>
+        <li><a href="../">Dashboard</a></li>
+        <li><a href="../gallery/">Gallery</a></li>
+        <li><a href="../sop/">SOPs</a></li>
+        <li><a href="../pipeline/">Pipeline</a></li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">Experimental &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../experimental/">Tracer Tools Scripts</a></li>
+                <li><a href="../link-restore/">Link Restorer</a></li>
+                <li><a href="../tracertools-catalog/" aria-current="page">tracertools Catalog</a></li>
+            </ul>
+        </li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">More &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../publications/">Publications</a></li>
+                <li><a href="../links/">Curated Links</a></li>
+                <li><a href="../cave-local/">CAVE Local</a></li>
+                <li><a href="../archive/">Archive</a></li>
+                <li><a href="../glossary/">Glossary</a></li>
+                <li><a href="../games/sandy-pong/">Sandy Pong</a></li>
+                <li><a href="../thoughts/">Thoughts</a></li>
+                <li><a href="https://github.com/BunPrinceton/tracer-workspace" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+
+<main id="main-content" role="main">
+
+    <header class="page-header">
+        <h1>tracertools &mdash; Function Catalog</h1>
+        <p>A jump-board for the functions in Jay Gager's <code style="font-family:'SFMono-Regular',Consolas,monospace;">tracertools</code> Python library. Find a tool for a task, then follow the source link for its full definition, arguments, and examples.</p>
+    </header>
+
+    <div class="intro">
+        <p><strong>tracertools</strong> is Jay Gager's utility library for connectomics proofreading &mdash; a collection of Python functions that wrap CAVE, cloudvolume/cloudfiles, neuroglancer (Spelunker), and gspread for common tasks against datastacks like BANC, FlyWire/FAFB, and others. Install it editable (<code>pip install -e .</code>) and import it as <code>import tracertools as tt</code>, then call functions like <code>tt.get_current_seg_ids(...)</code>.</p>
+        <p>Upstream repo: <a href="https://github.com/jaybgager/tracertools" target="_blank" rel="noopener noreferrer">github.com/jaybgager/tracertools</a>. Ben keeps a synced fork at <a href="https://github.com/BunPrinceton/tracertools" target="_blank" rel="noopener noreferrer">github.com/BunPrinceton/tracertools</a>.</p>
+        <p>This page is a <strong>catalog / jump-board only</strong> &mdash; a one-line description plus a source link per function. The GitHub <a href="https://github.com/jaybgager/tracertools#readme" target="_blank" rel="noopener noreferrer">README</a> has the robust descriptions, argument tables, worked examples, and a glossary of terms. All functions live in a single module, <code>src/tracertools/utils.py</code> (re-exported by <code>__init__.py</code>), so every source link points into that file at the function's line.</p>
+    </div>
+
+    <div class="fork-note" role="note">
+        <p><strong>Not the same as the experimental <code style="background:#fde68a;">_ben</code> variants.</strong> These are the canonical <code style="background:#fde68a;">tracertools</code> functions maintained by Jay. Ben's experimental scripts and modified <code style="background:#fde68a;">_ben</code> variants live in a separate repo, <a href="https://github.com/BunPrinceton/tracer-tools-extensions" target="_blank" rel="noopener noreferrer">BunPrinceton/tracer-tools-extensions</a>, and are catalogued on the <a href="../experimental/">Experimental Tools</a> page.</p>
+    </div>
+
+    <nav class="family-index" aria-label="Function families">
+        <a href="#get_">get_ <span>&middot; 22</span></a>
+        <a href="#make_">make_ <span>&middot; 11</span></a>
+        <a href="#bucket_">bucket_ <span>&middot; 10</span></a>
+        <a href="#calc_">calc_ <span>&middot; 6</span></a>
+        <a href="#gsheet_">gsheet_ <span>&middot; 5</span></a>
+        <a href="#check_">check_ <span>&middot; 2</span></a>
+        <a href="#count_">count_ <span>&middot; 2</span></a>
+        <a href="#triage_">triage_ <span>&middot; 1</span></a>
+        <a href="#other">other <span>&middot; 3</span></a>
+    </nav>
+
+    <!-- get_ -->
+    <section class="family" id="get_">
+        <h2><code>get_</code> family <span class="family-count">&middot; 22 functions</span></h2>
+        <p class="family-blurb">Read-only lookups &mdash; pull segment IDs, skeletons, meshes, synapse/volume metrics, CAVE tables, datastack metadata, and the tracer-format config for a datastack.</p>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th scope="col">Function</th><th scope="col">Description</th><th scope="col">Source</th></tr></thead>
+                <tbody>
+                    <tr><td class="fn"><code>get_anno_array_from_state_file</code></td><td>Numpy array of point coordinates from a point-annotation layer in a local neuroglancer JSON state file.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L1175" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>get_bones</code></td><td>Viewer-resolution endpoint pairs ("bones") for each edge of a nanometer-resolution osteoid skeleton.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L1217" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>get_cable_lengths</code></td><td>Total skeleton edge length (cable length) for each segment in a list.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L1265" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>get_cave_stacks</code></td><td>List of all datastacks currently available through the CAVE service.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L1293" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>get_cave_stack_info</code></td><td>Official published metadata dictionary for a datastack.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L1311" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>get_cave_stack_tables</code></td><td>List of all backend CAVE tables available for a datastack.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L1334" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>get_cave_table</code></td><td>Full data for a CAVE table as a pandas DataFrame.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L1356" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>get_cave_table_info</code></td><td>Metadata dictionary for a specific CAVE table.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L1387" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>get_config</code></td><td>Tracer-format config dictionary for a supported datastack (resolutions, table/column names, source URLs, viewer defaults).</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L1416" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>get_current_seg_ids</code></td><td>Best-guess current IDs for a list of stale segment IDs, tracked through splits/merges via supervoxels.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L1610" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>get_json_state_from_url</code></td><td>Neuroglancer JSON state (as a Python dict) derived from a shortened share URL.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L1739" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>get_mesh_triangles</code></td><td>(n,3,3) array of face-vertex coordinates for a precomputed neuroglancer mesh in a volume.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L1772" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>get_original_seg_ids</code></td><td>IDs of all segments that contributed pieces to a segment's current version.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L1843" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>get_roots_from_points</code></td><td>Segment (or supervoxel) IDs at a list of point coordinates.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L1872" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>get_seg_3d_volume</code></td><td>3D volume of a segment in cubic micrometers, summed from its L2 nodes.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L1959" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>get_seg_changelog</code></td><td>Official CAVE tabular changelog for a segment as a pandas DataFrame.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L1997" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>get_seg_details</code></td><td>Current ID, 3D volume, cable length, and synapse count for each segment in a list.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L2028" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>get_seg_edits</code></td><td>Tracer-format edit history for a segment as a DataFrame (one row per edit).</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L2089" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>get_seg_from_sv</code></td><td>Current segment ID that a known supervoxel belongs to.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L2204" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>get_seg_skeletons</code></td><td>Osteoid-format skeleton objects for a list of segment IDs.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L2231" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>get_svs_from_seg</code></td><td>All supervoxel IDs belonging to a segment.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L2305" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>get_supported_configs</code></td><td>Names of all datastacks that have a tracer-format config (see <code>get_config</code>).</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L2333" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- make_ -->
+    <section class="family" id="make_">
+        <h2><code>make_</code> family <span class="family-count">&middot; 11 functions</span></h2>
+        <p class="family-blurb">Constructors &mdash; build neuroglancer links and annotation layers, generate meshes/OBJs/point clouds from annotations, and package precomputed volumes (local or on a bucket).</p>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th scope="col">Function</th><th scope="col">Description</th><th scope="col">Source</th></tr></thead>
+                <tbody>
+                    <tr><td class="fn"><code>make_anno_layer</code></td><td>Build a neuroglancer-format annotation-layer dictionary from a list of annotations (point, line, etc.), optionally linked to segments.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L2723" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>make_bucket_volume_from_obj</code></td><td>Convert a local OBJ into a legacy-format precomputed neuroglancer mesh volume on a remote cloudfiles bucket. <span class="note">BANC only</span></td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L2885" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>make_color_list</code></td><td>Generate N visually distinct, eye-friendly hex colors spaced around the color wheel (for coloring segments/layers).</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L2982" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>make_edits_link</code></td><td>Neuroglancer link showing all edits for a segment as line annotations, plus the current segmentation (cyan) and largest original ancestor (red).</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L3135" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>make_local_volume_from_obj</code></td><td>Build a legacy-format single-resolution precomputed neuroglancer mesh volume from an OBJ, stored on your local machine.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L3312" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>make_mesh_from_points</code></td><td>Build a mesh from a set of points &mdash; convex hull or alpha-shape shrinkwrap (uses internal <code>_alpha_shape_3d</code> helper).</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L3370" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>make_ng_link</code></td><td>Generate a neuroglancer link for a config-supported datastack, optionally adding segment IDs and extra layers.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L3947" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>make_objs_from_state_file</code></td><td>Convex-hull OBJ meshes generated from every point-annotation layer in a local JSON state file (one OBJ per layer).</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L4169" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>make_point_cloud_from_state_file</code></td><td>Point-cloud OBJ file from a point-annotation layer in a neuroglancer JSON state file.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L4246" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>make_volume_mesh_from_state_file</code></td><td>Convex-hull precomputed neuroglancer mesh volume from a point-annotation layer. <span class="note">not Windows-safe</span></td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L4305" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>make_volume_packaging</code></td><td>Create the local folder/file structure (an <code>image</code> folder) to hold a neuroglancer volume; used by other <code>make_</code> functions.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L4402" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- bucket_ -->
+    <section class="family" id="bucket_">
+        <h2><code>bucket_</code> family <span class="family-count">&middot; 10 functions</span></h2>
+        <p class="family-blurb">Remote storage &mdash; read from and write to cloudfiles-managed buckets (upload, download, move, rename, delete, copy). Write operations need write access to the bucket.</p>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th scope="col">Function</th><th scope="col">Description</th><th scope="col">Source</th></tr></thead>
+                <tbody>
+                    <tr><td class="fn"><code>bucket_convert_colons</code></td><td>Convert colons in file names to a Windows-safe placeholder (<code>___</code>) and back &mdash; needed for legacy neuroglancer mesh volumes.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L27" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>bucket_copy_folder</code></td><td>Copy a folder and its contents from one location on a bucket to another.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L65" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>bucket_delete_file</code></td><td>Delete a single file on a bucket.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L92" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>bucket_delete_folder</code></td><td>Delete a folder and everything in it; prompts for a typed confirmation before deleting.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L114" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>bucket_download_file</code></td><td>Download a file from a bucket to a local folder (defaults to <code>~/Downloads</code>).</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L155" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>bucket_download_folder</code></td><td>Download a whole folder and its contents from a bucket to a local folder.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L214" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>bucket_move_file</code></td><td>Move a file between folders on a bucket.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L290" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>bucket_rename_file</code></td><td>Rename a file in place on a bucket.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L327" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>bucket_upload_file</code></td><td>Upload a local file to a bucket folder, creating folders as needed.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L364" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>bucket_upload_folder</code></td><td>Upload a local folder and its contents to a bucket (last path segment names the destination folder).</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L421" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- calc_ -->
+    <section class="family" id="calc_">
+        <h2><code>calc_</code> family <span class="family-count">&middot; 6 functions</span></h2>
+        <p class="family-blurb">Spatial math &mdash; distances, centroids, bounding boxes, and line/skeleton-vs-mesh intersection geometry.</p>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th scope="col">Function</th><th scope="col">Description</th><th scope="col">Source</th></tr></thead>
+                <tbody>
+                    <tr><td class="fn"><code>calc_3d_distance</code></td><td>Euclidean distance between two 3D points at a given voxel resolution.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L467" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>calc_avg_point_coords</code></td><td>Average (centroid) coordinates of a list of points.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L499" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>calc_bbox_corners_from_center</code></td><td>Corner coordinates of a bounding box from a center point and x/y/z dimensions.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L536" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>calc_line_triangle_intersect</code></td><td>Intersection point of a line segment and a triangular plane (Möller&ndash;Trumbore), or <code>None</code>.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L572" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>calc_seg_mesh_intersect</code></td><td>Whether (or where) each segment's skeleton intersects a given neuroglancer mesh.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L734" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>calc_skeleton_mesh_intersect</code></td><td>All points where a skeleton's bones intersect a mesh's triangles (or <code>None</code>).</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L788" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- gsheet_ -->
+    <section class="family" id="gsheet_">
+        <h2><code>gsheet_</code> family <span class="family-count">&middot; 5 functions</span></h2>
+        <p class="family-blurb">Google Sheets I/O via <code>gspread</code>. All require an OAuth token set up beforehand (see the README's Google Sheet Functions note).</p>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th scope="col">Function</th><th scope="col">Description</th><th scope="col">Source</th></tr></thead>
+                <tbody>
+                    <tr><td class="fn"><code>gsheet_add_column</code></td><td>Append a list as a new column (first empty column) to a Google Sheet tab.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L2356" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>gsheet_add_row</code></td><td>Append a list as a new row (first empty row) to a Google Sheet tab.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L2397" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>gsheet_add_seg_details</code></td><td>Compute neuron details (volume, cable length, synapse counts, proofread status) for segment IDs in a sheet and write them back.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L2431" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>gsheet_get_col_as_list</code></td><td>Read a column from a Google Sheet tab as a Python list.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L2600" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>gsheet_get_tab_as_df</code></td><td>Read a Google Sheet tab as a pandas DataFrame.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L2643" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- check_ -->
+    <section class="family" id="check_">
+        <h2><code>check_</code> family <span class="family-count">&middot; 2 functions</span></h2>
+        <p class="family-blurb">Boolean status checks over a list of segment IDs.</p>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th scope="col">Function</th><th scope="col">Description</th><th scope="col">Source</th></tr></thead>
+                <tbody>
+                    <tr><td class="fn"><code>check_seg_freshness</code></td><td>Which segment IDs are current vs. outdated (list of True/False).</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L828" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>check_seg_proofread_status</code></td><td>Which segments are marked "backbone_proofread" in the datastack's proofreading table.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L857" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- count_ -->
+    <section class="family" id="count_">
+        <h2><code>count_</code> family <span class="family-count">&middot; 2 functions</span></h2>
+        <p class="family-blurb">Tallies over segments &mdash; synapses and per-user supervoxel contributions.</p>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th scope="col">Function</th><th scope="col">Description</th><th scope="col">Source</th></tr></thead>
+                <tbody>
+                    <tr><td class="fn"><code>count_synapses</code></td><td>Total synapse count per segment (optionally split into incoming/outgoing).</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L948" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>count_user_sv_contribution</code></td><td>How many supervoxels each user added/removed to produce a proofread segment.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L1051" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- triage_ -->
+    <section class="family" id="triage_">
+        <h2><code>triage_</code> family <span class="family-count">&middot; 1 function</span></h2>
+        <p class="family-blurb">Proofreading triage against known rough-data regions ("swamps").</p>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th scope="col">Function</th><th scope="col">Description</th><th scope="col">Source</th></tr></thead>
+                <tbody>
+                    <tr><td class="fn"><code>triage_segs</code></td><td>Skeletonize a list of segments and flag those passing through known rough spots for a datastack. <span class="note">WIP / nonfunctional</span></td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L4503" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- other -->
+    <section class="family" id="other">
+        <h2>Other utilities <span class="family-count">&middot; 3 functions</span></h2>
+        <p class="family-blurb">Single-function verbs that don't share a family: coordinate conversion, local hosting, and skeleton visualization.</p>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th scope="col">Function</th><th scope="col">Description</th><th scope="col">Source</th></tr></thead>
+                <tbody>
+                    <tr><td class="fn"><code>convert_coord_res</code></td><td>Convert a point's coordinates between two voxel resolutions.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L915" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>host_ng_volume_locally</code></td><td>Locally serve a precomputed neuroglancer volume for testing.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L2688" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                    <tr><td class="fn"><code>visualize_skeletons</code></td><td>Render segment skeletons in a microviewer/VTK window with a cable-thickness heatmap.</td><td class="src"><a href="https://github.com/jaybgager/tracertools/blob/main/src/tracertools/utils.py#L4564" target="_blank" rel="noopener noreferrer">source &#8599;</a></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <div class="footer-nav">
+        <a href="../">Back to Dashboard</a>
+        <a href="#" id="suggest-edit-link" class="suggest-edit" target="_blank" rel="noopener noreferrer">Please Suggest Edits</a>
+    </div>
+</footer>
+
+<script>
+(function() {
+    var link = document.getElementById('suggest-edit-link');
+    if (link) {
+        var title = encodeURIComponent('[Content] ' + document.title.replace(' - Princeton Tracers', ''));
+        link.href = 'https://github.com/BunPrinceton/tracer-workspace/issues/new?template=content-suggestion.yml&title=' + title + '&body=' + encodeURIComponent('**Page:** ' + window.location.href + '\n\n**Section:** \n\n**Suggestion:**\n');
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+    }
+})();
+</script>
+<script src="../search.js" defer></script>
+</body>
+</html>

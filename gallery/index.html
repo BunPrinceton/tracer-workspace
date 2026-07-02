@@ -359,6 +359,15 @@
         .gallery-category-badge[data-category="structure"] {
             background-color: rgba(5, 150, 105, 0.9);
         }
+        .gallery-category-badge[data-category="funny"] {
+            background-color: rgba(217, 119, 6, 0.9);
+        }
+        .gallery-category-badge[data-category="training"] {
+            background-color: rgba(13, 148, 136, 0.9);
+        }
+        .gallery-category-badge[data-category="figure"] {
+            background-color: rgba(79, 70, 229, 0.9);
+        }
 
         /* Caption area */
         .gallery-caption {
@@ -831,10 +840,19 @@
         <li><a href="../sop/">SOPs</a></li>
         <li><a href="../pipeline/">Pipeline</a></li>
         <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">Experimental &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../experimental/">Tracer Tools Scripts</a></li>
+                <li><a href="../link-restore/">Link Restorer</a></li>
+                <li><a href="../tracertools-catalog/">tracertools Catalog</a></li>
+            </ul>
+        </li>
+        <li class="nav-more">
             <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">More &#9662;</button>
             <ul class="nav-more-menu">
                 <li><a href="../publications/">Publications</a></li>
-                <li><a href="../experimental/">Experimental</a></li>
+                <li><a href="../links/">Curated Links</a></li>
+                <li><a href="../cave-local/">CAVE Local</a></li>
                 <li><a href="../archive/">Archive</a></li>
                 <li><a href="../glossary/">Glossary</a></li>
                 <li><a href="../games/sandy-pong/">Sandy Pong</a></li>
@@ -863,6 +881,7 @@
         <a href="#fly-synapses">Fly Synapses</a>
         <a href="#flywire-cheatsheet">FlyWire Cheatsheet</a>
         <a href="#optic-lobe-diagrams">OL Diagrams</a>
+        <a href="#tracer-contributions">Contributions</a>
         <a href="#image-bounty">Image Bounty</a>
     </nav>
 
@@ -877,6 +896,9 @@
             <option value="structure">Structures</option>
             <option value="defect">Defects</option>
             <option value="segmentation">Segmentation</option>
+            <option value="funny">Funny</option>
+            <option value="training">Training</option>
+            <option value="figure">Figure</option>
         </select>
     </div>
 
@@ -5832,6 +5854,339 @@
          IMAGE BOUNTY LIST
          Desired images we're looking for
          ============================================================ -->
+    <!-- tracer-contributions START (generated) -->
+    <section class="dataset-section" id="tracer-contributions" aria-labelledby="contributions-heading">
+        <div class="dataset-header">
+            <h2 id="contributions-heading">Tracer Contributions</h2>
+            <span class="dataset-badge">From the team</span>
+        </div>
+        <p class="dataset-description">
+            Images shared by the tracing team, in three flavors: <strong>Funny</strong> (shapes and faces spotted in EM),
+            <strong>Training</strong> (annotated examples like synapse quality tiers), and <strong>Figure</strong>
+            (illustrations and cross-modality comparisons). Use the Filter control above to show one flavor at a time.
+        </p>
+
+        <div class="gallery-grid">
+
+            <figure class="gallery-item" data-category="funny" id="fig-contrib-wolverine-claws">
+                <div class="gallery-image-container">
+                    <a href="contributions/contrib-wolverine-claws.png" aria-describedby="contrib-wolverine-claws-desc">
+                        <img src="contributions/contrib-wolverine-claws.png" alt="A segmented neuron whose parallel blade-like processes look uncannily like Wolverine's adamantium claws — a favorite “shapes seen in EM” fin" loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="funny">Funny</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="contributions/contrib-wolverine-claws.png">Wolverine's Claws</a>
+                    </h3>
+                    <p class="gallery-description" id="contrib-wolverine-claws-desc">A segmented neuron whose parallel blade-like processes look uncannily like Wolverine's adamantium claws — a favorite “shapes seen in EM” find from the tracing team.</p>
+                    <div class="gallery-meta">
+                    <span class="gallery-meta-item">Pareidolia</span>
+                    <span class="gallery-meta-item">EM</span>
+                    <span class="gallery-meta-item">Contributed by the team</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure class="gallery-item" data-category="funny" id="fig-contrib-ghost-face">
+                <div class="gallery-image-container">
+                    <a href="contributions/contrib-ghost-face.png" aria-describedby="contrib-ghost-face-desc">
+                        <img src="contributions/contrib-ghost-face.png" alt="An EM cross-section whose membrane outline reads as a wide-eyed cartoon ghost, from the team's running “faces seen in EM” collection." loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="funny">Funny</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="contributions/contrib-ghost-face.png">The Ghost</a>
+                    </h3>
+                    <p class="gallery-description" id="contrib-ghost-face-desc">An EM cross-section whose membrane outline reads as a wide-eyed cartoon ghost, from the team's running “faces seen in EM” collection.</p>
+                    <div class="gallery-meta">
+                    <span class="gallery-meta-item">Pareidolia</span>
+                    <span class="gallery-meta-item">EM</span>
+                    <span class="gallery-meta-item">Contributed by the team</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure class="gallery-item" data-category="funny" id="fig-contrib-dalmatian-running">
+                <div class="gallery-image-container">
+                    <a href="contributions/contrib-dalmatian-running.png" aria-describedby="contrib-dalmatian-running-desc">
+                        <img src="contributions/contrib-dalmatian-running.png" alt="Cell profiles that come together into the silhouette of a running dalmatian — more connectomics pareidolia." loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="funny">Funny</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="contributions/contrib-dalmatian-running.png">Running Dalmatian</a>
+                    </h3>
+                    <p class="gallery-description" id="contrib-dalmatian-running-desc">Cell profiles that come together into the silhouette of a running dalmatian — more connectomics pareidolia.</p>
+                    <div class="gallery-meta">
+                    <span class="gallery-meta-item">Pareidolia</span>
+                    <span class="gallery-meta-item">EM</span>
+                    <span class="gallery-meta-item">Contributed by the team</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure class="gallery-item" data-category="funny" id="fig-contrib-eggman">
+                <div class="gallery-image-container">
+                    <a href="contributions/contrib-eggman.png" aria-describedby="contrib-eggman-desc">
+                        <img src="contributions/contrib-eggman.png" alt="A rounded EM profile the team nicknamed “Eggman” — a lighthearted find from the screenshots pile." loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="funny">Funny</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="contributions/contrib-eggman.png">Eggman</a>
+                    </h3>
+                    <p class="gallery-description" id="contrib-eggman-desc">A rounded EM profile the team nicknamed “Eggman” — a lighthearted find from the screenshots pile.</p>
+                    <div class="gallery-meta">
+                    <span class="gallery-meta-item">Pareidolia</span>
+                    <span class="gallery-meta-item">EM</span>
+                    <span class="gallery-meta-item">Contributed by the team</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure class="gallery-item" data-category="training" id="fig-contrib-synapse-great-1">
+                <div class="gallery-image-container">
+                    <a href="contributions/contrib-synapse-great-1.png" aria-describedby="contrib-synapse-great-1-desc">
+                        <img src="contributions/contrib-synapse-great-1.png" alt="High-magnification D. virilis EM synapse with a clean pre→post annotation (cyan). A clear presynaptic vesicle cluster and well-defined cleft" loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="training">Training</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="contributions/contrib-synapse-great-1.png">Synapse Annotation — Great Example (1)</a>
+                    </h3>
+                    <p class="gallery-description" id="contrib-synapse-great-1-desc">High-magnification D. virilis EM synapse with a clean pre→post annotation (cyan). A clear presynaptic vesicle cluster and well-defined cleft make this a textbook “great” quality tier for synapse ground truth.</p>
+                    <div class="gallery-meta">
+                    <span class="gallery-meta-item">D. virilis</span>
+                    <span class="gallery-meta-item">Synapse</span>
+                    <span class="gallery-meta-item">Great tier</span>
+                    <span class="gallery-meta-item">Contributed by the team</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure class="gallery-item" data-category="training" id="fig-contrib-synapse-great-7">
+                <div class="gallery-image-container">
+                    <a href="contributions/contrib-synapse-great-7.png" aria-describedby="contrib-synapse-great-7-desc">
+                        <img src="contributions/contrib-synapse-great-7.png" alt="Another crisp, high-clarity D. virilis synapse example at the “great” quality tier — unambiguous vesicle cloud and cleft, cleanly annotated." loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="training">Training</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="contributions/contrib-synapse-great-7.png">Synapse Annotation — Great Example (2)</a>
+                    </h3>
+                    <p class="gallery-description" id="contrib-synapse-great-7-desc">Another crisp, high-clarity D. virilis synapse example at the “great” quality tier — unambiguous vesicle cloud and cleft, cleanly annotated.</p>
+                    <div class="gallery-meta">
+                    <span class="gallery-meta-item">D. virilis</span>
+                    <span class="gallery-meta-item">Synapse</span>
+                    <span class="gallery-meta-item">Great tier</span>
+                    <span class="gallery-meta-item">Contributed by the team</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure class="gallery-item" data-category="training" id="fig-contrib-synapse-fair-1">
+                <div class="gallery-image-container">
+                    <a href="contributions/contrib-synapse-fair-1.png" aria-describedby="contrib-synapse-fair-1-desc">
+                        <img src="contributions/contrib-synapse-fair-1.png" alt="A lower-clarity, grainier D. virilis EM synapse (green annotation to two postsynaptic partners). Representative of the “fair” quality tier w" loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="training">Training</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="contributions/contrib-synapse-fair-1.png">Synapse Annotation — Fair Example (1)</a>
+                    </h3>
+                    <p class="gallery-description" id="contrib-synapse-fair-1-desc">A lower-clarity, grainier D. virilis EM synapse (green annotation to two postsynaptic partners). Representative of the “fair” quality tier where the synapse is harder to resolve — a useful borderline reference for annotators.</p>
+                    <div class="gallery-meta">
+                    <span class="gallery-meta-item">D. virilis</span>
+                    <span class="gallery-meta-item">Synapse</span>
+                    <span class="gallery-meta-item">Fair tier</span>
+                    <span class="gallery-meta-item">Contributed by the team</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure class="gallery-item" data-category="training" id="fig-contrib-synapse-fair-12">
+                <div class="gallery-image-container">
+                    <a href="contributions/contrib-synapse-fair-12.png" aria-describedby="contrib-synapse-fair-12-desc">
+                        <img src="contributions/contrib-synapse-fair-12.png" alt="Another “fair” quality-tier D. virilis synapse in noisier tissue — the sort of marginal call annotators need to recognize and handle consist" loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="training">Training</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="contributions/contrib-synapse-fair-12.png">Synapse Annotation — Fair Example (2)</a>
+                    </h3>
+                    <p class="gallery-description" id="contrib-synapse-fair-12-desc">Another “fair” quality-tier D. virilis synapse in noisier tissue — the sort of marginal call annotators need to recognize and handle consistently.</p>
+                    <div class="gallery-meta">
+                    <span class="gallery-meta-item">D. virilis</span>
+                    <span class="gallery-meta-item">Synapse</span>
+                    <span class="gallery-meta-item">Fair tier</span>
+                    <span class="gallery-meta-item">Contributed by the team</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure class="gallery-item" data-category="figure" id="fig-contrib-tracer-team-workflow">
+                <div class="gallery-image-container">
+                    <a href="contributions/contrib-tracer-team-workflow.png" aria-describedby="contrib-tracer-team-workflow-desc">
+                        <img src="contributions/contrib-tracer-team-workflow.png" alt="How the tracing team splits its effort: Proofreading (35%) toward a correct connectome, Ground Truthing (50%) for AI training, and Annotatio" loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="figure">Figure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="contributions/contrib-tracer-team-workflow.png">Tracer Team Workflow Breakdown</a>
+                    </h3>
+                    <p class="gallery-description" id="contrib-tracer-team-workflow-desc">How the tracing team splits its effort: Proofreading (35%) toward a correct connectome, Ground Truthing (50%) for AI training, and Annotations (15%) for analysis — with the sub-tasks under each (axons, dendrites, spines, soma, synapses, mitochondria, myelin, glia, blood vessels, cell types).</p>
+                    <div class="gallery-meta">
+                    <span class="gallery-meta-item">Overview</span>
+                    <span class="gallery-meta-item">Workflow</span>
+                    <span class="gallery-meta-item">Contributed by the team</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure class="gallery-item" data-category="figure" id="fig-contrib-lm-em-aip5">
+                <div class="gallery-image-container">
+                    <a href="contributions/contrib-lm-em-aip5.png" aria-describedby="contrib-lm-em-aip5-desc">
+                        <img src="contributions/contrib-lm-em-aip5.png" alt="Side-by-side comparison of the aIP5 cell type reconstructed from EM against a light-microscopy reference, used to confirm cell-type identity" loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="figure">Figure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="contributions/contrib-lm-em-aip5.png">aIP5 — EM vs Light Microscopy</a>
+                    </h3>
+                    <p class="gallery-description" id="contrib-lm-em-aip5-desc">Side-by-side comparison of the aIP5 cell type reconstructed from EM against a light-microscopy reference, used to confirm cell-type identity across imaging modalities.</p>
+                    <div class="gallery-meta">
+                    <span class="gallery-meta-item">Cell typing</span>
+                    <span class="gallery-meta-item">LM vs EM</span>
+                    <span class="gallery-meta-item">Contributed by the team</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure class="gallery-item" data-category="figure" id="fig-contrib-lm-em-asp8">
+                <div class="gallery-image-container">
+                    <a href="contributions/contrib-lm-em-asp8.png" aria-describedby="contrib-lm-em-asp8-desc">
+                        <img src="contributions/contrib-lm-em-asp8.png" alt="The aSP8 cell type matched between its EM reconstruction and a light-microscopy image — part of the fru/dsx cell-typing comparison set." loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="figure">Figure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="contributions/contrib-lm-em-asp8.png">aSP8 — EM vs Light Microscopy</a>
+                    </h3>
+                    <p class="gallery-description" id="contrib-lm-em-asp8-desc">The aSP8 cell type matched between its EM reconstruction and a light-microscopy image — part of the fru/dsx cell-typing comparison set.</p>
+                    <div class="gallery-meta">
+                    <span class="gallery-meta-item">Cell typing</span>
+                    <span class="gallery-meta-item">LM vs EM</span>
+                    <span class="gallery-meta-item">Contributed by the team</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure class="gallery-item" data-category="figure" id="fig-contrib-lm-em-psp3">
+                <div class="gallery-image-container">
+                    <a href="contributions/contrib-lm-em-psp3.png" aria-describedby="contrib-lm-em-psp3-desc">
+                        <img src="contributions/contrib-lm-em-psp3.png" alt="pSP3 morphology compared across EM and light microscopy to validate the cell-type call." loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="figure">Figure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="contributions/contrib-lm-em-psp3.png">pSP3 — EM vs Light Microscopy</a>
+                    </h3>
+                    <p class="gallery-description" id="contrib-lm-em-psp3-desc">pSP3 morphology compared across EM and light microscopy to validate the cell-type call.</p>
+                    <div class="gallery-meta">
+                    <span class="gallery-meta-item">Cell typing</span>
+                    <span class="gallery-meta-item">LM vs EM</span>
+                    <span class="gallery-meta-item">Contributed by the team</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure class="gallery-item" data-category="figure" id="fig-contrib-lm-em-adt5">
+                <div class="gallery-image-container">
+                    <a href="contributions/contrib-lm-em-adt5.png" aria-describedby="contrib-lm-em-adt5-desc">
+                        <img src="contributions/contrib-lm-em-adt5.png" alt="The aDT5 cell type shown as an EM reconstruction beside its light-microscopy reference stack." loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="figure">Figure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="contributions/contrib-lm-em-adt5.png">aDT5 — EM vs Light Microscopy</a>
+                    </h3>
+                    <p class="gallery-description" id="contrib-lm-em-adt5-desc">The aDT5 cell type shown as an EM reconstruction beside its light-microscopy reference stack.</p>
+                    <div class="gallery-meta">
+                    <span class="gallery-meta-item">Cell typing</span>
+                    <span class="gallery-meta-item">LM vs EM</span>
+                    <span class="gallery-meta-item">Contributed by the team</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure class="gallery-item" data-category="figure" id="fig-contrib-lm-em-pmp5">
+                <div class="gallery-image-container">
+                    <a href="contributions/contrib-lm-em-pmp5.png" aria-describedby="contrib-lm-em-pmp5-desc">
+                        <img src="contributions/contrib-lm-em-pmp5.png" alt="pMP5 in the female brain, EM reconstruction against its light-microscopy match." loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="figure">Figure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="contributions/contrib-lm-em-pmp5.png">pMP5 (female) — EM vs Light Microscopy</a>
+                    </h3>
+                    <p class="gallery-description" id="contrib-lm-em-pmp5-desc">pMP5 in the female brain, EM reconstruction against its light-microscopy match.</p>
+                    <div class="gallery-meta">
+                    <span class="gallery-meta-item">Cell typing</span>
+                    <span class="gallery-meta-item">LM vs EM</span>
+                    <span class="gallery-meta-item">Contributed by the team</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure class="gallery-item" data-category="figure" id="fig-contrib-lm-em-asp4">
+                <div class="gallery-image-container">
+                    <a href="contributions/contrib-lm-em-asp4.png" aria-describedby="contrib-lm-em-asp4-desc">
+                        <img src="contributions/contrib-lm-em-asp4.png" alt="aSP4 morphology compared between EM and light microscopy — a case where the LM is noisy and the match takes care to call." loading="lazy">
+                    </a>
+                    <span class="gallery-category-badge" data-category="figure">Figure</span>
+                </div>
+                <figcaption class="gallery-caption">
+                    <h3 class="gallery-title">
+                        <a href="contributions/contrib-lm-em-asp4.png">aSP4 — EM vs Light Microscopy</a>
+                    </h3>
+                    <p class="gallery-description" id="contrib-lm-em-asp4-desc">aSP4 morphology compared between EM and light microscopy — a case where the LM is noisy and the match takes care to call.</p>
+                    <div class="gallery-meta">
+                    <span class="gallery-meta-item">Cell typing</span>
+                    <span class="gallery-meta-item">LM vs EM</span>
+                    <span class="gallery-meta-item">Contributed by the team</span>
+                    </div>
+                </figcaption>
+            </figure>
+
+        </div>
+
+        <p class="dataset-description" style="margin-top:1.25rem;">
+            A few larger animations and videos are hosted on Drive rather than embedded here:
+        </p>
+        <ul style="margin:0.5rem 0 0 1.25rem; line-height:1.8;">
+            <li><a href="https://drive.google.com/file/d/1eia2O_kXwKvUZGBIWTFOagzJTj6z6UjK/view" target="_blank" rel="noopener noreferrer">Extracellular space (ground-truth set) — animation</a></li>
+            <li><a href="https://drive.google.com/file/d/1xSv5Z1r0V6UjIPVJ2TrReSW_PEKGE_oe/view" target="_blank" rel="noopener noreferrer">Ground-truthing error — animation</a></li>
+            <li><a href="https://drive.google.com/file/d/1wyQ__a4IgOgARy3icnJvqFct6HPWOFP1/view" target="_blank" rel="noopener noreferrer">First upsampling set (shows hallucinations) — animation</a></li>
+            <li><a href="https://drive.google.com/file/d/1FobyQK3yS6am6ANv0Tj2e7ukyZzsk9KI/view" target="_blank" rel="noopener noreferrer">Big Dipper cell — full-resolution image</a></li>
+            <li><a href="https://drive.google.com/file/d/18_ItuicQjVP0uZVy6QdEKVVH9qPp304A/view" target="_blank" rel="noopener noreferrer">Glia wheel (looks like myelin at first) — video</a></li>
+        </ul>
+    </section>
+    <!-- tracer-contributions END -->
+
     <section class="dataset-section" id="image-bounty" aria-labelledby="bounty-heading">
         <div class="dataset-header">
             <h2 id="bounty-heading">Image Bounty List</h2>

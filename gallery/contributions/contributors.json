@@ -1,0 +1,20 @@
+{
+  "_note": "Attribution + provenance for the Tracer Contributions gallery images. Not displayed on the gallery page (cards show generic 'Contributed by the team'); this file is the knowable record of who contributed each image and its Drive source.",
+  "images": [
+    {"file": "contrib-wolverine-claws.png",       "class": "funny",    "contributor": "team",   "source_folder": "faces seen in EM"},
+    {"file": "contrib-ghost-face.png",             "class": "funny",    "contributor": "team",   "source_folder": "faces seen in EM"},
+    {"file": "contrib-dalmatian-running.png",      "class": "funny",    "contributor": "team",   "source_folder": "faces seen in EM"},
+    {"file": "contrib-eggman.png",                 "class": "funny",    "contributor": "Austin", "source_folder": "Screenshots/lols", "drive_id": "1Y4VmMRanF5PMCutF-d82DjKH9NnX2W6P"},
+    {"file": "contrib-synapse-great-1.png",        "class": "training", "contributor": "Kyle",   "source_folder": "great (D. virilis synapses)", "drive_id": "1o7VoRpqvFuGnBhlO7V52Dztn4XU83RXJ"},
+    {"file": "contrib-synapse-great-7.png",        "class": "training", "contributor": "Kyle",   "source_folder": "great (D. virilis synapses)", "drive_id": "1qF978wYWBmCabzwAjdgxBvTZq8sUqe6D"},
+    {"file": "contrib-synapse-fair-1.png",         "class": "training", "contributor": "Kyle",   "source_folder": "fair (D. virilis synapses)", "drive_id": "1il854Rg2tcGcY98y3OwIWDd53N6AI-v4"},
+    {"file": "contrib-synapse-fair-12.png",        "class": "training", "contributor": "Kyle",   "source_folder": "fair (D. virilis synapses)", "drive_id": "1IK8eZ-Tlbs9P9CBh0tQRv53uzffFJK1U"},
+    {"file": "contrib-tracer-team-workflow.png",   "class": "figure",   "contributor": "team",   "source_folder": "shared team folder", "drive_id": "1lY1gd9rrA44_EnzFCMBF3HfVVJcxZjEu"},
+    {"file": "contrib-lm-em-aip5.png",             "class": "figure",   "contributor": "Austin", "source_folder": "LM Comparison (Final)", "drive_id": "1PwaaL3Vm6FREFnRCzw4IQ4zglF-LEjJr"},
+    {"file": "contrib-lm-em-asp8.png",             "class": "figure",   "contributor": "Austin", "source_folder": "LM Comparison (Final)", "drive_id": "16sdrNCcqbZAsLBXssW0yXA0ZtOiq910Y"},
+    {"file": "contrib-lm-em-psp3.png",             "class": "figure",   "contributor": "Austin", "source_folder": "LM Comparison (Final)", "drive_id": "15GnCR0llEX8P8_6sQrvXDQ5z3p6-YoXZ"},
+    {"file": "contrib-lm-em-adt5.png",             "class": "figure",   "contributor": "Austin", "source_folder": "LM Comparison (Final)", "drive_id": "1dGpy2VLzSucQkTrpKxZtdZAc1rrX7-zX"},
+    {"file": "contrib-lm-em-pmp5.png",             "class": "figure",   "contributor": "Austin", "source_folder": "LM Comparison (Final)", "drive_id": "1Gz8tmU0Y7RLv_8loIHVDKyJc-EpToolI"},
+    {"file": "contrib-lm-em-asp4.png",             "class": "figure",   "contributor": "Austin", "source_folder": "LM Comparison (Final)", "drive_id": "1S-LuF44p8wFY63ldT3epSKOM8tYaRAIa"}
+  ]
+}

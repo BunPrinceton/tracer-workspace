@@ -33,7 +33,169 @@
          keywords    — concepts/tools/terms not in the title
        ---------------------------------------------------------------------- */
     var INDEX = [
+        {
+            title: "Wolverine's Claws",
+            url: "gallery/#fig-contrib-wolverine-claws",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "A segmented neuron whose parallel blade-like processes look uncannily like Wolverine's adamantium claws — a favorite “shapes seen in EM” find from the tracing team.",
+            aliases: [],
+            keywords: ["funny", "wolverine", "claws", "pareidolia", "shapes seen in em", "neuron"],
+            text: "funny wolverine claws pareidolia shapes seen in em neuron a segmented neuron whose parallel blade-like processes look uncannily like wolverine's adamantium claws — a favorite “shapes seen in em” find from the tracing team."
+        },
+        {
+            title: "The Ghost",
+            url: "gallery/#fig-contrib-ghost-face",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "An EM cross-section whose membrane outline reads as a wide-eyed cartoon ghost, from the team's running “faces seen in EM” collection.",
+            aliases: [],
+            keywords: ["funny", "ghost", "face", "pareidolia", "faces seen in em"],
+            text: "funny ghost face pareidolia faces seen in em an em cross-section whose membrane outline reads as a wide-eyed cartoon ghost, from the team's running “faces seen in em” collection."
+        },
+        {
+            title: "Running Dalmatian",
+            url: "gallery/#fig-contrib-dalmatian-running",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "Cell profiles that come together into the silhouette of a running dalmatian — more connectomics pareidolia.",
+            aliases: [],
+            keywords: ["funny", "dalmatian", "dog", "running", "pareidolia"],
+            text: "funny dalmatian dog running pareidolia cell profiles that come together into the silhouette of a running dalmatian — more connectomics pareidolia."
+        },
+        {
+            title: "Eggman",
+            url: "gallery/#fig-contrib-eggman",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "A rounded EM profile the team nicknamed “Eggman” — a lighthearted find from the screenshots pile.",
+            aliases: [],
+            keywords: ["funny", "eggman", "egg", "pareidolia"],
+            text: "funny eggman egg pareidolia a rounded em profile the team nicknamed “eggman” — a lighthearted find from the screenshots pile."
+        },
+        {
+            title: "Synapse Annotation — Great Example (1)",
+            url: "gallery/#fig-contrib-synapse-great-1",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "High-magnification D. virilis EM synapse with a clean pre→post annotation (cyan). A clear presynaptic vesicle cluster and well-defined cleft make this a textbook “great” quality tier for synapse ground truth.",
+            aliases: [],
+            keywords: ["training", "synapse", "annotation", "great", "quality", "vesicles", "cleft", "presynaptic", "postsynaptic", "drosophila virilis", "ground truth"],
+            text: "training synapse annotation great quality vesicles cleft presynaptic postsynaptic drosophila virilis ground truth high-magnification d. virilis em synapse with a clean pre→post annotation (cyan). a clear presynaptic vesicle cluster and well-defined cleft make this a textbook “great” quality tier for synapse ground truth."
+        },
+        {
+            title: "Synapse Annotation — Great Example (2)",
+            url: "gallery/#fig-contrib-synapse-great-7",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "Another crisp, high-clarity D. virilis synapse example at the “great” quality tier — unambiguous vesicle cloud and cleft, cleanly annotated.",
+            aliases: [],
+            keywords: ["training", "synapse", "annotation", "great", "quality", "vesicles", "cleft", "drosophila virilis"],
+            text: "training synapse annotation great quality vesicles cleft drosophila virilis another crisp, high-clarity d. virilis synapse example at the “great” quality tier — unambiguous vesicle cloud and cleft, cleanly annotated."
+        },
+        {
+            title: "Synapse Annotation — Fair Example (1)",
+            url: "gallery/#fig-contrib-synapse-fair-1",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "A lower-clarity, grainier D. virilis EM synapse (green annotation to two postsynaptic partners). Representative of the “fair” quality tier where the synapse is harder to resolve — a useful borderline reference for annotators.",
+            aliases: [],
+            keywords: ["training", "synapse", "annotation", "fair", "quality", "borderline", "polyadic", "postsynaptic", "drosophila virilis"],
+            text: "training synapse annotation fair quality borderline polyadic postsynaptic drosophila virilis a lower-clarity, grainier d. virilis em synapse (green annotation to two postsynaptic partners). representative of the “fair” quality tier where the synapse is harder to resolve — a useful borderline reference for annotators."
+        },
+        {
+            title: "Synapse Annotation — Fair Example (2)",
+            url: "gallery/#fig-contrib-synapse-fair-12",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "Another “fair” quality-tier D. virilis synapse in noisier tissue — the sort of marginal call annotators need to recognize and handle consistently.",
+            aliases: [],
+            keywords: ["training", "synapse", "annotation", "fair", "quality", "borderline", "drosophila virilis"],
+            text: "training synapse annotation fair quality borderline drosophila virilis another “fair” quality-tier d. virilis synapse in noisier tissue — the sort of marginal call annotators need to recognize and handle consistently."
+        },
+        {
+            title: "Tracer Team Workflow Breakdown",
+            url: "gallery/#fig-contrib-tracer-team-workflow",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "How the tracing team splits its effort: Proofreading (35%) toward a correct connectome, Ground Truthing (50%) for AI training, and Annotations (15%) for analysis — with the sub-tasks under each (axons, dendrites, spines, soma, synapses, mitochondria, myelin, glia, blood vessels, cell types).",
+            aliases: [],
+            keywords: ["figure", "workflow", "proofreading", "ground truthing", "annotations", "overview", "tracer team", "pie chart"],
+            text: "figure workflow proofreading ground truthing annotations overview tracer team pie chart how the tracing team splits its effort: proofreading (35%) toward a correct connectome, ground truthing (50%) for ai training, and annotations (15%) for analysis — with the sub-tasks under each (axons, dendrites, spines, soma, synapses, mitochondria, myelin, glia, blood vessels, cell types)."
+        },
+        {
+            title: "aIP5 — EM vs Light Microscopy",
+            url: "gallery/#fig-contrib-lm-em-aip5",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "Side-by-side comparison of the aIP5 cell type reconstructed from EM against a light-microscopy reference, used to confirm cell-type identity across imaging modalities.",
+            aliases: [],
+            keywords: ["figure", "light microscopy", "lm", "em", "comparison", "cell type", "aip5", "morphology", "fru", "dsx"],
+            text: "figure light microscopy lm em comparison cell type aip5 morphology fru dsx side-by-side comparison of the aip5 cell type reconstructed from em against a light-microscopy reference, used to confirm cell-type identity across imaging modalities."
+        },
+        {
+            title: "aSP8 — EM vs Light Microscopy",
+            url: "gallery/#fig-contrib-lm-em-asp8",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "The aSP8 cell type matched between its EM reconstruction and a light-microscopy image — part of the fru/dsx cell-typing comparison set.",
+            aliases: [],
+            keywords: ["figure", "light microscopy", "lm", "em", "comparison", "cell type", "asp8", "morphology"],
+            text: "figure light microscopy lm em comparison cell type asp8 morphology the asp8 cell type matched between its em reconstruction and a light-microscopy image — part of the fru/dsx cell-typing comparison set."
+        },
+        {
+            title: "pSP3 — EM vs Light Microscopy",
+            url: "gallery/#fig-contrib-lm-em-psp3",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "pSP3 morphology compared across EM and light microscopy to validate the cell-type call.",
+            aliases: [],
+            keywords: ["figure", "light microscopy", "lm", "em", "comparison", "cell type", "psp3", "morphology"],
+            text: "figure light microscopy lm em comparison cell type psp3 morphology psp3 morphology compared across em and light microscopy to validate the cell-type call."
+        },
+        {
+            title: "aDT5 — EM vs Light Microscopy",
+            url: "gallery/#fig-contrib-lm-em-adt5",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "The aDT5 cell type shown as an EM reconstruction beside its light-microscopy reference stack.",
+            aliases: [],
+            keywords: ["figure", "light microscopy", "lm", "em", "comparison", "cell type", "adt5", "morphology"],
+            text: "figure light microscopy lm em comparison cell type adt5 morphology the adt5 cell type shown as an em reconstruction beside its light-microscopy reference stack."
+        },
+        {
+            title: "pMP5 (female) — EM vs Light Microscopy",
+            url: "gallery/#fig-contrib-lm-em-pmp5",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "pMP5 in the female brain, EM reconstruction against its light-microscopy match.",
+            aliases: [],
+            keywords: ["figure", "light microscopy", "lm", "em", "comparison", "cell type", "pmp5", "female", "morphology"],
+            text: "figure light microscopy lm em comparison cell type pmp5 female morphology pmp5 in the female brain, em reconstruction against its light-microscopy match."
+        },
+        {
+            title: "aSP4 — EM vs Light Microscopy",
+            url: "gallery/#fig-contrib-lm-em-asp4",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "aSP4 morphology compared between EM and light microscopy — a case where the LM is noisy and the match takes care to call.",
+            aliases: [],
+            keywords: ["figure", "light microscopy", "lm", "em", "comparison", "cell type", "asp4", "morphology"],
+            text: "figure light microscopy lm em comparison cell type asp4 morphology asp4 morphology compared between em and light microscopy — a case where the lm is noisy and the match takes care to call."
+        },
         /* ---- Top-level hubs ---- */
+        {
+            title: "Local CAVE Stack — Setup & Demo",
+            url: "cave-local/",
+            section: "Experimental · CAVE Local",
+            description: "How to stand up a self-hosted single-user CAVEconnectome stack with dummy data on a Windows machine, and a demo walkthrough for the team using the official caveclient.",
+            aliases: ["cave local", "local cave", "cave stack", "cave demo"],
+            keywords: ["cave", "caveconnectome", "caveclient", "connectome", "docker", "materialization", "chunkedgraph", "annotation", "datastack", "dummy data", "self-hosted", "setup", "demo", "windows", "time travel", "versioning", "edit history"],
+            text: "cave local stack self-hosted caveconnectome dummy data windows docker git bash caveclient fake_datastack my_cave_table supervoxel root id materialization chunkedgraph annotation info schema pychunkedgraph get_root_id get_roots query_table live_query get_versions update_annotation edit history audit log time travel versioning bootstrap run_demo reset_demo dashboard gateway 127.0.0.1"
+        },
+        {
+            title: "tracertools — Function Catalog",
+            url: "tracertools-catalog/",
+            section: "Experimental · Catalog",
+            description: "Catalog of the functions in Jay Gager's tracertools Python library (bucket_/calc_/check_/get_/gsheet_/make_/triage_ families), each linking to the GitHub source.",
+            aliases: ["tracertools", "tracer tools catalog", "function catalog"],
+            keywords: ["tracertools", "jay gager", "functions", "catalog", "bucket", "calc", "check", "get", "gsheet", "make", "triage", "cave", "banc", "neuroglancer", "mesh", "coordinates", "root ids", "google sheets"],
+            text: "tracertools jay gager function catalog import tt bucket_ calc_ check_ get_ gsheet_ make_ triage_ cave banc neuroglancer mesh coordinates root ids google sheets make_mesh_from_points host_ng_volume_locally get_config get_anno_array_from_state_file bucket_copy_folder"
+        },
+        {
+            title: "Curated Links",
+            url: "links/",
+            section: "More · Curated Links",
+            description: "A curated collection of shareable 3D neuroglancer example scenes contributed by the team — ZFish, Pinky 100, Minnie basket cells, Fly lobe meshes, and failure-mode examples — with a one-click hand-off to the Link Restorer for older links.",
+            aliases: ["curated links", "links tab", "3d links", "example links"],
+            keywords: ["curated links", "neuroglancer", "3d", "examples", "zfish", "pinky", "minnie", "basket cells", "fly", "lobe meshes", "failure modes", "shared scenes", "restore"],
+            text: "curated links neuroglancer 3d examples zfish pinky 100 minnie basket cells fly all lobe meshes c2 cluster errors breaks blown membrane merger er pm pinch dark cells large vesicles parallel bundles optic lobe meshes failure modes restore ryan"
+        },
         {
             title: 'Dashboard',
             url: '',
@@ -1150,8 +1312,18 @@
         }
         if (matched === 0) return 0;
         if (terms.length > 1) {
-            // Reward entries that cover more query terms
-            total *= (0.5 + 0.5 * (matched / terms.length));
+            // Strong AND-bias: entries that cover ALL query terms must dominate
+            // entries matching only one (even on a high-weight field). Without
+            // this, "synapse layer" ranks a title-only "synapse" hit above an
+            // entry containing both words, and every extra query word only admits
+            // more single-term matches (longer query -> looser results). Cubed
+            // coverage steeply demotes partial matches (coverage 0.5 -> x0.125)
+            // while the per-extra-term factor keeps rewarding broader coverage.
+            // Partial matches still score > 0, so nothing disappears from the full
+            // results list — only the ranking changes. Single-term queries are
+            // untouched (coverage === 1).
+            var coverage = matched / terms.length;
+            total *= Math.pow(coverage, 3) * (1 + 0.5 * (matched - 1));
         }
         // Per-entry ranking multiplier (e.g. the glossary boosts itself to the
         // top for the jargon terms it defines). Only affects entries that opt in.

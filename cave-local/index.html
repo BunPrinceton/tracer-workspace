@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAVE Local Stack - Princeton Tracers</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 18px;
+            line-height: 1.6;
+            scrollbar-gutter: stable;
+            scroll-behavior: smooth;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #1a1a1a;
+            padding: 0.75rem 1.5rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem 1.5rem;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav a {
+            color: #e5e5e5;
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            display: inline-block;
+        }
+
+        nav a:hover,
+        nav a:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        nav a[aria-current="page"] {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* More dropdown */
+        .nav-more {
+            position: relative;
+        }
+
+        .nav-more-btn {
+            background: none;
+            border: none;
+            color: #e5e5e5;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .nav-more-btn:hover,
+        .nav-more-btn:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .nav-more-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 0.25rem 0;
+            min-width: 160px;
+            z-index: 1000;
+            list-style: none;
+        }
+
+        .nav-more-menu li {
+            padding: 0;
+        }
+
+        .nav-more-menu a {
+            display: block;
+            padding: 0.5rem 1rem;
+            white-space: nowrap;
+        }
+
+        .nav-more-menu a:hover,
+        .nav-more-menu a:focus {
+            background-color: #333;
+        }
+
+        .nav-more:hover .nav-more-menu,
+        .nav-more:focus-within .nav-more-menu {
+            display: block;
+        }
+
+        /* Main content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        /* Page header */
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid #d4d4d4;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            color: #525252;
+            font-size: 1.0625rem;
+            max-width: 70ch;
+        }
+
+        /* Section headings */
+        .section {
+            margin-bottom: 2.5rem;
+        }
+
+        .section > h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin: 0 0 0.75rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 2px solid #d4d4d4;
+            scroll-margin-top: 1rem;
+        }
+
+        .section > h3 {
+            font-size: 1.0625rem;
+            font-weight: 700;
+            margin: 1.5rem 0 0.5rem;
+        }
+
+        .section p {
+            margin-bottom: 0.85rem;
+            max-width: 74ch;
+        }
+
+        .section ul, .section ol {
+            margin: 0 0 0.85rem 1.4rem;
+            max-width: 74ch;
+        }
+
+        .section li {
+            margin-bottom: 0.4rem;
+        }
+
+        .section a {
+            color: #2563eb;
+        }
+
+        strong { font-weight: 700; }
+
+        /* On this page nav */
+        .toc {
+            background-color: #ffffff;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .toc h2 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #737373;
+            margin-bottom: 0.5rem;
+        }
+
+        .toc ol {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem 1.5rem;
+            margin: 0;
+        }
+
+        .toc a {
+            color: #2563eb;
+            text-decoration: none;
+            font-size: 0.9375rem;
+        }
+
+        .toc a:hover { text-decoration: underline; }
+
+        /* Callout boxes */
+        .callout {
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin: 1rem 0 1.25rem;
+        }
+
+        .callout p { margin-bottom: 0.5rem; }
+        .callout p:last-child { margin-bottom: 0; }
+
+        .callout-amber {
+            background-color: #fef3c7;
+            border: 2px solid #d97706;
+        }
+
+        .callout-amber h3 {
+            color: #92400e;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .callout-amber, .callout-amber p, .callout-amber li {
+            color: #92400e;
+        }
+
+        .callout-amber ul {
+            margin: 0.5rem 0 0 1.25rem;
+        }
+
+        .callout-info {
+            background-color: #eff6ff;
+            border: 1px solid #93c5fd;
+        }
+
+        .callout-info p, .callout-info li { color: #1e3a8a; }
+
+        /* Cards */
+        .card {
+            background-color: #ffffff;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Code — click to copy */
+        code.inline {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.85em;
+            background-color: #ececec;
+            padding: 0.1em 0.35em;
+            border-radius: 4px;
+            word-break: break-word;
+        }
+
+        .copy {
+            position: relative;
+            display: block;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 0.8125rem;
+            line-height: 1.5;
+            background-color: #1e293b;
+            color: #e2e8f0;
+            border: 1px solid #334155;
+            border-radius: 6px;
+            padding: 0.85rem 3.5rem 0.85rem 1rem;
+            margin: 0.5rem 0;
+            white-space: pre-wrap;
+            word-break: break-word;
+            cursor: pointer;
+            overflow-wrap: anywhere;
+        }
+
+        .copy:hover { border-color: #2563eb; }
+
+        .copy:focus-visible {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+
+        .copy .copytag {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.6rem;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            font-size: 0.6875rem;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            pointer-events: none;
+        }
+
+        .copy.copied { border-color: #16a34a; }
+        .copy.copied .copytag { color: #4ade80; }
+
+        /* Command list (demo cheat-sheet) */
+        .cmd-group { margin-bottom: 1.25rem; }
+
+        .cmd-group h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 0.35rem;
+        }
+
+        .cmd-row {
+            margin-bottom: 0.75rem;
+        }
+
+        .cmd-row .proves {
+            display: block;
+            font-size: 0.85rem;
+            color: #525252;
+            margin: 0.15rem 0 0 0.25rem;
+        }
+
+        .cmd-row .proves::before {
+            content: "Proves: ";
+            font-weight: 700;
+            color: #737373;
+        }
+
+        /* Ordered setup steps */
+        ol.steps {
+            counter-reset: step;
+            list-style: none;
+            margin-left: 0;
+        }
+
+        ol.steps > li {
+            position: relative;
+            padding-left: 2.5rem;
+            margin-bottom: 1.1rem;
+        }
+
+        ol.steps > li::before {
+            counter-increment: step;
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0.05rem;
+            width: 1.75rem;
+            height: 1.75rem;
+            background-color: #2563eb;
+            color: #ffffff;
+            border-radius: 50%;
+            font-size: 0.875rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Definition-ish table */
+        .facts {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 74ch;
+            margin: 0.5rem 0 1rem;
+            font-size: 0.9375rem;
+        }
+
+        .facts th, .facts td {
+            text-align: left;
+            padding: 0.5rem 0.75rem;
+            border-bottom: 1px solid #e5e5e5;
+            vertical-align: top;
+        }
+
+        .facts th {
+            color: #525252;
+            font-weight: 600;
+            white-space: nowrap;
+            width: 1%;
+        }
+
+        .facts td code { word-break: break-all; }
+
+        /* Screenshot placeholder */
+        .shot-placeholder {
+            background-color: #fafafa;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            color: #94a3b8;
+            font-size: 0.875rem;
+            margin: 1rem 0;
+        }
+
+        /* Footer */
+        footer {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            border-top: 1px solid #e5e5e5;
+            font-size: 0.875rem;
+            color: #737373;
+        }
+
+        footer a { color: #525252; }
+        footer a:hover { color: #1a1a1a; }
+
+        .footer-nav {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .suggest-edit {
+            color: #737373;
+            font-size: 0.8125rem;
+        }
+
+        .suggest-edit:hover { color: #2563eb; }
+
+        /* Focus visible */
+        :focus-visible {
+            outline: 2px solid #2563eb;
+            outline-offset: 2px;
+        }
+
+        /* Skip link */
+        .skip-link {
+            position: absolute;
+            left: -10000px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+        .skip-link:focus {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: auto;
+            height: auto;
+            padding: 1rem;
+            background: #2563eb;
+            color: #ffffff;
+            z-index: 10000;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            html { font-size: 16px; }
+            main { padding: 1.5rem 1rem; }
+        }
+
+        @media print {
+            nav, footer { display: none; }
+            .copy { color: #000; background: #f5f5f5; border: 1px solid #000; }
+            .copy .copytag { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Main navigation">
+    <ul>
+        <li><a href="../">Dashboard</a></li>
+        <li><a href="../gallery/">Gallery</a></li>
+        <li><a href="../sop/">SOPs</a></li>
+        <li><a href="../pipeline/">Pipeline</a></li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">Experimental &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../experimental/">Tracer Tools Scripts</a></li>
+                <li><a href="../link-restore/">Link Restorer</a></li>
+                <li><a href="../tracertools-catalog/">tracertools Catalog</a></li>
+            </ul>
+        </li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">More &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../publications/">Publications</a></li>
+                <li><a href="../links/">Curated Links</a></li>
+                <li><a href="../cave-local/" aria-current="page">CAVE Local</a></li>
+                <li><a href="../archive/">Archive</a></li>
+                <li><a href="../glossary/">Glossary</a></li>
+                <li><a href="../games/sandy-pong/">Sandy Pong</a></li>
+                <li><a href="../thoughts/">Thoughts</a></li>
+                <li><a href="https://github.com/BunPrinceton/tracer-workspace" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+
+<main id="main-content" role="main">
+
+    <header class="page-header">
+        <h1>Local CAVE Stack &mdash; Setup &amp; Demo</h1>
+        <p>A self-hosted, single-user, $0 deployment of the real CAVEconnectome backend running on one Windows box &mdash; queryable by the official <code class="inline">caveclient</code>, indistinguishable from production. This page is the guide to standing it up and walking a team through it.</p>
+    </header>
+
+    <nav class="toc" aria-label="On this page">
+        <h2>On this page</h2>
+        <ol>
+            <li><a href="#what">1. What this is</a></li>
+            <li><a href="#setup">2. Windows setup</a></li>
+            <li><a href="#gotchas">3. Gotchas</a></li>
+            <li><a href="#demo">4. Demo command list</a></li>
+            <li><a href="#versioning">5. Edit-history story</a></li>
+            <li><a href="#dashboard">6. The dashboard</a></li>
+        </ol>
+    </nav>
+
+    <!-- ================= 1. WHAT THIS IS ================= -->
+    <section class="section" id="what">
+        <h2>1. What this is</h2>
+
+        <p>
+            CAVE &mdash; the <strong>Connectome Annotation Versioning Engine</strong> &mdash; is the backend that large EM
+            connectomics projects (FlyWire, MICrONS) use to store annotations tied to a segmentation, resolve
+            supervoxels to root IDs through a dynamic proofreading graph, and take immutable, versioned snapshots
+            you can time-travel query. In production it is a fleet of microservices behind
+            <code class="inline">global.daf-apis.com</code>.
+        </p>
+
+        <p>
+            This project runs that <strong>entire fleet locally, for $0, with no cloud account</strong>, on a single
+            Windows machine. These are the genuine production container images &mdash; InfoService, SchemaService,
+            AnnotationEngine, PyChunkedGraph, and MaterializationEngine (plus its Celery worker) &mdash; behind an
+            nginx gateway, backed by Postgres/PostGIS, Redis, and an in-memory BigTable emulator. The official Python
+            client connects to <code class="inline">http://127.0.0.1:8080</code> and cannot tell the difference from real CAVE.
+        </p>
+
+        <p>The dummy fixtures it serves:</p>
+        <table class="facts">
+            <tr><th>Datastack</th><td><code class="inline">fake_datastack</code> &rarr; aligned volume <code class="inline">fake_volume</code> &rarr; PCG table <code class="inline">test</code></td></tr>
+            <tr><th>Annotation table</th><td><code class="inline">my_cave_table</code>, schema <code class="inline">bound_tag</code> (a point + a string tag), voxel resolution <code class="inline">[8, 8, 40]</code></td></tr>
+            <tr><th>Dummy graph</th><td>two supervoxels <code class="inline">72127962782105600</code> / <code class="inline">...601</code>, both resolving to root <code class="inline">288230376151711745</code></td></tr>
+            <tr><th>Demo annotations</th><td>points <code class="inline">[600,100,10]</code> and <code class="inline">[900,100,10]</code>, landing on the two dummy supervoxels</td></tr>
+        </table>
+
+        <h3>Why it matters</h3>
+        <p>
+            It lets us demo and train against a fully faithful CAVE &mdash; discovery, annotation, live supervoxel&rarr;root
+            resolution, materialization, and time-travel queries &mdash; with <strong>no cloud costs and no credentials</strong>.
+            Anyone learning the client, or testing tooling, gets the real API surface on a laptop. It also proves out
+            the hardest-to-host piece, MaterializationEngine, entirely offline.
+        </p>
+
+        <div class="callout callout-info">
+            <p><strong>Where it lives.</strong> The working stack is on this box at <code class="inline">Desktop\_scratch\cave-local\realcave</code>. Everything below is run from that <code class="inline">realcave</code> directory.</p>
+        </div>
+    </section>
+
+    <!-- ================= 2. WINDOWS SETUP ================= -->
+    <section class="section" id="setup">
+        <h2>2. Windows setup, step by step</h2>
+
+        <p>
+            <strong>Prerequisites:</strong> Docker Desktop with the <strong>WSL2 backend</strong> enabled. Confirm
+            <code class="inline">docker version</code> and <code class="inline">docker compose version</code> both work.
+        </p>
+
+        <div class="callout callout-amber">
+            <p><strong>Run from Git Bash driving <code class="inline">docker.exe</code> &mdash; not from inside WSL.</strong></p>
+            <p>Docker Desktop's WSL integration registers Ubuntu but never injects <code class="inline">/usr/bin/docker</code> or the socket, and Windows-path bind mounts do <em>not</em> resolve over a raw TCP <code class="inline">DOCKER_HOST</code> from WSL. Native Windows-path bind mounts <em>do</em> work through <code class="inline">docker.exe</code>. Git Bash + <code class="inline">docker.exe</code> is the combination that works.</p>
+        </div>
+
+        <ol class="steps">
+            <li>
+                <p>Open Git Bash and go to the stack directory:</p>
+                <div class="copy" tabindex="0"><span class="copytag">copy</span>cd realcave</div>
+            </li>
+            <li>
+                <p>Bring the whole stack up. <code class="inline">MSYS_NO_PATHCONV=1</code> stops Git Bash from mangling in-container path arguments like <code class="inline">/cfg/...</code>:</p>
+                <div class="copy" tabindex="0"><span class="copytag">copy</span>MSYS_NO_PATHCONV=1 bash ./bootstrap.sh</div>
+                <p><code class="inline">bootstrap.sh</code> runs 8 idempotent-ish steps, in order:</p>
+                <ol>
+                    <li><strong>Backing services + gateway + schema</strong> &mdash; <code class="inline">postgres redis bigtable gateway schema</code>.</li>
+                    <li><strong>Wait for Postgres</strong> to report healthy.</li>
+                    <li><strong>Create databases</strong> (<code class="inline">datasets</code>, <code class="inline">annotation</code>, <code class="inline">materialize</code>, + PostGIS). The per-volume DB <code class="inline">fake_volume</code> is auto-created later by AnnotationEngine.</li>
+                    <li><strong>InfoService + DB migrations</strong> (<code class="inline">flask db upgrade</code>).</li>
+                    <li><strong>Register the datastack</strong> &mdash; inserts the <code class="inline">aligned_volume</code> and <code class="inline">datastack</code> rows the client discovers (there is no POST API for this).</li>
+                    <li><strong>AnnotationEngine + PyChunkedGraph.</strong></li>
+                    <li><strong>Build the dummy graph</strong> in the emulator &mdash; two supervoxels joined by one edge, both resolving to one root.</li>
+                    <li><strong>MaterializationEngine web + worker.</strong></li>
+                </ol>
+                <p class="proves" style="color:#737373;font-size:0.85rem;">If step 3 fails once on a fresh PostGIS init race (<code class="inline">database system is shutting down</code>), just re-run <code class="inline">bootstrap.sh</code>.</p>
+            </li>
+            <li>
+                <p>Create a host virtualenv (Windows Python 3.11) with the official client and its deps:</p>
+                <div class="copy" tabindex="0"><span class="copytag">copy</span>python -m venv .venv-host
+./.venv-host/Scripts/python.exe -m pip install caveclient pandas numpy</div>
+                <p class="proves" style="color:#737373;font-size:0.85rem;"><code class="inline">cloudvolume</code> from <code class="inline">requirements-host.txt</code> has no Windows wheel and the demo scripts do not need it &mdash; <code class="inline">caveclient</code> + <code class="inline">pandas</code> + <code class="inline">numpy</code> is enough.</p>
+            </li>
+            <li>
+                <p>Create the annotation table and its two annotations:</p>
+                <div class="copy" tabindex="0"><span class="copytag">copy</span>./.venv-host/Scripts/python.exe scripts/setup_demo_data.py</div>
+            </li>
+            <li>
+                <p>Run the materialization workflow to create version 1 (annotations joined to root IDs in an immutable, queryable snapshot):</p>
+                <div class="copy" tabindex="0"><span class="copytag">copy</span>curl -s -X POST "http://localhost:8080/materialize/api/v2/materialize/run/complete_workflow/datastack/fake_datastack?days_to_expire=5&merge_tables=true"</div>
+                <p class="proves" style="color:#737373;font-size:0.85rem;">Watch it with <code class="inline">docker logs -f realcave-mat-worker-1</code> &mdash; look for supervoxel + root lookups and <code class="inline">set_version_status ... AVAILABLE</code>. It creates DB <code class="inline">fake_datastack__mat1</code> and an <code class="inline">AnalysisVersion</code> row.</p>
+            </li>
+            <li>
+                <p>Open the live dashboard in a browser:</p>
+                <div class="copy" tabindex="0"><span class="copytag">copy</span>http://localhost:8080/</div>
+            </li>
+        </ol>
+
+        <h3>Daily use</h3>
+        <p>Once it is set up, you do not repeat the whole bootstrap. Two scripts cover day-to-day demoing, both run from <code class="inline">realcave/</code> in Git Bash:</p>
+
+        <p><strong>Get demo-ready and run the proof</strong> &mdash; ensures the stack is up, rebuilds the in-memory dummy graph (needed after any reboot), and runs the 5-part narrated proof:</p>
+        <div class="copy" tabindex="0"><span class="copytag">copy</span>cd realcave &amp;&amp; ./run_demo.sh</div>
+
+        <p><strong>Reset before a fresh demo</strong> &mdash; wipes the live table back to 2 clean annotations with empty edit history, then materializes a fresh version:</p>
+        <div class="copy" tabindex="0"><span class="copytag">copy</span>./reset_demo.sh</div>
+
+        <div class="callout callout-info">
+            <p><strong>Cold boot</strong> (Docker Desktop not running): launch Docker Desktop, wait for the engine, then <code class="inline">./run_demo.sh</code>. It handles the rebooted-box case where the in-memory graph was lost.</p>
+        </div>
+    </section>
+
+    <!-- ================= 3. GOTCHAS ================= -->
+    <section class="section" id="gotchas">
+        <h2>3. Gotchas</h2>
+        <p>These are the hard-won, non-obvious things &mdash; the reasons a naive <code class="inline">docker compose up</code> of the real images does not just work. Don't re-discover them.</p>
+
+        <div class="callout callout-amber">
+            <h3>Read before you demo</h3>
+            <ul>
+                <li><strong>Use <code style="background:#fde68a;padding:0 3px;border-radius:3px;">127.0.0.1</code>, never <code style="background:#fde68a;padding:0 3px;border-radius:3px;">localhost</code></strong>, in any host-side client config. On Windows, Python <code style="background:#fde68a;padding:0 3px;border-radius:3px;">requests</code> resolves <code style="background:#fde68a;padding:0 3px;border-radius:3px;">localhost</code> to IPv6 <code style="background:#fde68a;padding:0 3px;border-radius:3px;">::1</code> first and eats a ~21s SYN timeout per new connection before falling back to IPv4. This turned a ~3s demo into ~150s.</li>
+                <li><strong>Rebuild the dummy graph after any BigTable restart or reboot.</strong> The emulator is in-memory, so the graph is wiped and live queries break. <code style="background:#fde68a;padding:0 3px;border-radius:3px;">run_demo.sh</code> / <code style="background:#fde68a;padding:0 3px;border-radius:3px;">reset_demo.sh</code> do this for you; manually: <code style="background:#fde68a;padding:0 3px;border-radius:3px;">docker exec realcave-pcg-1 python /cfg/create_dummy_graph.py</code>. It must run inside the pcg container so the written graph version matches the server.</li>
+                <li><strong>The three MaterializationEngine compose fixes</strong> (in <code style="background:#fde68a;padding:0 3px;border-radius:3px;">docker-compose.cave.yml</code>) that got the workflow to <code style="background:#fde68a;padding:0 3px;border-radius:3px;">AVAILABLE</code>: (a) worker pool <code style="background:#fde68a;padding:0 3px;border-radius:3px;">prefork --concurrency=4</code>, not <code style="background:#fde68a;padding:0 3px;border-radius:3px;">solo</code> (solo deadlocks on the workflow's Celery chords); (b) <code style="background:#fde68a;padding:0 3px;border-radius:3px;">LOCAL_SERVER_URL</code>/<code style="background:#fde68a;padding:0 3px;border-radius:3px;">GLOBAL_SERVER_URL=http://gateway</code> as real env vars (the worker reads <code style="background:#fde68a;padding:0 3px;border-radius:3px;">LOCAL_SERVER_URL</code> from <code style="background:#fde68a;padding:0 3px;border-radius:3px;">os.environ</code>, not flask config, else defaults to a bogus host); (c) mount <code style="background:#fde68a;padding:0 3px;border-radius:3px;">cfg/cave-secret.json</code> at <code style="background:#fde68a;padding:0 3px;border-radius:3px;">/root/.cloudvolume/secrets/</code> (CloudVolume's graphene driver demands a token file even with auth disabled).</li>
+                <li><strong>AVX is required.</strong> Polars (a MaterializationEngine dependency) needs AVX instructions. Fine on this Intel i7 (native AVX2); it <em>breaks</em> on Apple-Silicon Macs because the x86 images run under Rosetta, which has no AVX. Fallback on a no-AVX host: build the worker with the <code style="background:#fde68a;padding:0 3px;border-radius:3px;">polars-lts-cpu</code> wheel and set <code style="background:#fde68a;padding:0 3px;border-radius:3px;">POLARS_SKIP_CPU_CHECK=1</code>.</li>
+                <li><strong>Annotation POST returns 500 but the row still persists.</strong> On insert, AnnotationEngine fires a "supervoxel notify" to <code style="background:#fde68a;padding:0 3px;border-radius:3px;">local_server</code>, which is unreachable from inside the container, so it 500s &mdash; but the write already happened, and materialization does its own supervoxel lookup anyway. Optional clean fix: add <code style="background:#fde68a;padding:0 3px;border-radius:3px;">127.0.0.1 host.docker.internal</code> to the hosts file and point <code style="background:#fde68a;padding:0 3px;border-radius:3px;">local_server</code> there.</li>
+                <li><strong><code style="background:#fde68a;padding:0 3px;border-radius:3px;">AUTH_DISABLED=true</code> but the client still needs a token.</strong> Auth is off on info/annotation/pcg/materialize, but <code style="background:#fde68a;padding:0 3px;border-radius:3px;">caveclient</code> still insists on <em>some</em> token &mdash; pass <code style="background:#fde68a;padding:0 3px;border-radius:3px;">auth_token="dummy"</code>.</li>
+                <li><strong>The materialized version counter only resets on a full <code style="background:#fde68a;padding:0 3px;border-radius:3px;">down -v</code>.</strong> Deleting <code style="background:#fde68a;padding:0 3px;border-radius:3px;">AnalysisVersion</code> rows or dropping mat DBs does not reset it; old versions accumulate but stay valid and queryable. (This is why <code style="background:#fde68a;padding:0 3px;border-radius:3px;">team_demo.py</code>'s <code style="background:#fde68a;padding:0 3px;border-radius:3px;">versions == [1]</code> assertion may report a cosmetic "CHECK FAILED" once more than one version exists &mdash; the data checks still pass.)</li>
+            </ul>
+        </div>
+
+        <p style="font-size:0.9rem;color:#525252;">
+            One more intentional-looking oddity: <code class="inline">segmentation_source</code> host is <code class="inline">gateway</code> (container-reachable over the docker network) while <code class="inline">local_server</code> is <code class="inline">http://127.0.0.1:8080</code> (host caveclient reaches it). Different fields, split on purpose.
+        </p>
+    </section>
+
+    <!-- ================= 4. DEMO COMMAND LIST ================= -->
+    <section class="section" id="demo">
+        <h2>4. Demo walkthrough &mdash; the caveclient command list</h2>
+        <p>
+            This mirrors the click-to-copy cheat-sheet on the dashboard. Start a Python shell on the host
+            (<code class="inline">./.venv-host/Scripts/python.exe</code>) and paste these in order. Every command is the
+            same <code class="inline">caveclient</code> API the team uses against production &mdash; only the
+            <code class="inline">server_address</code> differs. Click any command to copy it.
+        </p>
+
+        <div class="cmd-group">
+            <h3>Connect (run these first)</h3>
+            <div class="cmd-row">
+                <div class="copy" tabindex="0"><span class="copytag">copy</span>from caveclient import CAVEclient
+import datetime
+client = CAVEclient("fake_datastack", server_address="http://127.0.0.1:8080", auth_token="dummy")</div>
+                <span class="proves">the official client attaches to the self-hosted stack exactly as it would to real CAVE.</span>
+            </div>
+        </div>
+
+        <div class="cmd-group">
+            <h3>Discover what's on the server</h3>
+            <div class="cmd-row">
+                <div class="copy" tabindex="0"><span class="copytag">copy</span>client.info.get_datastacks()</div>
+                <span class="proves">the client auto-discovers the datastack, like it does for production.</span>
+            </div>
+            <div class="cmd-row">
+                <div class="copy" tabindex="0"><span class="copytag">copy</span>client.info.get_datastack_info()</div>
+                <span class="proves">the datastack advertises its aligned volume and segmentation source.</span>
+            </div>
+            <div class="cmd-row">
+                <div class="copy" tabindex="0"><span class="copytag">copy</span>client.annotation.get_tables()</div>
+                <span class="proves">a real AnnotationEngine is serving a real table.</span>
+            </div>
+            <div class="cmd-row">
+                <div class="copy" tabindex="0"><span class="copytag">copy</span>client.schema.schema_definition("bound_tag")</div>
+                <span class="proves">SchemaService returns the genuine schema for the table's type.</span>
+            </div>
+        </div>
+
+        <div class="cmd-group">
+            <h3>Read the annotation table</h3>
+            <div class="cmd-row">
+                <div class="copy" tabindex="0"><span class="copytag">copy</span>client.annotation.get_annotation("my_cave_table", [1, 2])</div>
+                <span class="proves">the two annotations come back with their positions and tags.</span>
+            </div>
+        </div>
+
+        <div class="cmd-group">
+            <h3>Materialized data &mdash; versions + time travel</h3>
+            <div class="cmd-row">
+                <div class="copy" tabindex="0"><span class="copytag">copy</span>client.materialize.get_versions()</div>
+                <span class="proves">materialization ran; there is at least one immutable version.</span>
+            </div>
+            <div class="cmd-row">
+                <div class="copy" tabindex="0"><span class="copytag">copy</span>client.materialize.query_table("my_cave_table")</div>
+                <span class="proves">the current materialized snapshot joins each annotation to its root ID.</span>
+            </div>
+            <div class="cmd-row">
+                <div class="copy" tabindex="0"><span class="copytag">copy</span>client.materialize.query_table("my_cave_table", materialization_version=1)</div>
+                <span class="proves">any prior version is still queryable exactly as it was.</span>
+            </div>
+            <div class="cmd-row">
+                <div class="copy" tabindex="0"><span class="copytag">copy</span>client.materialize.live_query("my_cave_table", timestamp=datetime.datetime.now(datetime.timezone.utc))</div>
+                <span class="proves">time-travel: roots are reconstructed as of any given moment.</span>
+            </div>
+        </div>
+
+        <div class="cmd-group">
+            <h3>Segmentation &mdash; live supervoxel &rarr; root</h3>
+            <div class="cmd-row">
+                <div class="copy" tabindex="0"><span class="copytag">copy</span>client.chunkedgraph.get_root_id(72127962782105600)</div>
+                <span class="proves">the real PyChunkedGraph resolves a supervoxel to its current root in real time.</span>
+            </div>
+            <div class="cmd-row">
+                <div class="copy" tabindex="0"><span class="copytag">copy</span>client.chunkedgraph.get_roots([72127962782105600, 72127962782105601])</div>
+                <span class="proves">both dummy supervoxels resolve to the same root <code class="inline">288230376151711745</code>.</span>
+            </div>
+        </div>
+
+        <div class="cmd-group">
+            <h3>Edit &mdash; every change is logged with full history</h3>
+            <div class="cmd-row">
+                <div class="copy" tabindex="0"><span class="copytag">copy</span>client.annotation.update_annotation("my_cave_table", {"id": 1, "pt": {"position": [600, 100, 10]}, "tag": "my new label"})</div>
+                <span class="proves">editing produces an audit trail &mdash; the old row is superseded, not overwritten (see next section).</span>
+            </div>
+            <p style="font-size:0.85rem;color:#737373;margin:0.35rem 0 0 0.25rem;">Note the schema-native body <code class="inline">{"id":N,"pt":{"position":[...]},"tag":...}</code> &mdash; not a flattened <code class="inline">pt_position</code>.</p>
+        </div>
+    </section>
+
+    <!-- ================= 5. VERSIONING STORY ================= -->
+    <section class="section" id="versioning">
+        <h2>5. The versioning / edit-history story</h2>
+        <p>
+            This is the "V" in CAVE &mdash; <strong>Versioning</strong> &mdash; and the most compelling thing to show a team.
+            Editing an annotation <strong>never overwrites it</strong>. The <code class="inline">edit_history_demo.py</code> script tells the story end to end:
+        </p>
+        <ol>
+            <li><strong>CAVE logs every change.</strong> When you update an annotation, CAVE keeps the old row, stamps it <code class="inline">deleted</code>, marks it <code class="inline">valid=false</code>, and links it to its successor via <code class="inline">superceded_id</code>. A brand-new row holds the new value.</li>
+            <li><strong>An audit log of old values.</strong> Every prior value is still on disk, with the exact timestamp it changed &mdash; you can read the whole lineage of a single annotation, superseded rows and all.</li>
+            <li><strong>Materialize a new version.</strong> Snapshotting the current state produces a fresh immutable version <code class="inline">N</code>.</li>
+            <li><strong>Time-travel across versions.</strong> <code class="inline">query_table("my_cave_table", materialization_version=N)</code> returns the data exactly as it was at version <code class="inline">N</code>, and <code class="inline">live_query(timestamp=...)</code> reconstructs state as of any moment.</li>
+        </ol>
+
+        <p>Run the whole story (re-runnable &mdash; each run adds one more edit, so the history visibly grows):</p>
+        <div class="copy" tabindex="0"><span class="copytag">copy</span>./.venv-host/Scripts/python.exe edit_history_demo.py</div>
+
+        <p style="font-size:0.9rem;color:#525252;">
+            The demo prints the active "cell A" annotation, renames it, then shows the full audit log where every
+            prior value is still present and timestamped, marked superseded and linked to the row that replaced it.
+            It then materializes a new version and prints what "cell A" was at each version &mdash; the essence of a
+            versioned annotation store.
+        </p>
+    </section>
+
+    <!-- ================= 6. THE DASHBOARD ================= -->
+    <section class="section" id="dashboard">
+        <h2>6. The dashboard</h2>
+        <p>
+            The live dashboard (<code class="inline">web/index.html</code>) is served by the gateway from the <code class="inline">./web</code>
+            bind mount at <code class="inline">http://localhost:8080/</code> &mdash; no rebuild to edit it, but it needs the running
+            stack (it polls the services same-origin every 5 seconds). It is the visual companion to the command list, with these panels:
+        </p>
+        <ul>
+            <li><strong>Services health</strong> &mdash; live status of the gateway and each CAVE service, polled every 5s.</li>
+            <li><strong>Command cheat-sheet</strong> &mdash; the same click-to-copy <code class="inline">caveclient</code> snippets grouped in section 4 above, ready to paste into a Python shell.</li>
+            <li><strong>Datastack discovery</strong> &mdash; the raw datastack JSON exactly as <code class="inline">caveclient</code> reads it.</li>
+            <li><strong>Annotation table</strong> &mdash; the current (active) rows of <code class="inline">my_cave_table</code> from the real AnnotationEngine.</li>
+            <li><strong>Edit history / audit log</strong> &mdash; every row ever written, active and superseded, with a <strong>&#9998; Make a live edit</strong> button that renames "cell A" straight from the browser (a PUT to the annotation API) so the audit trail grows live in front of the audience.</li>
+            <li><strong>Materialized versions</strong> &mdash; the immutable snapshots with their timestamps and status.</li>
+            <li><strong>Live query</strong> &mdash; a <strong>&#9654; Run live root query</strong> button that resolves the two supervoxels to their root through the real PyChunkedGraph on demand.</li>
+            <li><strong>Service Swagger / API docs</strong> &mdash; links to InfoService, SchemaService, AnnotationEngine, and PyChunkedGraph's own UIs, as proof these are genuine CAVE binaries.</li>
+        </ul>
+
+        <div class="shot-placeholder">
+            Annotated dashboard screenshots to be added here.
+            <!-- TODO: add annotated screenshots of dashboard panels -->
+        </div>
+    </section>
+
+</main>
+
+<footer>
+    <div class="footer-nav">
+        <a href="../">Back to Dashboard</a>
+        <a href="#" id="suggest-edit-link" class="suggest-edit" target="_blank" rel="noopener noreferrer">Please Suggest Edits</a>
+    </div>
+</footer>
+
+<script>
+// Click-to-copy for command blocks
+(function() {
+    document.querySelectorAll('.copy').forEach(function(el) {
+        function doCopy() {
+            var text = '';
+            el.childNodes.forEach(function(n) {
+                if (!(n.nodeType === 1 && n.classList && n.classList.contains('copytag'))) {
+                    text += n.textContent;
+                }
+            });
+            text = text.trim();
+            navigator.clipboard.writeText(text).then(function() {
+                el.classList.add('copied');
+                var tag = el.querySelector('.copytag');
+                var old = tag ? tag.textContent : '';
+                if (tag) tag.textContent = 'copied ✓';
+                setTimeout(function() {
+                    el.classList.remove('copied');
+                    if (tag) tag.textContent = old;
+                }, 1200);
+            });
+        }
+        el.addEventListener('click', doCopy);
+        el.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); doCopy(); }
+        });
+    });
+})();
+
+// Dynamic "Please Suggest Edits" GitHub issue link
+(function() {
+    var link = document.getElementById('suggest-edit-link');
+    if (link) {
+        var title = encodeURIComponent('[Content] ' + document.title.replace(' - Princeton Tracers', ''));
+        link.href = 'https://github.com/BunPrinceton/tracer-workspace/issues/new?template=content-suggestion.yml&title=' + title + '&body=' + encodeURIComponent('**Page:** ' + window.location.href + '\n\n**Section:** \n\n**Suggestion:**\n');
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+    }
+})();
+</script>
+<script src="../search.js" defer></script>
+</body>
+</html>
