@@ -30,7 +30,7 @@ function currentKey(rel) {
   if (rel.startsWith('tracertools-catalog/')) return 'exp-catalog';
   const map = { gallery: 'gallery', sop: 'sops', pipeline: 'pipeline', publications: 'publications',
     links: 'links', 'cave-local': 'cavelocal', archive: 'archive', glossary: 'glossary',
-    games: 'sandypong', thoughts: 'thoughts' };
+    games: 'sandypong', thoughts: 'thoughts', thanks: 'thanks' };
   return map[first] || null;
 }
 
@@ -63,6 +63,7 @@ function buildNav(prefix, cur) {
                 <li>${A('glossary', prefix + 'glossary/', 'Glossary')}</li>
                 <li>${A('sandypong', prefix + 'games/sandy-pong/', 'Sandy Pong')}</li>
                 <li>${A('thoughts', prefix + 'thoughts/', 'Thoughts')}</li>
+                <li>${A('thanks', prefix + 'thanks/', 'Thanks')}</li>
                 <li><a href="https://github.com/BunPrinceton/tracer-workspace" target="_blank" rel="noopener noreferrer">GitHub</a></li>
             </ul>
         </li>

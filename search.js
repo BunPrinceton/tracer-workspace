@@ -34,6 +34,42 @@
        ---------------------------------------------------------------------- */
     var INDEX = [
         {
+            title: "LM Comparison (Final) — Cell-Type Figures",
+            url: "gallery/#contrib-lmfinal",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "Austin's large final set of fly cell-type EM-vs-light-microscopy comparison figures.",
+            aliases: [],
+            keywords: ["figure", "light microscopy", "lm", "em", "cell type", "comparison", "austin", "psp3", "pmp5", "pip9", "pip8", "pip6", "pip5", "adt2", "asp9", "asp8", "asp6", "asp4", "asp3", "asp1", "asg7", "aip1", "adt6", "adt5", "adt3", "aip6", "aip5", "adt9", "asp10", "ame3", "aip2", "adt7", "asp25", "aip3", "asp7", "asp11", "asp26", "asp27", "pip7", "pip11", "pip13", "pmp20", "psp7", "psp8", "psp9", "psp5", "pmp19", "pmp17", "pmp16", "pmp14", "pmp12", "pmp9", "pmp7", "pmp6", "pmp3", "pmp1", "pmn2", "pmn1", "pip20", "pip18", "pip16", "pip15", "pip14", "pip12", "pc2l", "pc1e", "pc1d", "pc1c", "pc1b", "pc1a", "pam01", "lc31", "lc10a", "dn3", "asp30", "asp29", "asp24", "asp23", "asp22", "asp21", "asp18", "asp17", "asp16", "asp14", "asp5", "apn1", "aip8", "adt11", "adt10"],
+            text: "psp3 pmp5 pip9 pip8 pip6 pip5 adt2 asp9 asp8 asp6 asp4 asp3 asp1 asg7 aip1 adt6 adt5 adt3 aip6 aip5 adt9 asp10 ame3 aip2 adt7 asp25 aip3 asp7 asp11 asp26 asp27 pip7 pip11 pip13 pmp20 psp7 psp8 psp9 psp5 pmp19 pmp17 pmp16 pmp14 pmp12 pmp9 pmp7 pmp6 pmp3 pmp1 pmn2 pmn1 pip20 pip18 pip16 pip15 pip14 pip12 pc2l pc1e pc1d pc1c pc1b pc1a pam01 lc31 lc10a dn3 asp30 asp29 asp24 asp23 asp22 asp21 asp18 asp17 asp16 asp14 asp5 apn1 aip8 adt11 adt10"
+        },
+        {
+            title: "Final Figures (for real) — Cell-Type Comparisons",
+            url: "gallery/#contrib-lmfinal-real",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "Austin's alternate final set of cell-type EM-vs-light-microscopy figures.",
+            aliases: [],
+            keywords: ["figure", "light microscopy", "lm", "em", "cell type", "comparison", "austin", "dn3", "apn1", "asp10", "adt3", "pip7", "asp6", "asp8", "pmp3", "pip8a", "pip8b", "pip6", "asp27", "asp26", "asp22", "dnp13", "pc1a", "pmp5", "lc31b", "lc10a", "asp31", "adt10", "pmp6", "aip8", "pam01", "pmp7", "pmp1", "pip18", "asp21", "asp30", "pmp20", "aip6", "pc2l", "pc1e", "pc1d", "pc1c", "pc1b", "ame3", "psp9", "psp8", "psp7", "psp5", "psp3", "pmp16", "pip9", "aip5", "pmp17", "pmp14", "pmp9", "pmp12", "pip15", "pip14", "pip13", "pip12", "pip11", "asp23", "pip5", "asp29", "asp25", "asp18", "asp17", "asp16", "asp9", "asp3", "asp7", "asp5", "asp4", "aip2", "asp11", "asg7", "aip3", "aip1", "adt11", "adt9", "adt7", "adt6", "adt5"],
+            text: "dn3 apn1 asp10 adt3 pip7 asp6 asp8 pmp3 pip8a pip8b pip6 asp27 asp26 asp22 dnp13 pc1a pmp5 lc31b lc10a asp31 adt10 pmp6 aip8 pam01 pmp7 pmp1 pip18 asp21 asp30 pmp20 aip6 pc2l pc1e pc1d pc1c pc1b ame3 psp9 psp8 psp7 psp5 psp3 pmp16 pip9 aip5 pmp17 pmp14 pmp9 pmp12 pip15 pip14 pip13 pip12 pip11 asp23 pip5 asp29 asp25 asp18 asp17 asp16 asp9 asp3 asp7 asp5 asp4 aip2 asp11 asg7 aip3 aip1 adt11 adt9 adt7 adt6 adt5"
+        },
+        {
+            title: "Individual Cell Reconstructions (Austin)",
+            url: "gallery/#contrib-individuals",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "Austin's collection of individual fly cell reconstructions.",
+            aliases: [],
+            keywords: ["figure", "light microscopy", "lm", "em", "cell type", "comparison", "austin", "pc1a", "lc31b", "pip8", "pip6", "adt7", "adt11", "asp3", "aip5", "ame3", "aip2", "adt5", "asp1", "asp25", "aip1", "pmp5", "asp27", "pip7", "pip11", "pip13", "aip3", "asp6", "asp7", "asp8", "asp10", "asp11", "asp26", "pip5", "pmp20", "psp3", "psp7", "psp8", "psp9", "pmn2", "psp5", "pmp19", "pmp17", "pmp16", "pmp14", "pmp12", "pmp9", "pmp7", "pmp6", "pmp3", "pmp1", "pmn1", "pip20", "pip18", "pip16", "pip15", "pip14", "pip12", "pip9", "pc2l", "pc1e", "pc1d", "pc1c", "pc1b", "pam01", "lc31", "lc10a", "dn3", "asp30", "asp29", "asp24", "asp23", "asp22", "asp21", "asp18", "asp17", "asp16", "asp14", "asp9", "asp5", "asp4", "asg7", "apn1", "aip8", "aip6", "adt10", "adt9", "adt6", "adt3"],
+            text: "pc1a lc31b pip8 pip6 adt7 adt11 asp3 aip5 ame3 aip2 adt5 asp1 asp25 aip1 pmp5 asp27 pip7 pip11 pip13 aip3 asp6 asp7 asp8 asp10 asp11 asp26 pip5 pmp20 psp3 psp7 psp8 psp9 pmn2 psp5 pmp19 pmp17 pmp16 pmp14 pmp12 pmp9 pmp7 pmp6 pmp3 pmp1 pmn1 pip20 pip18 pip16 pip15 pip14 pip12 pip9 pc2l pc1e pc1d pc1c pc1b pam01 lc31 lc10a dn3 asp30 asp29 asp24 asp23 asp22 asp21 asp18 asp17 asp16 asp14 asp9 asp5 asp4 asg7 apn1 aip8 aip6 adt10 adt9 adt6 adt3"
+        },
+        {
+            title: "Codex EM Screenshots (Austin)",
+            url: "gallery/#contrib-codex",
+            section: "Gallery \u00b7 Tracer Contributions",
+            description: "Austin's collection of Codex EM screenshots.",
+            aliases: [],
+            keywords: ["figure", "light microscopy", "lm", "em", "cell type", "comparison", "austin", "dn3", "apn1", "asp10", "adt3", "pip7", "asp22", "asp8", "dnp13", "pmp5", "lc31b", "asp31", "adt10", "pmp6", "aip8", "pmp1", "pip18", "pmp20", "aip6", "pmp3", "pip9", "pcd2", "pc2l", "pc1e", "pc1d", "pc1c", "pc1b", "pc1a", "aip5", "psp9", "psp8", "psp7", "psp5", "psp3", "pmp19", "pmp16", "pmp7", "pmn2", "pmn1", "pmp17", "pmp14", "pmp12", "pmp9", "asp23", "pip8b", "pip8a", "pip6", "pip5", "asp3", "pip20", "pip16", "pip15", "pip14", "pip13", "pip12", "pip11", "pam01", "lc31", "lc10a", "asp30", "asp29", "asp27", "asp26", "asp25", "asp24", "asp21", "asp18", "asp17", "asp16", "asp14", "ame3", "adt7", "asp9", "asp7", "asp6", "asp5", "asp4", "asp11", "asg7", "aip3", "aip2", "aip1", "adt5", "adt9", "adt6", "adt11"],
+            text: "dn3 apn1 asp10 adt3 pip7 asp22 asp8 dnp13 pmp5 lc31b asp31 adt10 pmp6 aip8 pmp1 pip18 pmp20 aip6 pmp3 pip9 pcd2 pc2l pc1e pc1d pc1c pc1b pc1a aip5 psp9 psp8 psp7 psp5 psp3 pmp19 pmp16 pmp7 pmn2 pmn1 pmp17 pmp14 pmp12 pmp9 asp23 pip8b pip8a pip6 pip5 asp3 pip20 pip16 pip15 pip14 pip13 pip12 pip11 pam01 lc31 lc10a asp30 asp29 asp27 asp26 asp25 asp24 asp21 asp18 asp17 asp16 asp14 ame3 adt7 asp9 asp7 asp6 asp5 asp4 asp11 asg7 aip3 aip2 aip1 adt5 adt9 adt6 adt11"
+        },
+        {
             title: "Synapse Annotation Quality-Tier Examples (Great / Fair)",
             url: "gallery/#tracer-contributions",
             section: "Gallery \u00b7 Tracer Contributions",
@@ -284,6 +320,14 @@
             text: "figure light microscopy lm em comparison cell type asp4 morphology asp4 morphology compared between em and light microscopy — a case where the lm is noisy and the match takes care to call."
         },
         /* ---- Top-level hubs ---- */
+        {
+            title: "Thanks & Contributors",
+            url: "thanks/",
+            section: "More · Thanks",
+            description: "A thank-you to the tracer team members who contributed to this space — Austin, Kyle, Ryan, Jay, and everyone whose work turned up along the way.",
+            aliases: ["thanks", "contributors", "credits", "acknowledgements", "acknowledgments"],
+            keywords: ["thanks", "contributors", "credits", "acknowledgements", "team", "austin", "kyle", "ryan", "jay"]
+        },
         {
             title: "Local CAVE Stack — Setup & Demo",
             url: "cave-local/",
