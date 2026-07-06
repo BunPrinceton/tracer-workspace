@@ -477,11 +477,11 @@
             keywords: ['dust', 'merger', 'supervoxel', 'segment', 'spine', 'volume', 'brush', 'label', 'omni terminology', 'vast terminology']
         },
         {
-            title: 'Experimental Tools',
+            title: 'Experimental tracertools Catalog',
             url: 'experimental/',
             section: 'Experimental',
             description: 'Generation 2 scripts and experimental utilities (faster, parallel).',
-            aliases: ['experimental', 'gen 2', 'gen2', 'experiments'],
+            aliases: ['experimental', 'gen 2', 'gen2', 'experiments', 'experimental tools', 'tracer tools scripts', 'tracertools scripts'],
             keywords: ['fast_validate_ids', 'fast_get_coords', 'parallel scripts', 'threadpool']
         },
         {

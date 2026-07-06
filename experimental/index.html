@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Experimental Tools - Princeton Tracers</title>
+    <title>Experimental tracertools Catalog - Princeton Tracers</title>
     <style>
         *, *::before, *::after {
             box-sizing: border-box;
@@ -373,7 +373,7 @@
         <li class="nav-more">
             <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">Experimental &#9662;</button>
             <ul class="nav-more-menu">
-                <li><a href="../experimental/" aria-current="page">Tracer Tools Scripts</a></li>
+                <li><a href="../experimental/" aria-current="page">Experimental tracertools Catalog</a></li>
                 <li><a href="../link-restore/">Link Restorer</a></li>
                 <li><a href="../tracertools-catalog/">tracertools Catalog</a></li>
             </ul>
@@ -398,7 +398,7 @@
 <main id="main-content" role="main">
 
     <div class="page-header">
-        <h1>Experimental Tools</h1>
+        <h1>Experimental tracertools Catalog</h1>
         <p>Scripts and utilities in active development. These tools work but may have bugs or rough edges. Use with caution and report issues.</p>
     </div>
 
@@ -413,21 +413,6 @@
     </div>
 
     <div class="tool-list">
-
-        <!-- FlyWire link troubleshooting (reference) -->
-        <article class="tool-card" id="flywire-links">
-            <div class="tool-header">
-                <h2><a href="../link-restore/" style="color:#2563eb; text-decoration:none;">FlyWire Link Troubleshooting</a></h2>
-                <span class="tool-badge" style="background:#16a34a;">Reference</span>
-            </div>
-            <p class="tool-desc">
-                Why old FlyWire / Neuroglancer share links fail with <code style="display:inline; font-size:inherit;">Error retrieving metadata for volume graphene://&hellip;/fly_v31 &mdash; HTTP error 0</code>, and how to fix them. Short version: it's the per-session <code style="display:inline; font-size:inherit;">prodv1</code> auth token (login / cookies / Brave Shields), not the link &mdash; the native viewer authenticates the source for you. Warm up the session by opening any scene first.
-            </p>
-            <div class="tool-meta">
-                <span><strong>Open:</strong> <a href="../link-restore/" style="color:#2563eb">/link-restore/</a></span>
-                <span><strong>Use case:</strong> diagnosing dead share links</span>
-            </div>
-        </article>
 
         <!-- fast_validate_ids.py -->
         <article class="tool-card" id="fast-validate-ids">
