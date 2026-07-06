@@ -220,7 +220,7 @@
         <li class="nav-more">
             <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">Experimental &#9662;</button>
             <ul class="nav-more-menu">
-                <li><a href="../experimental/">Tracer Tools Scripts</a></li>
+                <li><a href="../experimental/">Experimental tracertools Catalog</a></li>
                 <li><a href="../link-restore/" aria-current="page">Link Restorer</a></li>
                 <li><a href="../tracertools-catalog/">tracertools Catalog</a></li>
             </ul>
@@ -469,7 +469,13 @@
         <details class="ref">
             <summary>Scene opens but the EM is black / loads forever (dead EM image)</summary>
             <div>
-                <p>Some old Minnie65 scenes point their EM image at an <strong>intermediate alignment</strong> on <code>gs://microns-seunglab/minnie_v4/alignment/&hellip;/image_stitch_multi_block_v1</code>. The lab garbage-collected those voxels, but the precomputed <code>info</code> header survives &mdash; so the layer still "loads," forever, as black tiles (the viewer keeps requesting chunks that 404). The <strong>segmentation</strong> still works because its data/meshes are still hosted; only the EM image is dead.</p>
+                <p>Some old Minnie65 scenes point their EM image at a source that no longer serves voxels. Three flavors show up, all with the segmentation/meshes still rendering fine while the 2D EM is black or errors:</p>
+                <ul style="margin:0.35rem 0 0.6rem 1.25rem;">
+                    <li>an <strong>intermediate alignment</strong> on <code>gs://microns-seunglab/minnie_v4/alignment/&hellip;/image_stitch_multi_block_v1</code> — voxels garbage-collected but the precomputed <code>info</code> header survives, so it "loads" forever as black tiles (chunks 404);</li>
+                    <li>the <strong>phase-3 stitched EM</strong> on <code>gs://seunglab_minnie_phase3/sergiy/final_fine_x4/image_stitch_dd200_mip1_final</code> — the whole bucket now returns <code>HTTP error 404</code>;</li>
+                    <li>the <strong>retired graphene EM proxy</strong> at <code>graphene://https://minnie.microns-daf.com/proxy/minnie&hellip;_em/</code> — now <code>HTTP error 0</code>.</li>
+                </ul>
+                <p>In all three, only the EM image is dead; the <strong>segmentation</strong> data/meshes are still hosted.</p>
                 <p>The tissue itself isn't gone &mdash; the released public EM (<code>gs://iarpa_microns/minnie/minnie65/em</code>) is alive. <strong>Fix:</strong> open the scene's <code>{ }</code> JSON editor in Spelunker, copy the whole state, and paste it into the <em>Restore a link</em> box above. It repoints the dead EM image to the public release EM and hands back a self-contained Spelunker link (no login &mdash; public data). Segmentation, annotations, and position are left untouched.</p>
                 <p style="margin-top:0.5rem;"><strong>Eyeball the registration</strong> afterward: the public EM is a later alignment of the same data, so if it looks slightly shifted against the segmentation, that old scene used a different alignment version (rare; usually it lines up).</p>
             </div>
@@ -547,17 +553,28 @@
     var FLYWIRE_VIEWER = 'https://ngl.flywire.ai';
     var SPELUNKER_VIEWER = 'https://spelunker.cave-explorer.org';
 
-    // Repoint dead MICrONS intermediate EM image sources to the public release EM.
-    // These old microns-seunglab minnie alignment images had their voxel data garbage-collected
-    // (the precomputed `info` header survives, so the layer "exists" and loads forever as black).
-    // The segmentation (type=segmentation) is left untouched — only `image` layers are swapped.
+    // Repoint dead MICrONS minnie EM image sources to the public release EM.
+    // Three flavors of dead minnie EM all fail the same way (black 2D that loads forever, or
+    // graphene HTTP error 0) while the segmentation/meshes still render:
+    //   • old intermediate alignment on gs://microns-seunglab/minnie_v4/…/image_stitch_multi_block_v1
+    //   • the phase-3 stitched EM on gs://seunglab_minnie_phase3/… (the whole bucket now 404s)
+    //   • the retired graphene EM proxy at minnie.microns-daf.com/proxy/minnie…_em (HTTP error 0)
+    // In every case the tissue is fine — the released public EM (gs://iarpa_microns/minnie/
+    // minnie65/em) is alive — so we repoint the image layer to it. Only `image` layers are
+    // swapped; the segmentation (type=segmentation / segmentation_with_graph) is left untouched.
+    function isDeadMinnieEm(src) {
+        if (/microns-seunglab/i.test(src) && /minnie/i.test(src)) return true;   // intermediate alignment
+        if (/seunglab_minnie_phase3/i.test(src)) return true;                    // phase-3 stitched EM (bucket 404)
+        if (/minnie\.microns-daf\.com\/proxy\/[^"'\s]*_em/i.test(src)) return true; // retired graphene EM proxy
+        return false;
+    }
     function swapDeadMicronsEm(state) {
         var swapped = [];
         if (!state || !Array.isArray(state.layers)) return { changed: false, swapped: swapped };
         state.layers.forEach(function (l) {
             if (!l || l.type !== 'image') return;
             var src = (typeof l.source === 'string') ? l.source : (l.source && l.source.url) || '';
-            if (/microns-seunglab/i.test(src) && /minnie/i.test(src)) {
+            if (isDeadMinnieEm(src)) {
                 var ds = /minnie35/i.test(src) ? 'minnie35' : 'minnie65';
                 var pub = 'precomputed://gs://iarpa_microns/minnie/' + ds + '/em';
                 if (src !== pub) {
@@ -1015,6 +1032,28 @@
                 check: function (r) {
                     return r.kind === 'MICrONS EM fix' && r.output.indexOf('spelunker.cave-explorer.org/#!') !== -1 &&
                         r.output.indexOf(encodeURIComponent('iarpa_microns/minnie/minnie65/em')) !== -1;
+                }
+            },
+            {
+                name: 'phase-3 stitched EM (gs://seunglab_minnie_phase3) -> repointed to public release EM',
+                run: function () { return restore('{"layers":[{"type":"image","source":"precomputed://gs://seunglab_minnie_phase3/sergiy/final_fine_x4/image_stitch_dd200_mip1_final","name":"EM"},{"type":"segmentation_with_graph","source":"graphene://https://minnie.microns-daf.com/segmentation/table/minnie3_v1","name":"seg"}]}', {}); },
+                check: function (r) {
+                    if (r.kind !== 'MICrONS EM fix' || !r.changed) return false;
+                    var s = JSON.parse(decodeURIComponent(r.output.split('#!')[1]));
+                    var img = s.layers.find(function (l) { return l.type === 'image'; });
+                    var seg = s.layers.find(function (l) { return l.type === 'segmentation_with_graph'; });
+                    return img.source === 'precomputed://gs://iarpa_microns/minnie/minnie65/em' &&
+                        seg.source === 'graphene://https://minnie.microns-daf.com/segmentation/table/minnie3_v1';
+                }
+            },
+            {
+                name: 'retired graphene EM proxy (minnie.microns-daf.com/proxy/…_em) -> repointed to public release EM',
+                run: function () { return restore('{"layers":[{"type":"image","source":"graphene://https://minnie.microns-daf.com/proxy/minniev2_em/","name":"EM"}]}', {}); },
+                check: function (r) {
+                    if (r.kind !== 'MICrONS EM fix' || !r.changed) return false;
+                    var s = JSON.parse(decodeURIComponent(r.output.split('#!')[1]));
+                    var img = s.layers.find(function (l) { return l.type === 'image'; });
+                    return img.source === 'precomputed://gs://iarpa_microns/minnie/minnie65/em';
                 }
             },
             {
