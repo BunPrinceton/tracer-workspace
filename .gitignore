@@ -116,6 +116,8 @@ scripts/drive_token.json
 # contributor names). Keep it out of source; it lives in the Cloudflare secret
 # and, for the local snapshot refresher, in this git-ignored file only.
 worker/.dev.vars
+worker/refresh.log
+worker/daily-refresh.ps1
 # Defensive: never let the raw sheet dump or any real-name report be committed.
 **/privacy-report.json
 **/activity-raw*.json
