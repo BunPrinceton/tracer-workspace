@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BANC Dataset - Princeton Tracers</title>
+    <link rel="stylesheet" href="../../datasets/shared/activity.css">
+    <style>
+        /* ============================================================
+           BORKBOOK CHROME (mirrored from index.html — no-build site
+           duplicates base CSS per page). Nav + body tokens only;
+           the dashboard itself is styled by activity.css (#activity-app).
+           ============================================================ */
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 18px;
+            line-height: 1.6;
+            scrollbar-gutter: stable;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        /* Navigation bar */
+        nav {
+            background-color: #1a1a1a;
+            padding: 0.75rem 1.5rem;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem 1.5rem;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        nav a {
+            color: #e5e5e5;
+            text-decoration: none;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            display: inline-block;
+        }
+
+        nav a:hover,
+        nav a:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        nav a[aria-current="page"] {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* Dropdowns (More / Experimental / Datasets) */
+        .nav-more {
+            position: relative;
+        }
+
+        .nav-more-btn {
+            background: none;
+            border: none;
+            color: #e5e5e5;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .nav-more-btn:hover,
+        .nav-more-btn:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .nav-more-btn[aria-current="page"] {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .nav-more-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 0.25rem 0;
+            min-width: 160px;
+            z-index: 1000;
+            list-style: none;
+        }
+
+        .nav-more-menu li {
+            padding: 0;
+        }
+
+        .nav-more-menu a {
+            display: block;
+            padding: 0.5rem 1rem;
+            white-space: nowrap;
+        }
+
+        .nav-more-menu a:hover,
+        .nav-more-menu a:focus {
+            background-color: #333;
+        }
+
+        .nav-more:hover .nav-more-menu,
+        .nav-more:focus-within .nav-more-menu {
+            display: block;
+        }
+
+        /* Main content area */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem;
+        }
+
+        .page-head {
+            margin-bottom: 2rem;
+        }
+
+        .page-head h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.02em;
+        }
+
+        .page-lede {
+            font-size: 1.0625rem;
+            color: #404040;
+            max-width: 70ch;
+        }
+
+        .page-lede a {
+            color: #2563eb;
+        }
+
+        /* Footer */
+        footer {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 3rem;
+            border-top: 1px solid #d4d4d4;
+            font-size: 0.875rem;
+            color: #595959;
+        }
+
+        footer a {
+            color: #2563eb;
+        }
+
+        /* Skip link */
+        .skip-link {
+            position: absolute;
+            left: -10000px;
+            top: auto;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+        .skip-link:focus {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: auto;
+            height: auto;
+            padding: 1rem;
+            background: #2563eb;
+            color: #ffffff;
+            z-index: 10000;
+            font-weight: 600;
+        }
+
+        @media (max-width: 600px) {
+            html { font-size: 16px; }
+            main { padding: 2rem 1rem; }
+        }
+
+        @media print {
+            nav { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<!-- ============================================================
+     NAVIGATION (borkbook standard + Datasets dropdown)
+     ============================================================ -->
+<nav aria-label="Main navigation">
+    <ul>
+        <li><a href="../../">Dashboard</a></li>
+        <li><a href="../../gallery/">Gallery</a></li>
+        <li><a href="../../sop/">SOPs</a></li>
+        <li><a href="../../pipeline/">Pipeline</a></li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true" aria-current="page">Datasets &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../">Dataset Dashboard</a></li>
+                <li><a href="../retina/">RETINA</a></li>
+                <li><a href="../minnie/">MINNIE</a></li>
+                <li><a href="../ca3/">CA3</a></li>
+                <li><a href="../banc/" aria-current="page">BANC</a></li>
+                <li><a href="../fafb/">FAFB</a></li>
+            </ul>
+        </li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">Experimental &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../../experimental/">Tracer Tools Scripts</a></li>
+                <li><a href="../../link-restore/">Link Restorer</a></li>
+                <li><a href="../../tracertools-catalog/">tracertools Catalog</a></li>
+            </ul>
+        </li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">More &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../../publications/">Publications</a></li>
+                <li><a href="../../links/">Curated Links</a></li>
+                <li><a href="../../cave-local/">CAVE Local</a></li>
+                <li><a href="../../archive/">Archive</a></li>
+                <li><a href="../../glossary/">Glossary</a></li>
+                <li><a href="../../games/sandy-pong/">Sandy Pong</a></li>
+                <li><a href="../../thoughts/">Thoughts</a></li>
+                <li><a href="../../thanks/">Thanks</a></li>
+                <li><a href="https://github.com/BunPrinceton/tracer-workspace" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+
+<main id="main-content" role="main">
+    <div class="page-head">
+        <h1>BANC Dataset</h1>
+        <p class="page-lede">
+            Focused activity view for the BANC (brain and nerve cord) dataset — daily
+            edits, cells, and labels, per contributor. This is the BANC deep dive;
+            for the cross-dataset overview see the <a href="../">Dataset Dashboard</a>.
+        </p>
+    </div>
+
+    <div id="activity-app"></div>
+</main>
+
+<footer>
+    <p>Princeton Tracers · internal connectomics dashboards. Contributor names are pseudonyms.</p>
+</footer>
+
+<script src="../../datasets/shared/activity-core.js" defer></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.ActivityDashboard.init({
+      mount: '#activity-app',
+      mode: 'dataset',
+      dataset: 'BANC',
+      workerUrl: 'https://worker.borkbook.com/activity',
+      snapshotUrl: '../../datasets/data/activity-snapshot.json'
+    });
+  });
+</script>
+<script src="../../search.js" defer></script>
+</body>
+</html>

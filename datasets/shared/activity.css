@@ -1,0 +1,627 @@
+/* ============================================================
+   Activity Datasets — shared dashboard styles
+   borkbook design system (no-build static site)
+
+   Tokens: bg #f5f5f5 · ink #1a1a1a · links #2563eb · mark #fef3c7
+   Metric themes: edits #E77500 · cells #1E6FBE · labels #2E8540 · combined #3F3C32
+   Colorblind-safe (blue/amber, no red/green semantics), WCAG AA,
+   44px min touch targets, NO animations/transitions in chrome.
+   All selectors scoped to #activity-app so nothing fights the global dark nav.
+   ============================================================ */
+
+#activity-app {
+  /* Surfaces */
+  --aa-bg:        #f5f5f5;
+  --aa-card:      #ffffff;
+  --aa-ink:       #1a1a1a;
+  --aa-ink-2:     #404040;
+  --aa-ink-3:     #595959;   /* small/uppercase labels — 7:1 on white */
+  --aa-rule:      #d4d4d4;
+  --aa-rule-2:    #e5e5e5;
+  --aa-link:      #2563eb;
+  --aa-mark:      #fef3c7;
+
+  /* Metric identity colors */
+  --aa-edits:     #E77500;
+  --aa-cells:     #1E6FBE;
+  --aa-labels:    #2E8540;
+  --aa-combined:  #3F3C32;
+
+  /* Colorblind-safe trend indicators (blue up / amber down, NOT red/green) */
+  --aa-up:        #2563eb;
+  --aa-down:      #b45309;
+
+  /* Runtime accent (set per current metric by the JS) */
+  --aa-accent:      #E77500;
+  --aa-accent-soft: #FFE2C2;
+  --aa-accent-bg:   #FFF1E2;
+
+  --aa-mono: "SF Mono", Monaco, "Cascadia Code", Consolas, monospace;
+  --aa-shadow:    0 1px 2px rgba(20,20,20,.05), 0 4px 14px rgba(20,20,20,.05);
+  --aa-shadow-lg: 0 6px 24px rgba(20,20,20,.10), 0 24px 60px rgba(20,20,20,.10);
+
+  color: var(--aa-ink);
+}
+
+#activity-app *,
+#activity-app *::before,
+#activity-app *::after { box-sizing: border-box; }
+
+/* ---------- Toolbar (status + refresh + snapshot note) ---------- */
+#activity-app .aa-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+  font-size: 0.8125rem;
+  color: var(--aa-ink-3);
+}
+/* Inline variant: rides on the right of the metric-tab row to save vertical space. */
+#activity-app .aa-toolbar-inline {
+  margin: 0 0 0 auto;   /* push to the far right of the flex tab-row */
+  gap: 0.75rem;
+}
+#activity-app .aa-toolbar-inline .snapshot-note {
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+}
+#activity-app .aa-toolbar-inline .btn { min-height: 36px; padding: 0.35rem 0.7rem; }
+@media (max-width: 720px) {
+  /* On narrow screens let the toolbar wrap under the tabs instead of squeezing. */
+  #activity-app .aa-toolbar-inline { margin-left: 0; width: 100%; }
+}
+
+/* Dashboard mode: no metric-tab row, so tuck the status/Refresh strip up into the
+   empty top-right zone beside the page header to reclaim the vertical row. */
+#activity-app.aa-dashboard { position: relative; }
+#activity-app.aa-dashboard .aa-toolbar-dash {
+  position: absolute;
+  top: -3.5rem;
+  right: 0;
+  margin: 0;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+#activity-app.aa-dashboard .aa-toolbar-dash .snapshot-note { padding: 0.3rem 0.6rem; font-size: 0.75rem; }
+#activity-app.aa-dashboard .aa-toolbar-dash .btn { min-height: 36px; padding: 0.35rem 0.7rem; }
+@media (max-width: 900px) {
+  /* Not enough horizontal room to overlap the header — fall back to a normal row. */
+  #activity-app.aa-dashboard .aa-toolbar-dash {
+    position: static;
+    margin: 0 0 1.25rem;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+}
+#activity-app .aa-status { display: inline-flex; align-items: center; gap: 0.5rem; }
+#activity-app .updated-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: #2E8540; display: inline-block;
+}
+#activity-app .updated-dot.stale { background: var(--aa-ink-3); }
+#activity-app .updated-dot.err   { background: var(--aa-down); }
+
+#activity-app button.btn {
+  min-height: 44px;
+  background: var(--aa-ink);
+  color: #ffffff;
+  border: none;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#activity-app button.btn.ghost {
+  background: transparent;
+  color: var(--aa-ink);
+  border: 1px solid var(--aa-rule);
+}
+#activity-app button.btn:hover,
+#activity-app button.btn:focus { text-decoration: underline; text-underline-offset: 3px; }
+
+#activity-app .snapshot-note {
+  display: none;
+  background: var(--aa-mark);
+  border: 1px solid #e6d089;
+  color: #4a3b00;
+  padding: 0.5rem 0.875rem;
+  border-radius: 4px;
+  font-size: 0.8125rem;
+}
+#activity-app .snapshot-note.show { display: inline-block; }
+
+#activity-app .err-banner {
+  background: #fff4e6;
+  border: 1px solid #f0b96b;
+  color: #7a3d00;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  margin-bottom: 1.25rem;
+}
+
+/* ---------- Tabs (metric picker) ---------- */
+#activity-app .tab-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--aa-rule);
+  /* This bar is a <nav>; override borkbook's global dark `nav{background:#1a1a1a;padding:…}`
+     so the light-designed metric tabs (incl. the dark "Combined") stay legible. */
+  background: transparent;
+  padding: 0;
+}
+#activity-app .tab-row.hidden { display: none; }
+#activity-app .tab-row .label {
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--aa-ink);
+  font-weight: 700;
+  margin-right: 1rem;
+}
+#activity-app .tab {
+  min-height: 44px;
+  background: transparent;
+  border: none;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--aa-ink-2);
+  padding: 0.5rem 0.875rem;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -1px;
+  text-transform: capitalize;
+}
+#activity-app .tab:hover,
+#activity-app .tab:focus { color: var(--aa-ink); }
+#activity-app .tab.active {
+  color: var(--aa-ink);
+  border-bottom-color: var(--aa-accent);
+  font-weight: 700;
+}
+/* Metrics a dataset has no data for yet — shown for a consistent format, but inert. */
+#activity-app .tab.disabled,
+#activity-app .tab.disabled:hover,
+#activity-app .tab.disabled:focus {
+  color: var(--aa-ink-3);
+  opacity: 0.4;
+  cursor: not-allowed;
+  border-bottom-color: transparent;
+}
+
+/* ---------- KPI grid ---------- */
+#activity-app .kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.875rem;
+  margin-bottom: 2rem;
+}
+#activity-app .kpi-grid.hidden { display: none; }
+#activity-app .kpi {
+  background: var(--aa-card);
+  border: 1px solid var(--aa-rule);
+  border-radius: 6px;
+  padding: 1rem 1.125rem;
+  box-shadow: var(--aa-shadow);
+  position: relative;
+  overflow: hidden;
+}
+#activity-app .kpi::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--aa-accent);
+}
+#activity-app .kpi .lbl {
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--aa-ink-3);
+  font-weight: 700;
+}
+#activity-app .kpi .val {
+  font-size: 1.625rem;
+  font-weight: 700;
+  line-height: 1.1;
+  margin-top: 0.375rem;
+  font-variant-numeric: tabular-nums;
+}
+#activity-app .kpi .sub {
+  font-size: 0.75rem;
+  color: var(--aa-ink-2);
+  margin-top: 0.25rem;
+}
+#activity-app .kpi .delta.up   { color: var(--aa-up); }
+#activity-app .kpi .delta.down { color: var(--aa-down); }
+
+/* ---------- Section cards ---------- */
+#activity-app section.card {
+  background: var(--aa-card);
+  border: 1px solid var(--aa-rule);
+  border-radius: 6px;
+  box-shadow: var(--aa-shadow);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+#activity-app section.card > header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--aa-rule-2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+#activity-app section.card > header h2 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+#activity-app section.card > header .hint {
+  font-size: 0.75rem;
+  color: var(--aa-ink-3);
+}
+#activity-app section.card .body { padding: 1.25rem; }
+
+/* ---------- Trend chart ---------- */
+#activity-app .trend-wrap { padding: 0.875rem 1.25rem 1.25rem; }
+#activity-app .legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.125rem;
+  font-size: 0.75rem;
+  color: var(--aa-ink-2);
+  margin-bottom: 0.5rem;
+}
+#activity-app .legend .swatch {
+  display: inline-block;
+  width: 14px; height: 3px;
+  vertical-align: middle;
+  margin-right: 0.375rem;
+  border-radius: 1px;
+}
+#activity-app .legend .swatch.bars { background: var(--aa-accent-soft); height: 10px; }
+#activity-app .legend .swatch.line { background: var(--aa-accent); }
+#activity-app .trend-wrap svg,
+#activity-app .heatmap-scroll svg,
+#activity-app .drill-panel svg { display: block; }
+
+/* ---------- Heatmap ---------- */
+#activity-app .heatmap-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding: 0.875rem 1.25rem 0;
+}
+#activity-app .legend-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.6875rem;
+  color: var(--aa-ink-3);
+}
+#activity-app .legend-row .cells { display: inline-flex; gap: 3px; }
+#activity-app .legend-row .cells span {
+  width: 12px; height: 12px;
+  border-radius: 2px;
+  display: inline-block;
+}
+#activity-app .heatmap-scroll {
+  overflow-x: auto;
+  padding: 0.875rem 1.25rem 1.25rem;
+}
+#activity-app .sort-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--aa-ink-3);
+}
+#activity-app .sort-controls select {
+  min-height: 44px;
+  font: inherit;
+  font-size: 0.8125rem;
+  padding: 0.375rem 0.5rem;
+  border: 1px solid var(--aa-rule);
+  border-radius: 4px;
+  background: var(--aa-card);
+  color: var(--aa-ink);
+  cursor: pointer;
+}
+
+/* ---------- Leaderboard + sparklines ---------- */
+#activity-app .grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+#activity-app table.leaderboard {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8125rem;
+}
+#activity-app table.leaderboard th,
+#activity-app table.leaderboard td {
+  text-align: left;
+  padding: 0.5rem 0.625rem;
+  border-bottom: 1px solid var(--aa-rule-2);
+}
+#activity-app table.leaderboard th {
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--aa-ink-3);
+  font-weight: 700;
+  background: var(--aa-bg);
+}
+#activity-app table.leaderboard tr { cursor: pointer; }
+#activity-app table.leaderboard tbody tr:hover,
+#activity-app table.leaderboard tbody tr:focus-within { background: var(--aa-accent-bg); }
+#activity-app table.leaderboard td.num {
+  font-variant-numeric: tabular-nums;
+  font-family: var(--aa-mono);
+  text-align: right;
+}
+#activity-app table.leaderboard td.bar-cell { width: 100px; }
+#activity-app .mini-bar {
+  background: var(--aa-rule-2);
+  height: 6px;
+  border-radius: 2px;
+  overflow: hidden;
+}
+#activity-app .mini-bar > div { background: var(--aa-accent); height: 100%; border-radius: 2px; }
+#activity-app .mini-stack {
+  display: flex;
+  height: 6px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--aa-rule-2);
+}
+#activity-app .mini-stack > div { height: 100%; }
+
+#activity-app .sparklines {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.625rem;
+}
+#activity-app .spark-card {
+  border: 1px solid var(--aa-rule-2);
+  border-radius: 4px;
+  padding: 0.5rem 0.625rem;
+  cursor: pointer;
+  background: var(--aa-card);
+}
+#activity-app .spark-card:hover,
+#activity-app .spark-card:focus { border-color: var(--aa-accent); }
+#activity-app .spark-card .name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#activity-app .spark-card .num {
+  font-size: 0.6875rem;
+  color: var(--aa-ink-3);
+  font-family: var(--aa-mono);
+  margin-top: 1px;
+}
+#activity-app .spark-card svg { margin-top: 0.25rem; }
+
+/* ---------- Dashboard-mode dataset cards ---------- */
+#activity-app .ds-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.125rem;
+  margin-bottom: 2rem;
+}
+#activity-app .ds-card {
+  display: block;
+  background: var(--aa-card);
+  border: 1px solid var(--aa-rule);
+  border-left: 4px solid var(--aa-accent);
+  border-radius: 6px;
+  box-shadow: var(--aa-shadow);
+  padding: 1.125rem 1.25rem;
+  text-decoration: none;
+  color: var(--aa-ink);
+  min-height: 44px;
+}
+#activity-app .ds-card:hover,
+#activity-app .ds-card:focus { border-color: var(--aa-accent); box-shadow: var(--aa-shadow-lg); }
+#activity-app .ds-card .ds-name {
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+#activity-app .ds-card .ds-sub {
+  font-size: 0.75rem;
+  color: var(--aa-ink-3);
+  margin-top: 0.125rem;
+}
+#activity-app .ds-card .ds-stats {
+  display: flex;
+  gap: 1.25rem;
+  margin: 0.75rem 0;
+  flex-wrap: wrap;
+}
+#activity-app .ds-card .ds-stat .v {
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.1;
+}
+#activity-app .ds-card .ds-stat .l {
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--aa-ink-3);
+  font-weight: 600;
+}
+#activity-app .ds-card .ds-open {
+  font-size: 0.8125rem;
+  color: var(--aa-link);
+  font-weight: 600;
+}
+
+/* ---------- Drill-down side panel ---------- */
+#activity-app .drill-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(20,20,20,.42);
+  z-index: 90;
+  display: none;
+}
+#activity-app .drill-backdrop.open { display: block; }
+#activity-app .drill-panel {
+  position: fixed;
+  top: 0; right: 0; bottom: 0;
+  width: 640px;
+  max-width: 92vw;
+  background: var(--aa-bg);
+  box-shadow: var(--aa-shadow-lg);
+  z-index: 100;
+  display: none;
+  overflow-y: auto;
+  padding: 2rem 2rem 3.5rem;
+}
+#activity-app .drill-panel.open { display: block; }
+#activity-app .drill-panel .close {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  min-width: 44px; min-height: 44px;
+  background: transparent;
+  border: 1px solid var(--aa-rule);
+  color: var(--aa-ink-2);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#activity-app .drill-panel .who-eyebrow {
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--aa-accent);
+  font-weight: 700;
+}
+#activity-app .drill-panel h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0.25rem 0;
+  letter-spacing: -0.01em;
+}
+#activity-app .drill-panel .id-line {
+  font-size: 0.75rem;
+  color: var(--aa-ink-3);
+  font-family: var(--aa-mono);
+  margin-bottom: 1.5rem;
+}
+#activity-app .drill-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.75rem;
+}
+#activity-app .drill-stat {
+  background: var(--aa-card);
+  border: 1px solid var(--aa-rule);
+  border-radius: 4px;
+  padding: 0.75rem 0.875rem;
+}
+#activity-app .drill-stat .l {
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--aa-ink-3);
+  font-weight: 700;
+}
+#activity-app .drill-stat .v {
+  font-size: 1.375rem;
+  font-weight: 700;
+  margin-top: 0.25rem;
+  font-variant-numeric: tabular-nums;
+}
+#activity-app .drill-stat .sub { font-size: 0.6875rem; color: var(--aa-ink-2); margin-top: 2px; }
+#activity-app .drill-section-title {
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--aa-ink-3);
+  font-weight: 700;
+  margin: 1.5rem 0 0.625rem;
+}
+#activity-app .breakdown-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0;
+  border-bottom: 1px solid var(--aa-rule-2);
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+#activity-app .breakdown-row .pill {
+  font-size: 0.625rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--aa-rule-2);
+  padding: 3px 8px;
+  border-radius: 10px;
+  color: var(--aa-ink-2);
+  font-weight: 700;
+  min-width: 64px;
+  text-align: center;
+}
+#activity-app .breakdown-row .pill.metric-edits  { background: #FFE7CF; color: #8a4500; }
+#activity-app .breakdown-row .pill.metric-cells  { background: #E0EBFF; color: #14477f; }
+#activity-app .breakdown-row .pill.metric-labels { background: #E0F2E0; color: #1c5a29; }
+#activity-app .breakdown-row .qty {
+  font-family: var(--aa-mono);
+  font-weight: 700;
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+#activity-app .breakdown-row .qty.zero { color: var(--aa-ink-3); font-weight: 400; }
+
+/* ---------- Loading / empty ---------- */
+#activity-app .loading {
+  padding: 3rem;
+  text-align: center;
+  color: var(--aa-ink-3);
+  font-size: 0.875rem;
+}
+
+/* ---------- Tooltip ---------- */
+#activity-app .aa-tooltip {
+  position: fixed;
+  background: var(--aa-ink);
+  color: #ffffff;
+  padding: 0.375rem 0.625rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  pointer-events: none;
+  z-index: 200;
+  display: none;
+  white-space: nowrap;
+  font-family: var(--aa-mono);
+  box-shadow: 0 4px 12px rgba(0,0,0,.2);
+}
+#activity-app .aa-tooltip.show { display: block; }
+
+@media (max-width: 720px) {
+  #activity-app .grid-2 { grid-template-columns: 1fr; }
+  #activity-app .drill-stats { grid-template-columns: 1fr; }
+}

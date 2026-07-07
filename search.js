@@ -34,6 +34,54 @@
        ---------------------------------------------------------------------- */
     var INDEX = [
         {
+            title: "Dataset Dashboard",
+            url: "datasets/",
+            section: "Datasets",
+            description: "Cross-dataset activity springboard: aggregate KPIs, per-dataset cards, and comparisons across every tracked dataset. Names anonymized.",
+            aliases: ["datasets", "activity dashboard", "dataset overview"],
+            keywords: ["activity", "contributions", "edits", "cells", "labels", "metrics", "leaderboard", "heatmap", "cross-dataset", "overview", "RETINA", "MINNIE", "CA3", "BANC", "FAFB", "tracer", "anonymized"]
+        },
+        {
+            title: "RETINA Dataset — Activity",
+            url: "datasets/retina/",
+            section: "Datasets",
+            description: "Focused contribution activity for the RETINA reconstruction: KPIs, daily trend, per-contributor heatmap, leaderboard and drill-down. Names anonymized.",
+            aliases: ["retina activity", "retina dataset"],
+            keywords: ["retina", "activity", "edits", "contributors", "heatmap", "leaderboard", "metrics", "dataset"]
+        },
+        {
+            title: "MINNIE Dataset — Activity",
+            url: "datasets/minnie/",
+            section: "Datasets",
+            description: "Focused contribution activity for the MINNIE dataset: KPIs, daily trend, per-contributor heatmap, leaderboard and drill-down. Names anonymized.",
+            aliases: ["minnie activity", "minnie dataset"],
+            keywords: ["minnie", "activity", "edits", "contributors", "heatmap", "leaderboard", "metrics", "dataset"]
+        },
+        {
+            title: "CA3 Dataset — Activity",
+            url: "datasets/ca3/",
+            section: "Datasets",
+            description: "Focused contribution activity for the CA3 hippocampus dataset: KPIs, daily trend, per-contributor heatmap, leaderboard and drill-down. Names anonymized.",
+            aliases: ["ca3 activity", "ca3 dataset", "hippocampus"],
+            keywords: ["ca3", "hippocampus", "activity", "edits", "contributors", "heatmap", "leaderboard", "metrics", "dataset"]
+        },
+        {
+            title: "BANC Dataset — Activity",
+            url: "datasets/banc/",
+            section: "Datasets",
+            description: "Focused contribution activity for the BANC (brain and nerve cord) dataset: edits, cells and labels metrics, per-contributor heatmap, leaderboard and drill-down. Names anonymized.",
+            aliases: ["banc activity", "banc dataset", "brain and nerve cord"],
+            keywords: ["banc", "brain and nerve cord", "activity", "edits", "cells", "labels", "combined", "contributors", "heatmap", "leaderboard", "metrics", "dataset"]
+        },
+        {
+            title: "FAFB Dataset — Activity",
+            url: "datasets/fafb/",
+            section: "Datasets",
+            description: "Focused contribution activity for the FAFB dataset: edits, cells and labels metrics, per-contributor heatmap, leaderboard and drill-down. Names anonymized.",
+            aliases: ["fafb activity", "fafb dataset", "full adult fly brain"],
+            keywords: ["fafb", "full adult fly brain", "activity", "edits", "cells", "labels", "combined", "contributors", "heatmap", "leaderboard", "metrics", "dataset"]
+        },
+        {
             title: "LM Comparison (Final) — Cell-Type Figures",
             url: "gallery/#contrib-lmfinal",
             section: "Gallery \u00b7 Tracer Contributions",

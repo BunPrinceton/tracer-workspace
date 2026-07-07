@@ -3,8 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thoughts - Princeton Tracers</title>
+    <title>Dataset Dashboard - Princeton Tracers</title>
+
+    <!-- Shared dashboard core styles -->
+    <link rel="stylesheet" href="./shared/activity.css">
+
     <style>
+        /* ============================================================
+           BASE CHROME — mirrors borkbook's per-page inline CSS
+           (no-build static site duplicates these tokens on every page)
+
+           Design principles:
+           - Colorblind-safe: Blue/amber palette (no red/green)
+           - High contrast: WCAG AA compliant (4.5:1 minimum)
+           - No animations or transitions in chrome
+           - Large touch targets (minimum 44px)
+           ============================================================ */
+
         *, *::before, *::after {
             box-sizing: border-box;
             margin: 0;
@@ -24,7 +39,9 @@
             min-height: 100vh;
         }
 
-        /* Navigation */
+        /* ============================================================
+           NAVIGATION BAR
+           ============================================================ */
         nav {
             background-color: #1a1a1a;
             padding: 0.75rem 1.5rem;
@@ -59,7 +76,7 @@
             font-weight: 600;
         }
 
-        /* More dropdown */
+        /* Dropdown menus */
         .nav-more {
             position: relative;
         }
@@ -78,6 +95,11 @@
         .nav-more-btn:focus {
             text-decoration: underline;
             text-underline-offset: 4px;
+        }
+
+        .nav-more-btn[aria-current="page"] {
+            color: #ffffff;
+            font-weight: 600;
         }
 
         .nav-more-menu {
@@ -115,95 +137,57 @@
             display: block;
         }
 
-        /* Main content */
+        /* ============================================================
+           MAIN CONTENT AREA
+           ============================================================ */
         main {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 2rem 1.5rem 4rem;
+            padding: 3rem 1.5rem;
         }
 
-        /* Page Header */
         .page-header {
             margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 2px solid #d4d4d4;
         }
 
         .page-header h1 {
             font-size: 2rem;
             font-weight: 700;
+            color: #1a1a1a;
             margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
         }
 
-        .page-header p {
-            color: #525252;
+        .page-header .lede {
             font-size: 1.0625rem;
+            color: #404040;
+            max-width: 720px;
         }
 
-        /* Content sections (parked items) */
-        .content-section {
-            background-color: #ffffff;
-            border: 2px solid #d4d4d4;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
+        /* ============================================================
+           FOOTER
+           ============================================================ */
+        footer {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 3rem;
+            border-top: 1px solid #d4d4d4;
+            color: #595959;
+            font-size: 0.875rem;
         }
 
-        .content-section h2 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .parked-meta {
-            font-size: 0.8125rem;
-            color: #737373;
-            margin-bottom: 1rem;
-        }
-
-        .parked-meta a {
+        footer a {
             color: #2563eb;
             text-decoration: none;
         }
 
-        .parked-meta a:hover {
+        footer a:hover,
+        footer a:focus {
             text-decoration: underline;
+            text-underline-offset: 3px;
         }
 
-        .content-section ul {
-            margin-left: 1.5rem;
-            margin-bottom: 0;
-        }
-
-        .content-section li {
-            margin-bottom: 0.5rem;
-        }
-
-        /* Footer */
-        footer {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
-            border-top: 1px solid #e5e5e5;
-            font-size: 0.875rem;
-            color: #737373;
-        }
-
-        footer a {
-            color: #525252;
-        }
-
-        footer a:hover {
-            color: #1a1a1a;
-        }
-
-        /* Focus visible */
-        :focus-visible {
-            outline: 2px solid #2563eb;
-            outline-offset: 2px;
-        }
-
-        /* Skip link */
+        /* Skip link for keyboard/screen reader users */
         .skip-link {
             position: absolute;
             left: -10000px;
@@ -225,15 +209,9 @@
             font-weight: 600;
         }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            html {
-                font-size: 16px;
-            }
-
-            main {
-                padding: 1.5rem 1rem;
-            }
+        @media (max-width: 600px) {
+            html { font-size: 16px; }
+            main { padding: 2rem 1rem; }
         }
     </style>
 </head>
@@ -241,6 +219,9 @@
 
 <a href="#main-content" class="skip-link">Skip to main content</a>
 
+<!-- ============================================================
+     NAVIGATION (borkbook standard nav + Datasets dropdown)
+     ============================================================ -->
 <nav aria-label="Main navigation">
     <ul>
         <li><a href="../">Dashboard</a></li>
@@ -248,20 +229,20 @@
         <li><a href="../sop/">SOPs</a></li>
         <li><a href="../pipeline/">Pipeline</a></li>
         <li class="nav-more">
-            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">Datasets &#9662;</button>
+            <button class="nav-more-btn" aria-current="page" aria-expanded="false" aria-haspopup="true">Datasets &#9662;</button>
             <ul class="nav-more-menu">
-                <li><a href="../datasets/">Dataset Dashboard</a></li>
-                <li><a href="../datasets/retina/">RETINA</a></li>
-                <li><a href="../datasets/minnie/">MINNIE</a></li>
-                <li><a href="../datasets/ca3/">CA3</a></li>
-                <li><a href="../datasets/banc/">BANC</a></li>
-                <li><a href="../datasets/fafb/">FAFB</a></li>
+                <li><a href="./" aria-current="page">Dataset Dashboard</a></li>
+                <li><a href="./retina/">RETINA</a></li>
+                <li><a href="./minnie/">MINNIE</a></li>
+                <li><a href="./ca3/">CA3</a></li>
+                <li><a href="./banc/">BANC</a></li>
+                <li><a href="./fafb/">FAFB</a></li>
             </ul>
         </li>
         <li class="nav-more">
             <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">Experimental &#9662;</button>
             <ul class="nav-more-menu">
-                <li><a href="../experimental/">Experimental tracertools Catalog</a></li>
+                <li><a href="../experimental/">Tracer Tools Scripts</a></li>
                 <li><a href="../link-restore/">Link Restorer</a></li>
                 <li><a href="../tracertools-catalog/">tracertools Catalog</a></li>
             </ul>
@@ -275,7 +256,7 @@
                 <li><a href="../archive/">Archive</a></li>
                 <li><a href="../glossary/">Glossary</a></li>
                 <li><a href="../games/sandy-pong/">Sandy Pong</a></li>
-                <li><a href="../thoughts/" aria-current="page">Thoughts</a></li>
+                <li><a href="../thoughts/">Thoughts</a></li>
                 <li><a href="../thanks/">Thanks</a></li>
                 <li><a href="https://github.com/BunPrinceton/tracer-workspace" target="_blank" rel="noopener noreferrer">GitHub</a></li>
             </ul>
@@ -284,29 +265,40 @@
 </nav>
 
 <main id="main-content" role="main">
+    <div class="page-header">
+        <h1>Dataset Dashboard</h1>
+        <p class="lede">
+            The cross-dataset springboard for the tracer team. Explore aggregate activity
+            across every tracked dataset &mdash; RETINA, MINNIE, CA3, BANC and FAFB &mdash;
+            and jump into any one for its full contributor view: KPIs, daily trends,
+            per-contributor heatmap, leaderboard and drill-down.
+        </p>
+    </div>
 
-    <header class="page-header">
-        <h1>Thoughts</h1>
-        <p>A holding area &mdash; ideas and content pulled out of pages where they didn't quite belong, but worth keeping. Saved for later, kept searchable.</p>
-    </header>
-
-    <!-- Parked from SOP-005 (2026-06-05): a useful aside, but more thinking-out-loud than protocol. -->
-    <section class="content-section">
-        <h2>Upsampled images</h2>
-        <p class="parked-meta">Parked from <a href="../sop/gt-protocol-guidelines/">WebKnossos - General GT Protocol Guidelines (SOP-005)</a> &middot; 2026-06-05 &mdash; read as a useful train of thought rather than protocol.</p>
-        <ul>
-            <li><strong>Two-pass labeling:</strong> first paint the original (thicker) sections, then copy labels onto the upsampled (thinner) sections and connect objects naturally.</li>
-            <li><strong>Cross-reference resolutions:</strong> working only from the upsampled image is misleading &mdash; always check against the original image data.</li>
-            <li><strong>Artifacts:</strong> ignore "hallucinations" (artificial structures in upsampled data); focus on anatomically sensible structures.</li>
-        </ul>
-    </section>
-
+    <div id="activity-app"></div>
 </main>
 
 <footer>
-    <a href="../">Back to Dashboard</a>
+    <p>
+        Princeton Tracers &middot; internal connectomics dashboard.
+        <a href="https://github.com/BunPrinceton/tracer-workspace/issues/new" target="_blank" rel="noopener noreferrer">Suggest an edit</a>
+    </p>
 </footer>
 
+<!-- Shared dashboard core -->
+<script src="./shared/activity-core.js" defer></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.ActivityDashboard.init({
+      mount: '#activity-app',
+      mode: 'dashboard',
+      workerUrl: 'https://worker.borkbook.com/activity',
+      snapshotUrl: './data/activity-snapshot.json'
+    });
+  });
+</script>
+
+<!-- Site-wide search -->
 <script src="../search.js" defer></script>
 </body>
 </html>

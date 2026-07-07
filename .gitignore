@@ -111,3 +111,11 @@ tracer_tools/nul
 # Google OAuth token — must never be published (live credential)
 scripts/drive_token.json
 *drive_token*.json
+
+# Activity-dashboard Worker — the Google Sheet ID is a secret (holds real
+# contributor names). Keep it out of source; it lives in the Cloudflare secret
+# and, for the local snapshot refresher, in this git-ignored file only.
+worker/.dev.vars
+# Defensive: never let the raw sheet dump or any real-name report be committed.
+**/privacy-report.json
+**/activity-raw*.json
