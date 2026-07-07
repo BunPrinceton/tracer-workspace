@@ -20,7 +20,7 @@ function loadSheetId() {
     const m = readFileSync(dv, 'utf8').match(/^\s*SHEET_ID\s*=\s*(.+?)\s*$/m);
     if (m) return m[1].replace(/^["']|["']$/g, '').trim();
   }
-  console.error('ERROR: SHEET_ID not set. Pass it as an env var (SHEET_ID=<id> node worker/build-snapshot.mjs)\n' +
+  console.log('ERROR: SHEET_ID not set. Pass it as an env var (SHEET_ID=<id> node worker/build-snapshot.mjs)\n' +
                 '       or put `SHEET_ID=<id>` in a git-ignored worker/.dev.vars file.');
   process.exit(1);
 }
@@ -43,8 +43,8 @@ async function fetchTab(tab) {
 
 const raw = {};
 for (const tab of ALL_TABS) {
-  try { raw[tab] = await fetchTab(tab); console.error('fetched', tab); }
-  catch (e) { console.error('FAILED', tab, e.message); }
+  try { raw[tab] = await fetchTab(tab); console.log('fetched', tab); }
+  catch (e) { console.log('FAILED', tab, e.message); }
 }
 
 // Collect the real names present in the raw source (for the privacy report only).
@@ -82,16 +82,16 @@ const sheetLeak = snapText.includes(SHEET_ID);
 
 // Refuse to write if the anonymized output would leak anything.
 if (leaks.length || idLeaks.length || sheetLeak) {
-  console.error('ABORT: anonymized output failed the privacy check — snapshot NOT written.');
+  console.log('ABORT: anonymized output failed the privacy check — snapshot NOT written.');
   process.exit(2);
 }
 // Write ONLY the anonymized snapshot into the repo. The real-name list is never
 // persisted to disk (it stays in memory); only aggregate counts are reported.
 writeFileSync(OUT_SNAPSHOT, JSON.stringify(snapshot, null, 0));
-console.error('wrote', OUT_SNAPSHOT);
+console.log('wrote', OUT_SNAPSHOT);
 
-console.error('\n===== PRIVACY REPORT =====');
-console.error('real names in source:', realNames.size);
-console.error('contributors (pseudonymized):', snapshot.contributorCount);
-console.error('name leaks:', leaks.length, 'id leaks:', [...new Set(idLeaks)].length, 'sheetId leak:', sheetLeak);
-console.error('VERDICT:', (leaks.length === 0 && idLeaks.length === 0 && !sheetLeak) ? 'PASS' : 'FAIL');
+console.log('\n===== PRIVACY REPORT =====');
+console.log('real names in source:', realNames.size);
+console.log('contributors (pseudonymized):', snapshot.contributorCount);
+console.log('name leaks:', leaks.length, 'id leaks:', [...new Set(idLeaks)].length, 'sheetId leak:', sheetLeak);
+console.log('VERDICT:', (leaks.length === 0 && idLeaks.length === 0 && !sheetLeak) ? 'PASS' : 'FAIL');
