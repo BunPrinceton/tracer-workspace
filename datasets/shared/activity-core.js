@@ -301,7 +301,6 @@
         <span class="aa-toolbar aa-toolbar-inline" id="aa-toolbar">
           <span class="aa-status"><span class="updated-dot" id="status-dot"></span><span id="status-text">Loading data…</span></span>
           <span class="snapshot-note" id="snapshot-note"></span>
-          <button class="btn ghost" id="refresh-btn" type="button" title="Reload latest data">↻ Refresh</button>
         </span>
       </nav>
       <div id="err-host"></div>
@@ -368,7 +367,6 @@
       <div class="aa-tooltip" id="aa-tooltip"></div>
     `;
 
-    el('refresh-btn').addEventListener('click', () => loadAll());
     el('drill-close').addEventListener('click', closeDrill);
     el('drill-backdrop').addEventListener('click', closeDrill);
     el('sort-select').addEventListener('change', () => {
@@ -1046,7 +1044,6 @@
       <div class="aa-toolbar aa-toolbar-dash" id="aa-toolbar">
         <span class="aa-status"><span class="updated-dot" id="status-dot"></span><span id="status-text">Loading data…</span></span>
         <span class="snapshot-note" id="snapshot-note"></span>
-        <button class="btn ghost" id="refresh-btn" type="button" title="Reload latest data">↻ Refresh</button>
       </div>
       <div id="err-host"></div>
 
@@ -1068,7 +1065,6 @@
 
       <div class="aa-tooltip" id="aa-tooltip"></div>
     `;
-    el('refresh-btn').addEventListener('click', () => loadAll());
     applyAccent();
   }
 
