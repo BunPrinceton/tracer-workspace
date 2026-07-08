@@ -70,6 +70,7 @@
   }
   function fmtDate(d) { return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
   function fmtDateLong(d) { return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
+  function fmtDateTime(d) { return d.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }); }
   function parseISO(s) {
     if (s instanceof Date) return s;
     const m = /^(\d{4})-(\d{1,2})-(\d{1,2})/.exec(String(s));
@@ -163,8 +164,8 @@
 
   function statusText() {
     if (STATE.generatedAt) {
-      const d = parseISO(STATE.generatedAt) || new Date(STATE.generatedAt);
-      if (d && !isNaN(d)) return 'Data as of ' + fmtDateLong(d);
+      const d = new Date(STATE.generatedAt);
+      if (d && !isNaN(d)) return 'Last updated ' + fmtDateTime(d);
     }
     return 'Data loaded';
   }
@@ -228,10 +229,12 @@
   function showError(msg) { const h = el('err-host'); if (h) h.innerHTML = '<div class="err-banner">' + escapeHtml(msg) + '</div>'; }
   function clearError() { const h = el('err-host'); if (h) h.innerHTML = ''; }
   function toggleSnapshotNote(on) {
+    // The "last updated" timestamp now lives in the status line (statusText),
+    // so this note is no longer used for the cached-snapshot message.
     const n = el('snapshot-note');
     if (!n) return;
-    n.className = 'snapshot-note' + (on ? ' show' : '');
-    n.textContent = on ? 'Showing cached snapshot (live source unavailable).' : '';
+    n.className = 'snapshot-note';
+    n.textContent = '';
   }
 
   let TIP = null;

@@ -58,8 +58,25 @@ for (const resp of Object.values(raw)) {
   }
 }
 
-const snapshot = anonymizeSheet(raw, null); // generatedAt null -> deterministic file
-const snapText = JSON.stringify(snapshot);
+// Build the anonymized data WITHOUT a timestamp first, so we can tell whether the
+// numbers actually changed (independent of when we last checked). "Last updated"
+// should reflect the last real data change, not every daily poll.
+const freshNoTs = anonymizeSheet(raw, null);
+const dataKey = (o) => JSON.stringify({ tabCount: o.tabCount, contributorCount: o.contributorCount, roster: o.roster, tabs: o.tabs });
+let generatedAt = new Date().toISOString();
+let dataChanged = true;
+if (existsSync(OUT_SNAPSHOT)) {
+  try {
+    const prev = JSON.parse(readFileSync(OUT_SNAPSHOT, 'utf8'));
+    if (prev.generatedAt && dataKey(prev) === dataKey(freshNoTs)) {
+      dataChanged = false;            // numbers identical -> keep the prior "last updated" time
+      generatedAt = prev.generatedAt;
+    }
+  } catch { /* unreadable prev -> treat as changed */ }
+}
+const snapshot = anonymizeSheet(raw, generatedAt);
+// Scan the timestamp-FREE data for leaks (so timestamp digits can't collide with a worker id).
+const snapText = JSON.stringify(freshNoTs);
 
 // ---- PRIVACY AUDIT: assert no real name / id appears in the anonymized output ----
 const leaks = [];
@@ -85,10 +102,15 @@ if (leaks.length || idLeaks.length || sheetLeak) {
   console.log('ABORT: anonymized output failed the privacy check — snapshot NOT written.');
   process.exit(2);
 }
-// Write ONLY the anonymized snapshot into the repo. The real-name list is never
-// persisted to disk (it stays in memory); only aggregate counts are reported.
-writeFileSync(OUT_SNAPSHOT, JSON.stringify(snapshot, null, 0));
-console.log('wrote', OUT_SNAPSHOT);
+// Write ONLY the anonymized snapshot into the repo, and only when the data changed
+// (so unchanged days don't churn the file or its timestamp). The real-name list is
+// never persisted to disk (it stays in memory); only aggregate counts are reported.
+if (!dataChanged) {
+  console.log('no data change since last run - snapshot left as-is (last updated ' + generatedAt + ')');
+} else {
+  writeFileSync(OUT_SNAPSHOT, JSON.stringify(snapshot, null, 0));
+  console.log('wrote', OUT_SNAPSHOT, '(last updated ' + generatedAt + ')');
+}
 
 console.log('\n===== PRIVACY REPORT =====');
 console.log('real names in source:', realNames.size);
