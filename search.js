@@ -458,7 +458,7 @@
             description: 'Definitions of the jargon used across the tracer docs — anatomy, artifacts, and annotation terms, with links to current protocol where one exists.',
             boost: 3,
             aliases: ['glossary', 'terms', 'definitions', 'jargon'],
-            keywords: ['annotation', 'invaginations', 'organelles', 'er', 'endoplasmic reticulum', 'myelin', 'inner tongue', 'outer tongue', 'defects', 'fat globule', 'membrane swirl', 'extracellular space', 'bounding box']
+            keywords: ['annotation', 'invaginations', 'organelles', 'er', 'endoplasmic reticulum', 'myelin', 'inner tongue', 'outer tongue', 'defects', 'fat globule', 'membrane swirl', 'extracellular space', 'bounding box', 'axon', 'dendrite', 'soma', 'glia', 'blood vessel', 'mitochondria', 'vesicles', 'synapse', 't-bar', 'synaptic cleft', 'nucleus', 'golgi apparatus', 'membrane', 'voxel painting', 'classification labeling', 'semantic segmentation', 'ground truth', 'proofreading', 'skeletonization', 'supervoxel', 'merge error', 'split error', 'electron microscopy', 'em']
         },
         {
             title: 'Archive · All Documents',
@@ -1858,7 +1858,7 @@
             'nav>ul>li>a::after,nav>ul>li>.nav-more-btn::after{content:attr(data-text);display:block;height:0;overflow:hidden;visibility:hidden;font-weight:600;user-select:none;pointer-events:none;}' +
             // Anchor the nav so the absolutely-positioned search can hug its right edge
             // without affecting the existing centered link layout.
-            'nav{position:relative;}' +
+            'nav{position:relative;z-index:100;}' +
             // Search bar floats at the right side of the nav with a small buffer from
             // the viewport edge — does NOT live in the link flow, so it never shifts
             // the centered nav links.
@@ -2267,7 +2267,25 @@
        behaviour and NO extra listeners — their hover dropdown is unchanged.
        ---------------------------------------------------------------------- */
     function initMoreDropdown() {
-        if (!window.matchMedia || !window.matchMedia('(hover: none)').matches) return;
+        // Desktop / hover-capable devices: the CSS opens .nav-more menus on
+        // :hover AND :focus-within. A left-click focuses the button, so
+        // :focus-within pins the menu open after the mouse leaves — hovering a
+        // second .nav-more then shows BOTH. Fix: blur any focused element inside
+        // a wrapper the moment the cursor leaves it, releasing :focus-within.
+        // Hover-to-open and keyboard focus-within accessibility are preserved.
+        if (!window.matchMedia || !window.matchMedia('(hover: none)').matches) {
+            var wraps = document.querySelectorAll('nav .nav-more');
+            for (var i = 0; i < wraps.length; i++) {
+                (function(wrap) {
+                    wrap.addEventListener('mouseleave', function() {
+                        if (wrap.contains(document.activeElement) && document.activeElement.blur) {
+                            document.activeElement.blur();
+                        }
+                    });
+                })(wraps[i]);
+            }
+            return;
+        }
         var nav = document.querySelector('nav');
         if (!nav) return;
         var wrap = nav.querySelector('.nav-more');

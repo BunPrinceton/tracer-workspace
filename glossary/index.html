@@ -127,6 +127,62 @@
             padding: 2rem 1.5rem 4rem;
         }
 
+        /* Glossary shell: sidebar + main */
+        .glossary-shell {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .glossary-shell main {
+            flex: 1;
+            min-width: 0;
+            max-width: none;
+            margin: 0;
+        }
+
+        .glossary-sidebar {
+            flex: 0 0 220px;
+            position: sticky;
+            top: 1rem;
+            max-height: calc(100vh - 2rem);
+            overflow-y: auto;
+            padding: 2rem 0 2rem 1.5rem;
+            font-size: 0.875rem;
+        }
+
+        .glossary-sidebar h2 {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #737373;
+            margin-bottom: 0.75rem;
+        }
+
+        .glossary-sidebar a {
+            display: block;
+            color: #525252;
+            text-decoration: none;
+            padding: 0.2rem 0;
+            line-height: 1.35;
+        }
+
+        .glossary-sidebar a:hover,
+        .glossary-sidebar a:focus {
+            color: #2563eb;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .glossary-sidebar a:target,
+        .glossary-sidebar a.is-current {
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
         /* Page Header */
         .page-header {
             margin-bottom: 1.5rem;
@@ -245,6 +301,19 @@
             main {
                 padding: 1.5rem 1rem;
             }
+
+            .glossary-shell {
+                flex-direction: column;
+                gap: 0;
+            }
+
+            .glossary-sidebar {
+                position: static;
+                flex-basis: auto;
+                max-height: none;
+                width: 100%;
+                padding: 1.5rem 1rem 0;
+            }
         }
     </style>
 </head>
@@ -294,6 +363,13 @@
     </ul>
 </nav>
 
+<div class="glossary-shell">
+
+<aside class="glossary-sidebar" aria-label="Glossary terms">
+    <h2>Terms</h2>
+    <div id="glossary-index" role="navigation" aria-label="Jump to term"></div>
+</aside>
+
 <main id="main-content" role="main">
 
     <header class="page-header">
@@ -306,15 +382,41 @@
         <p>Marking or labeling structures in image data &mdash; painting voxels, tracing, tagging, or otherwise recording what is where. The umbrella term for most of the team's ground-truth work.</p>
     </section>
 
+    <section class="glossary-term" id="axon">
+        <h2>Axon</h2>
+        <p>The output process of a neuron, carrying signals away from the soma toward synapses. In cross-section it is easily confused with a dendrite; a dense cluster of synaptic vesicles is a strong cue that a process is an axon.</p>
+    </section>
+
+    <section class="glossary-term" id="blood-vessel">
+        <h2>Blood vessel</h2>
+        <p>Vasculature running through the tissue. It is segmented separately from neural structures and is a useful spatial landmark, but it is not a neuron.</p>
+    </section>
+
     <section class="glossary-term" id="bounding-box">
         <h2>Bounding box</h2>
         <p>The 3D box defining the extent of your assigned volume &mdash; the borders within which you segment. Often called the volume border; watch its edges for small segments that just barely pass through.</p>
+    </section>
+
+    <section class="glossary-term" id="classification-labeling">
+        <h2>Classification labeling</h2>
+        <p>Assigning a category name (axon, dendrite, soma, &hellip;) to an already-segmented object, rather than painting its voxels. The second core semantic-segmentation activity.</p>
+        <p class="term-protocol">Current protocol &rarr; <a href="../sop/semantic-segmentation/">Semantic Segmentation (Labeling)</a></p>
     </section>
 
     <section class="glossary-term" id="defects">
         <h2>Defects</h2>
         <p>Imaging artifacts and tissue-quality problems &mdash; cracks, folds, tears, fat globules, membrane swirls, missing slices, and staining issues. They should not be mistaken for biological structure.</p>
         <p class="term-protocol">Current protocol &rarr; <a href="../sop/voxel-painting/">WebKnossos - GT Semantic Segmentation Protocol (SOP-006)</a> &mdash; defect segmentation &amp; masking.</p>
+    </section>
+
+    <section class="glossary-term" id="dendrite">
+        <h2>Dendrite</h2>
+        <p>The input process of a neuron, receiving signals at synapses and often studded with spines. Distinguishing dendrites from axons in ambiguous cross-sections is a common labeling challenge.</p>
+    </section>
+
+    <section class="glossary-term" id="electron-microscopy">
+        <h2>Electron microscopy</h2>
+        <p>The imaging modality that produces the high-resolution grayscale volumes tracers annotate; abbreviated EM. Contrast comes from heavy-metal staining of membranes.</p>
     </section>
 
     <section class="glossary-term" id="er">
@@ -333,9 +435,30 @@
         <p class="term-protocol">Current protocol &rarr; <a href="../sop/voxel-painting/">WebKnossos - GT Semantic Segmentation Protocol (SOP-006)</a> &mdash; defect labels.</p>
     </section>
 
+    <section class="glossary-term" id="glia">
+        <h2>Glia</h2>
+        <p>Non-neuronal support cells such as astrocytes, oligodendrocytes, and microglia. Glial cells form the myelin that wraps axons.</p>
+    </section>
+
+    <section class="glossary-term" id="golgi-apparatus">
+        <h2>Golgi apparatus</h2>
+        <p>A stacked-membrane organelle that packages proteins. Its distinctive parallel cisternae can be mistaken for membrane swirls or defects.</p>
+    </section>
+
+    <section class="glossary-term" id="ground-truth">
+        <h2>Ground truth</h2>
+        <p>Carefully verified annotations treated as the correct reference, used to train and evaluate automated segmentation. The quality bar for most tracer work; often abbreviated GT.</p>
+        <p class="term-protocol">Current protocol &rarr; <a href="../sop/gt-task-handling/">WebKnossos - GT Segmentation Task Handling (SOP-001)</a></p>
+    </section>
+
     <section class="glossary-term" id="invaginations">
         <h2>Invaginations</h2>
         <p>Infoldings of a cell membrane that push inward into the cell. They are easy to misread as a separate object or as a boundary between cells &mdash; look closely before splitting.</p>
+    </section>
+
+    <section class="glossary-term" id="membrane">
+        <h2>Membrane</h2>
+        <p>The lipid bilayer bounding a cell or organelle. Membrane boundaries are what you trace when segmenting; painting past a membrane (boundary leakage) is a common error.</p>
     </section>
 
     <section class="glossary-term" id="membrane-swirl">
@@ -344,10 +467,25 @@
         <p class="term-protocol">Current protocol &rarr; <a href="../sop/voxel-painting/">WebKnossos - GT Semantic Segmentation Protocol (SOP-006)</a> &mdash; defect labels.</p>
     </section>
 
+    <section class="glossary-term" id="merge-error">
+        <h2>Merge error</h2>
+        <p>When the segmentation incorrectly joins two separate objects into one. Fixed by splitting during proofreading.</p>
+    </section>
+
+    <section class="glossary-term" id="mitochondria">
+        <h2>Mitochondria</h2>
+        <p>Energy-producing organelles found inside axons, dendrites, and somata. Their double membrane and internal cristae make them recognizable; do not mistake a mitochondrion for a separate object or boundary.</p>
+    </section>
+
     <section class="glossary-term" id="myelin">
         <h2>Myelin</h2>
         <p>The insulating sheath that wraps axons, formed by glial cells. In current semantic segmentation we distinguish the <strong>inner tongue</strong> (the innermost wrap, next to the axon) from the <strong>outer tongue</strong> (the outermost wrap, on the glial side). Plain "myelin" is still a valid label when the inner/outer distinction is ambiguous.</p>
         <p class="term-protocol">Current protocol &rarr; <a href="../sop/voxel-painting/">WebKnossos - GT Semantic Segmentation Protocol (SOP-006)</a> &mdash; myelin segmentation.</p>
+    </section>
+
+    <section class="glossary-term" id="nucleus">
+        <h2>Nucleus</h2>
+        <p>The membrane-bound compartment inside the soma that holds the cell's DNA. A reliable marker that you are looking at a cell body rather than a process.</p>
     </section>
 
     <section class="glossary-term" id="organelles">
@@ -355,11 +493,119 @@
         <p>Internal cell structures such as mitochondria and ER. Be careful not to mistake an organelle for a separate cell or for a boundary when segmenting.</p>
     </section>
 
+    <section class="glossary-term" id="proofreading">
+        <h2>Proofreading</h2>
+        <p>Reviewing and correcting an existing automated segmentation &mdash; fixing merge and split errors rather than painting from scratch.</p>
+        <p class="term-protocol">Current protocol &rarr; <a href="../sop/proofreading/">Proofreading 3D (Tracing)</a></p>
+    </section>
+
+    <section class="glossary-term" id="semantic-segmentation">
+        <h2>Semantic segmentation</h2>
+        <p>Labeling tissue types and cellular structures in EM data, spanning both voxel painting and classification labeling.</p>
+        <p class="term-protocol">Current protocol &rarr; <a href="../sop/semantic-segmentation/">Semantic Segmentation (Labeling)</a></p>
+    </section>
+
+    <section class="glossary-term" id="skeletonization">
+        <h2>Skeletonization</h2>
+        <p>Reducing a segmented neuron to a thin centerline (skeleton) that captures its branching structure for downstream analysis.</p>
+        <p class="term-protocol">Current protocol &rarr; <a href="../sop/skeletonization/">Skeletonization</a></p>
+    </section>
+
+    <section class="glossary-term" id="soma">
+        <h2>Soma</h2>
+        <p>The cell body of a neuron, containing the nucleus; also called the perikaryon. It is the origin point from which axons and dendrites extend.</p>
+    </section>
+
+    <section class="glossary-term" id="split-error">
+        <h2>Split error</h2>
+        <p>When the segmentation incorrectly breaks a single object into multiple pieces. Fixed by merging during proofreading.</p>
+    </section>
+
+    <section class="glossary-term" id="supervoxel">
+        <h2>Supervoxel</h2>
+        <p>The smallest atomic segment produced by the base segmentation. Neurons are built by agglomerating supervoxels, and ID updates follow supervoxels through splits.</p>
+    </section>
+
+    <section class="glossary-term" id="synapse">
+        <h2>Synapse</h2>
+        <p>The connection point where one neuron signals another. In EM it is identified by a presynaptic vesicle cluster, a synaptic cleft, and a postsynaptic density (or a T-bar in insect datasets).</p>
+    </section>
+
+    <section class="glossary-term" id="cleft">
+        <h2>Synaptic cleft</h2>
+        <p>The narrow gap between the pre- and postsynaptic membranes at a synapse. Its location defines where a synapse is annotated.</p>
+    </section>
+
+    <section class="glossary-term" id="t-bar">
+        <h2>T-bar</h2>
+        <p>The T-shaped presynaptic density found at insect (e.g. Drosophila) synapses. It marks the release site and is used to identify and count synapses in fly datasets.</p>
+    </section>
+
+    <section class="glossary-term" id="vesicles">
+        <h2>Vesicles</h2>
+        <p>Small membrane-bound transport bodies that cluster at synapses. A dense vesicle pool signals a presynaptic terminal.</p>
+    </section>
+
+    <section class="glossary-term" id="voxel-painting">
+        <h2>Voxel painting</h2>
+        <p>Hand-coloring the individual voxels of a structure in 3D to produce a dense segmentation. One of the two core semantic-segmentation activities, alongside classification labeling.</p>
+        <p class="term-protocol">Current protocol &rarr; <a href="../sop/voxel-painting/">WebKnossos - GT Semantic Segmentation Protocol (SOP-006)</a></p>
+    </section>
+
 </main>
+
+</div>
 
 <footer>
     <a href="../">Back to Dashboard</a>
 </footer>
+
+<script>
+    // Build the alphabetical A->Z sidebar index from the glossary terms in the DOM,
+    // so it stays in sync automatically as terms are added.
+    (function () {
+        var container = document.getElementById('glossary-index');
+        if (!container) return;
+
+        var terms = Array.prototype.slice.call(
+            document.querySelectorAll('.glossary-term')
+        ).map(function (section) {
+            var h2 = section.querySelector('h2');
+            return {
+                id: section.id,
+                heading: h2 ? h2.textContent.trim() : section.id
+            };
+        }).filter(function (t) {
+            return t.id;
+        });
+
+        terms.sort(function (a, b) {
+            return a.heading.toLowerCase().localeCompare(b.heading.toLowerCase());
+        });
+
+        var frag = document.createDocumentFragment();
+        terms.forEach(function (t) {
+            var link = document.createElement('a');
+            link.href = '#' + t.id;
+            link.textContent = t.heading;
+            frag.appendChild(link);
+        });
+        container.appendChild(frag);
+
+        // Subtly mark the current term when arriving via a hash.
+        function markCurrent() {
+            var current = (location.hash || '').replace('#', '');
+            container.querySelectorAll('a').forEach(function (a) {
+                a.classList.toggle(
+                    'is-current',
+                    a.getAttribute('href') === '#' + current
+                );
+            });
+        }
+        window.addEventListener('hashchange', markCurrent);
+        markCurrent();
+    })();
+</script>
 
 <script src="../search.js" defer></script>
 </body>

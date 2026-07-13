@@ -279,25 +279,25 @@
     <div class="sop-view sop-card active" data-view="overview" data-view-label="Overview">
         <h2>What is Semantic Segmentation?</h2>
         <p>
-            Semantic segmentation is the process of labeling tissue types and cellular structures in electron microscopy data. This encompasses two related activities: <strong>voxel painting</strong> (hand-painting specific structures in 3D) and <strong>classification labeling</strong> (identifying and naming structures like axons, dendrites, and somata).
+            Semantic segmentation is the process of labeling tissue types and cellular structures in electron microscopy data. This encompasses two related activities: <strong><a href="../../glossary/#voxel-painting">voxel painting</a></strong> (hand-painting specific structures in 3D) and <strong><a href="../../glossary/#classification-labeling">classification labeling</a></strong> (identifying and naming structures like <a href="../../glossary/#axon">axons</a>, <a href="../../glossary/#dendrite">dendrites</a>, and <a href="../../glossary/#soma">somata</a>).
         </p>
         <p>
-            We have a storied history of hand-painting neurons, mitochondria, vesicles, synapses, T-bars, errors, membranes, and more. The tools and software have changed rapidly over the years as technology capabilities evolve, but the core skill of identifying and labeling biological structures in EM imagery remains the same.
+            We have a storied history of hand-painting neurons, <a href="../../glossary/#mitochondria">mitochondria</a>, <a href="../../glossary/#vesicles">vesicles</a>, <a href="../../glossary/#synapse">synapses</a>, <a href="../../glossary/#t-bar">T-bars</a>, errors, membranes, and more. The tools and software have changed rapidly over the years as technology capabilities evolve, but the core skill of identifying and labeling biological structures in EM imagery remains the same.
         </p>
 
         <h2>Structure Labels</h2>
         <div class="label-grid">
-            <div class="label-item"><strong>Soma</strong> — Cell body</div>
-            <div class="label-item"><strong>Axon</strong> — Output process</div>
-            <div class="label-item"><strong>Dendrite</strong> — Input process</div>
-            <div class="label-item"><strong>Glia</strong> — Support cells</div>
-            <div class="label-item"><strong>Blood Vessel</strong> — Vasculature</div>
+            <div class="label-item"><strong><a href="../../glossary/#soma">Soma</a></strong> — Cell body</div>
+            <div class="label-item"><strong><a href="../../glossary/#axon">Axon</a></strong> — Output process</div>
+            <div class="label-item"><strong><a href="../../glossary/#dendrite">Dendrite</a></strong> — Input process</div>
+            <div class="label-item"><strong><a href="../../glossary/#glia">Glia</a></strong> — Support cells</div>
+            <div class="label-item"><strong><a href="../../glossary/#blood-vessel">Blood Vessel</a></strong> — Vasculature</div>
             <div class="label-item"><strong><a href="../../glossary/#myelin">Myelin</a></strong> — Insulating sheath (use when inner/outer is unclear)</div>
-            <div class="label-item"><strong>Myelin (inner tongue)</strong> — Innermost wrap, next to the axon</div>
-            <div class="label-item"><strong>Myelin (outer tongue)</strong> — Outermost wrap, glial side</div>
-            <div class="label-item"><strong>Mitochondria</strong> — <a href="../../glossary/#organelles">Organelle</a></div>
-            <div class="label-item"><strong>Synapse / T-bar</strong> — Connection</div>
-            <div class="label-item"><strong>Vesicles</strong> — Transport bodies</div>
+            <div class="label-item"><strong><a href="../../glossary/#myelin">Myelin</a> (inner tongue)</strong> — Innermost wrap, next to the axon</div>
+            <div class="label-item"><strong><a href="../../glossary/#myelin">Myelin</a> (outer tongue)</strong> — Outermost wrap, glial side</div>
+            <div class="label-item"><strong><a href="../../glossary/#mitochondria">Mitochondria</a></strong> — <a href="../../glossary/#organelles">Organelle</a></div>
+            <div class="label-item"><strong><a href="../../glossary/#synapse">Synapse</a> / <a href="../../glossary/#t-bar">T-bar</a></strong> — Connection</div>
+            <div class="label-item"><strong><a href="../../glossary/#vesicles">Vesicles</a></strong> — Transport bodies</div>
             <div class="label-item"><strong><a href="../../glossary/#extracellular-space">Extracellular</a></strong> — Outside cells</div>
             <div class="label-item"><strong>Artifact / <a href="../../glossary/#defects">Defect</a></strong> — Imaging error</div>
         </div>
@@ -307,7 +307,7 @@
 
         <h2>Defect Annotation</h2>
         <p>
-            Defect annotation is a specialized form of semantic segmentation focused on marking imaging artifacts, tissue damage, and data quality issues. Defects include section tears, folds, staining artifacts, missing slices, and other preparation problems. Accurate defect annotation prevents these regions from corrupting downstream analysis. See the <a href="../../gallery/#banc">Gallery</a> for visual examples of common defects.
+            Defect annotation is a specialized form of semantic segmentation focused on marking imaging artifacts, tissue damage, and data quality issues. Defects include section tears, folds, staining artifacts, missing slices, and other preparation problems. Accurate defect annotation prevents these regions from corrupting downstream analysis. See the <a href="../../gallery/?filter=defect">Gallery</a> for visual examples of common defects.
         </p>
         <div class="label-grid">
             <div class="label-item"><strong>Crack</strong> — Fracture in the section</div>

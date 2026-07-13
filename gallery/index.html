@@ -283,6 +283,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            scroll-margin-top: 70px;
         }
 
         .gallery-image-container {
@@ -23980,6 +23981,22 @@ function filterGallery(category) {
         }
     });
 }
+
+// Deep-link support: gallery/?filter=defect applies the category filter and scrolls to the first match.
+document.addEventListener('DOMContentLoaded', function() {
+    var VALID = ['all', 'synapse', 'structure', 'defect', 'segmentation', 'funny', 'training', 'figure'];
+    var value = new URLSearchParams(window.location.search).get('filter');
+    if (!value || VALID.indexOf(value) === -1) return;
+    var select = document.getElementById('category-filter');
+    if (select) select.value = value;
+    filterGallery(value);
+    var first = document.querySelector('.gallery-item:not(.filtered-out)');
+    if (!first) return;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setTimeout(function() {
+        first.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    }, 100);
+});
 </script>
 
 <script>
