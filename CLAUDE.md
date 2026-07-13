@@ -24,9 +24,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **No build system.** Pure static HTML served directly by GitHub Pages. No Jekyll, no bundler, no templating engine. This has major implications:
 
 - **CSS is duplicated in every page** via inline `<style>` blocks. Shared stylesheets are the exception: `sop/print.css` (print rules) and `sop/sidebar.css` (the SOP-section left-rail + Procedure/Details layout, linked on every `/sop/` page); `/search.js` also injects a `<style>` at runtime for shared search UI bits. Updating the design system otherwise means editing every HTML file.
-- **Navigation is duplicated in every page.** `_includes/nav.html` exists as a reference template only — it cannot be auto-included. Adding a nav item requires editing every page. Top-level nav links are centered (`justify-content: center`); the top-right search bar is absolutely positioned and doesn't shift the link layout.
+- **Navigation is duplicated in every page.** `_includes/nav.html` exists as a reference template only — it cannot be auto-included. Adding a nav item requires editing every page. Top-level nav links are centered (`justify-content: center`); the top-right search bar is absolutely positioned and doesn't shift the link layout. The `.nav-more` dropdowns open via per-page CSS `:hover`/`:focus-within`, but `search.js` also injects `nav{z-index:100}` (so the search dropdown clears sticky page content like the gallery jump-nav) and, on desktop, a `mouseleave`→`blur` on each `.nav-more` so only one menu stays open at a time — nav behavior is split between per-page CSS and `search.js`.
 - **External links open in new tabs** (`target="_blank" rel="noopener noreferrer"`), including "Suggest an edit" footer links which are built dynamically via JavaScript.
-- **Deployment is just `git push` to `master`.** No build step, no CI/CD, no GitHub Actions. GitHub Pages rebuild takes 30-90s.
+- **Deployment is just `git push` to `master`.** No build step, no CI/CD, no GitHub Actions. GitHub Pages rebuild takes 30-90s. `search.js` is cached aggressively — hard-refresh (⌘⇧R) after a deploy to pick up search/nav changes.
+
+**Previewing / verifying site changes.** No dev server or test suite. Serve the repo statically and screenshot with headless Chrome — relative paths (`../`, `../../`) resolve correctly under a real HTTP root but NOT over `file://`, so always use the server:
+```bash
+python3 -m http.server 8799            # from repo root
+CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+"$CHROME" --headless --disable-gpu --hide-scrollbars --window-size=1400,1600 \
+  --screenshot=out.png "http://localhost:8799/glossary/"
+# Query-string deep-links work too, e.g. .../gallery/?filter=defect
+node --check search.js                 # only real "lint" — search.js is the one big JS file
+```
 
 ### Design System
 
@@ -56,6 +66,10 @@ All pages follow these principles (documented in `index.html` comments):
 /gallery/            # Single unified gallery (~245 figures, 9 stacked sections): BANC, FAFB 2019,
                      # Reference Materials, Visual Glossary, OL Cell Name Guide, Fly Synapses,
                      # FlyWire Cheatsheet, Optic Lobe Diagrams, Image Bounty. Sticky section jump-nav.
+                     # Category filter <select> (all/synapse/structure/defect/segmentation/funny/training/
+                     # figure) drives filterGallery() by toggling .filtered-out. Deep-linkable: a ?filter=<cat>
+                     # query on the URL auto-applies that filter + scrolls the first match into view (e.g. the
+                     # SOP defect section links to gallery/?filter=defect).
 /gallery/reference-figures/   # ORPHANED standalone page (185 figs) — merged into /gallery/ (2026-05-27);
                      # left intact (preserve-originals), unlinked. Image files still served from here.
 /gallery/optic-lobe-diagrams/ # ORPHANED standalone page (16 diagrams) — likewise merged + unlinked.
@@ -73,7 +87,14 @@ All pages follow these principles (documented in `index.html` comments):
 /glossary/           # Jargon/terms glossary (distinct from the gallery "Visual Glossary" and archive/glossary/).
                      # Each term has an #anchor; in-doc Wikipedia-style links deep-link to it; terms with live
                      # protocol carry a "Current protocol →" link. Its search.js INDEX entry sets boost:3 so it
-                     # ranks first for its terms (scoreEntry multiplies by entry.boost). Linked from More.
+                     # ranks first for its terms (scoreEntry multiplies by entry.boost). Terms are ALSO listed
+                     # individually in that entry's keywords[] so each is searchable. Linked from More.
+                     # Layout: a sticky left-rail (.glossary-shell/.glossary-sidebar, inline CSS on the page —
+                     # NOT the SOP sidebar.css) whose A→Z index is built at runtime by an inline script that
+                     # reads each .glossary-term's <h2>+id and sorts. Adding a <section class="glossary-term"
+                     # id="…"> is all that's needed — the sidebar and search keywords are the only other touch
+                     # points. Gotcha: don't wrap the index in a <nav> (the global nav{} dark styling would
+                     # apply) — it uses <div role="navigation">.
 /games/sandy-pong/   # OFF-TOPIC: 2-player Pong + bot mode. Single self-contained HTML.
                      # Talks to a separate Socket.IO server (github.com/BunPrinceton/sandy-pong,
                      # deployed on Render free as sandy-pong-server.onrender.com). Linked from
