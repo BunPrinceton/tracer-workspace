@@ -528,9 +528,9 @@
             title: 'Experimental tracertools Catalog',
             url: 'experimental/',
             section: 'Experimental',
-            description: 'Generation 2 scripts and experimental utilities (faster, parallel).',
+            description: 'Scripts and experimental utilities. Recommended default: resolve_and_status.py — update a list of IDs and get their proofread status via suggest_latest_roots + a live backbone_proofread query.',
             aliases: ['experimental', 'gen 2', 'gen2', 'experiments', 'experimental tools', 'tracer tools scripts', 'tracertools scripts'],
-            keywords: ['fast_validate_ids', 'fast_get_coords', 'parallel scripts', 'threadpool']
+            keywords: ['resolve_and_status', 'proofread status', 'backbone_proofread', 'suggest_latest_roots', 'live_live_query', 'update ids', 'check_backbone_proofread_hybrid', 'banc-bot', 'fast_validate_ids', 'fast_get_coords', 'parallel scripts', 'threadpool']
         },
         {
             title: 'FlyWire Link Restorer',

@@ -195,6 +195,15 @@
             color: #ffffff;
         }
 
+        .tool-badge.recommended {
+            background-color: #2563eb;
+        }
+
+        .tool-card.recommended {
+            border-color: #2563eb;
+            border-width: 2px;
+        }
+
         .tool-desc {
             font-size: 0.9375rem;
             color: #525252;
@@ -425,6 +434,58 @@
 
     <div class="tool-list">
 
+        <!-- resolve_and_status.py -->
+        <article class="tool-card recommended" id="resolve-and-status">
+            <div class="tool-header">
+                <h2>resolve_and_status.py</h2>
+                <span class="tool-badge recommended">Recommended</span>
+            </div>
+            <p class="tool-desc">
+                <strong>The current best way to take a list of IDs and get back the updated (current) IDs with their proofread status.</strong> It uses two sanctioned, ground-truth CAVE calls and nothing custom &mdash; so the output needs no external corroboration and cannot produce a false positive. First, <code style="display:inline; font-size:inherit;">suggest_latest_roots</code> resolves each ID to its current version (returns it unchanged if already current; on a split it picks the largest-overlap piece). Then a live <code style="display:inline; font-size:inherit;">live_live_query</code> on <code style="display:inline; font-size:inherit;">backbone_proofread</code> &mdash; the same live call banc-bot runs for <code style="display:inline; font-size:inherit;">&lt;id&gt;??</code> &mdash; reports proofread status without lagging behind recent proofreading (a materialized snapshot can lag weeks).
+            </p>
+
+            <div class="tool-usage">
+                <h3>Usage</h3>
+                <code>python resolve_and_status.py --input ids.txt
+python resolve_and_status.py -i ids.txt -o out.tsv --workers 20</code>
+            </div>
+
+            <div class="tool-meta">
+                <span><strong>Repo:</strong> <a target="_blank" rel="noopener noreferrer" href="https://github.com/BunPrinceton/tracer-tools-extensions/blob/master/resolve_and_status.py" style="color:#2563eb">tracer-tools-extensions/resolve_and_status.py</a></span>
+                <span><strong>Output:</strong> input_id &middot; current_id &middot; id_changed &middot; proofread_status</span>
+                <span><strong>Speed:</strong> ~330 IDs in ~20&nbsp;s</span>
+            </div>
+
+            <div class="tool-issues">
+                <h3>Good to know</h3>
+                <ul>
+                    <li>Needs only <code style="display:inline; font-size:inherit;">caveclient</code> &mdash; no <code style="display:inline; font-size:inherit;">--tracer-path</code>, no extra packages.</li>
+                    <li>After a real split there is no single canonical "current ID" &mdash; it depends which piece you mean, exactly as in Neuroglancer (a 2D double-click returns whichever piece you clicked). <code style="display:inline; font-size:inherit;">suggest_latest_roots</code> returns the biggest-overlap piece; treat those rows as a human "look at it" flag, not a tool error.</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- check_backbone_proofread_hybrid.py -->
+        <article class="tool-card" id="check-backbone-proofread-hybrid">
+            <div class="tool-header">
+                <h2>check_backbone_proofread_hybrid.py</h2>
+                <span class="tool-badge">Audit</span>
+            </div>
+            <p class="tool-desc">
+                Three-way corroboration for when you need to <em>prove</em> the answer (skeptics, or validating a new script). Runs the same IDs through three engines side by side &mdash; a supervoxel method, banc-bot's own code imported from the <code style="display:inline; font-size:inherit;">banc</code> package (<code style="display:inline; font-size:inherit;">is_latest_roots</code> + <code style="display:inline; font-size:inherit;">banc.lookup.annotations</code>, i.e. the literal <code style="display:inline; font-size:inherit;">&lt;id&gt;??</code>), and <code style="display:inline; font-size:inherit;">suggest_latest_roots</code> &mdash; flags every disagreement, and writes a <code style="display:inline; font-size:inherit;">*_bancbot_log.txt</code> reproducing banc-bot's replies as an offline audit trail. Its reconciled <code style="display:inline; font-size:inherit;">best_current_id</code> / <code style="display:inline; font-size:inherit;">best_proofread</code> columns match <code style="display:inline; font-size:inherit;">resolve_and_status.py</code>.
+            </p>
+
+            <div class="tool-usage">
+                <h3>Usage</h3>
+                <code>python check_backbone_proofread_hybrid.py --input ids.txt</code>
+            </div>
+
+            <div class="tool-meta">
+                <span><strong>Repo:</strong> <a target="_blank" rel="noopener noreferrer" href="https://github.com/BunPrinceton/tracer-tools-extensions/blob/master/check_backbone_proofread_hybrid.py" style="color:#2563eb">tracer-tools-extensions/check_backbone_proofread_hybrid.py</a></span>
+                <span><strong>Needs:</strong> <code style="display:inline; font-size:inherit;">pip install banc</code> (then restore <code style="display:inline; font-size:inherit;">cloud-files==6.3.1</code>)</span>
+            </div>
+        </article>
+
         <!-- fast_validate_ids.py -->
         <article class="tool-card" id="fast-validate-ids">
             <div class="tool-header">
@@ -432,7 +493,7 @@
                 <span class="tool-badge">Experimental</span>
             </div>
             <p class="tool-desc">
-                Parallel ID validator using ThreadPoolExecutor. Processes 5,000+ root IDs in under 2 minutes by parallelizing supervoxel lookups, then batching root lookups in a single API call. Uses the accurate supervoxel tracking method (not <code style="display:inline; font-size: inherit;">get_latest_roots</code>).
+                Parallel ID-currency validator using ThreadPoolExecutor. Processes 5,000+ root IDs in under 2 minutes by parallelizing supervoxel lookups, then batching root lookups in a single API call. <strong>ID-currency only</strong> &mdash; for updating IDs <em>and</em> checking proofread status together, use <a href="#resolve-and-status" style="color:#2563eb">resolve_and_status.py</a> above. Resolves via single-supervoxel tracking (follows physical voxels through splits/merges), which can land on a minor fragment after a split; <code style="display:inline; font-size: inherit;">resolve_and_status.py</code> uses the split-robust <code style="display:inline; font-size: inherit;">suggest_latest_roots</code> instead.
             </p>
 
             <div class="tool-usage">
