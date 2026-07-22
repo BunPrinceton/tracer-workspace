@@ -530,7 +530,7 @@
             section: 'Experimental',
             description: 'Scripts and experimental utilities. Recommended default: resolve_and_status.py — update a list of IDs and get their proofread status via suggest_latest_roots + a live backbone_proofread query.',
             aliases: ['experimental', 'gen 2', 'gen2', 'experiments', 'experimental tools', 'tracer tools scripts', 'tracertools scripts'],
-            keywords: ['resolve_and_status', 'proofread status', 'backbone_proofread', 'suggest_latest_roots', 'live_live_query', 'update ids', 'check_backbone_proofread_hybrid', 'banc-bot', 'fast_validate_ids', 'fast_get_coords', 'parallel scripts', 'threadpool']
+            keywords: ['resolve_and_status', 'proofread status', 'backbone_proofread', 'suggest_latest_roots', 'live_live_query', 'update ids', 'check_backbone_proofread_hybrid', 'banc-bot', 'fast_validate_ids', 'fast_get_coords', 'parallel scripts', 'threadpool', 'mesh pipeline', 'state_to_ng_layer_ben', 'merge_layers_to_ng_ben', 'precomputed mesh', 'link_pipeline', 'validate_links', 'extract_sheet_links', 'restore neuroglancer links']
         },
         {
             title: 'FlyWire Link Restorer',

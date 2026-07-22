@@ -428,7 +428,7 @@
             If you encounter issues, please <a target="_blank" rel="noopener noreferrer" href="https://github.com/BunPrinceton/tracer-tools-extensions/issues" style="color: #92400e; font-weight: 600;">report them</a>.
         </p>
         <p style="margin-top: 0.5rem;">
-            <strong>Source:</strong> <a target="_blank" rel="noopener noreferrer" href="https://github.com/BunPrinceton/tracer-tools-extensions" style="color: #92400e;">github.com/BunPrinceton/tracer-tools-extensions</a>
+            <strong>Sources:</strong> the ID / proofread, coordinate, mesh, and link tools live in <a target="_blank" rel="noopener noreferrer" href="https://github.com/BunPrinceton/tracer-tools-extensions" style="color: #92400e;">github.com/BunPrinceton/tracer-tools-extensions</a>. The Google Sheets and CLI-utility scripts below are part of the <code style="display:inline; font-size:inherit; color:#92400e;">tracer_tools</code> library (<code style="display:inline; font-size:inherit; color:#92400e;">tracer_tools/scripts/</code> in the <a target="_blank" rel="noopener noreferrer" href="https://github.com/BunPrinceton/tracer-workspace" style="color: #92400e;">tracer-workspace</a> repo). Each card's Repo/Location line says which.
         </p>
     </div>
 
@@ -493,7 +493,7 @@ python resolve_and_status.py -i ids.txt -o out.tsv --workers 20</code>
                 <span class="tool-badge">Experimental</span>
             </div>
             <p class="tool-desc">
-                Parallel ID-currency validator using ThreadPoolExecutor. Processes 5,000+ root IDs in under 2 minutes by parallelizing supervoxel lookups, then batching root lookups in a single API call. <strong>ID-currency only</strong> &mdash; for updating IDs <em>and</em> checking proofread status together, use <a href="#resolve-and-status" style="color:#2563eb">resolve_and_status.py</a> above. Resolves via single-supervoxel tracking (follows physical voxels through splits/merges), which can land on a minor fragment after a split; <code style="display:inline; font-size: inherit;">resolve_and_status.py</code> uses the split-robust <code style="display:inline; font-size: inherit;">suggest_latest_roots</code> instead.
+                Parallel ID updater using ThreadPoolExecutor. Checks whether root IDs are still current and resolves stale ones to their latest version; processes 5,000+ IDs in under 2 minutes by parallelizing supervoxel lookups, then batching root lookups in a single API call. <strong>Updates IDs only &mdash; it does not report proofread status.</strong> For updating IDs <em>and</em> checking proofread status together, use <a href="#resolve-and-status" style="color:#2563eb">resolve_and_status.py</a> above. Resolves via single-supervoxel tracking (follows physical voxels through splits/merges), which can land on a minor fragment after a split; <code style="display:inline; font-size: inherit;">resolve_and_status.py</code> uses the split-robust <code style="display:inline; font-size: inherit;">suggest_latest_roots</code> instead.
             </p>
 
             <div class="tool-usage">
@@ -525,7 +525,7 @@ python fast_validate_ids.py --input ids.txt --output results.txt --workers 20</c
                 <span class="tool-badge">Experimental</span>
             </div>
             <p class="tool-desc">
-                Updated version of fast_validate_ids with automatic path detection. Resolves the correct datastack path automatically, removing the need for manual configuration.
+                Portable version of fast_validate_ids for coworkers / other machines. Auto-detects the <code style="display:inline; font-size:inherit;">tracer_tools/src</code> module path relative to the script, removing the need to hand-set <code style="display:inline; font-size:inherit;">--tracer-path</code> (pass it manually if auto-detect fails). Same behavior otherwise &mdash; ID updates only, no proofread status.
             </p>
             <div class="tool-usage">
                 <h3>Usage</h3>
@@ -758,6 +758,152 @@ python fast_get_coords.py --input ids.txt --output coords.tsv --workers 20</code
             </p>
             <div class="tool-meta">
                 <span><strong>Location:</strong> tracer_tools/scripts/save_cave_token.py</span>
+            </div>
+        </article>
+
+    </div>
+
+    <!-- Mesh & Volume Pipeline -->
+    <h2 style="font-size: 1.25rem; font-weight: 600; margin: 2rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #d4d4d4;">Mesh &amp; Volume Pipeline</h2>
+    <p style="font-size: 0.9375rem; color: #525252; margin-bottom: 1rem;">Turn Neuroglancer annotation points into publicly-viewable precomputed mesh (and optional 2D segmentation) layers. All in <a target="_blank" rel="noopener noreferrer" href="https://github.com/BunPrinceton/tracer-tools-extensions" style="color:#2563eb">tracer-tools-extensions</a>; Windows/nokura-adapted variants of the upstream tooling.</p>
+
+    <div class="tool-list">
+
+        <!-- state_to_ng_layer_ben.py -->
+        <article class="tool-card" id="state-to-ng-layer">
+            <div class="tool-header">
+                <h2>state_to_ng_layer_ben.py</h2>
+                <span class="tool-badge">Experimental</span>
+            </div>
+            <p class="tool-desc">
+                One-command mesh pipeline: an annotation layer of points &rarr; a publicly-viewable precomputed mesh layer. Supports convex hull (default) and a 3D alpha-shape ("shrinkwrap") that auto-tunes alpha to a single-component watertight mesh, then uploads to a bucket with the correct ACLs and <code style="display:inline; font-size:inherit;">info</code> dimensions. Composes three helpers: <code style="display:inline; font-size:inherit;">json_to_volume_ben.py</code> (points &rarr; mesh), <code style="display:inline; font-size:inherit;">obj_to_volume_ben.py</code> (OBJ &rarr; volume), <code style="display:inline; font-size:inherit;">bucket_upload_folder_ben.py</code> (folder &rarr; bucket).
+            </p>
+            <div class="tool-usage">
+                <h3>Usage</h3>
+                <code>python state_to_ng_layer_ben.py state.json --layer annotation3 --name region_v1
+python state_to_ng_layer_ben.py state.json --layer pts --name region_v2 --method alpha</code>
+            </div>
+            <div class="tool-meta">
+                <span><strong>Repo:</strong> <a target="_blank" rel="noopener noreferrer" href="https://github.com/BunPrinceton/tracer-tools-extensions/blob/master/state_to_ng_layer_ben.py" style="color:#2563eb">tracer-tools-extensions/state_to_ng_layer_ben.py</a></span>
+                <span><strong>Needs:</strong> <code style="display:inline; font-size:inherit;">trimesh</code>, <code style="display:inline; font-size:inherit;">cloud-volume</code>, <code style="display:inline; font-size:inherit;">cloud-files&gt;=6.x</code>, <code style="display:inline; font-size:inherit;">boto3</code>, <code style="display:inline; font-size:inherit;">scipy</code></span>
+            </div>
+        </article>
+
+        <!-- state_to_ng_seg_layer_ben.py -->
+        <article class="tool-card" id="state-to-ng-seg-layer">
+            <div class="tool-header">
+                <h2>state_to_ng_seg_layer_ben.py + serve_local_precomputed_ben.py</h2>
+                <span class="tool-badge">Experimental</span>
+            </div>
+            <p class="tool-desc">
+                For when the layer should render in <strong>both</strong> the 2D cross-section panel and 3D, not just 3D. Extends the mesh pipeline by voxelizing the mesh into a chunked precomputed segmentation volume so NG's 2D view has per-voxel IDs to sample. <code style="display:inline; font-size:inherit;">serve_local_precomputed_ben.py</code> is a tiny CORS HTTP server for previewing a <code style="display:inline; font-size:inherit;">--no-upload</code> build in NG before publishing. Adds ~2&ndash;3 min and 30&nbsp;MB&ndash;1&nbsp;GB per mesh, so the mesh-only pipeline stays the default when 2D fills aren't needed.
+            </p>
+            <div class="tool-usage">
+                <h3>Usage</h3>
+                <code>python state_to_ng_seg_layer_ben.py state.json --layer annotation1 --name my_region --method alpha --no-upload
+python serve_local_precomputed_ben.py C:\path\to\workdir\image   # -> precomputed://http://localhost:9000</code>
+            </div>
+            <div class="tool-meta">
+                <span><strong>Repo:</strong> <a target="_blank" rel="noopener noreferrer" href="https://github.com/BunPrinceton/tracer-tools-extensions/blob/master/state_to_ng_seg_layer_ben.py" style="color:#2563eb">tracer-tools-extensions/state_to_ng_seg_layer_ben.py</a></span>
+            </div>
+        </article>
+
+        <!-- merge_layers_to_ng_ben.py -->
+        <article class="tool-card" id="merge-layers-to-ng">
+            <div class="tool-header">
+                <h2>merge_layers_to_ng_ben.py</h2>
+                <span class="tool-badge">Experimental</span>
+            </div>
+            <p class="tool-desc">
+                Combines multiple annotation layers into <strong>one</strong> hosted mesh (vs one mesh per layer). Useful when N point clusters should be a single 3D region &mdash; e.g. 12 sub-regions &rarr; one watertight envelope for "does this neuron pass through" testing. Self-contained (pulls scale and EM source from the state directly). Optional boolean union, dilation, Taubin smoothing, and a marching-cubes remesh that guarantees watertight output.
+            </p>
+            <div class="tool-usage">
+                <h3>Usage</h3>
+                <code>python merge_layers_to_ng_ben.py state.json --name all_regions --combine per-layer --method alpha --union --remesh-pitch 500</code>
+            </div>
+            <div class="tool-meta">
+                <span><strong>Repo:</strong> <a target="_blank" rel="noopener noreferrer" href="https://github.com/BunPrinceton/tracer-tools-extensions/blob/master/merge_layers_to_ng_ben.py" style="color:#2563eb">tracer-tools-extensions/merge_layers_to_ng_ben.py</a></span>
+                <span><strong>Optional deps:</strong> <code style="display:inline; font-size:inherit;">manifold3d</code>, <code style="display:inline; font-size:inherit;">scikit-image</code>, <code style="display:inline; font-size:inherit;">fast-simplification</code></span>
+            </div>
+        </article>
+
+        <!-- bucket_copy_folder_ben.py -->
+        <article class="tool-card" id="bucket-copy-folder">
+            <div class="tool-header">
+                <h2>bucket_copy_folder_ben.py</h2>
+                <span class="tool-badge">Experimental</span>
+            </div>
+            <p class="tool-desc">
+                Copies a precomputed folder from one bucket to another with the nokura-safe client (colon-name translation, public-read ACLs). A local stand-in for the upstream <code style="display:inline; font-size:inherit;">tracertools.bucket_copy_folder</code> &mdash; used to copy meshes into the shared central folder. Requires <code style="display:inline; font-size:inherit;">cloud-files&gt;=6.x</code> (older versions silently make shared-folder copies unreadable).
+            </p>
+            <div class="tool-meta">
+                <span><strong>Repo:</strong> <a target="_blank" rel="noopener noreferrer" href="https://github.com/BunPrinceton/tracer-tools-extensions/blob/master/bucket_copy_folder_ben.py" style="color:#2563eb">tracer-tools-extensions/bucket_copy_folder_ben.py</a></span>
+            </div>
+        </article>
+
+    </div>
+
+    <!-- Link Restoration Pipeline -->
+    <h2 style="font-size: 1.25rem; font-weight: 600; margin: 2rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #d4d4d4;">Link Restoration Pipeline</h2>
+    <p style="font-size: 0.9375rem; color: #525252; margin-bottom: 1rem;">Collect old Neuroglancer / appspot / CAVE-state share links, classify which still work, and rebuild the dead-but-restorable ones. The command-line companion to the <a href="../link-restore/" style="color:#2563eb">Link Restorer</a> web tool &mdash; both share the same fetch/route logic. Guiding rule: a link's host does not identify the dataset; only the fetched state contents do.</p>
+
+    <div class="tool-list">
+
+        <!-- link_pipeline.py -->
+        <article class="tool-card" id="link-pipeline">
+            <div class="tool-header">
+                <h2>link_pipeline.py</h2>
+                <span class="tool-badge">Experimental</span>
+            </div>
+            <p class="tool-desc">
+                End-to-end orchestrator: point it at Google Sheets and/or a text file of pasted links and get back one self-contained HTML report of clickable <strong>fixed</strong> links, grouped by liveness status. Runs the three stages (collect &rarr; validate &rarr; restore) in sequence.
+            </p>
+            <div class="tool-usage">
+                <h3>Usage</h3>
+                <code>python link_pipeline.py --input links.txt --output report.html
+python link_pipeline.py --sheet &lt;SHEET_ID&gt; --output report.html
+python link_pipeline.py --input links.txt --no-fetch      # shape-only, offline</code>
+            </div>
+            <div class="tool-meta">
+                <span><strong>Repo:</strong> <a target="_blank" rel="noopener noreferrer" href="https://github.com/BunPrinceton/tracer-tools-extensions/blob/master/link_pipeline.py" style="color:#2563eb">tracer-tools-extensions/link_pipeline.py</a></span>
+            </div>
+        </article>
+
+        <!-- extract_sheet_links.py -->
+        <article class="tool-card" id="extract-sheet-links">
+            <div class="tool-header">
+                <h2>extract_sheet_links.py</h2>
+                <span class="tool-badge">Experimental</span>
+            </div>
+            <p class="tool-desc">
+                Stage 1 (collect). Scans every cell of one or more worksheets and pulls out anything that looks like a shareable NG link/source (matches <code style="display:inline; font-size:inherit;">appspot.com</code>, <code style="display:inline; font-size:inherit;">json_url=</code>, <code style="display:inline; font-size:inherit;">nglstate</code>, <code style="display:inline; font-size:inherit;">graphene://</code>, <code style="display:inline; font-size:inherit;">spelunker</code>, &hellip;), capturing an adjacent "Notes" column when present. OAuth via your personal Google account (read-only).
+            </p>
+            <div class="tool-usage">
+                <h3>Usage</h3>
+                <code>python extract_sheet_links.py --sheet &lt;SHEET_ID&gt; --output links.json</code>
+            </div>
+            <div class="tool-meta">
+                <span><strong>Repo:</strong> <a target="_blank" rel="noopener noreferrer" href="https://github.com/BunPrinceton/tracer-tools-extensions/blob/master/extract_sheet_links.py" style="color:#2563eb">tracer-tools-extensions/extract_sheet_links.py</a></span>
+                <span><strong>Needs:</strong> <code style="display:inline; font-size:inherit;">gspread</code>, <code style="display:inline; font-size:inherit;">google-auth-oauthlib</code></span>
+            </div>
+        </article>
+
+        <!-- validate_links.py -->
+        <article class="tool-card" id="validate-links">
+            <div class="tool-header">
+                <h2>validate_links.py</h2>
+                <span class="tool-badge">Experimental</span>
+            </div>
+            <p class="tool-desc">
+                Stage 2 (classify). Given any link shape, decides whether it still works and why, returning exactly one status: <code style="display:inline; font-size:inherit;">ok</code>, <code style="display:inline; font-size:inherit;">dead-host</code>, <code style="display:inline; font-size:inherit;">truncated-id</code>, <code style="display:inline; font-size:inherit;">auth-gated</code>, <code style="display:inline; font-size:inherit;">dead-em</code>, <code style="display:inline; font-size:inherit;">seg-gone</code>, <code style="display:inline; font-size:inherit;">local-id-unportable</code>, or <code style="display:inline; font-size:inherit;">unrecognized</code>. Optionally fetches stored states with your CAVE token to route by real contents.
+            </p>
+            <div class="tool-usage">
+                <h3>Usage</h3>
+                <code>python validate_links.py --input links.txt --output report.json
+python validate_links.py --input links.txt --no-fetch      # shape-only, no network</code>
+            </div>
+            <div class="tool-meta">
+                <span><strong>Repo:</strong> <a target="_blank" rel="noopener noreferrer" href="https://github.com/BunPrinceton/tracer-tools-extensions/blob/master/validate_links.py" style="color:#2563eb">tracer-tools-extensions/validate_links.py</a></span>
             </div>
         </article>
 
