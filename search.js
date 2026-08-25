@@ -407,10 +407,10 @@
             title: "Task History",
             url: "task-history/",
             section: "Task History",
-            description: "Timeline of every project spreadsheet since 2016 — the data layer behind the documentation. 315 sheets grouped by era (Pinky/Omni, CREMI, Minnie65/V1DD, FlyWire/FAFB, BANC, CA3, MEC), each linking to the live Google Sheet and its related protocol docs.",
+            description: "Timeline of project spreadsheets since 2016 — the data layer behind the documentation. 145 sheets grouped by era (Pinky/Omni, CREMI, Minnie65/V1DD, FlyWire/FAFB, CA3, MEC), each linking to the live Google Sheet and its related protocol docs.",
             aliases: ["task history", "sheet history", "sheets", "spreadsheets", "project sheets", "work log"],
-            keywords: ["task history", "sheets", "spreadsheets", "timeline", "eras", "pinky", "omni", "cremi", "minnie", "v1dd", "flywire", "fafb", "optic lobe", "banc", "ca3", "mec", "every task done at work", "proofreading queues", "ground truth log", "templates", "google sheets"],
-            text: "task history every project spreadsheet since 2016 timeline eras pinky omni semantic ground truth cremi fly minnie65 v1dd microns flywire fafb optic lobe banc brain and nerve cord ca3 mec hippocampus cross-project logs templates tooling every task done at work since march 12 2019 proofreading queues synapse assignments google sheets drive"
+            keywords: ["task history", "sheets", "spreadsheets", "timeline", "eras", "pinky", "omni", "cremi", "minnie", "v1dd", "flywire", "fafb", "optic lobe", "ca3", "mec", "every task done at work", "proofreading queues", "ground truth log", "templates", "google sheets"],
+            text: "task history project spreadsheets since 2016 timeline eras pinky omni semantic ground truth cremi fly minnie65 v1dd microns flywire fafb optic lobe ca3 mec hippocampus cross-project logs templates tooling proofreading queues synapse assignments google sheets drive"
         },
         {
             title: 'Dashboard',
