@@ -404,6 +404,33 @@
             text: "curated links neuroglancer 3d examples zfish pinky 100 minnie basket cells fly all lobe meshes c2 cluster errors breaks blown membrane merger er pm pinch dark cells large vesicles parallel bundles optic lobe meshes failure modes restore ryan"
         },
         {
+            title: "The Ultimate Frisbee Anime",
+            url: "thoughts/#frisbee-anime",
+            section: "More · Thoughts",
+            description: "Team lore: the ultimate frisbee anime the tracer team plotted out at work — camp premise, the cast (the Science Guy, the Delinquent, the Magician, the Americans feat. Kyle and Ben), episode seeds, and the merch plan.",
+            aliases: ["frisbee anime", "ultimate frisbee", "frisbee", "team lore"],
+            keywords: ["frisbee", "anime", "lore", "story", "camp", "science guy", "delinquent", "magician", "large one", "americans", "kyle", "ben", "175 grams", "episode", "merch"],
+            text: "ultimate frisbee anime team lore story camp season one season two protagonist entomology science guy german exchange 175 grams exact delinquent mifune kitano takakura toei large one baker anemia magician magic camp tall guy glasses sentai leading champions americans kyle ben episode seeds name logo bug merch frisbees jerseys cosplay"
+        },
+        {
+            title: "Ground Truth Errors",
+            url: "ground-truth-errors/",
+            section: "Reference",
+            description: "Reference collection of ground-truth and proofreading error types: ambiguous borders, the Pinky-era cortex error casebook with Neuroglancer scenes and step-by-step fixes, Kyle's fly-data error statistics (1,284 segments reviewed), and the team's error clips.",
+            aliases: ["gt errors", "ground truth errors", "error types", "cortex errors", "fly errors", "error reference"],
+            keywords: ["ground truth", "errors", "merger", "split", "missed connection", "missing spine head", "dust", "overcoloring", "over-coloring", "ambiguous border", "slide stitch", "black slide", "jump", "rosette", "orphans", "corrupted", "upsampling", "hallucinations", "glia wheel", "pinky", "fly", "proofreading errors"],
+            text: "ground truth errors reference ambiguous border types of cortex errors pinky 2018 slide stitch spine head continuation merger blood vessel black slide jump unclickable dark slides axonal dendritic merger multisplit missing spine head dendrite dendrite merger fly data error breakdown 1284 segments missed connections merge errors dust overcoloring orphans rosettes error clips corrupted upsampling hallucinations glia wheel kyle"
+        },
+        {
+            title: "MEC Synapse Annotation Protocol",
+            url: "sop/mec-synapse-annotation/",
+            section: "SOPs · Current procedures",
+            description: "SOP-007: checking and completing synapse annotations in the MEC / Zheng-hippocampus volumes — validating AI-painted clefts and line annotations, the to_check/checked layer workflow, cleft conventions for mouse tissue, axo-axonic synapse criteria.",
+            aliases: ["mec synapse", "sop-007", "mec sop", "synapse annotation protocol", "mec synapse annotation"],
+            keywords: ["mec", "medial entorhinal cortex", "hippocampus", "zheng", "synapse", "annotation", "cleft", "psd", "bouton", "axo-axonic", "axo-somatic", "line annotation", "to_check", "checked", "ai synapses", "jay gager", "webknossos", "mouse"],
+            text: "mec synapse annotation protocol sop-007 medial entorhinal cortex zheng hippocampus validate ai generated synapses painted cleft line annotations to_check checked layers new tracer synapses presynaptic postsynaptic axo-axonic bouton bouton shaft psd axo-somatic monadic zhihao nico shader jay gager webknossos save changes autosave"
+        },
+        {
             title: "Task History",
             url: "task-history/",
             section: "Task History",

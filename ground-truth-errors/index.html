@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ground Truth Errors - Princeton Tracers</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { font-size: 18px; line-height: 1.6; scrollbar-gutter: stable; }
+
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            background-color: #f5f5f5;
+            color: #1a1a1a;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        nav { background-color: #1a1a1a; padding: 0.75rem 1.5rem; }
+        nav ul {
+            list-style: none; display: flex; flex-wrap: wrap;
+            gap: 0.25rem 1.5rem; justify-content: center;
+            max-width: 1200px; margin: 0 auto;
+        }
+        nav a {
+            color: #e5e5e5; text-decoration: none; font-size: 0.875rem;
+            padding: 0.5rem 0; display: inline-block;
+        }
+        nav a:hover, nav a:focus { text-decoration: underline; text-underline-offset: 4px; }
+        nav a[aria-current="page"] { color: #ffffff; font-weight: 600; }
+
+        .nav-more { position: relative; }
+        .nav-more-btn {
+            background: none; border: none; color: #e5e5e5; font-size: 0.875rem;
+            padding: 0.5rem 0; cursor: pointer; font-family: inherit;
+        }
+        .nav-more-btn:hover, .nav-more-btn:focus { text-decoration: underline; text-underline-offset: 4px; }
+        .nav-more-menu {
+            display: none; position: absolute; top: 100%; left: 50%;
+            transform: translateX(-50%); background-color: #2a2a2a;
+            border: 1px solid #444; border-radius: 4px; padding: 0.25rem 0;
+            min-width: 160px; z-index: 1000; list-style: none;
+        }
+        .nav-more-menu li { padding: 0; }
+        .nav-more-menu a { display: block; padding: 0.5rem 1rem; white-space: nowrap; }
+        .nav-more-menu a:hover, .nav-more-menu a:focus { background-color: #333; }
+        .nav-more:hover .nav-more-menu, .nav-more:focus-within .nav-more-menu { display: block; }
+
+        /* Main content */
+        main { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+        .page-header { margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 2px solid #d4d4d4; }
+        .page-header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .page-header p { color: #525252; font-size: 1.0625rem; max-width: 70ch; }
+        .page-header p + p { margin-top: 0.5rem; }
+
+        /* Amber callout */
+        .restore-callout {
+            background-color: #fef3c7; border: 2px solid #d97706; border-radius: 8px;
+            padding: 1rem 1.25rem; margin-bottom: 2rem;
+        }
+        .restore-callout p { font-size: 0.9375rem; color: #92400e; }
+        .restore-callout a { color: #92400e; font-weight: 600; }
+
+        /* Dataset sections */
+        .dataset { margin-bottom: 2.5rem; }
+        .dataset h2 {
+            font-size: 1.375rem; font-weight: 700; margin-bottom: 1rem;
+            padding-bottom: 0.5rem; border-bottom: 2px solid #d4d4d4;
+        }
+
+        .entry-list { list-style: none; display: flex; flex-direction: column; gap: 1rem; }
+
+        .entry {
+            background-color: #ffffff; border: 2px solid #d4d4d4; border-radius: 8px;
+            padding: 1.125rem 1.25rem;
+        }
+        .entry:hover { border-color: #a3a3a3; }
+
+        .entry-label { font-size: 1.0625rem; font-weight: 700; }
+        .entry-notes { font-size: 0.9375rem; color: #525252; margin-top: 0.25rem; }
+
+        .entry-actions {
+            display: flex; flex-wrap: wrap; align-items: center;
+            gap: 0.5rem 1rem; margin-top: 0.875rem;
+        }
+
+        .entry-open {
+            display: inline-flex; align-items: center; min-height: 44px;
+            padding: 0.4rem 0.9rem; font-size: 0.9375rem; font-weight: 600;
+            color: #ffffff; background-color: #2563eb; border-radius: 6px;
+            text-decoration: none;
+        }
+        .entry-open:hover, .entry-open:focus { background-color: #1d4ed8; }
+
+        .entry-alt {
+            display: inline-flex; align-items: center; min-height: 44px;
+            font-size: 0.875rem; color: #2563eb; text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .entry-restore {
+            display: inline-flex; align-items: center; min-height: 44px;
+            padding: 0.4rem 0.9rem; font-size: 0.875rem; font-weight: 600;
+            color: #1a1a1a; background-color: #ffffff;
+            border: 2px solid #d97706; border-radius: 6px;
+            cursor: pointer; font-family: inherit;
+        }
+        .entry-restore:hover, .entry-restore:focus { background-color: #fef3c7; }
+
+        .restore-msg { font-size: 0.8125rem; color: #15803d; font-weight: 600; }
+
+        .entry-pending {
+            display: inline-flex; align-items: center; min-height: 44px;
+            font-size: 0.875rem; font-style: italic; color: #737373;
+        }
+
+        /* Footer */
+        footer {
+            max-width: 1000px; margin: 0 auto; padding: 2rem 1.5rem;
+            border-top: 1px solid #e5e5e5; font-size: 0.875rem; color: #737373;
+        }
+        footer a { color: #525252; }
+        footer a:hover { color: #1a1a1a; }
+        .footer-nav { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+        .suggest-edit { color: #737373; font-size: 0.8125rem; }
+        .suggest-edit:hover { color: #2563eb; }
+
+        @media (max-width: 768px) {
+            html { font-size: 16px; }
+            main { padding: 1.5rem 1rem; }
+        }
+
+        @media print {
+            nav, footer { display: none; }
+            .entry { break-inside: avoid; border: 1px solid #000; }
+        }
+
+        :focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+
+        .skip-link { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+        .skip-link:focus {
+            position: fixed; top: 0; left: 0; width: auto; height: auto; padding: 1rem;
+            background: #2563eb; color: #ffffff; z-index: 10000; font-weight: 600;
+        }
+    
+        .err-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; background: #fff; }
+        .err-table th, .err-table td { border: 1px solid #d4d4d4; padding: 0.5rem 0.75rem; text-align: left; vertical-align: top; }
+        .err-table th { background: #ececec; }
+        .err-table td:first-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
+        .err-figure { background:#fff; border:2px solid #d4d4d4; border-radius:8px; padding:1rem; margin:1rem 0; }
+        .err-figure img { max-width:100%; height:auto; display:block; margin:0 auto; }
+        .err-figure figcaption { font-size: 0.9rem; color:#525252; margin-top:0.75rem; }
+        .stat-list li { margin-bottom: 0.5rem; }
+        .table-scroll { overflow-x: auto; }
+        section.content-block { margin-bottom: 2.5rem; }
+        section.content-block h2 { font-size:1.375rem; font-weight:700; margin-bottom:0.75rem; padding-bottom:0.5rem; border-bottom:2px solid #d4d4d4; }
+        section.content-block h3 { margin: 1rem 0 0.5rem; }
+        section.content-block p, section.content-block li { max-width: 85ch; }
+        .src-note { font-size:0.875rem; color:#525252; font-style:italic; }
+    </style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Main navigation">
+    <ul>
+        <li><a href="../">Dashboard</a></li>
+        <li><a href="../gallery/">Gallery</a></li>
+        <li><a href="../sop/">SOPs</a></li>
+        <li><a href="../pipeline/">Pipeline</a></li>
+        <li><a href="../task-history/">Task History</a></li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">Datasets &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../datasets/">Dataset Dashboard</a></li>
+                <li><a href="../datasets/retina/">RETINA</a></li>
+                <li><a href="../datasets/minnie/">MINNIE</a></li>
+                <li><a href="../datasets/ca3/">CA3</a></li>
+                <li><a href="../datasets/banc/">BANC</a></li>
+                <li><a href="../datasets/fafb/">FAFB</a></li>
+            </ul>
+        </li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">Experimental &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../experimental/">Experimental tracertools Catalog</a></li>
+                <li><a href="../link-restore/">Link Restorer</a></li>
+                <li><a href="../tracertools-catalog/">tracertools Catalog</a></li>
+            </ul>
+        </li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">More &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../publications/">Publications</a></li>
+                <li><a href="../links/">Curated Links</a></li>
+                <li><a href="../cave-local/">CAVE Local</a></li>
+                <li><a href="../archive/">Archive</a></li>
+                <li><a href="../glossary/">Glossary</a></li>
+                <li><a href="../games/sandy-pong/">Sandy Pong</a></li>
+                <li><a href="../thoughts/">Thoughts</a></li>
+                <li><a href="../thanks/">Thanks</a></li>
+                <li><a href="https://github.com/BunPrinceton/tracer-workspace" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+
+<main id="main-content">
+    <header class="page-header">
+        <h1>Ground Truth Errors</h1>
+        <p>A reference collection of the error types that come up in ground-truth and proofreading work &mdash; what they look like, why they happen, and how the team has fixed them. Compiled from Kyle's error documents and the team's error clips.</p>
+    </header>
+
+    <section class="content-block" id="ambiguous-border">
+        <h2>Ambiguous borders</h2>
+        <figure class="err-figure">
+            <img src="images/ambiguous-border.png" alt="Side-by-side EM segmentation and raw EM with a circled region where the boundary between a yellow and a blue segment cannot be discerned." width="1100">
+            <figcaption>Areas between the yellow segment (bottom-left) and the neighboring blue segment are left unannotated because it is difficult to discern which segment they belong to. <span class="src-note">Source: "Ground Truth Errors" (Kyle).</span></figcaption>
+        </figure>
+    </section>
+
+    <section class="content-block" id="cortex-errors">
+        <h2>Types of cortex errors (Pinky era, 2018)</h2>
+        <p>Kyle's casebook of proofreading errors from the mouse cortex work &mdash; each row is a real case with coordinates and a Neuroglancer scene, several with step-by-step fixes. <span class="src-note">Scenes open in the era's neuromancer instance and may require access.</span></p>
+        <div class="table-scroll">
+        <table class="err-table">
+            <thead><tr><th scope="col">Coordinates</th><th scope="col">Error type</th><th scope="col">Scene, fix steps &amp; notes</th></tr></thead>
+            <tbody>
+<tr><td>81638, 42576, 189</td><td>Slide stitch affecting spine-head continuation</td><td><a href="https://nkem-multicut-dot-neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/5662940552232960" target="_blank" rel="noopener noreferrer">scene</a> &mdash; a spine branches off into a stitch; the continuation gets much harder to work out, sometimes too difficult to continue with confidence.</td></tr>
+<tr><td>81574, 41811, 485</td><td>Slide stitch affecting spine-head continuation</td><td><a href="https://nkem-multicut-dot-neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/5763418761986048" target="_blank" rel="noopener noreferrer">scene</a></td></tr>
+<tr><td>70294, 51507, 1908</td><td>Huge merger — many objects plus a blood vessel</td><td><a href="https://nkem-multicut-dot-neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/5637824724336640" target="_blank" rel="noopener noreferrer">scene</a></td></tr>
+<tr><td>57713, 71443, 1209</td><td>Black slide + jump causing mergers and wrong continuations</td><td><a href="https://nkem-multicut-dot-neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/5704407857496064" target="_blank" rel="noopener noreferrer">scene</a> &middot; <a href="https://giphy.com/gifs/3gVoKKfXqsu40Lh1NV" target="_blank" rel="noopener noreferrer">animation</a> &mdash; a dendritic branch isn't properly continued after a jump following a black slide; the proper continuation was itself merged with a different dendrite.</td></tr>
+<tr><td>118150, 61621, 1845</td><td>Failure to continue a dendritic branch — unclickable sections</td><td><a href="https://nkem-multicut-dot-neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/5733423247261696" target="_blank" rel="noopener noreferrer">scene</a> &mdash; keep stepping through slides until supervoxels light up under the mouse again; experience tells you when to give up.</td></tr>
+<tr><td>115154, 66959, 1300</td><td>Axonal&ndash;dendritic merger (with step-by-step fix)</td><td><a href="https://nkem-multicut-dot-neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/5656774724026368" target="_blank" rel="noopener noreferrer">start</a> &rarr; <a href="https://nkem-multicut-dot-neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/5716808736702464" target="_blank" rel="noopener noreferrer">multisplit axon from dendritic base</a> &rarr; <a href="https://nkem-multicut-dot-neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/5695414665740288" target="_blank" rel="noopener noreferrer">split off more axon</a> &rarr; <a href="https://nkem-multicut-dot-neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/5690599873183744" target="_blank" rel="noopener noreferrer">find the axon continuations</a> &rarr; <a href="https://nkem-multicut-dot-neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/5767123439714304" target="_blank" rel="noopener noreferrer">break up their mergers</a></td></tr>
+<tr><td>108615, 65532, 713</td><td>Missing spine head</td><td><a href="https://nkem-multicut-dot-neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/5146847282724864" target="_blank" rel="noopener noreferrer">scene</a> &mdash; creep along each dendritic branch in 3D looking for spines without bouton-like heads, or bumps that could be missing spines.</td></tr>
+<tr><td>109660, 67111, 810</td><td>Missing spine head</td><td><a href="https://nkem-multicut-dot-neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/5649438416568320" target="_blank" rel="noopener noreferrer">scene</a></td></tr>
+<tr><td>110250, 67364, 821</td><td>Failure to continue a dendritic branch — dark slides</td><td><a href="https://nkem-multicut-dot-neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/5688587211243520" target="_blank" rel="noopener noreferrer">scene</a></td></tr>
+<tr><td>110787, 68298, 876</td><td>Merger / missing spine head / slide jump (with fix)</td><td><a href="https://nkem-multicut-dot-neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/5729392286236672" target="_blank" rel="noopener noreferrer">start</a> &middot; <a href="https://giphy.com/gifs/3bzHKfKGWT7g3ILp81" target="_blank" rel="noopener noreferrer">animation</a> &rarr; <a href="https://nkem-multicut-dot-neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/5756433131896832" target="_blank" rel="noopener noreferrer">multisplit axon from dendrite</a> &rarr; <a href="https://nkem-multicut-dot-neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/5644660902985728" target="_blank" rel="noopener noreferrer">split a second merger to free the spine head</a> &mdash; use anchor points to gauge the path and severity of the jump.</td></tr>
+<tr><td>69672, 47567, 698</td><td>Dendrite&ndash;dendrite merger at multiple points</td><td><a href="https://nkem-multicut-dot-neuromancer-seung-import.appspot.com/?json_url=https://www.dynamicannotationframework.com/nglstate/5661813022654464" target="_blank" rel="noopener noreferrer">scene</a> &mdash; locate all merge points (61065,47077,2018 &middot; 61667,47172,1998 &middot; 57889,56473,1247 &middot; 58720,56381,1265); splitting spines from the dendritic base zeroes in on the merger source.</td></tr>
+            </tbody>
+        </table>
+        </div>
+    </section>
+
+    <section class="content-block" id="fly-error-breakdown">
+        <h2>Fly data error breakdown</h2>
+        <p>Kyle's report after reviewing <strong>1,284 fly ground-truth segments</strong> (837 error logs, many holding multiple error points):</p>
+        <ul class="stat-list">
+            <li><strong>400+ missed connections</strong> &mdash; by far the most common error, ranging from obvious to very subtle. Tracing from smaller segments outward beats scrutinizing a big segment: the smaller pieces need review anyway, and subtle connections are easier to spot in a focused area.</li>
+            <li><strong>~310 segments that couldn't be located</strong> &mdash; likely genuinely missing; even 1-pixel dust was easy to spot.</li>
+            <li><strong>~160 merge errors</strong> &mdash; some from small jumps, but many joined multiple distant segments with no contact at all.</li>
+            <li><strong>~150 pieces of dust</strong>.</li>
+            <li><strong>81 logged cases of over-coloring</strong> (realistically 100&ndash;120 areas) &mdash; almost always incorrect inclusion of the thin glia between bordering neurons; the wider the segment, the more likely.</li>
+            <li><strong>16 cases</strong> where the correction wasn't fully confident.</li>
+            <li><strong>21 potential orphans</strong> out of 435 segments reviewed for orphans.</li>
+        </ul>
+        <p>The hardest areas were tangles of small branches swirling around each other (rosette-like): pinches, intricate wrapping, and jumps left 3&ndash;5 segments swapping parts of themselves. <span class="src-note">Source: "Fly Data Error Breakdown" (Kyle).</span></p>
+    </section>
+
+    <section class="content-block" id="error-clips">
+        <h2>Error clips &amp; animations</h2>
+        <p>Larger recordings live in Drive (access required):</p>
+        <ul>
+<li><a href="https://drive.google.com/file/d/1xSv5Z1r0V6UjIPVJ2TrReSW_PEKGE_oe/view" target="_blank" rel="noopener noreferrer">Ground-truthing error — animation 1</a></li>
+<li><a href="https://drive.google.com/file/d/1Bzy23SuT_keXHYZSX4blvhQ79JOeyygt/view" target="_blank" rel="noopener noreferrer">Ground-truthing error — animation 2</a></li>
+<li><a href="https://drive.google.com/file/d/1eia2O_kXwKvUZGBIWTFOagzJTj6z6UjK/view" target="_blank" rel="noopener noreferrer">Enrique III's GT set in EC space — animation</a></li>
+<li><a href="https://drive.google.com/file/d/1nTrJkFGMHdfZjAru7DxZe49bOMyaMBRr/view" target="_blank" rel="noopener noreferrer">Corrupted data — before</a></li>
+<li><a href="https://drive.google.com/file/d/15WhT0vsKQzn_8sGcxHoQvSOZbI_Dw19l/view" target="_blank" rel="noopener noreferrer">Corrupted data — after</a></li>
+<li><a href="https://drive.google.com/file/d/1wyQ__a4IgOgARy3icnJvqFct6HPWOFP1/view" target="_blank" rel="noopener noreferrer">First upsampling set (shows hallucinations) — animation</a></li>
+<li><a href="https://drive.google.com/file/d/1UO9UF-bwhsEZuq0zX_gkVC3Sd64qj5wI/view" target="_blank" rel="noopener noreferrer">Upsampling data scroll — video</a></li>
+<li><a href="https://drive.google.com/file/d/18_ItuicQjVP0uZVy6QdEKVVH9qPp304A/view" target="_blank" rel="noopener noreferrer">Glia wheel (looks like myelin at first) — video</a></li>
+        </ul>
+    </section>
+
+    <section class="content-block" id="related">
+        <h2>Related</h2>
+        <ul>
+            <li><a href="../sop/gt-verification/">SOP-002: General GT Verification/Review</a></li>
+            <li><a href="../sop/voxel-painting/">SOP-006: GT Semantic Segmentation Protocol</a> (defect classes)</li>
+            <li><a href="../gallery/?filter=defect">Gallery &mdash; defect examples</a></li>
+            <li><a href="../task-history/">Task History</a> &mdash; the error_collection and review sheets</li>
+        </ul>
+    </section>
+</main>
+
+<footer>
+    <div class="footer-nav">
+        <a href="../">Back to Dashboard</a>
+        <a href="#" id="suggest-edit-link" class="suggest-edit" target="_blank" rel="noopener noreferrer">Please Suggest Edits</a>
+    </div>
+</footer>
+
+<script src="../search.js" defer></script>
+</body>
+</html>

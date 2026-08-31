@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEC Synapse Annotation Protocol v1.0 - Princeton Tracers</title>
+    <link rel="stylesheet" href="../print.css" media="print">
+    <link rel="stylesheet" href="../sidebar.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-size: 18px; line-height: 1.6; }
+        body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background-color: #f5f5f5; color: #1a1a1a; min-height: 100vh; }
+
+        /* Navigation */
+        nav { background-color: #1a1a1a; padding: 0.75rem 1.5rem; }
+        nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; justify-content: center; max-width: 1200px; margin: 0 auto; }
+        nav a { color: #e5e5e5; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0; display: inline-block; }
+        nav a:hover, nav a:focus { text-decoration: underline; text-underline-offset: 4px; }
+        nav a[aria-current="page"] { color: #ffffff; font-weight: 600; }
+
+        /* More dropdown */
+        .nav-more {
+            position: relative;
+        }
+
+        .nav-more-btn {
+            background: none;
+            border: none;
+            color: #e5e5e5;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .nav-more-btn:hover,
+        .nav-more-btn:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .nav-more-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 0.25rem 0;
+            min-width: 160px;
+            z-index: 1000;
+            list-style: none;
+        }
+
+        .nav-more-menu li {
+            padding: 0;
+        }
+
+        .nav-more-menu a {
+            display: block;
+            padding: 0.5rem 1rem;
+            white-space: nowrap;
+        }
+
+        .nav-more-menu a:hover,
+        .nav-more-menu a:focus {
+            background-color: #333;
+        }
+
+        .nav-more:hover .nav-more-menu,
+        .nav-more:focus-within .nav-more-menu {
+            display: block;
+        }
+
+
+        /* Main content */
+        main { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+        /* Page header */
+        .page-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #d4d4d4; }
+        .page-header h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .page-header p { color: #525252; font-size: 1.0625rem; }
+
+        .sop-meta { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 0.75rem; font-size: 0.8125rem; color: #737373; }
+        .sop-meta strong { color: #525252; }
+
+        .version-badge { display: inline-block; font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.25rem 0.5rem; border-radius: 3px; background-color: #059669; color: #ffffff; margin-left: 0.5rem; vertical-align: middle; }
+
+        /* Semantic class table */
+        .class-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .class-table th, .class-table td { padding: 0.625rem 0.75rem; text-align: left; border-bottom: 1px solid #e5e5e5; font-size: 0.875rem; }
+        .class-table th { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #525252; background-color: #f9fafb; }
+        .class-table td:first-child { font-weight: 600; white-space: nowrap; }
+        .class-table tbody tr:hover { background-color: #fafafa; }
+
+        /* Important callouts */
+        .callout { background-color: #fef3c7; border-left: 4px solid #d97706; padding: 0.75rem 1rem; margin: 0.75rem 0; border-radius: 0 4px 4px 0; font-size: 0.9375rem; }
+        .callout strong { color: #92400e; }
+
+        /* Footer */
+        footer { max-width: 1000px; margin: 0 auto; padding: 2rem 1.5rem; border-top: 1px solid #e5e5e5; font-size: 0.875rem; color: #737373; }
+        footer a { color: #525252; }
+        footer a:hover { color: #1a1a1a; }
+        .footer-nav { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+        .suggest-edit { color: #737373; font-size: 0.8125rem; }
+        .suggest-edit:hover { color: #2563eb; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            html { font-size: 16px; }
+            main { padding: 1.5rem 1rem; }
+            .class-table { display: block; overflow-x: auto; }
+        }
+
+        :focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+        .skip-link { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+        .skip-link:focus { position: fixed; top: 0; left: 0; width: auto; height: auto; padding: 1rem; background: #2563eb; color: #ffffff; z-index: 10000; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Main navigation">
+    <ul>
+        <li><a href="../../">Dashboard</a></li>
+        <li><a href="../../gallery/">Gallery</a></li>
+        <li><a href="../../sop/" aria-current="page">SOPs</a></li>
+        <li><a href="../../pipeline/">Pipeline</a></li>
+        <li><a href="../../task-history/">Task History</a></li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">Datasets &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../../datasets/">Dataset Dashboard</a></li>
+                <li><a href="../../datasets/retina/">RETINA</a></li>
+                <li><a href="../../datasets/minnie/">MINNIE</a></li>
+                <li><a href="../../datasets/ca3/">CA3</a></li>
+                <li><a href="../../datasets/banc/">BANC</a></li>
+                <li><a href="../../datasets/fafb/">FAFB</a></li>
+            </ul>
+        </li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">Experimental &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../../experimental/">Experimental tracertools Catalog</a></li>
+                <li><a href="../../link-restore/">Link Restorer</a></li>
+                <li><a href="../../tracertools-catalog/">tracertools Catalog</a></li>
+            </ul>
+        </li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">More &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../../publications/">Publications</a></li>
+                <li><a href="../../links/">Curated Links</a></li>
+                <li><a href="../../cave-local/">CAVE Local</a></li>
+                <li><a href="../../archive/">Archive</a></li>
+                <li><a href="../../glossary/">Glossary</a></li>
+                <li><a href="../../games/sandy-pong/">Sandy Pong</a></li>
+                <li><a href="../../thoughts/">Thoughts</a></li>
+                <li><a href="../../thanks/">Thanks</a></li>
+                <li><a href="https://github.com/BunPrinceton/tracer-workspace" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+
+<div class="sop-shell">
+<aside id="sop-sidebar" class="sop-sidebar" aria-label="SOP section navigation"></aside>
+<main id="main-content" role="main">
+
+    <header class="page-header">
+        <h1>MEC Synapse Annotation Protocol <span class="version-badge">v1.0</span></h1>
+        <p>Checking and completing synapse annotations (painted clefts + line annotations) in the MEC / Zheng-hippocampus volumes.</p>
+        <div class="sop-meta">
+            <span><strong>Owner:</strong> Jay Gager</span>
+            <span><strong>Status:</strong> Working protocol (Aug 2026)</span>
+            <span><strong>Source:</strong> <a href="https://docs.google.com/document/d/1zeYLJ20TA3XG1IomhpZe67eaYNHiujeDNGJ34hG5e3c/edit" target="_blank" rel="noopener noreferrer">mec_synapse_annotation_2026_08 (live Google Doc)</a></span>
+        </div>
+    </header>
+
+    <!-- PROCEDURE (default view) -->
+    <div class="sop-view sop-card active" data-view="procedure" data-view-label="Procedure">
+        <h2>General task</h2>
+        <p>Go through each synapse indicated by either a painted cleft or a pre-existing line annotation and check it for validity, then scan the volume for any missed synapses.</p>
+
+        <div class="callout">
+            <strong>A note about saving:</strong> the "Save Changes" button at the top of the interface only saves the painted segmentation, <em>not</em> changes to the annotation layers. Annotation layers autosave every 30 seconds; the save icon on the right-hand sidebar saves them manually. Refreshing or closing without that manual save loses any annotation changes since the last autosave.
+        </div>
+
+        <h2 id="step-by-step">Step-by-step</h2>
+        <div class="callout">
+            <strong>Temporary addition (requested by Chris, 2026-08-05):</strong> collect all examples of AI-generated axo-axonic synapse painting in separate point-annotation layers marking the location of the painted synapse &mdash; one layer for bouton&ndash;bouton, another for bouton&ndash;shaft. Do <strong>not</strong> delete their segmentation paint when you find them.
+        </div>
+        <ol>
+            <li>The volume starts with an annotation layer marking the points where AI-generated synapses occur. Copy this layer (click-and-drag the layer, then shift+click) and rename it <strong>"to_check"</strong>. Also make a second, empty annotation layer named <strong>"checked"</strong>.</li>
+            <li>Scan through the volume and add annotation points anywhere you see existing tracer-made line annotations that don't coincide with an AI-made synapse.</li>
+            <li>Work through the "to_check" list, deleting each point as you check it. Each time you delete a point, add a corresponding point to the "checked" layer &mdash; <em>even when you're erasing a synapse</em>, so you know the area has been covered.</li>
+            <li>Edit the cleft painting to add or remove as needed:
+                <ul>
+                    <li>Actual gaps between the pre- and post-partners' membranes usually aren't visible in mouse tissue, so "cleft" here means all the space from the inside of the presynaptic partner's membrane to the inside of the postsynaptic partner's membrane, plus any PSD you notice.</li>
+                    <li>If the clefts of two separate synapses touch, paint one with a different segment by changing the "target value" number in the brush menu (this creates a new segment, same as in VAST).</li>
+                </ul>
+            </li>
+            <li>Create a line annotation for each synapse in the <strong>"New Tracer Synapses"</strong> annotation layer that came with the volume (it has Nico's shader script preloaded). Place the first point inside the <strong>presynaptic</strong> partner and the second point inside the <strong>postsynaptic</strong> partner.</li>
+            <li>Any axo-axonic synapses go in their own annotation layer (requested by Nico for labeling purposes).</li>
+            <li>Once all existing synapse sites have been checked, scan the volume for any missed by both the previous tracers and the AI, and add them as well.</li>
+        </ol>
+
+        <h2 id="axo-axonic">Axo-axonic synapse criteria</h2>
+        <ul>
+            <li><strong>Bouton&ndash;bouton</strong> synapses can only be marked if the boutons aren't synapsing with anything else.</li>
+            <li><strong>Bouton&ndash;shaft</strong> synapses must show clear PSD to qualify.</li>
+            <li>Axo-somatic synapses likely won't have PSD but still need to be marked. <em>(Criteria pending &mdash; awaiting the outcome of Ben and Zhihao's conversation.)</em></li>
+        </ul>
+
+        <h3>Examples</h3>
+        <figure class="sop-figure">
+            <img src="images/axo-axonic-expectation.png" alt="Ideal-resolution EM example of an axo-axonic synapse with clearly visible partners" style="max-width:100%;height:auto;border:1px solid #d4d4d4;border-radius:4px;">
+            <figcaption>Expectation (ideal resolution).</figcaption>
+        </figure>
+        <figure class="sop-figure">
+            <img src="images/axo-axonic-reality.png" alt="Real MEC data at coordinates 166201, 133723, 5472 showing an axo-axonic synapse at working resolution" style="border:1px solid #d4d4d4;border-radius:4px;">
+            <figcaption>Reality at 166201, 133723, 5472 (confirmed by Zhihao, 2026-08-05).</figcaption>
+        </figure>
+    </div>
+
+    <!-- DETAILS -->
+    <div class="sop-view sop-card" data-view="details" data-view-label="Details">
+        <h2>General notes</h2>
+        <ul>
+            <li>Most mammalian CNS chemical synapses are monadic (one partner). Per Zhihao, roughly 20&ndash;30% of boutons in some brain areas have more than one post-partner &mdash; the MEC ratio is unknown. Even then, most are one bouton onto two spines; one bouton onto one spine <em>and</em> another bouton should be very rare.</li>
+        </ul>
+
+        <h3>If you want to nuke the volume and start from scratch</h3>
+        <ol>
+            <li>Consider making a copy of the original paint layer first (memory-usage impact untested).</li>
+            <li>Select the fill tool and switch to 3D fill.</li>
+            <li>Fill the whole volume with a single segment color.</li>
+            <li>Switch the fill segment to ID 0 and fill again &mdash; this deletes everything and may take some time.</li>
+            <li>Saving afterward may take a <em>very</em> long time (10&ndash;15 minutes).</li>
+        </ol>
+
+        <h2>Related documents</h2>
+        <ul>
+            <li><a href="https://docs.google.com/document/d/1zeYLJ20TA3XG1IomhpZe67eaYNHiujeDNGJ34hG5e3c/edit" target="_blank" rel="noopener noreferrer">mec_synapse_annotation_2026_08</a> &mdash; the live working doc this SOP mirrors (Jay Gager, Aug 2026)</li>
+            <li><a href="../voxel-painting/">SOP-006: WebKnossos GT Semantic Segmentation Protocol</a> &mdash; the painting conventions this task builds on</li>
+            <li><a href="../../task-history/#mec">Task History &middot; MEC &amp; Hippocampus era</a> &mdash; the data sheets for this work</li>
+            <li><a href="../../glossary/">Glossary</a> &mdash; synapse, cleft, PSD, bouton definitions</li>
+        </ul>
+
+        <h2>Revision history</h2>
+        <ul>
+            <li><strong>v1.0</strong> (2026-08) &mdash; initial SOP, mirrored from Jay's working doc of 2026-08-05 including Chris's temporary axo-axonic collection request. Axo-somatic criteria pending.</li>
+        </ul>
+    </div>
+
+</main>
+</div>
+
+<footer>
+    <div class="footer-nav">
+        <div>
+            <a href="../">SOP Index</a>
+        </div>
+        <a href="#" id="suggest-edit-link" class="suggest-edit" target="_blank" rel="noopener noreferrer">Please Suggest Edits</a>
+    </div>
+</footer>
+
+<script>
+(function() {
+    var link = document.getElementById('suggest-edit-link');
+    if (link) {
+        var title = encodeURIComponent('[SOP] ' + document.title.replace(' - Princeton Tracers', ''));
+        link.href = 'https://github.com/BunPrinceton/tracer-workspace/issues/new?template=sop-update.yml&title=' + title + '&body=' + encodeURIComponent('**SOP:** ' + window.location.href + '\n\n**Reason for update:**\n');
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+    }
+})();
+</script>
+<script src="../sidebar.js" defer></script>
+<script src="../../search.js" defer></script>
+</body>
+</html>
