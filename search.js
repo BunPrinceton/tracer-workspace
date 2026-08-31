@@ -1890,6 +1890,10 @@
             // bold-state width. The active aria-current="page" link can flip to
             // font-weight:600 without shifting any siblings. Requires data-text
             // attribute on each link — set by lockNavLinkWidths() below.
+            // Disable the macOS rubber-band bounce at the top/bottom of every page —
+            // overscrolling past the top revealed a white gap above the dark nav.
+            // Injected here (not per-page CSS) so it applies sitewide from one place.
+            'html{overscroll-behavior-y:none;}' +
             'nav>ul>li>a,nav>ul>li>.nav-more-btn{display:inline-block;}' +
             'nav>ul>li>a::after,nav>ul>li>.nav-more-btn::after{content:attr(data-text);display:block;height:0;overflow:hidden;visibility:hidden;font-weight:600;user-select:none;pointer-events:none;}' +
             // Anchor the nav so the absolutely-positioned search can hug its right edge
