@@ -12,6 +12,23 @@
     {"file": "contrib-zombie-thumbs-up.png",        "class": "funny",    "contributor": "team",   "source_folder": "faces seen in EM"},
     {"file": "contrib-big-dipper-cell.png",         "class": "funny",    "contributor": "team",   "source_folder": "shared team folder", "drive_id": "1FobyQK3yS6am6ANv0Tj2e7ukyZzsk9KI"},
     {"file": "contrib-eggman.png",                  "class": "funny",    "contributor": "Austin", "source_folder": "Screenshots/lols", "drive_id": "1Y4VmMRanF5PMCutF-d82DjKH9NnX2W6P"},
+    {"file": "kyle-r1-6-chiasmic.png",              "class": "reference", "contributor": "Kyle", "source_folder": "borkbook_move 7.13.26", "drive_id": "14Pnc03vt_1iPs5P8x5tdyXqPo8pszGyp"},
+    {"file": "kyle-r1-6-medullar.png",              "class": "reference", "contributor": "Kyle", "source_folder": "borkbook_move 7.13.26", "drive_id": "1x3C0UftfsNMQpT6ckC17ZDzX4FFudzDj"},
+    {"file": "kyle-r1-6-lobular.png",               "class": "reference", "contributor": "Kyle", "source_folder": "borkbook_move 7.13.26", "drive_id": "1EEHGk_pNm_1LQvMffAya_dJYVPBcHGPM"},
+    {"file": "kyle-tm21-population.jpeg",           "class": "reference", "contributor": "Kyle", "source_folder": "borkbook_move 7.13.26", "drive_id": "1OtUmlaFfgMmWX6KBnr2XDO5fhgJWTMD1"},
+    {"file": "kyle-tm5c-population.jpeg",           "class": "reference", "contributor": "Kyle", "source_folder": "borkbook_move 7.13.26", "drive_id": "12rcjz9rc24x6aE-xkxmn8XPefcvfQefM"},
+    {"file": "kyle-dm8-population.jpeg",            "class": "reference", "contributor": "Kyle", "source_folder": "borkbook_move 7.13.26", "drive_id": "1E9nYR2Yd3_csWejTBQSjkev69kowt-Vq"},
+    {"file": "kyle-mti2-population.jpeg",           "class": "reference", "contributor": "Kyle", "source_folder": "borkbook_move 7.13.26", "drive_id": "1qrryfKw9iyNFbZOjrhdune1HtMAwoRfj"},
+    {"file": "kyle-similar2y12.jpeg",               "class": "reference", "contributor": "Kyle", "source_folder": "borkbook_move 7.13.26", "drive_id": "1cvcSJGUE5VtdWtRVR6-dgiTS13SksCwL"},
+    {"file": "kyle-unknown-type-population.jpeg",   "class": "reference", "contributor": "Kyle", "source_folder": "borkbook_move 7.13.26", "drive_id": "1RAmBEa-kXPZBStf_h-u-m_pe9Wkn4xjV"},
+    {"file": "kyle-synapse-neuroglancer.webm",      "class": "synapse",   "contributor": "Kyle", "source_folder": "borkbook_move 7.13.26/video", "drive_id": "1qhnRPYca5ExnwF5Z8w6NLQaF5p_3D5oW"},
+    {"file": "kyle-possible-invagination.webm",     "class": "synapse",   "contributor": "Kyle", "source_folder": "borkbook_move 7.13.26/video", "drive_id": "1qgt3cczDA1n4cowESXsOlJGyXTvRKdoA"},
+    {"file": "kyle-parasaurolophus.webm",           "class": "funny",     "contributor": "Kyle", "source_folder": "borkbook_move 7.13.26/video", "drive_id": "1BzCoZnFcI_iLjT9MdOz3OBQF-R3mtpCt"},
+    {"file": "kyle-omni-capture.gif",               "class": "training",  "contributor": "Kyle", "source_folder": "borkbook_move 7.13.26/gifs", "drive_id": "1xplgdhW7pW80OnXcuczcyOVk7QMqgvQ_"},
+    {"file": "kyle-omni-overview.gif",              "class": "training",  "contributor": "Kyle", "source_folder": "borkbook_move 7.13.26/gifs", "drive_id": "1fvqK2Y5_3LZ1TLXAPtbz8ENmH760-hlb"},
+    {"file": "kyle-omni-example8.gif",              "class": "training",  "contributor": "Kyle", "source_folder": "borkbook_move 7.13.26/gifs", "drive_id": "1ER3fsQRXohOhOABQ7P6-IwuWtVYz718k"},
+    {"file": "contrib-sad-face-mitochondrion.png",  "class": "funny",    "contributor": "Chris",  "source_folder": "sent directly to Ben (Desktop/new-cpu/em_sad_face.png)"},
+    {"file": "contrib-hippocampus-ghost.png",       "class": "funny",    "contributor": "Chris",  "source_folder": "sent directly to Ben (Desktop/new-cpu/msem_hippocampus_ghost.png)"},
     {"file": "contrib-synapse-great-1.png",         "class": "training", "contributor": "Kyle",   "source_folder": "great (D. virilis synapses)", "drive_id": "1o7VoRpqvFuGnBhlO7V52Dztn4XU83RXJ"},
     {"file": "contrib-synapse-great-7.png",         "class": "training", "contributor": "Kyle",   "source_folder": "great (D. virilis synapses)", "drive_id": "1qF978wYWBmCabzwAjdgxBvTZq8sUqe6D"},
     {"file": "contrib-synapse-fair-1.png",          "class": "training", "contributor": "Kyle",   "source_folder": "fair (D. virilis synapses)", "drive_id": "1il854Rg2tcGcY98y3OwIWDd53N6AI-v4"},
@@ -33,5 +50,5 @@
     {"pattern": "contrib-<face>.png (faces seen in EM)", "class": "funny", "contributor": "team", "source_folder": "F2 team folder / Animals:faces seen in EM"},
     {"pattern": "contrib-lmc-*.png", "class": "figure", "contributor": "Austin", "source_folder": "F3 Screenshots/LM Comparison (per-cell-type EM vs light-microscopy)"}
   ],
-  "_excluded_note": "Austin's larger archives were NOT imported (too large for a public Pages repo): Screenshots/Individuals (~337 imgs, 1.6GB), Screenshots/Codex EM Screenshots (~125, 572MB), Screenshots/LM Comparison (Final) (~450, 1.6GB). Available in Drive on request."
+  "_excluded_note": "borkbook_move NOT imported: mfig002/003 (published Tm-type LM figure panels - copyright), Large_3_synapses.webm + follow_both.webm + corrupted_before/after.webm + anonymous ice_video_* (size/unidentified; in Drive), vast/*.vsseg raw backups, Li118_6.png (13.9MB oversize master - PSD masters live in work_images/diagrams). Also: Austin's larger archives were NOT imported (too large for a public Pages repo): Screenshots/Individuals (~337 imgs, 1.6GB), Screenshots/Codex EM Screenshots (~125, 572MB), Screenshots/LM Comparison (Final) (~450, 1.6GB). Available in Drive on request."
 }
