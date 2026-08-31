@@ -1894,7 +1894,11 @@
             'nav>ul>li>a::after,nav>ul>li>.nav-more-btn::after{content:attr(data-text);display:block;height:0;overflow:hidden;visibility:hidden;font-weight:600;user-select:none;pointer-events:none;}' +
             // Anchor the nav so the absolutely-positioned search can hug its right edge
             // without affecting the existing centered link layout.
-            'nav{position:relative;z-index:100;}' +
+            // Scoped to the top nav only (.site-top-nav is added by injectSearchBar):
+            // a bare `nav` selector would also promote secondary navs (cave-local's
+            // .toc, the gallery .section-jump) into sibling stacking contexts that
+            // paint over the dropdown menus.
+            'nav.site-top-nav{position:relative;z-index:100;}' +
             // Search bar floats at the right side of the nav with a small buffer from
             // the viewport edge — does NOT live in the link flow, so it never shifts
             // the centered nav links.
@@ -1942,7 +1946,7 @@
             '.site-search-hint{font-size:0.6875rem;color:#a3a3a3;padding:0.375rem 0.875rem;border-top:1px solid #f0f0f0;text-align:right;}' +
             // Narrow screens: drop the absolute position, let the search sit below the
             // nav links on its own row, full width.
-            '@media (max-width:700px){nav{position:static;}.nav-search{position:static;transform:none;display:block;width:100%;margin-top:0.5rem;padding:0 0.5rem;box-sizing:border-box;}#site-search{width:100%;}.site-search-results{left:0;right:0;min-width:0;max-width:none;}}' +
+            '@media (max-width:700px){nav.site-top-nav{position:static;}.nav-search{position:static;transform:none;display:block;width:100%;margin-top:0.5rem;padding:0 0.5rem;box-sizing:border-box;}#site-search{width:100%;}.site-search-results{left:0;right:0;min-width:0;max-width:none;}}' +
             // Touch devices (no real hover): the More dropdown's CSS :hover/:focus-within
             // open is unreliable on tap, so we drive it explicitly with a JS-toggled class
             // (see initMoreDropdown). Scoped entirely inside @media (hover:none) so mouse /
@@ -1977,6 +1981,7 @@
     function injectSearchBar() {
         var nav = document.querySelector('nav');
         if (!nav) return null;
+        nav.classList.add('site-top-nav');
         var ul = nav.querySelector('ul');
         if (!ul) {
             ul = document.createElement('ul');
