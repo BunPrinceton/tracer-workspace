@@ -1139,22 +1139,24 @@
     const layers = [];
     // EM stays available (toggle it on if you switch to a 2D layout) but the link opens 3D-only.
     if (v.img) layers.push({ type: 'image', source: v.img, name: 'em', visible: false });
-    const nowSegments = [], nowColors = {};
+    // One "before" + one "now" layer PER cell, in pairs, so each cell can be toggled on its own.
     cells.forEach((c, i) => {
       const color = RC_NOW_COLORS[i % RC_NOW_COLORS.length];
-      nowSegments.push(String(c.root)); nowColors[String(c.root)] = color;
+      const many = cells.length > 1;
       if (c.before && c.before.length && c.tBefore) {
         const bc = {}; c.before.forEach((b) => { bc[String(b)] = RC_BEFORE_COLOR; });
         layers.push({
-          type: 'segmentation', source: seg, name: 'before ' + shortRoot(c.root),
+          type: 'segmentation', source: seg, name: many ? 'before ' + shortRoot(c.root) : 'before',
           timestamp: c.tBefore, segments: c.before.map(String), segmentColors: bc, segmentDefaultColor: RC_BEFORE_COLOR,
           objectAlpha: 0.5, selectedAlpha: 0.45, notSelectedAlpha: 0,
         });
       }
-    });
-    layers.push({
-      type: 'segmentation', source: seg, name: 'now', segments: nowSegments, segmentColors: nowColors,
-      selectedAlpha: 0.55, notSelectedAlpha: 0, objectAlpha: 1,
+      const nc = {}; nc[String(c.root)] = color;
+      layers.push({
+        type: 'segmentation', source: seg, name: many ? 'now ' + shortRoot(c.root) : 'now',
+        segments: [String(c.root)], segmentColors: nc, segmentDefaultColor: color,
+        selectedAlpha: 0.55, notSelectedAlpha: 0, objectAlpha: 1,
+      });
     });
     // Center on the FIRST cell in the list: its L2 centroid when the feed has one, else the last edit point.
     const first = cells[0];
@@ -1174,7 +1176,7 @@
       crossSectionScale: 1, projectionScale,
       showSlices: false,
       layers, layout: '3d',
-      selectedLayer: { layer: 'now', visible: true },
+      selectedLayer: { layer: cells.length > 1 ? 'now ' + shortRoot(cells[0].root) : 'now', visible: true },
       title: (person && person.name ? person.name + ' · ' : '') + (cells.length === 1 ? 'cell ' + shortRoot(cells[0].root) : cells.length + ' cells') + ' · before vs now',
     };
     return site + '#!' + encodeURIComponent(JSON.stringify(state));
