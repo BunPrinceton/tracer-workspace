@@ -160,7 +160,7 @@
     setStatus(statusText(), '');
     toggleSnapshotNote(cached);
 
-    if (STATE.mode === 'dataset') { renderMetricTabs(); render(); }
+    if (STATE.mode === 'dataset') { renderMetricTabs(); render(); openDrillFromUrl(); }
     else { renderDashboard(); }
   }
 
@@ -987,9 +987,10 @@
           if (newPi >= 0) openDrill(newPi);
         });
       } else {
-        // Cross-dataset row: link out to that dataset's own page (deep view lives there).
-        row.title = `Open the ${r.dsKey} dataset page`;
-        row.addEventListener('click', () => { window.location.href = datasetHref(r.dsKey); });
+        // Cross-dataset row: link out to that dataset's own page (deep view lives there),
+        // carrying the pseudonym + metric so the same profile opens there.
+        row.title = `Open ${person.name} on the ${r.dsKey} dataset page`;
+        row.addEventListener('click', () => { window.location.href = datasetHref(r.dsKey, person, r.metricKey); });
       }
       host.appendChild(row);
     }
@@ -999,9 +1000,35 @@
      ==================  DASHBOARD MODE  ========================
      Cross-dataset springboard: dataset cards + aggregate stats.
      ============================================================ */
-  function datasetHref(key) {
-    const base = OPTS.datasetBase || './';
-    return base + key.toLowerCase() + '/';
+  function datasetHref(key, person, metric) {
+    // Dashboard lives at datasets/, dataset pages at datasets/<key>/ — so from a dataset page the
+    // sibling is one level up. Pages may override with opts.datasetBase.
+    const base = OPTS.datasetBase || (STATE.mode === 'dataset' ? '../' : './');
+    let href = base + key.toLowerCase() + '/';
+    if (person) {
+      const q = new URLSearchParams();
+      if (person.id) q.set('person', person.id); else if (person.name) q.set('person', person.name);
+      if (metric) q.set('metric', metric);
+      href += '?' + q.toString();
+    }
+    return href;
+  }
+
+  // Deep link: datasets/<key>/?person=T059&metric=edits opens that contributor's profile on load.
+  function openDrillFromUrl() {
+    let params;
+    try { params = new URLSearchParams(window.location.search); } catch (e) { return; }
+    const who = params.get('person');
+    if (!who) return;
+    const metric = params.get('metric');
+    const ds = DATASETS.find((d) => d.key === STATE.dataset);
+    if (metric && ds && getDisplayMetrics(ds).includes(metric) && metric !== STATE.metric) {
+      STATE.metric = metric; renderMetricTabs(); render();
+    }
+    const tab = currentTab();
+    let pi = tab.people.findIndex((p) => p.id === who);
+    if (pi < 0) pi = tab.people.findIndex((p) => p.name === who);
+    if (pi >= 0) openDrill(pi);
   }
 
   function editsTab(key) { return STATE.data[key + '_edits'] || { people: [], dates: [], values: [] }; }
@@ -1193,7 +1220,7 @@
       dataset: opts.dataset || null,
       workerUrl: opts.workerUrl || '',
       snapshotUrl: opts.snapshotUrl || './data/activity-snapshot.json',
-      datasetBase: opts.datasetBase || './',
+      datasetBase: opts.datasetBase || null,
     };
     STATE.mode = OPTS.mode;
     if (STATE.mode === 'dataset') {
