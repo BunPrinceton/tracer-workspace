@@ -68,6 +68,8 @@
     if (Math.abs(n) >= 1000) return n.toLocaleString('en-US', { maximumFractionDigits: 0 });
     return Number.isInteger(n) ? String(n) : n.toFixed(1);
   }
+  // Left gutter wide enough for the widest y-axis label (10px monospace ≈ 6.2px/char) plus its offset from the axis.
+  function yGutter(maxVal, offset, minL) { return Math.max(minL, Math.ceil(fmtNum(maxVal).length * 6.2) + offset + 4); }
   function fmtDate(d) { return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }); }
   function fmtDateLong(d) { return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
   function fmtDateTime(d) { return d.toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }); }
@@ -528,15 +530,15 @@
     const { dates, values } = tab;
     const w = svg.clientWidth || 1100;
     const h = 220;
-    const pad = { l: 44, r: 16, t: 14, b: 28 };
+    const dailyTotals = values.map((row) => row.reduce((a, b) => a + b, 0));
+    const maxY = Math.max(...dailyTotals, 1);
+    const pad = { l: yGutter(maxY, 8, 44), r: 16, t: 14, b: 28 };
     svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
     svg.setAttribute('preserveAspectRatio', 'none');
     if (!dates.length) {
       svg.innerHTML = `<text x="${w / 2}" y="${h / 2}" text-anchor="middle" fill="#8a8a85" font-size="13">No data</text>`;
       return;
     }
-    const dailyTotals = values.map((row) => row.reduce((a, b) => a + b, 0));
-    const maxY = Math.max(...dailyTotals, 1);
     const innerW = w - pad.l - pad.r;
     const innerH = h - pad.t - pad.b;
     const n = dates.length;
@@ -907,10 +909,10 @@
   function drawDrillLine(series, dates) {
     const svg = el('drill-line');
     svg.innerHTML = '';
-    const w = svg.clientWidth || 560, h = 160, pad = { l: 36, r: 12, t: 10, b: 22 };
+    const max = Math.max(...series, 1);
+    const w = svg.clientWidth || 560, h = 160, pad = { l: yGutter(max, 6, 36), r: 12, t: 10, b: 22 };
     svg.setAttribute('viewBox', `0 0 ${w} ${h}`); svg.setAttribute('preserveAspectRatio', 'none');
     if (!series.length || !series.some((v) => v > 0)) { svg.innerHTML = `<text x="${w / 2}" y="${h / 2}" text-anchor="middle" fill="#8a8a85" font-size="12">No activity</text>`; return; }
-    const max = Math.max(...series, 1);
     const innerW = w - pad.l - pad.r, innerH = h - pad.t - pad.b;
     const stepX = innerW / Math.max(1, series.length - 1);
     const xFor = (i) => pad.l + i * stepX;
@@ -927,13 +929,13 @@
   function drawDrillStacked(tab, personIdx) {
     const svg = el('drill-line');
     svg.innerHTML = '';
-    const w = svg.clientWidth || 560, h = 160, pad = { l: 36, r: 12, t: 10, b: 22 };
-    svg.setAttribute('viewBox', `0 0 ${w} ${h}`); svg.setAttribute('preserveAspectRatio', 'none');
     const { dates, breakdown, metricKeys } = tab;
     const stacks = metricKeys.map((mk) => breakdown.map((row) => (row[personIdx] && row[personIdx][mk]) || 0));
     const totals = breakdown.map((row) => { const cell = row[personIdx] || {}; return metricKeys.reduce((a, mk) => a + (cell[mk] || 0), 0); });
-    if (!totals.some((v) => v > 0)) { svg.innerHTML = `<text x="${w / 2}" y="${h / 2}" text-anchor="middle" fill="#8a8a85" font-size="12">No activity</text>`; return; }
     const max = Math.max(...totals, 1);
+    const w = svg.clientWidth || 560, h = 160, pad = { l: yGutter(max, 6, 36), r: 12, t: 10, b: 22 };
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`); svg.setAttribute('preserveAspectRatio', 'none');
+    if (!totals.some((v) => v > 0)) { svg.innerHTML = `<text x="${w / 2}" y="${h / 2}" text-anchor="middle" fill="#8a8a85" font-size="12">No activity</text>`; return; }
     const innerW = w - pad.l - pad.r, innerH = h - pad.t - pad.b;
     const stepX = innerW / Math.max(1, totals.length - 1);
     const xFor = (i) => pad.l + i * stepX;
@@ -1140,11 +1142,11 @@
     const svg = el('cum-chart');
     svg.innerHTML = '';
     const { cumDates: dates, cumulative } = agg;
-    const w = svg.clientWidth || 1000, h = 220, pad = { l: 52, r: 16, t: 14, b: 28 };
+    const max = Math.max(...cumulative, 1);
+    const w = svg.clientWidth || 1000, h = 220, pad = { l: yGutter(max, 8, 52), r: 16, t: 14, b: 28 };
     svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
     svg.setAttribute('preserveAspectRatio', 'none');
     if (!dates.length) { svg.innerHTML = `<text x="${w / 2}" y="${h / 2}" text-anchor="middle" fill="#8a8a85" font-size="13">No data</text>`; return; }
-    const max = Math.max(...cumulative, 1);
     const innerW = w - pad.l - pad.r, innerH = h - pad.t - pad.b;
     const stepX = innerW / Math.max(1, dates.length - 1);
     const xFor = (i) => pad.l + i * stepX;
