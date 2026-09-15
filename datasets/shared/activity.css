@@ -649,3 +649,4 @@
 #activity-app .rc-open { flex: 0 0 auto; color: var(--aa-link); font-weight: 600; text-decoration: none; padding: 0.5rem 0.25rem; }
 #activity-app .rc-open:hover, #activity-app .rc-open:focus { text-decoration: underline; }
 #activity-app .rc-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-top: 0.75rem; }
+#activity-app .rc-more { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.6875rem; color: var(--aa-ink-3); margin-left: 0.25rem; }

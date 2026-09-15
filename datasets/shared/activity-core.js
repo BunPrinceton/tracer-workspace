@@ -1083,7 +1083,8 @@
       if (c.merges) parts.push(c.merges + ' merge' + (c.merges > 1 ? 's' : ''));
       if (c.splits) parts.push(c.splits + ' split' + (c.splits > 1 ? 's' : ''));
       const kind = parts.join(' · ') || (c.ops + ' edit' + (c.ops > 1 ? 's' : ''));
-      main.innerHTML = '<div class="rc-root" title="Current root id">' + escapeHtml(c.root) + '</div>' +
+      const extra = (c.roots && c.roots.length > 1) ? ' <span class="rc-more">+' + (c.roots.length - 1) + ' piece' + (c.roots.length > 2 ? 's' : '') + '</span>' : '';
+      main.innerHTML = '<div class="rc-root" title="Current root id' + (extra ? ' (cell is now several pieces; all open in the now layer)' : '') + '">' + escapeHtml(c.root) + extra + '</div>' +
         '<div class="rc-sub">' + escapeHtml(fmtAgo(c.t1)) + ' · ' + escapeHtml(fmtDateLong(new Date(c.t1))) + ' · ' + escapeHtml(kind) +
         (Array.isArray(c.extentNm) ? ' · ~' + Math.round(Math.max(...c.extentNm) / 1000) + ' µm' : '') +
         (c.before && c.before.length ? ' · before: ' + c.before.map(shortRoot).map(escapeHtml).join(', ') : '') + '</div>';
@@ -1151,10 +1152,11 @@
           objectAlpha: 0.5, selectedAlpha: 0.45, notSelectedAlpha: 0,
         });
       }
-      const nc = {}; nc[String(c.root)] = color;
+      const nowRoots = (c.roots && c.roots.length ? c.roots : [c.root]).map(String);
+      const nc = {}; nowRoots.forEach((r) => { nc[r] = color; });
       layers.push({
         type: 'segmentation', source: seg, name: many ? 'now ' + shortRoot(c.root) : 'now',
-        segments: [String(c.root)], segmentColors: nc, segmentDefaultColor: color,
+        segments: nowRoots, segmentColors: nc, segmentDefaultColor: color,
         selectedAlpha: 0.55, notSelectedAlpha: 0, objectAlpha: 1,
       });
     });

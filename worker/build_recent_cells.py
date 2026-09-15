@@ -47,6 +47,7 @@ ROOTS_BATCH = 2000   # supervoxels per get_roots call
 L2_SAMPLE = 100      # L2 nodes sampled per cell for the centroid / extent (l2cache call dominates cost)
 CENTROID_WORKERS = 4 # l2cache is rate-limited to 600 req/min per server; 2 calls per cell -> keep this low
 BEFORE_WORKERS = 8   # parallel get_roots(timestamp) lookups (one per kept cell)
+PRE_CUT = 40         # candidates per user kept for lineage grouping before the final per-user cut
 
 
 def log(*a):
@@ -237,12 +238,13 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
             continue
         groups[(o['user'], root)].append(o)
 
+    # Stage 1: one candidate per (user, current root); keep the PRE_CUT most recent per user.
     users = defaultdict(list)
     for (user, root), gops in groups.items():
         gops.sort(key=lambda o: o['ts'])
         first, last = gops[0], gops[-1]
         users[user].append({
-            'root': str(root),
+            'roots': [str(root)],
             't0': first['ts'], 't1': last['ts'],
             'ops': len(gops),
             'merges': sum(1 for o in gops if o['merge']),
@@ -250,14 +252,14 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
             'xyz': last['xyz'],
             '_first_svs': first['svs'][:4],
         })
-    # Keep the most recent N cells per user, then resolve "before" roots for those only (parallel).
     for user, cells in users.items():
         cells.sort(key=lambda c: c['t1'], reverse=True)
-        del cells[per_user:]
-    kept = [c for cells in users.values() for c in cells]
+        del cells[PRE_CUT:]
+    cand = [c for cells in users.values() for c in cells]
 
     def resolve_before(c):
-        svs = c.pop('_first_svs', [])
+        """Roots of the candidate's first-edit supervoxels one second before that edit."""
+        svs = c.get('_first_svs') or []
         c['tBefore'] = c['t0'] - 1000
         c['before'] = []
         if not svs:
@@ -267,11 +269,90 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
             br = roots_for(cg, svs, timestamp=ts_before)
             c['before'] = sorted({str(r) for r in br.values() if r})
         except Exception as e:
-            log('  before-roots failed for', c['root'], str(e)[:100])
+            log('  before-roots failed for', c['roots'][0], str(e)[:100])
     t0 = time.time()
     with ThreadPoolExecutor(max_workers=BEFORE_WORKERS) as ex:
-        list(ex.map(resolve_before, kept))
-    log(f'  {len(ops)} ops -> {len(groups)} user-cells, {len(users)} users, {len(kept)} before-root lookups in {time.time()-t0:.0f}s')
+        list(ex.map(resolve_before, cand))
+    # Lineage key: the root each candidate's first supervoxel belonged to at the START of the
+    # window (one batched call). Pieces of one cell share it even when their per-edit "before"
+    # ids differ (e.g. the tracer edited, then split, then edited each side).
+    ws_ts = dt.datetime.fromtimestamp(window_start / 1000, tz=dt.timezone.utc)
+    all_svs = sorted({sv for c in cand for sv in (c.get('_first_svs') or [])[:2]})
+    try:
+        ws_roots = roots_for(cg, all_svs, timestamp=ws_ts)
+    except Exception as e:
+        log('  window-start roots failed:', str(e)[:120]); ws_roots = {}
+    for c in cand:
+        c['_lineage'] = sorted({str(ws_roots[sv]) for sv in (c.get('_first_svs') or [])[:2] if ws_roots.get(sv)})
+    log(f'  {len(ops)} ops -> {len(groups)} user-cells, {len(users)} users, {len(cand)} before-root lookups + {len(all_svs)} lineage keys in {time.time()-t0:.0f}s')
+
+    # Stage 2: lineage grouping per user. Candidates that share a "before" root (a cell the
+    # tracer later split) or a current root (pieces the tracer merged) are ONE cell: its
+    # "before" is the state at the tracer's EARLIEST touch, its "now" the state after the LATEST.
+    def union_cells(cells):
+        parent = list(range(len(cells)))
+        def find(i):
+            while parent[i] != i:
+                parent[i] = parent[parent[i]]; i = parent[i]
+            return i
+        seen = {}
+        for i, c in enumerate(cells):
+            for key in [('b', b) for b in c['before']] + [('n', r) for r in c['roots']] + [('l', l) for l in c.get('_lineage', [])]:
+                if key in seen:
+                    parent[find(i)] = find(seen[key])
+                else:
+                    seen[key] = i
+        comp = defaultdict(list)
+        for i in range(len(cells)):
+            comp[find(i)].append(cells[i])
+        merged = []
+        for members in comp.values():
+            members.sort(key=lambda c: c['t0'])
+            earliest = members[0]
+            latest = max(members, key=lambda c: c['t1'])
+            if len(members) == 1:
+                m = dict(earliest); m['_regroup_svs'] = None
+            else:
+                m = {
+                    'roots': sorted({r for c in members for r in c['roots']}),
+                    't0': earliest['t0'], 't1': latest['t1'],
+                    'ops': sum(c['ops'] for c in members),
+                    'merges': sum(c['merges'] for c in members),
+                    'splits': sum(c['splits'] for c in members),
+                    'xyz': latest['xyz'],
+                    'tBefore': earliest['t0'] - 1000,
+                    'before': [],
+                    # re-resolve "before" for ALL members' first supervoxels at the earliest touch
+                    '_regroup_svs': [sv for c in members for sv in (c.get('_first_svs') or [])][:12],
+                    '_first_svs': earliest.get('_first_svs'),
+                }
+            m['root'] = latest['roots'][0] if latest['roots'] else m['roots'][0]
+            merged.append(m)
+        return merged
+
+    regroup = []
+    for user in list(users.keys()):
+        merged = union_cells(users[user])
+        merged.sort(key=lambda c: c['t1'], reverse=True)
+        del merged[per_user:]
+        users[user] = merged
+        regroup.extend(c for c in merged if c.get('_regroup_svs'))
+
+    def resolve_group_before(c):
+        svs = c.pop('_regroup_svs')
+        ts_before = dt.datetime.fromtimestamp(c['tBefore'] / 1000, tz=dt.timezone.utc)
+        try:
+            br = roots_for(cg, svs, timestamp=ts_before)
+            c['before'] = sorted({str(r) for r in br.values() if r})
+        except Exception as e:
+            log('  group before-roots failed for', c['root'], str(e)[:100])
+    with ThreadPoolExecutor(max_workers=BEFORE_WORKERS) as ex:
+        list(ex.map(resolve_group_before, regroup))
+    for cells in users.values():
+        for c in cells:
+            c.pop('_first_svs', None); c.pop('_regroup_svs', None); c.pop('_lineage', None)
+    kept = [c for cells in users.values() for c in cells]
+    log(f'  lineage grouping: {len(cand)} candidates -> {len(kept)} cells ({len(regroup)} merged groups re-resolved)')
     # Centroid / extent for every kept cell (parallel; ~1s each serially).
     t0 = time.time()
     with ThreadPoolExecutor(max_workers=CENTROID_WORKERS) as ex:
