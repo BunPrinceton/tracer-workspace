@@ -153,3 +153,38 @@ Exactly what `anonymizeSheet` returns (names/IDs/sheet-id free):
 `values[r][i]` is the value on `dates[r]` for `people[i]`. Pseudonyms are
 stable **across** tabs/datasets: the same underlying worker is always the
 same `T0NN` / `Tracer NN`.
+
+## Recent cells feed (profile panel → "Recent Cells")
+
+A second, independent pipeline feeds the **Recent Cells** section of the contributor
+profile on each dataset page: the cells a tracer edited most recently, each with the
+root(s) it was *right before* that tracer's first edit, so the viewer can open a
+Spelunker link that overlays *before* (amber, pinned to a past timestamp) against
+*now* (live). Two steps, both local:
+
+1. `python worker/build_recent_cells.py [--days 14] [--per-user 15] [--only BANC]`
+   Crawls PyChunkedGraph with the local CAVE token using only **view-level**
+   endpoints (no admin): operation ids are a sequential counter, so it walks
+   `operation_details` id ranges back to the window start (~10k ids/day on BANC,
+   500 ids per 0.2 s call), keeps successful ops, resolves each op's supervoxel to
+   its **current** root (`get_roots` at now, batched) and the first-edit
+   supervoxels to their roots one second **before** that edit (`get_roots` at
+   `t0 - 1s`). Writes `worker/recent-cells-raw.json` (git-ignored: keyed by REAL
+   CAVE user ids) and `worker/recent-cells-state.json`. Whole run ≈ 5 min.
+   Datastacks: RETINA=`stroeh_mouse_retina`, MINNIE=`minnie65_phase3_v1`,
+   CA3=`zheng_ca3`, BANC=`brain_and_nerve_cord`, FAFB=`flywire_fafb_production`.
+2. `node worker/build-recent-cells.mjs`
+   Maps user id → `Tracer NN` with the SAME `pseudonymMap()` the snapshot uses
+   (sheet headers are `<CAVE user id> <name>`), drops users not in the sheet, and
+   writes `datasets/data/recent-cells/<DATASET>.json` (~20–100 KB each). Refuses
+   to write on any tracked id / real name / sheet id leak (exit 2).
+
+The site fetches a dataset's file **only when the viewer clicks "Load recent
+cells"** in a profile (cached in memory afterwards), so the feature costs nothing
+on page load. Link building is pure client-side JSON: EM layer + one
+`timestamp`-pinned segmentation layer per selected cell (Spelunker-only key,
+milliseconds) + one live layer holding all selected current roots.
+
+Privacy note: the public files contain pseudonyms and root ids only. Root ids
+are not personal data, but anyone with CAVE access could look a root's change
+log up and learn who a pseudonym is — weaker than the counts-only snapshot.

@@ -368,6 +368,8 @@
         <svg id="drill-line" width="100%" height="160"></svg>
         <div class="drill-section-title">Across Datasets &amp; Metrics</div>
         <div id="drill-breakdown"></div>
+        <div class="drill-section-title">Recent Cells</div>
+        <div id="drill-cells" class="drill-cells"></div>
       </aside>
       <div class="aa-tooltip" id="aa-tooltip"></div>
     `;
@@ -897,6 +899,7 @@
     if (isCombined() && tab.breakdown && tab.metricKeys) drawDrillStacked(tab, personIdx);
     else drawDrillLine(series, tab.dates);
     renderBreakdown(person);
+    renderRecentCells(person);
     el('drill-backdrop').classList.add('open');
     el('drill-panel').classList.add('open');
     el('drill-panel').setAttribute('aria-hidden', 'false');
@@ -994,6 +997,173 @@
       }
       host.appendChild(row);
     }
+  }
+
+  /* ============================================================
+     RECENT CELLS  (profile panel)
+     Lazy: nothing is fetched until the viewer clicks "Load recent cells".
+     Data: datasets/data/recent-cells/<DATASET>.json, built locally by
+     worker/build_recent_cells.py + build-recent-cells.mjs (pseudonyms only).
+     Each cell carries the CURRENT root plus the root(s) it was right before
+     this tracer's first edit in the window, so the viewer can overlay
+     "before" vs "now" in Spelunker (per-layer timestamp pinning).
+     ============================================================ */
+  const RC = { data: {}, loading: {}, selected: new Set() };
+  const RC_NOW_COLORS = ['#1E6FBE', '#2E8540', '#7B3FA0', '#00838F', '#B8860B', '#C2185B', '#4E342E', '#3F51B5'];
+  const RC_BEFORE_COLOR = '#E77500';
+
+  function recentCellsUrl(dsKey) {
+    const base = (OPTS.snapshotUrl || './data/activity-snapshot.json').replace(/activity-snapshot\.json.*$/, '');
+    return base + 'recent-cells/' + dsKey + '.json';
+  }
+  function shortRoot(r) { r = String(r); return r.length > 8 ? '…' + r.slice(-6) : r; }
+  function fmtAgo(ms) {
+    const d = (Date.now() - ms) / 86400000;
+    if (d < 1) return 'today'; if (d < 2) return 'yesterday'; return Math.floor(d) + ' days ago';
+  }
+
+  async function loadRecentCells(dsKey) {
+    if (RC.data[dsKey]) return RC.data[dsKey];
+    if (RC.loading[dsKey]) return RC.loading[dsKey];
+    RC.loading[dsKey] = (async () => {
+      const r = await fetch(recentCellsUrl(dsKey), { cache: 'no-cache' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const j = await r.json();
+      RC.data[dsKey] = j;
+      return j;
+    })();
+    try { return await RC.loading[dsKey]; } finally { delete RC.loading[dsKey]; }
+  }
+
+  function renderRecentCells(person) {
+    const host = el('drill-cells');
+    if (!host) return;
+    RC.selected = new Set();
+    host.innerHTML = '';
+    const dsKey = STATE.dataset;
+    if (RC.data[dsKey]) { renderRecentCellsList(host, person, RC.data[dsKey]); return; }
+    const btn = document.createElement('button');
+    btn.type = 'button'; btn.className = 'rc-btn';
+    btn.textContent = 'Load recent cells';
+    const hint = document.createElement('div');
+    hint.className = 'rc-hint';
+    hint.textContent = 'Cells this tracer edited most recently, with before/now overlay links. Loaded only on request.';
+    host.appendChild(btn); host.appendChild(hint);
+    btn.addEventListener('click', async () => {
+      btn.disabled = true; btn.textContent = 'Loading…';
+      try {
+        const data = await loadRecentCells(dsKey);
+        renderRecentCellsList(host, person, data);
+      } catch (e) {
+        host.innerHTML = '<div class="rc-hint">Recent cells are not available for ' + escapeHtml(dsKey) + ' yet (' + escapeHtml(e.message) + ').</div>';
+      }
+    });
+  }
+
+  function renderRecentCellsList(host, person, data) {
+    host.innerHTML = '';
+    const cells = (data.people && data.people[person.id]) || [];
+    const meta = document.createElement('div');
+    meta.className = 'rc-hint';
+    const gen = data.generatedAt ? new Date(data.generatedAt) : null;
+    meta.textContent = (data.windowDays ? 'Last ' + data.windowDays + ' days' : 'Recent') + (gen && !isNaN(gen) ? ' · updated ' + fmtDateLong(gen) : '') + ' · before = amber, now = colored';
+    host.appendChild(meta);
+    if (!cells.length) {
+      const none = document.createElement('div'); none.className = 'rc-hint';
+      none.textContent = 'No edits by this tracer in the window.'; host.appendChild(none); return;
+    }
+    const list = document.createElement('div'); list.className = 'rc-list';
+    cells.forEach((c, i) => {
+      const row = document.createElement('label');
+      row.className = 'rc-row';
+      const cb = document.createElement('input'); cb.type = 'checkbox'; cb.value = String(i); cb.className = 'rc-check';
+      cb.addEventListener('change', () => { if (cb.checked) RC.selected.add(i); else RC.selected.delete(i); updateRcOpenBtn(); });
+      const main = document.createElement('div'); main.className = 'rc-main';
+      const parts = [];
+      if (c.merges) parts.push(c.merges + ' merge' + (c.merges > 1 ? 's' : ''));
+      if (c.splits) parts.push(c.splits + ' split' + (c.splits > 1 ? 's' : ''));
+      const kind = parts.join(' · ') || (c.ops + ' edit' + (c.ops > 1 ? 's' : ''));
+      main.innerHTML = '<div class="rc-root" title="Current root id">' + escapeHtml(c.root) + '</div>' +
+        '<div class="rc-sub">' + escapeHtml(fmtAgo(c.t1)) + ' · ' + escapeHtml(fmtDateLong(new Date(c.t1))) + ' · ' + escapeHtml(kind) +
+        (c.before && c.before.length ? ' · before: ' + c.before.map(shortRoot).map(escapeHtml).join(', ') : '') + '</div>';
+      const open = document.createElement('a');
+      open.className = 'rc-open'; open.textContent = 'Open ↗'; open.target = '_blank'; open.rel = 'noopener noreferrer';
+      open.href = buildOverlayLink(data, person, [c]);
+      open.title = 'Open this cell (before vs now) in ' + viewerName(data);
+      open.addEventListener('click', (e) => e.stopPropagation());
+      row.appendChild(cb); row.appendChild(main); row.appendChild(open);
+      list.appendChild(row);
+    });
+    host.appendChild(list);
+    const bar = document.createElement('div'); bar.className = 'rc-bar';
+    const all = document.createElement('button'); all.type = 'button'; all.className = 'rc-btn rc-btn-ghost'; all.textContent = 'Select all';
+    all.addEventListener('click', () => {
+      const boxes = list.querySelectorAll('input.rc-check');
+      const every = [...boxes].every((b) => b.checked);
+      boxes.forEach((b, i) => { b.checked = !every; if (!every) RC.selected.add(i); else RC.selected.delete(i); });
+      all.textContent = every ? 'Select all' : 'Clear'; updateRcOpenBtn();
+    });
+    const openSel = document.createElement('a');
+    openSel.id = 'rc-open-selected'; openSel.className = 'rc-btn'; openSel.target = '_blank'; openSel.rel = 'noopener noreferrer';
+    openSel.setAttribute('aria-disabled', 'true'); openSel.textContent = 'Open selected in ' + viewerName(data);
+    openSel.addEventListener('click', (e) => {
+      if (!RC.selected.size) { e.preventDefault(); return; }
+      openSel.href = buildOverlayLink(data, person, [...RC.selected].sort((a, b) => a - b).map((i) => cells[i]));
+    });
+    bar.appendChild(all); bar.appendChild(openSel);
+    host.appendChild(bar);
+    updateRcOpenBtn();
+  }
+  function updateRcOpenBtn() {
+    const b = el('rc-open-selected'); if (!b) return;
+    const n = RC.selected.size;
+    const vn = viewerName(RC.data[STATE.dataset]);
+    b.setAttribute('aria-disabled', n ? 'false' : 'true');
+    b.textContent = n ? 'Open ' + n + ' selected in ' + vn : 'Open selected in ' + vn;
+    if (!n) b.removeAttribute('href');
+  }
+  function viewerName(data) {
+    const site = (data && data.viewer && data.viewer.site) || '';
+    return /flywire/i.test(site) ? 'FlyWire' : 'Spelunker';
+  }
+
+  // Build a self-contained viewer state: EM + one pinned "before" layer per cell + one live "now" layer.
+  function buildOverlayLink(data, person, cells) {
+    const v = data.viewer || {};
+    const site = (v.site || 'https://spelunker.cave-explorer.org/').replace(/\/?$/, '/');
+    const flywire = /flywire/i.test(site);
+    // Spelunker authenticates CAVE graphene sources via the middleauth+ prefix; the native FlyWire viewer wants the bare URL.
+    const seg = flywire ? v.seg : String(v.seg || '').replace(/^graphene:\/\/(?!middleauth\+)/, 'graphene://middleauth+');
+    const res = (v.res && v.res.every((x) => x > 0)) ? v.res : [4, 4, 40];
+    const layers = [];
+    if (v.img) layers.push({ type: 'image', source: v.img, name: 'em' });
+    const nowSegments = [], nowColors = {};
+    cells.forEach((c, i) => {
+      const color = RC_NOW_COLORS[i % RC_NOW_COLORS.length];
+      nowSegments.push(String(c.root)); nowColors[String(c.root)] = color;
+      if (c.before && c.before.length && c.tBefore) {
+        const bc = {}; c.before.forEach((b) => { bc[String(b)] = RC_BEFORE_COLOR; });
+        layers.push({
+          type: 'segmentation', source: seg, name: 'before ' + shortRoot(c.root),
+          timestamp: c.tBefore, segments: c.before.map(String), segmentColors: bc, segmentDefaultColor: RC_BEFORE_COLOR,
+          objectAlpha: 0.5, selectedAlpha: 0.45, notSelectedAlpha: 0,
+        });
+      }
+    });
+    layers.push({
+      type: 'segmentation', source: seg, name: 'now', segments: nowSegments, segmentColors: nowColors,
+      selectedAlpha: 0.55, notSelectedAlpha: 0, objectAlpha: 1,
+    });
+    const first = cells.find((c) => Array.isArray(c.xyz) && c.xyz.length === 3);
+    const state = {
+      dimensions: { x: [res[0] * 1e-9, 'm'], y: [res[1] * 1e-9, 'm'], z: [res[2] * 1e-9, 'm'] },
+      position: first ? first.xyz : undefined,
+      crossSectionScale: 1, projectionScale: 30000,
+      layers, layout: 'xy-3d',
+      selectedLayer: { layer: 'now', visible: true },
+      title: (person && person.name ? person.name + ' · ' : '') + (cells.length === 1 ? 'cell ' + shortRoot(cells[0].root) : cells.length + ' cells') + ' · before vs now',
+    };
+    return site + '#!' + encodeURIComponent(JSON.stringify(state));
   }
 
   /* ============================================================

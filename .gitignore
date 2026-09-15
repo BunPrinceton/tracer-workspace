@@ -121,3 +121,7 @@ worker/daily-refresh.ps1
 # Defensive: never let the raw sheet dump or any real-name report be committed.
 **/privacy-report.json
 **/activity-raw*.json
+
+# Recent-cells crawler: raw feed keyed by REAL CAVE user ids + crawl state. Never publish.
+worker/recent-cells-raw.json
+worker/recent-cells-state.json

@@ -92,7 +92,13 @@ function extractTab(resp) {
  * anonymizeSheet(tabResponses) — tabResponses: { [tabName]: rawGvizResponse }
  * Returns the public, name-free payload.
  */
-export function anonymizeSheet(tabResponses, generatedAt = null) {
+/**
+ * pseudonymMap(tabResponses) — the ONE place pseudonyms are assigned.
+ * Returns { extracted, pidByKey (privateKey -> 'T0NN'), roster ({T0NN: {label}}) }.
+ * Also used by build-recent-cells.mjs so every derived artifact shares the exact
+ * same Tracer NN assignment as the activity snapshot.
+ */
+export function pseudonymMap(tabResponses) {
   // 1) Extract every tab, collecting the universe of private keys.
   const extracted = {};
   const keyUniverse = new Map(); // privateKey -> {isId, sortNum}
@@ -125,6 +131,11 @@ export function anonymizeSheet(tabResponses, generatedAt = null) {
     pidByKey.set(key, pid);
     roster[pid] = { label: 'Tracer ' + String(n).padStart(2, '0') };
   });
+  return { extracted, pidByKey, roster, keys };
+}
+
+export function anonymizeSheet(tabResponses, generatedAt = null) {
+  const { extracted, pidByKey, roster, keys } = pseudonymMap(tabResponses);
 
   // 3) Re-emit each tab with pseudonyms only. No names, no ids, no colIdx.
   const tabs = {};

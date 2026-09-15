@@ -625,3 +625,27 @@
   #activity-app .grid-2 { grid-template-columns: 1fr; }
   #activity-app .drill-stats { grid-template-columns: 1fr; }
 }
+
+/* ---------- Recent cells (profile panel) ---------- */
+#activity-app .drill-cells { font-size: 0.8125rem; }
+#activity-app .rc-hint { color: var(--aa-ink-3); font-size: 0.75rem; margin: 0.25rem 0 0.5rem; line-height: 1.45; }
+#activity-app .rc-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 44px; padding: 0 1rem; border-radius: 4px;
+  background: var(--aa-link); color: #fff; border: 1px solid var(--aa-link);
+  font: inherit; font-size: 0.8125rem; font-weight: 600; cursor: pointer; text-decoration: none;
+}
+#activity-app .rc-btn:disabled, #activity-app .rc-btn[aria-disabled="true"] { background: var(--aa-rule); border-color: var(--aa-rule); color: var(--aa-ink-3); cursor: not-allowed; }
+#activity-app .rc-btn-ghost { background: transparent; color: var(--aa-link); }
+#activity-app .rc-list { border-top: 1px solid var(--aa-rule-2); margin-top: 0.25rem; }
+#activity-app .rc-row {
+  display: flex; align-items: center; gap: 0.75rem;
+  min-height: 44px; padding: 0.5rem 0; border-bottom: 1px solid var(--aa-rule-2); cursor: pointer;
+}
+#activity-app .rc-check { width: 18px; height: 18px; margin: 0; flex: 0 0 auto; cursor: pointer; }
+#activity-app .rc-main { flex: 1 1 auto; min-width: 0; }
+#activity-app .rc-root { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.8125rem; color: var(--aa-ink); word-break: break-all; }
+#activity-app .rc-sub { color: var(--aa-ink-3); font-size: 0.6875rem; margin-top: 2px; }
+#activity-app .rc-open { flex: 0 0 auto; color: var(--aa-link); font-weight: 600; text-decoration: none; padding: 0.5rem 0.25rem; }
+#activity-app .rc-open:hover, #activity-app .rc-open:focus { text-decoration: underline; }
+#activity-app .rc-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-top: 0.75rem; }

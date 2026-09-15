@@ -103,6 +103,18 @@ All pages follow these principles (documented in `index.html` comments):
 /search.js           # Site-wide search system — INDEX is the canonical page registry
 ```
 
+### Datasets tab (`/datasets/`)
+
+Anonymized activity dashboards (cross-dataset springboard + one page per dataset) driven by
+`datasets/shared/activity-core.js` + `activity.css`. Data = `datasets/data/activity-snapshot.json`,
+regenerated daily by a local scheduled task (`worker/daily-refresh.ps1`, git-ignored) from the private
+Google Sheet via `worker/build-snapshot.mjs`; everyone is a stable `Tracer NN` pseudonym assigned by
+`worker/anonymize.mjs#pseudonymMap` (sheet headers are `<CAVE user id> <name>`). Dataset pages deep-link a
+profile with `?person=T059&metric=edits`. The profile's **Recent Cells** section lazy-loads
+`datasets/data/recent-cells/<DATASET>.json` (built by `worker/build_recent_cells.py` + `build-recent-cells.mjs`,
+see `worker/README.md`) and builds Spelunker before/now overlay links client-side. Chart y-axis gutters size
+themselves from the widest label (`yGutter`).
+
 ### Search System (`/search.js`)
 
 `/search.js` is loaded by every HTML page as `<script src=".../search.js" defer></script>` with depth-correct relative path. It is the heart of the site:
