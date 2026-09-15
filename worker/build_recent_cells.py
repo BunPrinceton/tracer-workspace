@@ -412,10 +412,13 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
                     'merges': sum(c['merges'] for c in members),
                     'splits': sum(c['splits'] for c in members),
                     'xyz': latest['xyz'],
-                    'tBefore': earliest['t0'] - 1000,
-                    'before': [],
-                    # re-resolve "before" for ALL members' first supervoxels at the earliest touch
-                    '_regroup_svs': [sv for c in members for sv in (c.get('_first_svs') or [])][:12],
+                    # "before" = ONLY what the tracer's very FIRST edit on this lineage touched, one
+                    # second before it. Pieces joined by later edits are growth (translucent colour),
+                    # even if the tracer edited them separately first; their trimmed fragments are
+                    # still found via the descendants union above.
+                    'tBefore': earliest['tBefore'],
+                    'before': list(earliest['before']),
+                    '_regroup_svs': None,
                     '_first_svs': earliest.get('_first_svs'),
                 }
             m['root'] = latest['roots'][0] if latest['roots'] else m['roots'][0]
