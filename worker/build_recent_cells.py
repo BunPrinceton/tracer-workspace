@@ -474,13 +474,18 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
         sv = rep[o['id']]
         r = cur.get(sv) if sv else None
         if r:
-            by_root[str(r)].append(o['user'])
+            by_root[str(r)].append((o['user'], o['ts']))
     for user, cells in users.items():
         for c in cells:
-            others = [u for r in set(c.get('_desc') or []) | set(c.get('_edit_roots') or []) for u in by_root.get(r, []) if u != user]
-            if others:
-                c['others'] = len(others)
-                c['otherUsers'] = len(set(others))
+            others = [(u, ts) for r in set(c.get('_desc') or []) | set(c.get('_edit_roots') or []) for (u, ts) in by_root.get(r, []) if u != user]
+            after = [u for (u, ts) in others if ts > c['t1']]
+            before = [u for (u, ts) in others if ts <= c['t1']]
+            # "others" = edits by other people AFTER this tracer's last touch (the changed-hands signal);
+            # "othersBefore" = other people's edits earlier in the window (already inside "before"/"after").
+            if after:
+                c['others'] = len(after); c['otherUsers'] = len(set(after))
+            if before:
+                c['othersBefore'] = len(before); c['otherUsersBefore'] = len(set(before))
     # State as the tracer left it (pinned at last edit + 1 s) and live "today" root (parallel).
     t0 = time.time()
     with ThreadPoolExecutor(max_workers=PIECE_WORKERS) as ex:
