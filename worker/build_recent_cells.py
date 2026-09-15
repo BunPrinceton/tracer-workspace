@@ -217,11 +217,14 @@ def cell_pieces(cg, cell):
     whole unrelated cell."""
     before = [int(b) for b in cell.get('before') or []]
     cur = set(int(r) for r in cell.get('roots') or [])
-    for b in before:
-        try:
-            cur.update(int(x) for x in cg.get_latest_roots(b))
-        except Exception as e:
-            log('  latest-roots failed for', b, str(e)[:80])
+    if cell.get('_desc') is not None:
+        cur.update(int(d) for d in cell['_desc'])
+    else:
+        for b in before:
+            try:
+                cur.update(int(x) for x in cg.get_latest_roots(b))
+            except Exception as e:
+                log('  latest-roots failed for', b, str(e)[:80])
     orig = set()
     for b in before:
         try:
@@ -238,22 +241,37 @@ def cell_pieces(cg, cell):
         pieces.append({'root': str(r), 'l2': len(l2), 'orig': shared,
                        'frac': (shared / len(l2)) if l2 else 0.0})
     if not pieces:
+        cell.pop('_edit_roots', None); cell.pop('_desc', None)
         return cell
-    pieces.sort(key=lambda p: (-p['orig'], -p['l2']))
-    main = pieces[0]
+    # The cell the tracer worked on is the fragment that still holds their own edit points
+    # (largest such). A cell grown from a small seed by many merges is mostly NEW material, so
+    # "share of original" alone would wrongly discard it; the score only breaks ties.
+    edit_roots = set(str(r) for r in cell.get('_edit_roots') or [])
+    touched = [p for p in pieces if p['root'] in edit_roots]
+    if touched:
+        touched.sort(key=lambda p: (-p['l2'], -p['orig']))
+        main = touched[0]
+    else:
+        pieces.sort(key=lambda p: (-p['orig'], -p['l2']))
+        main = pieces[0]
     kept, away = [main], []
-    for p in pieces[1:]:
-        # mostly original material (or tiny, or no L2 info) -> cut off; otherwise merged elsewhere
-        if p['frac'] >= 0.5 or p['l2'] <= 3 or not orig:
+    for p in pieces:
+        if p is main:
+            continue
+        # cut off = the tracer touched it, or it is mostly original material, or tiny / no L2 info;
+        # otherwise it is original material now living in a DIFFERENT neuron (excluded)
+        if p['root'] in edit_roots or p['frac'] >= 0.5 or p['l2'] <= 3 or not orig:
             kept.append(p)
         else:
             away.append(p)
+    kept.sort(key=lambda p: (p is not main, -p['l2']))
     kept = kept[:MAX_PIECES]
     cell['pieces'] = [{'root': p['root'], 'l2': p['l2']} for p in kept]
     cell['roots'] = [p['root'] for p in kept]
     cell['root'] = main['root']
     if away:
         cell['mergedAway'] = len(away)
+    cell.pop('_edit_roots', None); cell.pop('_desc', None)
     return cell
 
 
@@ -279,9 +297,12 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
     if not ops:
         return {'viewer': viewer, 'users': {}, 'ops': 0, 'maxOp': max_id}
 
-    # One representative supervoxel per op -> its CURRENT root (batched, one timestamp).
+    # Representative supervoxel per op -> its CURRENT root (batched, one timestamp). The second
+    # supervoxel of the first edge is the OTHER side of a split (or the merged-in piece), so its
+    # current root also counts as "touched" by the tracer.
     rep = {o['id']: (o['svs'][0] if o['svs'] else None) for o in ops}
-    cur = roots_for(cg, [sv for sv in rep.values() if sv])
+    alt = {o['id']: (o['svs'][1] if len(o['svs']) > 1 else None) for o in ops}
+    cur = roots_for(cg, sorted({sv for sv in list(rep.values()) + list(alt.values()) if sv}))
     # Group per (user, current root)
     groups = defaultdict(list)
     for o in ops:
@@ -296,8 +317,10 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
     for (user, root), gops in groups.items():
         gops.sort(key=lambda o: o['ts'])
         first, last = gops[0], gops[-1]
+        touched = {str(root)} | {str(cur[alt[o['id']]]) for o in gops if alt[o['id']] and cur.get(alt[o['id']])}
         users[user].append({
             'roots': [str(root)],
+            '_touched': sorted(touched),
             't0': first['ts'], 't1': last['ts'],
             'ops': len(gops),
             'merges': sum(1 for o in gops if o['merge']),
@@ -337,6 +360,20 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
         log('  window-start roots failed:', str(e)[:120]); ws_roots = {}
     for c in cand:
         c['_lineage'] = sorted({str(ws_roots[sv]) for sv in (c.get('_first_svs') or [])[:2] if ws_roots.get(sv)})
+
+    # Current descendants of each candidate's before-root(s): what that cell became. Used both as a
+    # grouping key (a seed the tracer grew by merging shares descendants with the grown cell even
+    # though neither its before-root nor its edit points match) and later as the fragment list.
+    def resolve_desc(c):
+        d = set()
+        for b in c.get('before') or []:
+            try:
+                d.update(str(int(x)) for x in cg.get_latest_roots(int(b)))
+            except Exception as e:
+                log('  latest-roots failed for', b, str(e)[:80])
+        c['_desc'] = sorted(d)
+    with ThreadPoolExecutor(max_workers=PIECE_WORKERS) as ex:
+        list(ex.map(resolve_desc, cand))
     log(f'  {len(ops)} ops -> {len(groups)} user-cells, {len(users)} users, {len(cand)} before-root lookups + {len(all_svs)} lineage keys in {time.time()-t0:.0f}s')
 
     # Stage 2: lineage grouping per user. Candidates that share a "before" root (a cell the
@@ -350,7 +387,7 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
             return i
         seen = {}
         for i, c in enumerate(cells):
-            for key in [('b', b) for b in c['before']] + [('n', r) for r in c['roots']] + [('l', l) for l in c.get('_lineage', [])]:
+            for key in [('b', b) for b in c['before']] + [('n', r) for r in c['roots']] + [('n', d) for d in c.get('_desc', [])] + [('l', l) for l in c.get('_lineage', [])]:
                 if key in seen:
                     parent[find(i)] = find(seen[key])
                 else:
@@ -368,6 +405,8 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
             else:
                 m = {
                     'roots': sorted({r for c in members for r in c['roots']}),
+                    '_desc': sorted({d for c in members for d in c.get('_desc', [])}),
+                    '_touched': sorted({t for c in members for t in c.get('_touched', [])}),
                     't0': earliest['t0'], 't1': latest['t1'],
                     'ops': sum(c['ops'] for c in members),
                     'merges': sum(c['merges'] for c in members),
@@ -405,6 +444,8 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
         for c in cells:
             c.pop('_first_svs', None); c.pop('_regroup_svs', None); c.pop('_lineage', None)
     kept = [c for cells in users.values() for c in cells]
+    for c in kept:
+        c['_edit_roots'] = sorted(set(c.get('roots') or []) | set(c.pop('_touched', [])))
     log(f'  lineage grouping: {len(cand)} candidates -> {len(kept)} cells ({len(regroup)} merged groups re-resolved)')
     # All current fragments per cell, largest first (parallel chunkedgraph calls).
     t0 = time.time()
