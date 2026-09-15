@@ -1067,7 +1067,7 @@
     const meta = document.createElement('div');
     meta.className = 'rc-hint';
     const gen = data.generatedAt ? new Date(data.generatedAt) : null;
-    meta.textContent = (data.windowDays ? 'Last ' + data.windowDays + ' days' : 'Recent') + (gen && !isNaN(gen) ? ' · updated ' + fmtDateLong(gen) : '') + ' · amber = original, translucent color = added, red = cut off';
+    meta.textContent = (data.windowDays ? 'Last ' + data.windowDays + ' days' : 'Recent') + (gen && !isNaN(gen) ? ' · updated ' + fmtDateLong(gen) : '') + ' · amber = before, color = as they left it, red = cut off, "today" layer = live (hidden)';
     host.appendChild(meta);
     if (!cells.length) {
       const none = document.createElement('div'); none.className = 'rc-hint';
@@ -1090,6 +1090,8 @@
       main.innerHTML = '<div class="rc-root" title="Current root id (largest fragment)' + (nCut ? '; the ' + nCut + ' split-off fragment' + (nCut > 1 ? 's open' : ' opens') + ' in red in the cut-off layer' : '') + '">' + escapeHtml(c.root) + extra + '</div>' +
         '<div class="rc-sub">' + escapeHtml(fmtAgo(c.t1)) + ' · ' + escapeHtml(fmtDateLong(new Date(c.t1))) + ' · ' + escapeHtml(kind) +
         (Array.isArray(c.extentNm) ? ' · ~' + Math.round(Math.max(...c.extentNm) / 1000) + ' µm' : '') +
+        (c.others ? ' · <span class="rc-flag" title="' + c.others + ' edit' + (c.others > 1 ? 's' : '') + ' by ' + c.otherUsers + ' other tracer' + (c.otherUsers > 1 ? 's' : '') + ' on this cell in the window; the overlay is pinned to this tracer\'s last edit, toggle the today layer to see later work">' + c.others + ' edit' + (c.others > 1 ? 's' : '') + ' by others</span>' : '') +
+        (c.today && c.today !== c.root ? ' · <span class="rc-flag" title="The cell has been edited since this tracer\'s last touch; the today layer shows its current state">changed since</span>' : '') +
         (c.before && c.before.length ? ' · before: ' + c.before.map(shortRoot).map(escapeHtml).join(', ') : '') + '</div>';
       const open = document.createElement('a');
       open.className = 'rc-open'; open.textContent = 'Open ↗'; open.target = '_blank'; open.rel = 'noopener noreferrer';
@@ -1161,18 +1163,34 @@
           objectAlpha: 1, selectedAlpha: 0.5, notSelectedAlpha: 0,
         });
       }
+      // "now" and "cut off" are pinned to one second after the tracer's LAST edit, so other
+      // people's later work never shows up in this tracer's picture. "today" is the live cell,
+      // hidden by default; toggle it on to see what has happened since.
       const nc = {}; nc[String(c.root)] = color;
-      layers.push({
+      const nowLayer = {
         type: 'segmentation', source: seg, name: 'now' + tag,
         segments: [String(c.root)], segmentColors: nc, segmentDefaultColor: color,
         selectedAlpha: 0.55, notSelectedAlpha: 0, objectAlpha: 0.45,
-      });
+      };
+      if (c.tNow) nowLayer.timestamp = c.tNow;
+      layers.push(nowLayer);
       if (cut.length) {
         const gc = {}; cut.forEach((r) => { gc[r] = RC_CUTOFF_COLOR; });
-        layers.push({
+        const cutLayer = {
           type: 'segmentation', source: seg, name: 'cut off' + tag,
           segments: cut, segmentColors: gc, segmentDefaultColor: RC_CUTOFF_COLOR,
           selectedAlpha: 0.5, notSelectedAlpha: 0, objectAlpha: 1,
+        };
+        if (c.tNow) cutLayer.timestamp = c.tNow;
+        layers.push(cutLayer);
+      }
+      if (c.tNow) {
+        const todayRoot = String(c.today || c.root);
+        const tc = {}; tc[todayRoot] = color;
+        layers.push({
+          type: 'segmentation', source: seg, name: 'today' + tag, visible: false,
+          segments: [todayRoot], segmentColors: tc, segmentDefaultColor: color,
+          selectedAlpha: 0.55, notSelectedAlpha: 0, objectAlpha: 1,
         });
       }
     });

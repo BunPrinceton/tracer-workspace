@@ -206,51 +206,27 @@ def cell_geometry(client, root, _retries=0):
         return None
 
 
-def cell_pieces(cg, cell):
-    """Current fragments of the cell after the tracer's edits.
-
-    Follow the before-root(s) forward to every current root, then score each fragment by how
-    many of the ORIGINAL cell's L2 nodes it still contains. The fragment holding most of the
-    original is "the cell" (main); other fragments that are mostly original material were
-    cut off; fragments that are mostly OTHER material were merged into a different neuron and
-    are excluded from the "now" layer (counted as mergedAway) so the grey never paints a
-    whole unrelated cell."""
-    before = [int(b) for b in cell.get('before') or []]
-    cur = set(int(r) for r in cell.get('roots') or [])
-    if cell.get('_desc') is not None:
-        cur.update(int(d) for d in cell['_desc'])
-    else:
-        for b in before:
-            try:
-                cur.update(int(x) for x in cg.get_latest_roots(b))
-            except Exception as e:
-                log('  latest-roots failed for', b, str(e)[:80])
-    orig = set()
-    for b in before:
-        try:
-            orig.update(int(x) for x in cg.get_leaves(b, stop_layer=2))
-        except Exception:
-            pass
+def score_pieces(cg, roots, touched, before, orig):
+    """Rank a set of roots (fragments of one cell): the largest fragment holding the tracer's
+    edit points is "the cell" (main); other fragments that are mostly ORIGINAL material (or tiny)
+    were cut off; fragments that are mostly other material were merged into a different neuron
+    and are excluded. Returns (main, kept_pieces, n_away) or (None, [], 0)."""
     pieces = []
-    for r in list(cur)[:MAX_PIECES * 2]:
+    for r in list(roots)[:MAX_PIECES * 2]:
         try:
-            l2 = set(int(x) for x in cg.get_leaves(r, stop_layer=2))
+            l2 = set(int(x) for x in cg.get_leaves(int(r), stop_layer=2))
         except Exception:
             l2 = set()
         shared = len(l2 & orig)
         pieces.append({'root': str(r), 'l2': len(l2), 'orig': shared,
                        'frac': (shared / len(l2)) if l2 else 0.0})
     if not pieces:
-        cell.pop('_edit_roots', None); cell.pop('_desc', None)
-        return cell
-    # The cell the tracer worked on is the fragment that still holds their own edit points
-    # (largest such). A cell grown from a small seed by many merges is mostly NEW material, so
-    # "share of original" alone would wrongly discard it; the score only breaks ties.
-    edit_roots = set(str(r) for r in cell.get('_edit_roots') or [])
-    touched = [p for p in pieces if p['root'] in edit_roots]
-    if touched:
-        touched.sort(key=lambda p: (-p['l2'], -p['orig']))
-        main = touched[0]
+        return None, [], 0
+    touched = set(str(t) for t in touched)
+    hit = [p for p in pieces if p['root'] in touched]
+    if hit:
+        hit.sort(key=lambda p: (-p['l2'], -p['orig']))
+        main = hit[0]
     else:
         pieces.sort(key=lambda p: (-p['orig'], -p['l2']))
         main = pieces[0]
@@ -258,20 +234,58 @@ def cell_pieces(cg, cell):
     for p in pieces:
         if p is main:
             continue
-        # cut off = the tracer touched it, or it is mostly original material, or tiny / no L2 info;
-        # otherwise it is original material now living in a DIFFERENT neuron (excluded)
-        if p['root'] in edit_roots or p['frac'] >= 0.5 or p['l2'] <= 3 or not orig:
+        if p['root'] in touched or p['frac'] >= 0.5 or p['l2'] <= 3 or not orig:
             kept.append(p)
         else:
             away.append(p)
     kept.sort(key=lambda p: (p is not main, -p['l2']))
-    kept = kept[:MAX_PIECES]
-    cell['pieces'] = [{'root': p['root'], 'l2': p['l2']} for p in kept]
-    cell['roots'] = [p['root'] for p in kept]
-    cell['root'] = main['root']
-    if away:
-        cell['mergedAway'] = len(away)
-    cell.pop('_edit_roots', None); cell.pop('_desc', None)
+    return main, kept[:MAX_PIECES], len(away)
+
+
+def cell_states(cg, cell):
+    """Fill the cell with:
+       - root/roots/pieces/mergedAway  = the cell AS THE TRACER LEFT IT (pinned at tNow = last edit + 1 s)
+       - today                          = the live cell now (largest current fragment they touched)
+    Pinning at the last edit keeps other people's later work out of the tracer's picture."""
+    before = [int(b) for b in cell.get('before') or []]
+    orig = set()
+    for b in before:
+        try:
+            orig.update(int(x) for x in cg.get_leaves(b, stop_layer=2))
+        except Exception:
+            pass
+    t_now = cell['t1'] + 1000
+    ts_now = dt.datetime.fromtimestamp(t_now / 1000, tz=dt.timezone.utc)
+    # --- state at the tracer's last edit ---
+    desc1 = set()
+    for b in before:
+        try:
+            desc1.update(str(int(x)) for x in cg.get_latest_roots(b, timestamp=ts_now))
+        except Exception as e:
+            log('  latest-roots@t1 failed for', b, str(e)[:80])
+    touched1 = set()
+    svs = [int(x) for x in (cell.get('_svs_all') or [])]
+    if svs:
+        try:
+            touched1 = set(str(r) for r in roots_for(cg, svs, timestamp=ts_now).values() if r)
+        except Exception as e:
+            log('  touched@t1 failed for', cell.get('roots'), str(e)[:80])
+    main1, kept1, away1 = score_pieces(cg, desc1 | touched1, touched1, before, orig)
+    # --- live state today ---
+    desc0 = set(cell.get('_desc') or []) | set(cell.get('_edit_roots') or [])
+    main0, _, _ = score_pieces(cg, desc0, set(cell.get('_edit_roots') or []), before, orig)
+    if main1:
+        cell['root'] = main1['root']
+        cell['roots'] = [p['root'] for p in kept1]
+        cell['pieces'] = [{'root': p['root'], 'l2': p['l2']} for p in kept1]
+        if away1:
+            cell['mergedAway'] = away1
+    elif main0:
+        cell['root'] = main0['root']; cell['roots'] = [main0['root']]; cell['pieces'] = [{'root': main0['root'], 'l2': main0['l2']}]
+    cell['tNow'] = t_now
+    cell['today'] = main0['root'] if main0 else cell.get('root')
+    for k in ('_edit_roots', '_desc', '_svs_all'):
+        cell.pop(k, None)
     return cell
 
 
@@ -327,6 +341,8 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
             'splits': sum(1 for o in gops if not o['merge']),
             'xyz': last['xyz'],
             '_first_svs': first['svs'][:4],
+            # a few supervoxels spread over the ops (first, last, middle) for "touched at last edit"
+            '_svs_all': sorted({sv for o in (first, last, gops[len(gops) // 2]) for sv in o['svs'][:2]}),
         })
     for user, cells in users.items():
         cells.sort(key=lambda c: c['t1'], reverse=True)
@@ -407,6 +423,7 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
                     'roots': sorted({r for c in members for r in c['roots']}),
                     '_desc': sorted({d for c in members for d in c.get('_desc', [])}),
                     '_touched': sorted({t for c in members for t in c.get('_touched', [])}),
+                    '_svs_all': sorted({sv for c in members for sv in c.get('_svs_all', [])})[:12],
                     't0': earliest['t0'], 't1': latest['t1'],
                     'ops': sum(c['ops'] for c in members),
                     'merges': sum(c['merges'] for c in members),
@@ -450,13 +467,29 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
     for c in kept:
         c['_edit_roots'] = sorted(set(c.get('roots') or []) | set(c.pop('_touched', [])))
     log(f'  lineage grouping: {len(cand)} candidates -> {len(kept)} cells ({len(regroup)} merged groups re-resolved)')
-    # All current fragments per cell, largest first (parallel chunkedgraph calls).
+    # Edits by OTHER users on the same cell (any op whose current root is one of this cell's
+    # current fragments / edit roots, by a different user) -> "changed hands" signal.
+    by_root = defaultdict(list)
+    for o in ops:
+        sv = rep[o['id']]
+        r = cur.get(sv) if sv else None
+        if r:
+            by_root[str(r)].append(o['user'])
+    for user, cells in users.items():
+        for c in cells:
+            others = [u for r in set(c.get('_desc') or []) | set(c.get('_edit_roots') or []) for u in by_root.get(r, []) if u != user]
+            if others:
+                c['others'] = len(others)
+                c['otherUsers'] = len(set(others))
+    # State as the tracer left it (pinned at last edit + 1 s) and live "today" root (parallel).
     t0 = time.time()
     with ThreadPoolExecutor(max_workers=PIECE_WORKERS) as ex:
-        list(ex.map(lambda c: cell_pieces(cg, c), kept))
-    log(f'  pieces resolved for {len(kept)} cells in {time.time()-t0:.0f}s '
-        f'({sum(1 for c in kept if len(c.get("roots") or []) > 1)} cells with cut-off pieces, '
-        f'{sum(c.get("mergedAway", 0) for c in kept)} fragments merged into other cells excluded)')
+        list(ex.map(lambda c: cell_states(cg, c), kept))
+    log(f'  states resolved for {len(kept)} cells in {time.time()-t0:.0f}s '
+        f'({sum(1 for c in kept if len(c.get("roots") or []) > 1)} with cut-off pieces, '
+        f'{sum(c.get("mergedAway", 0) for c in kept)} fragments merged elsewhere excluded, '
+        f'{sum(1 for c in kept if c.get("others"))} cells also edited by others, '
+        f'{sum(1 for c in kept if c.get("today") and c.get("today") != c.get("root"))} changed since)')
     # Centroid / extent for every kept cell (parallel; ~1s each serially).
     t0 = time.time()
     with ThreadPoolExecutor(max_workers=CENTROID_WORKERS) as ex:
