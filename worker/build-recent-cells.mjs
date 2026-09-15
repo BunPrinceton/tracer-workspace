@@ -80,6 +80,9 @@ for (const ds of DATASETS) {
       t0: c.t0, t1: c.t1,
       ops: c.ops, merges: c.merges, splits: c.splits,
       xyz: Array.isArray(c.xyz) ? c.xyz.map(Number) : null,
+      centerNm: Array.isArray(c.centerNm) ? c.centerNm : null,
+      extentNm: Array.isArray(c.extentNm) ? c.extentNm : null,
+      l2: c.l2 || null,
     }));
   }
   const out = {
@@ -94,7 +97,7 @@ for (const ds of DATASETS) {
   // ---- PRIVACY AUDIT ----
   // Strip the numeric fields that legitimately contain long digit runs (root ids,
   // timestamps, coordinates), then assert no tracked worker id survives as a token.
-  const scrub = JSON.stringify(out, (k, v) => (['root', 'before', 'tBefore', 't0', 't1', 'xyz'].includes(k) ? undefined : v));
+  const scrub = JSON.stringify(out, (k, v) => (['root', 'before', 'tBefore', 't0', 't1', 'xyz', 'centerNm', 'extentNm', 'l2'].includes(k) ? undefined : v));
   const idLeaks = [...trackedIds].filter(id => new RegExp('(^|[^0-9])' + id + '([^0-9]|$)').test(scrub));
   const lower = text.toLowerCase();
   const nameLeaks = [...realNames].filter(n => n !== 'tracer' && lower.includes('"' + n) || lower.includes(n + '"'));

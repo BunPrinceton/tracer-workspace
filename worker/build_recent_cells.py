@@ -21,8 +21,9 @@ The public, pseudonymized files are produced by worker/build-recent-cells.mjs.
 
 Usage:  python worker/build_recent_cells.py [--days 14] [--per-user 15] [--only BANC,RETINA]
 """
-import argparse, datetime as dt, json, os, sys, time
+import argparse, datetime as dt, json, os, random, sys, time
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor
 
 import numpy as np
 from caveclient import CAVEclient
@@ -43,6 +44,9 @@ DATASTACKS = {
 CHUNK = 500          # operation ids per operation_details call (0.2s each on BANC)
 PROBE = 400          # width of the existence probe (ids travel in the query string; >~500 -> HTTP 414)
 ROOTS_BATCH = 2000   # supervoxels per get_roots call
+L2_SAMPLE = 100      # L2 nodes sampled per cell for the centroid / extent (l2cache call dominates cost)
+CENTROID_WORKERS = 4 # l2cache is rate-limited to 600 req/min per server; 2 calls per cell -> keep this low
+BEFORE_WORKERS = 8   # parallel get_roots(timestamp) lookups (one per kept cell)
 
 
 def log(*a):
@@ -176,6 +180,29 @@ def roots_for(cg, svs, timestamp=None):
     return out
 
 
+def cell_geometry(client, root, _retries=0):
+    """Centroid + extent (nm) of a root from a sample of its L2 nodes' rep coords."""
+    try:
+        l2 = client.chunkedgraph.get_leaves(int(root), stop_layer=2)
+        l2 = [int(x) for x in l2]
+        if not l2:
+            return None
+        if len(l2) > L2_SAMPLE:
+            l2 = random.sample(l2, L2_SAMPLE)
+        d = client.l2cache.get_l2data(l2, attributes=['rep_coord_nm'])
+        pts = np.array([v['rep_coord_nm'] for v in d.values() if v.get('rep_coord_nm')], dtype=float)
+        if not len(pts):
+            return None
+        c = pts.mean(axis=0); ext = pts.max(axis=0) - pts.min(axis=0)
+        return {'centerNm': [int(x) for x in c], 'extentNm': [int(x) for x in ext], 'l2': len(d)}
+    except Exception as e:
+        if '429' in str(e) and _retries < 3:
+            time.sleep(15 * (_retries + 1))
+            return cell_geometry(client, root, _retries + 1)
+        log('  geometry failed for', root, str(e)[:100])
+        return None
+
+
 def build_dataset(ds_key, datastack, window_days, per_user, state):
     client = CAVEclient(datastack)
     cg = client.chunkedgraph
@@ -223,25 +250,36 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
             'xyz': last['xyz'],
             '_first_svs': first['svs'][:4],
         })
-    # Keep the most recent N cells per user, then resolve "before" roots for those only.
-    n_before_calls = 0
+    # Keep the most recent N cells per user, then resolve "before" roots for those only (parallel).
     for user, cells in users.items():
         cells.sort(key=lambda c: c['t1'], reverse=True)
         del cells[per_user:]
-        for c in cells:
-            svs = c.pop('_first_svs')
-            before = []
-            if svs:
-                ts_before = dt.datetime.fromtimestamp((c['t0'] - 1000) / 1000, tz=dt.timezone.utc)
-                try:
-                    br = roots_for(cg, svs, timestamp=ts_before)
-                    n_before_calls += 1
-                    before = sorted({str(r) for r in br.values() if r})
-                except Exception as e:
-                    log('  before-roots failed for', c['root'], str(e)[:100])
-            c['before'] = before
-            c['tBefore'] = c['t0'] - 1000
-    log(f'  {len(ops)} ops -> {len(groups)} user-cells, {len(users)} users, {n_before_calls} before-root lookups')
+    kept = [c for cells in users.values() for c in cells]
+
+    def resolve_before(c):
+        svs = c.pop('_first_svs', [])
+        c['tBefore'] = c['t0'] - 1000
+        c['before'] = []
+        if not svs:
+            return
+        ts_before = dt.datetime.fromtimestamp(c['tBefore'] / 1000, tz=dt.timezone.utc)
+        try:
+            br = roots_for(cg, svs, timestamp=ts_before)
+            c['before'] = sorted({str(r) for r in br.values() if r})
+        except Exception as e:
+            log('  before-roots failed for', c['root'], str(e)[:100])
+    t0 = time.time()
+    with ThreadPoolExecutor(max_workers=BEFORE_WORKERS) as ex:
+        list(ex.map(resolve_before, kept))
+    log(f'  {len(ops)} ops -> {len(groups)} user-cells, {len(users)} users, {len(kept)} before-root lookups in {time.time()-t0:.0f}s')
+    # Centroid / extent for every kept cell (parallel; ~1s each serially).
+    t0 = time.time()
+    with ThreadPoolExecutor(max_workers=CENTROID_WORKERS) as ex:
+        geos = list(ex.map(lambda c: cell_geometry(client, c['root']), kept))
+    for c, g in zip(kept, geos):
+        if g:
+            c['centerNm'] = g['centerNm']; c['extentNm'] = g['extentNm']; c['l2'] = g['l2']
+    log(f'  geometry for {sum(1 for g in geos if g)}/{len(kept)} cells in {time.time()-t0:.0f}s')
     return {'viewer': viewer, 'users': dict(users), 'ops': len(ops), 'maxOp': max_id, 'windowDays': window_days}
 
 

@@ -1085,6 +1085,7 @@
       const kind = parts.join(' · ') || (c.ops + ' edit' + (c.ops > 1 ? 's' : ''));
       main.innerHTML = '<div class="rc-root" title="Current root id">' + escapeHtml(c.root) + '</div>' +
         '<div class="rc-sub">' + escapeHtml(fmtAgo(c.t1)) + ' · ' + escapeHtml(fmtDateLong(new Date(c.t1))) + ' · ' + escapeHtml(kind) +
+        (Array.isArray(c.extentNm) ? ' · ~' + Math.round(Math.max(...c.extentNm) / 1000) + ' µm' : '') +
         (c.before && c.before.length ? ' · before: ' + c.before.map(shortRoot).map(escapeHtml).join(', ') : '') + '</div>';
       const open = document.createElement('a');
       open.className = 'rc-open'; open.textContent = 'Open ↗'; open.target = '_blank'; open.rel = 'noopener noreferrer';
@@ -1136,7 +1137,8 @@
     const seg = flywire ? v.seg : String(v.seg || '').replace(/^graphene:\/\/(?!middleauth\+)/, 'graphene://middleauth+');
     const res = (v.res && v.res.every((x) => x > 0)) ? v.res : [4, 4, 40];
     const layers = [];
-    if (v.img) layers.push({ type: 'image', source: v.img, name: 'em' });
+    // EM stays available (toggle it on if you switch to a 2D layout) but the link opens 3D-only.
+    if (v.img) layers.push({ type: 'image', source: v.img, name: 'em', visible: false });
     const nowSegments = [], nowColors = {};
     cells.forEach((c, i) => {
       const color = RC_NOW_COLORS[i % RC_NOW_COLORS.length];
@@ -1154,12 +1156,24 @@
       type: 'segmentation', source: seg, name: 'now', segments: nowSegments, segmentColors: nowColors,
       selectedAlpha: 0.55, notSelectedAlpha: 0, objectAlpha: 1,
     });
-    const first = cells.find((c) => Array.isArray(c.xyz) && c.xyz.length === 3);
+    // Center on the FIRST cell in the list: its L2 centroid when the feed has one, else the last edit point.
+    const first = cells[0];
+    let position, projectionScale = 30000;
+    if (first && Array.isArray(first.centerNm) && first.centerNm.length === 3) {
+      position = first.centerNm.map((nm, i) => nm / res[i]);
+      if (Array.isArray(first.extentNm)) {
+        const ext = Math.max(...first.extentNm) / res[0];          // widest side, in x-voxels
+        projectionScale = Math.max(4000, Math.min(400000, ext * 1.5));
+      }
+    } else if (first && Array.isArray(first.xyz) && first.xyz.length === 3) {
+      position = first.xyz;
+    }
     const state = {
       dimensions: { x: [res[0] * 1e-9, 'm'], y: [res[1] * 1e-9, 'm'], z: [res[2] * 1e-9, 'm'] },
-      position: first ? first.xyz : undefined,
-      crossSectionScale: 1, projectionScale: 30000,
-      layers, layout: 'xy-3d',
+      position,
+      crossSectionScale: 1, projectionScale,
+      showSlices: false,
+      layers, layout: '3d',
       selectedLayer: { layer: 'now', visible: true },
       title: (person && person.name ? person.name + ' · ' : '') + (cells.length === 1 ? 'cell ' + shortRoot(cells[0].root) : cells.length + ' cells') + ' · before vs now',
     };
