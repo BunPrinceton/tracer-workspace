@@ -19,7 +19,7 @@ STATE (git-ignored):
 
 The public, pseudonymized files are produced by worker/build-recent-cells.mjs.
 
-Usage:  python worker/build_recent_cells.py [--days 14] [--per-user 15] [--only BANC,RETINA]
+Usage:  python worker/build_recent_cells.py [--days 7] [--per-user 15] [--only BANC,RETINA]
 """
 import argparse, datetime as dt, json, os, random, sys, time
 from collections import defaultdict
@@ -426,7 +426,7 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--days', type=int, default=14)
+    ap.add_argument('--days', type=int, default=7)
     ap.add_argument('--per-user', type=int, default=15)
     ap.add_argument('--only', default='')
     args = ap.parse_args()

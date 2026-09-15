@@ -162,7 +162,7 @@ root(s) it was *right before* that tracer's first edit, so the viewer can open a
 Spelunker link that overlays *before* (amber, pinned to a past timestamp) against
 *now* (live). Two steps, both local:
 
-1. `python worker/build_recent_cells.py [--days 14] [--per-user 15] [--only BANC]`
+1. `python worker/build_recent_cells.py [--days 7] [--per-user 15] [--only BANC]`
    Crawls PyChunkedGraph with the local CAVE token using only **view-level**
    endpoints (no admin): operation ids are a sequential counter, so it walks
    `operation_details` id ranges back to the window start (~10k ids/day on BANC,
