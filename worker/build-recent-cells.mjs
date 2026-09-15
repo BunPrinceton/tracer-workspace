@@ -76,6 +76,8 @@ for (const ds of DATASETS) {
     people[pid] = cells.map(c => ({
       root: String(c.root),
       roots: (c.roots && c.roots.length ? c.roots : [c.root]).map(String),
+      pieces: Array.isArray(c.pieces) ? c.pieces.map(p => ({ root: String(p.root), l2: p.l2 })) : null,
+      mergedAway: c.mergedAway || 0,
       before: (c.before || []).map(String),
       tBefore: c.tBefore,
       t0: c.t0, t1: c.t1,
@@ -98,7 +100,7 @@ for (const ds of DATASETS) {
   // ---- PRIVACY AUDIT ----
   // Strip the numeric fields that legitimately contain long digit runs (root ids,
   // timestamps, coordinates), then assert no tracked worker id survives as a token.
-  const scrub = JSON.stringify(out, (k, v) => (['root', 'roots', 'before', 'tBefore', 't0', 't1', 'xyz', 'centerNm', 'extentNm', 'l2'].includes(k) ? undefined : v));
+  const scrub = JSON.stringify(out, (k, v) => (['root', 'roots', 'pieces', 'before', 'tBefore', 't0', 't1', 'xyz', 'centerNm', 'extentNm', 'l2'].includes(k) ? undefined : v));
   const idLeaks = [...trackedIds].filter(id => new RegExp('(^|[^0-9])' + id + '([^0-9]|$)').test(scrub));
   const lower = text.toLowerCase();
   const nameLeaks = [...realNames].filter(n => n !== 'tracer' && lower.includes('"' + n) || lower.includes(n + '"'));

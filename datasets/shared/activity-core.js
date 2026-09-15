@@ -1011,6 +1011,7 @@
   const RC = { data: {}, loading: {}, selected: new Set() };
   const RC_NOW_COLORS = ['#1E6FBE', '#2E8540', '#7B3FA0', '#00838F', '#B8860B', '#C2185B', '#4E342E', '#3F51B5'];
   const RC_BEFORE_COLOR = '#E77500';
+  const RC_CUTOFF_COLOR = '#8a8a85';   // split-off fragments inside the "now" layer
 
   function recentCellsUrl(dsKey) {
     const base = (OPTS.snapshotUrl || './data/activity-snapshot.json').replace(/activity-snapshot\.json.*$/, '');
@@ -1066,7 +1067,7 @@
     const meta = document.createElement('div');
     meta.className = 'rc-hint';
     const gen = data.generatedAt ? new Date(data.generatedAt) : null;
-    meta.textContent = (data.windowDays ? 'Last ' + data.windowDays + ' days' : 'Recent') + (gen && !isNaN(gen) ? ' · updated ' + fmtDateLong(gen) : '') + ' · before = amber, now = colored';
+    meta.textContent = (data.windowDays ? 'Last ' + data.windowDays + ' days' : 'Recent') + (gen && !isNaN(gen) ? ' · updated ' + fmtDateLong(gen) : '') + ' · before = amber, now = colored, cut-off pieces = grey';
     host.appendChild(meta);
     if (!cells.length) {
       const none = document.createElement('div'); none.className = 'rc-hint';
@@ -1083,8 +1084,10 @@
       if (c.merges) parts.push(c.merges + ' merge' + (c.merges > 1 ? 's' : ''));
       if (c.splits) parts.push(c.splits + ' split' + (c.splits > 1 ? 's' : ''));
       const kind = parts.join(' · ') || (c.ops + ' edit' + (c.ops > 1 ? 's' : ''));
-      const extra = (c.roots && c.roots.length > 1) ? ' <span class="rc-more">+' + (c.roots.length - 1) + ' piece' + (c.roots.length > 2 ? 's' : '') + '</span>' : '';
-      main.innerHTML = '<div class="rc-root" title="Current root id' + (extra ? ' (cell is now several pieces; all open in the now layer)' : '') + '">' + escapeHtml(c.root) + extra + '</div>' +
+      const nCut = (c.roots && c.roots.length > 1) ? c.roots.length - 1 : 0;
+      const extra = (nCut ? ' <span class="rc-more">' + nCut + ' cut off</span>' : '') +
+        (c.mergedAway ? ' <span class="rc-more" title="Fragment(s) split off and later merged into a different cell; not shown">' + c.mergedAway + ' merged elsewhere</span>' : '');
+      main.innerHTML = '<div class="rc-root" title="Current root id (largest fragment)' + (nCut ? '; the ' + nCut + ' split-off fragment' + (nCut > 1 ? 's open' : ' opens') + ' in grey in the now layer' : '') + '">' + escapeHtml(c.root) + extra + '</div>' +
         '<div class="rc-sub">' + escapeHtml(fmtAgo(c.t1)) + ' · ' + escapeHtml(fmtDateLong(new Date(c.t1))) + ' · ' + escapeHtml(kind) +
         (Array.isArray(c.extentNm) ? ' · ~' + Math.round(Math.max(...c.extentNm) / 1000) + ' µm' : '') +
         (c.before && c.before.length ? ' · before: ' + c.before.map(shortRoot).map(escapeHtml).join(', ') : '') + '</div>';
@@ -1152,8 +1155,9 @@
           objectAlpha: 0.5, selectedAlpha: 0.45, notSelectedAlpha: 0,
         });
       }
+      // Largest fragment (c.root) in the cell color; every other current fragment in grey = cut off.
       const nowRoots = (c.roots && c.roots.length ? c.roots : [c.root]).map(String);
-      const nc = {}; nowRoots.forEach((r) => { nc[r] = color; });
+      const nc = {}; nowRoots.forEach((r) => { nc[r] = r === String(c.root) ? color : RC_CUTOFF_COLOR; });
       layers.push({
         type: 'segmentation', source: seg, name: many ? 'now ' + shortRoot(c.root) : 'now',
         segments: nowRoots, segmentColors: nc, segmentDefaultColor: color,

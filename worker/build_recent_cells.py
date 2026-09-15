@@ -48,6 +48,8 @@ L2_SAMPLE = 100      # L2 nodes sampled per cell for the centroid / extent (l2ca
 CENTROID_WORKERS = 4 # l2cache is rate-limited to 600 req/min per server; 2 calls per cell -> keep this low
 BEFORE_WORKERS = 8   # parallel get_roots(timestamp) lookups (one per kept cell)
 PRE_CUT = 40         # candidates per user kept for lineage grouping before the final per-user cut
+MAX_PIECES = 10      # current fragments listed per cell (largest first)
+PIECE_WORKERS = 8    # get_latest_roots / get_leaves are chunkedgraph calls (not l2cache-rate-limited)
 
 
 def log(*a):
@@ -204,6 +206,57 @@ def cell_geometry(client, root, _retries=0):
         return None
 
 
+def cell_pieces(cg, cell):
+    """Current fragments of the cell after the tracer's edits.
+
+    Follow the before-root(s) forward to every current root, then score each fragment by how
+    many of the ORIGINAL cell's L2 nodes it still contains. The fragment holding most of the
+    original is "the cell" (main); other fragments that are mostly original material were
+    cut off; fragments that are mostly OTHER material were merged into a different neuron and
+    are excluded from the "now" layer (counted as mergedAway) so the grey never paints a
+    whole unrelated cell."""
+    before = [int(b) for b in cell.get('before') or []]
+    cur = set(int(r) for r in cell.get('roots') or [])
+    for b in before:
+        try:
+            cur.update(int(x) for x in cg.get_latest_roots(b))
+        except Exception as e:
+            log('  latest-roots failed for', b, str(e)[:80])
+    orig = set()
+    for b in before:
+        try:
+            orig.update(int(x) for x in cg.get_leaves(b, stop_layer=2))
+        except Exception:
+            pass
+    pieces = []
+    for r in list(cur)[:MAX_PIECES * 2]:
+        try:
+            l2 = set(int(x) for x in cg.get_leaves(r, stop_layer=2))
+        except Exception:
+            l2 = set()
+        shared = len(l2 & orig)
+        pieces.append({'root': str(r), 'l2': len(l2), 'orig': shared,
+                       'frac': (shared / len(l2)) if l2 else 0.0})
+    if not pieces:
+        return cell
+    pieces.sort(key=lambda p: (-p['orig'], -p['l2']))
+    main = pieces[0]
+    kept, away = [main], []
+    for p in pieces[1:]:
+        # mostly original material (or tiny, or no L2 info) -> cut off; otherwise merged elsewhere
+        if p['frac'] >= 0.5 or p['l2'] <= 3 or not orig:
+            kept.append(p)
+        else:
+            away.append(p)
+    kept = kept[:MAX_PIECES]
+    cell['pieces'] = [{'root': p['root'], 'l2': p['l2']} for p in kept]
+    cell['roots'] = [p['root'] for p in kept]
+    cell['root'] = main['root']
+    if away:
+        cell['mergedAway'] = len(away)
+    return cell
+
+
 def build_dataset(ds_key, datastack, window_days, per_user, state):
     client = CAVEclient(datastack)
     cg = client.chunkedgraph
@@ -353,6 +406,13 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
             c.pop('_first_svs', None); c.pop('_regroup_svs', None); c.pop('_lineage', None)
     kept = [c for cells in users.values() for c in cells]
     log(f'  lineage grouping: {len(cand)} candidates -> {len(kept)} cells ({len(regroup)} merged groups re-resolved)')
+    # All current fragments per cell, largest first (parallel chunkedgraph calls).
+    t0 = time.time()
+    with ThreadPoolExecutor(max_workers=PIECE_WORKERS) as ex:
+        list(ex.map(lambda c: cell_pieces(cg, c), kept))
+    log(f'  pieces resolved for {len(kept)} cells in {time.time()-t0:.0f}s '
+        f'({sum(1 for c in kept if len(c.get("roots") or []) > 1)} cells with cut-off pieces, '
+        f'{sum(c.get("mergedAway", 0) for c in kept)} fragments merged into other cells excluded)')
     # Centroid / extent for every kept cell (parallel; ~1s each serially).
     t0 = time.time()
     with ThreadPoolExecutor(max_workers=CENTROID_WORKERS) as ex:
