@@ -1011,6 +1011,9 @@
   const RC = { data: {}, loading: {}, selected: new Set() };
   const RC_NOW_COLORS = ['#1E6FBE', '#2E8540', '#7B3FA0', '#00838F', '#3F51B5', '#4E342E'];
   const RC_BEFORE_COLOR = '#E77500';
+  // When the first edit was a merge there are several "before" pieces; give each its own warm
+  // shade so the join itself is visible (the "after" is their union and would otherwise look unchanged).
+  const RC_BEFORE_SHADES = ['#E77500', '#8A4500', '#F5B041', '#B45309', '#FFD27F', '#6B3A00'];
   const RC_CUTOFF_COLOR = '#C2185B';   // split-off fragments: crimson (stays distinct from amber under red-green CVD)
 
   function recentCellsUrl(dsKey) {
@@ -1067,7 +1070,7 @@
     const meta = document.createElement('div');
     meta.className = 'rc-hint';
     const gen = data.generatedAt ? new Date(data.generatedAt) : null;
-    meta.textContent = (data.windowDays ? 'Last ' + data.windowDays + ' days' : 'Recent') + (gen && !isNaN(gen) ? ' · updated ' + fmtDateLong(gen) : '') + ' · amber = before, color = after (as they left it), red = cut off, "today" layer = live (hidden)';
+    meta.textContent = (data.windowDays ? 'Last ' + data.windowDays + ' days' : 'Recent') + (gen && !isNaN(gen) ? ' · updated ' + fmtDateLong(gen) : '') + ' · amber shades = before pieces, color = after (as they left it), red = cut off, "today" layer = live (hidden)';
     host.appendChild(meta);
     if (!cells.length) {
       const none = document.createElement('div'); none.className = 'rc-hint';
@@ -1156,7 +1159,7 @@
       const nowRoots = (c.roots && c.roots.length ? c.roots : [c.root]).map(String);
       const cut = nowRoots.filter((r) => r !== String(c.root));
       if (c.before && c.before.length && c.tBefore) {
-        const bc = {}; c.before.forEach((r) => { bc[String(r)] = RC_BEFORE_COLOR; });
+        const bc = {}; c.before.forEach((r, k) => { bc[String(r)] = c.before.length > 1 ? RC_BEFORE_SHADES[k % RC_BEFORE_SHADES.length] : RC_BEFORE_COLOR; });
         layers.push({
           type: 'segmentation', source: seg, name: 'before' + tag,
           timestamp: c.tBefore, segments: c.before.map(String), segmentColors: bc, segmentDefaultColor: RC_BEFORE_COLOR,
