@@ -1006,7 +1006,7 @@
      worker/build_recent_cells.py + build-recent-cells.mjs (pseudonyms only).
      Each cell carries the CURRENT root plus the root(s) it was right before
      this tracer's first edit in the window, so the viewer can overlay
-     "before" vs "now" in Spelunker (per-layer timestamp pinning).
+     "before" vs "after" in Spelunker (per-layer timestamp pinning).
      ============================================================ */
   const RC = { data: {}, loading: {}, selected: new Set() };
   const RC_NOW_COLORS = ['#1E6FBE', '#2E8540', '#7B3FA0', '#00838F', '#3F51B5', '#4E342E'];
@@ -1067,7 +1067,7 @@
     const meta = document.createElement('div');
     meta.className = 'rc-hint';
     const gen = data.generatedAt ? new Date(data.generatedAt) : null;
-    meta.textContent = (data.windowDays ? 'Last ' + data.windowDays + ' days' : 'Recent') + (gen && !isNaN(gen) ? ' · updated ' + fmtDateLong(gen) : '') + ' · amber = before, color = as they left it, red = cut off, "today" layer = live (hidden)';
+    meta.textContent = (data.windowDays ? 'Last ' + data.windowDays + ' days' : 'Recent') + (gen && !isNaN(gen) ? ' · updated ' + fmtDateLong(gen) : '') + ' · amber = before, color = after (as they left it), red = cut off, "today" layer = live (hidden)';
     host.appendChild(meta);
     if (!cells.length) {
       const none = document.createElement('div'); none.className = 'rc-hint';
@@ -1134,7 +1134,7 @@
     return /flywire/i.test(site) ? 'FlyWire' : 'Spelunker';
   }
 
-  // Build a self-contained viewer state: EM + one pinned "before" layer per cell + one live "now" layer.
+  // Build a self-contained viewer state: EM + pinned "before"/"after"/"cut off" layers per cell + a hidden live "today" layer.
   function buildOverlayLink(data, person, cells) {
     const v = data.viewer || {};
     const site = (v.site || 'https://spelunker.cave-explorer.org/').replace(/\/?$/, '/');
@@ -1145,9 +1145,9 @@
     const layers = [];
     // EM stays available (toggle it on if you switch to a 2D layout) but the link opens 3D-only.
     if (v.img) layers.push({ type: 'image', source: v.img, name: 'em', visible: false });
-    // Per cell, in layer order: "before" (amber, opaque, pinned) -> "now" (cell color, translucent,
+    // Per cell, in layer order: "before" (amber, opaque, pinned) -> "after" (cell color, translucent,
     // live) -> "cut off" (crimson, opaque, live; only when fragments exist). Amber wins where the
-    // current cell coincides with the original, so the translucent "now" reads only where the cell
+    // current cell coincides with the original, so the translucent "after" reads only where the cell
     // extends BEYOND the original = the additions; crimson = what was trimmed away.
     cells.forEach((c, i) => {
       const color = RC_NOW_COLORS[i % RC_NOW_COLORS.length];
@@ -1163,17 +1163,17 @@
           objectAlpha: 1, selectedAlpha: 0.5, notSelectedAlpha: 0,
         });
       }
-      // "now" and "cut off" are pinned to one second after the tracer's LAST edit, so other
+      // "after" and "cut off" are pinned to one second after the tracer's LAST edit, so other
       // people's later work never shows up in this tracer's picture. "today" is the live cell,
       // hidden by default; toggle it on to see what has happened since.
       const nc = {}; nc[String(c.root)] = color;
-      const nowLayer = {
-        type: 'segmentation', source: seg, name: 'now' + tag,
+      const afterLayer = {
+        type: 'segmentation', source: seg, name: 'after' + tag,
         segments: [String(c.root)], segmentColors: nc, segmentDefaultColor: color,
         selectedAlpha: 0.55, notSelectedAlpha: 0, objectAlpha: 0.45,
       };
-      if (c.tNow) nowLayer.timestamp = c.tNow;
-      layers.push(nowLayer);
+      if (c.tNow) afterLayer.timestamp = c.tNow;
+      layers.push(afterLayer);
       if (cut.length) {
         const gc = {}; cut.forEach((r) => { gc[r] = RC_CUTOFF_COLOR; });
         const cutLayer = {
@@ -1212,7 +1212,7 @@
       crossSectionScale: 1, projectionScale,
       showSlices: false,
       layers, layout: '3d',
-      selectedLayer: { layer: cells.length > 1 ? 'now ' + shortRoot(cells[0].root) : 'now', visible: true },
+      selectedLayer: { layer: cells.length > 1 ? 'after ' + shortRoot(cells[0].root) : 'after', visible: true },
       title: (person && person.name ? person.name + ' · ' : '') + (cells.length === 1 ? 'cell ' + shortRoot(cells[0].root) : cells.length + ' cells') + ' · before vs now',
     };
     return site + '#!' + encodeURIComponent(JSON.stringify(state));
