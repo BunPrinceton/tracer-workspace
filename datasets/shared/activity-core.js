@@ -1009,9 +1009,9 @@
      "before" vs "now" in Spelunker (per-layer timestamp pinning).
      ============================================================ */
   const RC = { data: {}, loading: {}, selected: new Set() };
-  const RC_NOW_COLORS = ['#1E6FBE', '#2E8540', '#7B3FA0', '#00838F', '#B8860B', '#C2185B', '#4E342E', '#3F51B5'];
+  const RC_NOW_COLORS = ['#1E6FBE', '#2E8540', '#7B3FA0', '#00838F', '#3F51B5', '#4E342E'];
   const RC_BEFORE_COLOR = '#E77500';
-  const RC_CUTOFF_COLOR = '#8a8a85';   // split-off fragments inside the "now" layer
+  const RC_CUTOFF_COLOR = '#C2185B';   // split-off fragments: crimson (stays distinct from amber under red-green CVD)
 
   function recentCellsUrl(dsKey) {
     const base = (OPTS.snapshotUrl || './data/activity-snapshot.json').replace(/activity-snapshot\.json.*$/, '');
@@ -1067,7 +1067,7 @@
     const meta = document.createElement('div');
     meta.className = 'rc-hint';
     const gen = data.generatedAt ? new Date(data.generatedAt) : null;
-    meta.textContent = (data.windowDays ? 'Last ' + data.windowDays + ' days' : 'Recent') + (gen && !isNaN(gen) ? ' · updated ' + fmtDateLong(gen) : '') + ' · before = amber, now = colored, cut-off pieces = grey';
+    meta.textContent = (data.windowDays ? 'Last ' + data.windowDays + ' days' : 'Recent') + (gen && !isNaN(gen) ? ' · updated ' + fmtDateLong(gen) : '') + ' · amber = original, translucent color = added, red = cut off';
     host.appendChild(meta);
     if (!cells.length) {
       const none = document.createElement('div'); none.className = 'rc-hint';
@@ -1087,7 +1087,7 @@
       const nCut = (c.roots && c.roots.length > 1) ? c.roots.length - 1 : 0;
       const extra = (nCut ? ' <span class="rc-more">' + nCut + ' cut off</span>' : '') +
         (c.mergedAway ? ' <span class="rc-more" title="Fragment(s) split off and later merged into a different cell; not shown">' + c.mergedAway + ' merged elsewhere</span>' : '');
-      main.innerHTML = '<div class="rc-root" title="Current root id (largest fragment)' + (nCut ? '; the ' + nCut + ' split-off fragment' + (nCut > 1 ? 's open' : ' opens') + ' in grey in the now layer' : '') + '">' + escapeHtml(c.root) + extra + '</div>' +
+      main.innerHTML = '<div class="rc-root" title="Current root id (largest fragment)' + (nCut ? '; the ' + nCut + ' split-off fragment' + (nCut > 1 ? 's open' : ' opens') + ' in red in the cut-off layer' : '') + '">' + escapeHtml(c.root) + extra + '</div>' +
         '<div class="rc-sub">' + escapeHtml(fmtAgo(c.t1)) + ' · ' + escapeHtml(fmtDateLong(new Date(c.t1))) + ' · ' + escapeHtml(kind) +
         (Array.isArray(c.extentNm) ? ' · ~' + Math.round(Math.max(...c.extentNm) / 1000) + ' µm' : '') +
         (c.before && c.before.length ? ' · before: ' + c.before.map(shortRoot).map(escapeHtml).join(', ') : '') + '</div>';
@@ -1143,26 +1143,38 @@
     const layers = [];
     // EM stays available (toggle it on if you switch to a 2D layout) but the link opens 3D-only.
     if (v.img) layers.push({ type: 'image', source: v.img, name: 'em', visible: false });
-    // One "before" + one "now" layer PER cell, in pairs, so each cell can be toggled on its own.
+    // Per cell, in layer order: "before" (amber, opaque, pinned) -> "now" (cell color, translucent,
+    // live) -> "cut off" (crimson, opaque, live; only when fragments exist). Amber wins where the
+    // current cell coincides with the original, so the translucent "now" reads only where the cell
+    // extends BEYOND the original = the additions; crimson = what was trimmed away.
     cells.forEach((c, i) => {
       const color = RC_NOW_COLORS[i % RC_NOW_COLORS.length];
       const many = cells.length > 1;
+      const tag = many ? ' ' + shortRoot(c.root) : '';
+      const nowRoots = (c.roots && c.roots.length ? c.roots : [c.root]).map(String);
+      const cut = nowRoots.filter((r) => r !== String(c.root));
       if (c.before && c.before.length && c.tBefore) {
-        const bc = {}; c.before.forEach((b) => { bc[String(b)] = RC_BEFORE_COLOR; });
+        const bc = {}; c.before.forEach((r) => { bc[String(r)] = RC_BEFORE_COLOR; });
         layers.push({
-          type: 'segmentation', source: seg, name: many ? 'before ' + shortRoot(c.root) : 'before',
+          type: 'segmentation', source: seg, name: 'before' + tag,
           timestamp: c.tBefore, segments: c.before.map(String), segmentColors: bc, segmentDefaultColor: RC_BEFORE_COLOR,
-          objectAlpha: 0.5, selectedAlpha: 0.45, notSelectedAlpha: 0,
+          objectAlpha: 1, selectedAlpha: 0.5, notSelectedAlpha: 0,
         });
       }
-      // Largest fragment (c.root) in the cell color; every other current fragment in grey = cut off.
-      const nowRoots = (c.roots && c.roots.length ? c.roots : [c.root]).map(String);
-      const nc = {}; nowRoots.forEach((r) => { nc[r] = r === String(c.root) ? color : RC_CUTOFF_COLOR; });
+      const nc = {}; nc[String(c.root)] = color;
       layers.push({
-        type: 'segmentation', source: seg, name: many ? 'now ' + shortRoot(c.root) : 'now',
-        segments: nowRoots, segmentColors: nc, segmentDefaultColor: color,
-        selectedAlpha: 0.55, notSelectedAlpha: 0, objectAlpha: 1,
+        type: 'segmentation', source: seg, name: 'now' + tag,
+        segments: [String(c.root)], segmentColors: nc, segmentDefaultColor: color,
+        selectedAlpha: 0.55, notSelectedAlpha: 0, objectAlpha: 0.45,
       });
+      if (cut.length) {
+        const gc = {}; cut.forEach((r) => { gc[r] = RC_CUTOFF_COLOR; });
+        layers.push({
+          type: 'segmentation', source: seg, name: 'cut off' + tag,
+          segments: cut, segmentColors: gc, segmentDefaultColor: RC_CUTOFF_COLOR,
+          selectedAlpha: 0.5, notSelectedAlpha: 0, objectAlpha: 1,
+        });
+      }
     });
     // Center on the FIRST cell in the list: its L2 centroid when the feed has one, else the last edit point.
     const first = cells[0];
