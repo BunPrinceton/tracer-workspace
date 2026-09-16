@@ -214,9 +214,11 @@ def _l2set(cg, root):
         return set()
 
 
-def score_pieces(cg, roots, touched, desc, orig, main_root=None):
+def score_pieces(cg, roots, touched, desc, orig, main_root=None, edits=None):
     """Rank a set of roots (fragments of one cell).
-       main   = the largest fragment holding the tracer's edit points (else the one with most ORIGINAL material)
+       main   = the fragment holding the MOST of the tracer's edits (size breaks ties; else the one
+                with most ORIGINAL material). "Largest" was wrong when a tracer trimmed one sliver off a
+                big neighbour and merged it into the smaller cell they were really building.
        kept   = main + cut-off pieces:
                 * descendants of the original cell (desc) that are mostly original material, or tiny
                   -> "cut off"; descendants that are mostly OTHER material were merged into a
@@ -239,7 +241,7 @@ def score_pieces(cg, roots, touched, desc, orig, main_root=None):
     if main is None:
         hit = [p for p in pieces if p['root'] in touched]
         if hit:
-            hit.sort(key=lambda p: (-p['l2'], -p['orig']))
+            hit.sort(key=lambda p: (-(edits or {}).get(p['root'], 0), -p['l2'], -p['orig']))
             main = hit[0]
         else:
             pieces.sort(key=lambda p: (-p['orig'], -p['l2']))
@@ -280,21 +282,28 @@ def cell_states(cg, cell):
             desc1.update(str(int(x)) for x in cg.get_latest_roots(b, timestamp=ts_now))
         except Exception as e:
             log('  latest-roots@t1 failed for', b, str(e)[:80])
-    touched1 = set()
-    svs = [int(x) for x in (cell.get('_svs_all') or [])]
+    # touched1 = roots at tNow of every edit's edge supervoxels; edits[root] = how many of the
+    # tracer's ops touch that root (an op counts once per side of its edge)
+    touched1, edits = set(), Counter()
+    edges = [[int(x) for x in e] for e in (cell.get('_op_svs') or [])]
+    svs = sorted({sv for e in edges for sv in e})
     if svs:
         try:
-            touched1 = set(str(r) for r in roots_for(cg, svs, timestamp=ts_now).values() if r)
+            sv_root = roots_for(cg, svs, timestamp=ts_now)
+            for e in edges:
+                for r in {str(sv_root[sv]) for sv in e if sv_root.get(sv)}:
+                    edits[r] += 1
+            touched1 = set(edits)
         except Exception as e:
             log('  touched@t1 failed for', cell.get('roots'), str(e)[:80])
     orig_first = set()
     for b in first_before:
         orig_first |= _l2set(cg, b)
-    main1, _, _ = score_pieces(cg, desc1 | touched1, touched1, desc1, orig_first)
+    main1, _, _ = score_pieces(cg, desc1 | touched1, touched1, desc1, orig_first, edits=edits)
     if not main1:
         cell['tNow'] = t_now
         cell['today'] = cell.get('root')
-        for k in ('_edit_roots', '_desc', '_svs_all'):
+        for k in ('_edit_roots', '_desc', '_op_svs'):
             cell.pop(k, None)
         return cell
     main_l2 = main1['_l2']
@@ -343,7 +352,7 @@ def cell_states(cg, cell):
                 best, best_n = r, n
         cell['today'] = best or main['root']
     cell['_live'] = sorted(set(live) | {cell['today']})
-    for k in ('_edit_roots', '_desc', '_svs_all'):
+    for k in ('_edit_roots', '_desc', '_op_svs'):
         cell.pop(k, None)
     return cell
 
@@ -400,8 +409,9 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
             'splits': sum(1 for o in gops if not o['merge']),
             'xyz': last['xyz'],
             '_first_svs': first['svs'][:4],
-            # a few supervoxels spread over the ops (first, last, middle) for "touched at last edit"
-            '_svs_all': sorted({sv for o in (first, last, gops[len(gops) // 2]) for sv in o['svs'][:2]}),
+            # both edge supervoxels of EVERY op: at the last edit, the fragment holding the most
+            # of them is the tracer's cell ("most edits", not "largest")
+            '_op_svs': [o['svs'][:2] for o in gops if o['svs']],
         })
     for user, cells in users.items():
         cells.sort(key=lambda c: c['t1'], reverse=True)
@@ -482,7 +492,7 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
                     'roots': sorted({r for c in members for r in c['roots']}),
                     '_desc': sorted({d for c in members for d in c.get('_desc', [])}),
                     '_touched': sorted({t for c in members for t in c.get('_touched', [])}),
-                    '_svs_all': sorted({sv for c in members for sv in c.get('_svs_all', [])})[:12],
+                    '_op_svs': [e for c in members for e in c.get('_op_svs', [])],
                     't0': earliest['t0'], 't1': latest['t1'],
                     'ops': sum(c['ops'] for c in members),
                     'merges': sum(c['merges'] for c in members),
