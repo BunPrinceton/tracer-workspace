@@ -1004,15 +1004,15 @@
      Lazy: nothing is fetched until the viewer clicks "Load recent cells".
      Data: datasets/data/recent-cells/<DATASET>.json, built locally by
      worker/build_recent_cells.py + build-recent-cells.mjs (pseudonyms only).
-     Each cell carries the CURRENT root plus the root(s) it was right before
-     this tracer's first edit in the window, so the viewer can overlay
-     "before" vs "after" in Spelunker (per-layer timestamp pinning).
+     Each cell carries the root as the tracer LEFT it plus its "before" = the trunk: the
+     pre-session root most of the cell's material came from, one second before this
+     tracer's first edit, so the viewer can overlay "before" vs "after" in Spelunker
+     (per-layer timestamp pinning).
      ============================================================ */
   const RC = { data: {}, loading: {}, selected: new Set() };
   const RC_NOW_COLORS = ['#1E6FBE', '#2E8540', '#7B3FA0', '#00838F', '#3F51B5', '#4E342E'];
   const RC_BEFORE_COLOR = '#E77500';
-  // When the first edit was a merge there are several "before" pieces; give each its own warm
-  // shade so the join itself is visible (the "after" is their union and would otherwise look unchanged).
+  // "before" is normally the single trunk root; the shades only matter if a feed ever carries several.
   const RC_BEFORE_SHADES = ['#E77500', '#8A4500', '#F5B041', '#B45309', '#FFD27F', '#6B3A00'];
   const RC_CUTOFF_COLOR = '#C2185B';   // split-off fragments: crimson (stays distinct from amber under red-green CVD)
   const RC_TODAY_COLOR = '#FFFFFF';    // live cell (hidden layer): white, so it never collides with the cell's own 'after' color
@@ -1071,7 +1071,7 @@
     const meta = document.createElement('div');
     meta.className = 'rc-hint';
     const gen = data.generatedAt ? new Date(data.generatedAt) : null;
-    meta.textContent = (data.windowDays ? 'Last ' + data.windowDays + ' days' : 'Recent') + (gen && !isNaN(gen) ? ' · updated ' + fmtDateLong(gen) : '') + ' · amber shades = before pieces, color = after (as they left it), red = cut off, white "today" layer = live (hidden)';
+    meta.textContent = (data.windowDays ? 'Last ' + data.windowDays + ' days' : 'Recent') + (gen && !isNaN(gen) ? ' · updated ' + fmtDateLong(gen) : '') + ' · amber = trunk (the piece most of the cell came from), color = after (as they left it), red = cut off, white "today" layer = live (hidden)';
     host.appendChild(meta);
     if (!cells.length) {
       const none = document.createElement('div'); none.className = 'rc-hint';
@@ -1097,7 +1097,7 @@
         (c.others ? ' · <span class="rc-flag" title="' + c.others + ' edit' + (c.others > 1 ? 's' : '') + ' by ' + c.otherUsers + ' other tracer' + (c.otherUsers > 1 ? 's' : '') + ' AFTER the last touch by this tracer; the overlay is pinned to that touch, toggle the today layer to see their work">' + c.others + ' edit' + (c.others > 1 ? 's' : '') + ' by others since</span>' : '') +
         (c.othersBefore ? ' · <span title="' + c.othersBefore + ' edit' + (c.othersBefore > 1 ? 's' : '') + ' by ' + c.otherUsersBefore + ' other tracer' + (c.otherUsersBefore > 1 ? 's' : '') + ' earlier in the window, before the last touch by this tracer (already part of before and after)">' + c.othersBefore + ' earlier by others</span>' : '') +
         (c.today && c.today !== c.root ? ' · <span class="rc-flag" title="The cell has been edited since this tracer\'s last touch; the today layer shows its current state">changed since</span>' : '') +
-        (c.before && c.before.length ? ' · before: ' + c.before.map(shortRoot).map(escapeHtml).join(', ') : '') + '</div>';
+        (c.before && c.before.length ? ' · trunk: ' + c.before.map(shortRoot).map(escapeHtml).join(', ') : '') + '</div>';
       const open = document.createElement('a');
       open.className = 'rc-open'; open.textContent = 'Open ↗'; open.target = '_blank'; open.rel = 'noopener noreferrer';
       open.href = buildOverlayLink(data, person, [c]);
