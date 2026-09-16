@@ -1015,6 +1015,7 @@
   // shade so the join itself is visible (the "after" is their union and would otherwise look unchanged).
   const RC_BEFORE_SHADES = ['#E77500', '#8A4500', '#F5B041', '#B45309', '#FFD27F', '#6B3A00'];
   const RC_CUTOFF_COLOR = '#C2185B';   // split-off fragments: crimson (stays distinct from amber under red-green CVD)
+  const RC_TODAY_COLOR = '#FFFFFF';    // live cell (hidden layer): white, so it never collides with the cell's own 'after' color
 
   function recentCellsUrl(dsKey) {
     const base = (OPTS.snapshotUrl || './data/activity-snapshot.json').replace(/activity-snapshot\.json.*$/, '');
@@ -1070,7 +1071,7 @@
     const meta = document.createElement('div');
     meta.className = 'rc-hint';
     const gen = data.generatedAt ? new Date(data.generatedAt) : null;
-    meta.textContent = (data.windowDays ? 'Last ' + data.windowDays + ' days' : 'Recent') + (gen && !isNaN(gen) ? ' · updated ' + fmtDateLong(gen) : '') + ' · amber shades = before pieces, color = after (as they left it), red = cut off, "today" layer = live (hidden)';
+    meta.textContent = (data.windowDays ? 'Last ' + data.windowDays + ' days' : 'Recent') + (gen && !isNaN(gen) ? ' · updated ' + fmtDateLong(gen) : '') + ' · amber shades = before pieces, color = after (as they left it), red = cut off, white "today" layer = live (hidden)';
     host.appendChild(meta);
     if (!cells.length) {
       const none = document.createElement('div'); none.className = 'rc-hint';
@@ -1168,8 +1169,8 @@
         });
       }
       // "after" and "cut off" are pinned to one second after the tracer's LAST edit, so other
-      // people's later work never shows up in this tracer's picture. "today" is the live cell,
-      // hidden by default; toggle it on to see what has happened since.
+      // people's later work never shows up in this tracer's picture. "today" is the live cell in
+      // white (distinct from the cell's own 'after' color), hidden by default; toggle it on to see what has happened since.
       const nc = {}; nc[String(c.root)] = color;
       const afterLayer = {
         type: 'segmentation', source: seg, name: 'after' + tag,
@@ -1190,10 +1191,10 @@
       }
       if (c.tNow) {
         const todayRoot = String(c.today || c.root);
-        const tc = {}; tc[todayRoot] = color;
+        const tc = {}; tc[todayRoot] = RC_TODAY_COLOR;
         layers.push({
           type: 'segmentation', source: seg, name: 'today' + tag, visible: false,
-          segments: [todayRoot], segmentColors: tc, segmentDefaultColor: color,
+          segments: [todayRoot], segmentColors: tc, segmentDefaultColor: RC_TODAY_COLOR,
           selectedAlpha: 0.55, notSelectedAlpha: 0, objectAlpha: 1,
         });
       }
