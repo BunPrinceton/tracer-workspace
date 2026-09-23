@@ -183,7 +183,20 @@ The site fetches a dataset's file **only when the viewer clicks "Load recent
 cells"** in a profile (cached in memory afterwards), so the feature costs nothing
 on page load. Link building is pure client-side JSON: EM layer + one
 `timestamp`-pinned segmentation layer per selected cell (Spelunker-only key,
-milliseconds) + one live layer holding all selected current roots.
+milliseconds) + one live layer holding all selected current roots + one
+`local://annotations` layer per cell ("edits") replaying the tracer's operations.
+
+Edit points (added 2026-09-17): each cell's `edits[]` lists every operation the
+tracer made on it in chronological order — `{id, t, k: 'm'|'s', a: [[x,y,z]…],
+b: [[x,y,z]…]}` with `a` = source click(s) and `b` = sink click(s) in **nm**
+(operation coords come back in segmentation-base voxels, which differ from the
+viewer resolution on BANC; `viewer.segRes` records that base). `editsTotal` is
+the true count when a cell exceeds the 400-entry cap. The viewer turns each
+click into a point marker and each operation into a source→sink line, colored
+cyan (merge) / magenta (split) through an `annotationProperties` color prop, and
+numbers them `#1, #2…` in the description (with UTC time and the elapsed time
+since the tracer's first edit on that cell). The link opens with the first
+cell's "edits" layer selected so its annotation list is the replay.
 
 Privacy note: the public files contain pseudonyms and root ids only. Root ids
 are not personal data, but anyone with CAVE access could look a root's change

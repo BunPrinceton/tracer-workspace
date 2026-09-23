@@ -112,7 +112,9 @@ Google Sheet via `worker/build-snapshot.mjs`; everyone is a stable `Tracer NN` p
 `worker/anonymize.mjs#pseudonymMap` (sheet headers are `<CAVE user id> <name>`). Dataset pages deep-link a
 profile with `?person=T059&metric=edits`. The profile's **Recent Cells** section lazy-loads
 `datasets/data/recent-cells/<DATASET>.json` (built by `worker/build_recent_cells.py` + `build-recent-cells.mjs`,
-see `worker/README.md`) and builds Spelunker before/now overlay links client-side. Chart y-axis gutters size
+see `worker/README.md`) and builds Spelunker before/now overlay links client-side, plus one `local://annotations`
+"edits" layer per cell that replays the tracer's operations as numbered cyan (merge) / magenta (split) points and
+source→sink lines (coords published in nm; op coords come back in seg-base voxels, see README). Chart y-axis gutters size
 themselves from the widest label (`yGutter`).
 
 ### Search System (`/search.js`)

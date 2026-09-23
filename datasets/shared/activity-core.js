@@ -1016,6 +1016,21 @@
   const RC_BEFORE_SHADES = ['#E77500', '#8A4500', '#F5B041', '#B45309', '#FFD27F', '#6B3A00'];
   const RC_CUTOFF_COLOR = '#C2185B';   // split-off fragments: crimson (stays distinct from amber under red-green CVD)
   const RC_TODAY_COLOR = '#FFFFFF';    // live cell (hidden layer): white, so it never collides with the cell's own 'after' color
+  // Edit-point annotations (one layer per cell, numbered in the order the tracer worked):
+  // cyan = merge, magenta = split. Both stay apart from amber/blue/crimson under red-green CVD.
+  const RC_MERGE_COLOR = '#00E5FF';
+  const RC_SPLIT_COLOR = '#FF2BD6';
+  const RC_EDIT_SHADER = [
+    '#uicontrol float markerSize slider(min=2, max=20, default=7)',
+    '#uicontrol float lineWidth slider(min=1, max=10, default=3)',
+    'void main() {',
+    '  setColor(prop_color());',
+    '  setPointMarkerSize(markerSize);',
+    '  setPointMarkerBorderWidth(1.0);',
+    '  setLineWidth(lineWidth);',
+    '  setEndpointMarkerSize(0.0);',
+    '}',
+  ].join('\n');
 
   function recentCellsUrl(dsKey) {
     const base = (OPTS.snapshotUrl || './data/activity-snapshot.json').replace(/activity-snapshot\.json.*$/, '');
@@ -1025,6 +1040,15 @@
   function fmtAgo(ms) {
     const d = (Date.now() - ms) / 86400000;
     if (d < 1) return 'today'; if (d < 2) return 'yesterday'; return Math.floor(d) + ' days ago';
+  }
+  function fmtClockUtc(ms) { return new Date(ms).toISOString().slice(11, 19) + 'Z'; }
+  function fmtElapsed(ms) {
+    const s = Math.max(0, Math.round(ms / 1000));
+    if (s < 60) return s + 's';
+    const m = Math.floor(s / 60), h = Math.floor(m / 60), d = Math.floor(h / 24);
+    if (h < 1) return m + 'm' + String(s % 60).padStart(2, '0') + 's';
+    if (d < 1) return h + 'h' + String(m % 60).padStart(2, '0') + 'm';
+    return d + 'd' + String(h % 24).padStart(2, '0') + 'h';
   }
 
   async function loadRecentCells(dsKey) {
@@ -1071,7 +1095,7 @@
     const meta = document.createElement('div');
     meta.className = 'rc-hint';
     const gen = data.generatedAt ? new Date(data.generatedAt) : null;
-    meta.textContent = (data.windowDays ? 'Last ' + data.windowDays + ' days' : 'Recent') + (gen && !isNaN(gen) ? ' · updated ' + fmtDateLong(gen) : '') + ' · amber = trunk (the piece most of the cell came from), color = after (as they left it), red = cut off, white "today" layer = live (hidden)';
+    meta.textContent = (data.windowDays ? 'Last ' + data.windowDays + ' days' : 'Recent') + (gen && !isNaN(gen) ? ' · updated ' + fmtDateLong(gen) : '') + ' · amber = trunk (the piece most of the cell came from), color = after (as they left it), red = cut off, white "today" layer = live (hidden) · edit points: cyan = merge, magenta = split, numbered #1, #2… in the order the tracer made them (open the "edits" layer\'s annotation list to replay)';
     host.appendChild(meta);
     if (!cells.length) {
       const none = document.createElement('div'); none.className = 'rc-hint';
@@ -1189,6 +1213,39 @@
         if (c.tNow) cutLayer.timestamp = c.tNow;
         layers.push(cutLayer);
       }
+      // "edits": every operation this tracer made on the cell, as annotations numbered in the order
+      // they made them. Each click point is a marker (cyan merge / magenta split) and each operation
+      // is a line pairing its source side with its sink side; the description carries the sequence
+      // number, kind, wall-clock time and the time since the tracer's first edit on this cell.
+      const edits = Array.isArray(c.edits) ? c.edits : [];
+      if (edits.length) {
+        const toVox = (nm) => nm.map((v, k) => Math.round(v / res[k] * 4) / 4);   // quarter-voxel precision keeps the URL short
+        const centroid = (pts) => pts.length ? pts.reduce((acc, p) => acc.map((v, k) => v + p[k] / pts.length), [0, 0, 0]) : null;
+        const anns = [];
+        const tFirst = edits[0].t;
+        edits.forEach((e, n) => {
+          const isMerge = e.k === 'm';
+          const col = isMerge ? RC_MERGE_COLOR : RC_SPLIT_COLOR;
+          const seq = n + 1;
+          // Kept terse: a 300-edit cell already makes a ~300 KB URL. Reads as "#12 split 14:22:05Z +4m12s".
+          const desc = '#' + seq + ' ' + (isMerge ? 'merge' : 'split') + ' ' + fmtClockUtc(e.t) + ' +' + fmtElapsed(e.t - tFirst);
+          const a = (e.a || []).map(toVox), b = (e.b || []).map(toVox);
+          a.forEach((p, k) => anns.push({ type: 'point', id: 'e' + seq + 'a' + k, point: p, description: desc + ' src', props: [col, seq] }));
+          b.forEach((p, k) => anns.push({ type: 'point', id: 'e' + seq + 'b' + k, point: p, description: desc + ' sink', props: [col, seq] }));
+          const ca = centroid(a), cb = centroid(b);
+          if (ca && cb) anns.push({ type: 'line', id: 'e' + seq + 'l', pointA: ca, pointB: cb, description: desc, props: [col, seq] });
+        });
+        layers.push({
+          type: 'annotation', source: 'local://annotations', name: 'edits' + tag, tab: 'annotations',
+          annotationColor: RC_MERGE_COLOR,
+          annotationProperties: [
+            { id: 'color', type: 'rgb', default: RC_MERGE_COLOR, description: 'cyan = merge, magenta = split' },
+            { id: 'seq', type: 'uint16', default: 0, description: 'order the tracer made the edits in' },
+          ],
+          shader: RC_EDIT_SHADER,
+          annotations: anns,
+        });
+      }
       if (c.tNow) {
         const todayRoot = String(c.today || c.root);
         const tc = {}; tc[todayRoot] = RC_TODAY_COLOR;
@@ -1208,8 +1265,11 @@
         const ext = Math.max(...first.extentNm) / res[0];          // widest side, in x-voxels
         projectionScale = Math.max(4000, Math.min(400000, ext * 1.5));
       }
-    } else if (first && Array.isArray(first.xyz) && first.xyz.length === 3) {
-      position = first.xyz;
+    } else if (first && Array.isArray(first.xyzNm) && first.xyzNm.length === 3) {
+      position = first.xyzNm.map((nm, i) => nm / res[i]);
+    } else if (first && Array.isArray(first.edits) && first.edits.length) {
+      const p = (first.edits[0].a || [])[0] || (first.edits[0].b || [])[0];
+      if (p) position = p.map((nm, i) => nm / res[i]);
     }
     const state = {
       dimensions: { x: [res[0] * 1e-9, 'm'], y: [res[1] * 1e-9, 'm'], z: [res[2] * 1e-9, 'm'] },
@@ -1217,7 +1277,8 @@
       crossSectionScale: 1, projectionScale,
       showSlices: false,
       layers, layout: '3d',
-      selectedLayer: { layer: cells.length > 1 ? 'after ' + shortRoot(cells[0].root) : 'after', visible: true },
+      // Open with the first cell's "edits" list showing (the replay), else its "after" layer.
+      selectedLayer: { layer: (cells[0] && Array.isArray(cells[0].edits) && cells[0].edits.length ? 'edits' : 'after') + (cells.length > 1 ? ' ' + shortRoot(cells[0].root) : ''), visible: true },
       title: (person && person.name ? person.name + ' · ' : '') + (cells.length === 1 ? 'cell ' + shortRoot(cells[0].root) : cells.length + ' cells') + ' · before vs now',
     };
     return site + '#!' + encodeURIComponent(JSON.stringify(state));

@@ -88,10 +88,13 @@ for (const ds of DATASETS) {
       tBefore: c.tBefore,
       t0: c.t0, t1: c.t1,
       ops: c.ops, merges: c.merges, splits: c.splits,
-      xyz: Array.isArray(c.xyz) ? c.xyz.map(Number) : null,
+      xyzNm: Array.isArray(c.xyzNm) ? c.xyzNm.map(Number) : null,
       centerNm: Array.isArray(c.centerNm) ? c.centerNm : null,
       extentNm: Array.isArray(c.extentNm) ? c.extentNm : null,
       l2: c.l2 || null,
+      // chronological edit points (nm): k = m(erge) | s(plit), a = source click(s), b = sink click(s)
+      edits: Array.isArray(c.edits) ? c.edits.map(e => ({ id: Number(e.id), t: Number(e.t), k: e.k === 'm' ? 'm' : 's', a: e.a || [], b: e.b || [] })) : null,
+      editsTotal: c.editsTotal || (Array.isArray(c.edits) ? c.edits.length : 0),
     }));
   }
   const out = {
@@ -106,7 +109,7 @@ for (const ds of DATASETS) {
   // ---- PRIVACY AUDIT ----
   // Strip the numeric fields that legitimately contain long digit runs (root ids,
   // timestamps, coordinates), then assert no tracked worker id survives as a token.
-  const scrub = JSON.stringify(out, (k, v) => (['root', 'roots', 'pieces', 'before', 'tBefore', 'tNow', 'today', 'others', 'otherUsers', 'othersBefore', 'otherUsersBefore', 't0', 't1', 'xyz', 'centerNm', 'extentNm', 'l2'].includes(k) ? undefined : v));
+  const scrub = JSON.stringify(out, (k, v) => (['root', 'roots', 'pieces', 'before', 'tBefore', 'tNow', 'today', 'others', 'otherUsers', 'othersBefore', 'otherUsersBefore', 't0', 't1', 'xyzNm', 'centerNm', 'extentNm', 'l2', 'edits', 'editsTotal', 'segRes'].includes(k) ? undefined : v));
   const idLeaks = [...trackedIds].filter(id => new RegExp('(^|[^0-9])' + id + '([^0-9]|$)').test(scrub));
   const lower = text.toLowerCase();
   const nameLeaks = [...realNames].filter(n => n !== 'tracer' && lower.includes('"' + n) || lower.includes(n + '"'));

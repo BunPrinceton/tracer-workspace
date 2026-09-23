@@ -51,6 +51,7 @@ PRE_CUT = 40         # candidates per user kept for lineage grouping before the 
 MAX_PIECES = 10      # current fragments listed per cell (largest first)
 FOREIGN_FRAC = 0.25  # far side of a split counts as a cut-off only if <= this fraction of the main cell's L2 nodes
 PIECE_WORKERS = 8    # get_latest_roots / get_leaves are chunkedgraph calls (not l2cache-rate-limited)
+MAX_EDITS = 400      # edit points published per cell (chronological; editsTotal keeps the true count)
 
 
 def log(*a):
@@ -153,7 +154,10 @@ def crawl_ops(cg, window_start_ms, max_id, last_seen_id=None, hard_cap=400000):
                 'roots': [int(r) for r in (op.get('roots') or [])],
                 'svs': op_supervoxels(op),
                 'merge': bool(op.get('added_edges')),
-                'xyz': (op.get('sink_coords') or op.get('source_coords') or [None])[0],
+                # click points of the edit, in segmentation-base voxels: merge = one source + one
+                # sink point (the two pieces joined); split = N source (red) + M sink (blue) points
+                'src': [[int(v) for v in p] for p in (op.get('source_coords') or []) if p and len(p) == 3],
+                'sink': [[int(v) for v in p] for p in (op.get('sink_coords') or []) if p and len(p) == 3],
             })
         lowest_id = lo
         if batch and oldest_in_batch is not None and oldest_in_batch < window_start_ms:
@@ -361,12 +365,22 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
     client = CAVEclient(datastack)
     cg = client.chunkedgraph
     info = client.info.get_datastack_info()
+    # Operation click coordinates are voxels at the SEGMENTATION base resolution (BANC: 16 nm while
+    # the viewer runs at 4 nm), so everything positional is published in nm and converted client-side.
+    try:
+        seg_res = [float(x) for x in cg.base_resolution]
+    except Exception as e:
+        log('  base_resolution unavailable, assuming viewer res:', str(e)[:80])
+        seg_res = [float(info.get('viewer_resolution_x') or 1), float(info.get('viewer_resolution_y') or 1), float(info.get('viewer_resolution_z') or 1)]
     viewer = {
         'site': (info.get('viewer_site') or 'https://spelunker.cave-explorer.org/').rstrip('/') + '/',
         'seg': info.get('segmentation_source'),
         'img': (info.get('aligned_volume') or {}).get('image_source'),
         'res': [info.get('viewer_resolution_x'), info.get('viewer_resolution_y'), info.get('viewer_resolution_z')],
+        'segRes': seg_res,
     }
+    def to_nm(pts):
+        return [[int(round(v * r)) for v, r in zip(p, seg_res)] for p in (pts or [])]
     now_ms = int(time.time() * 1000)
     window_start = now_ms - window_days * 86400 * 1000
 
@@ -407,7 +421,11 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
             'ops': len(gops),
             'merges': sum(1 for o in gops if o['merge']),
             'splits': sum(1 for o in gops if not o['merge']),
-            'xyz': last['xyz'],
+            'xyzNm': (to_nm(last['sink'] or last['src']) or [None])[0],
+            # every edit the tracer made on this cell, in the order they made them: id, time,
+            # kind (m = merge, s = split) and the click points (nm) on each side
+            '_ops': [{'id': o['id'], 't': o['ts'], 'k': 'm' if o['merge'] else 's',
+                      'a': to_nm(o['src']), 'b': to_nm(o['sink'])} for o in gops],
             '_first_svs': first['svs'][:4],
             # both edge supervoxels of EVERY op: at the last edit, the fragment holding the most
             # of them is the tracer's cell ("most edits", not "largest")
@@ -497,7 +515,8 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
                     'ops': sum(c['ops'] for c in members),
                     'merges': sum(c['merges'] for c in members),
                     'splits': sum(c['splits'] for c in members),
-                    'xyz': latest['xyz'],
+                    'xyzNm': latest.get('xyzNm'),
+                    '_ops': [o for c in members for o in c.get('_ops', [])],
                     # "before" = ONLY what the tracer's very FIRST edit on this lineage touched, one
                     # second before it. Pieces joined by later edits are growth (translucent colour),
                     # even if the tracer edited them separately first; their trimmed fragments are
@@ -535,6 +554,15 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
     kept = [c for cells in users.values() for c in cells]
     for c in kept:
         c['_edit_roots'] = sorted(set(c.get('roots') or []) | set(c.pop('_touched', [])))
+        # Published edit sequence: chronological, one entry per operation, capped (the viewer
+        # numbers them #1..#N so the order the tracer worked in can be replayed).
+        seen, edits = set(), []
+        for o in sorted(c.pop('_ops', []) or [], key=lambda o: (o['t'], o['id'])):
+            if o['id'] in seen or not (o['a'] or o['b']):
+                continue
+            seen.add(o['id']); edits.append(o)
+        c['editsTotal'] = len(edits)
+        c['edits'] = edits[:MAX_EDITS]
     log(f'  lineage grouping: {len(cand)} candidates -> {len(kept)} cells ({len(regroup)} merged groups re-resolved)')
     # State as the tracer left it (pinned at last edit + 1 s), trunk "before" and live "today" root (parallel).
     t0 = time.time()
