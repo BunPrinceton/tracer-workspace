@@ -198,6 +198,17 @@ numbers them `#1, #2…` in the description (with UTC time and the elapsed time
 since the tracer's first edit on that cell). The link opens with the first
 cell's "edits" layer selected so its annotation list is the replay.
 
+Stray ops (added 2026-09-23): a row only keeps the operations that actually
+landed on its cell. At the tracer's last edit every op's edge supervoxels are
+resolved to their root; an op none of whose supervoxels sit on the row's main
+root or one of its cut-off pieces was an edit on a *different* neuron and is spun
+off into a row of its own for that neuron (grouped by the source-side root, then
+subject to the same most-recent-15-per-tracer cut). This is what stops a "sweep"
+session — cut a bit off neuron A, merge it into B, cut a bit off B, merge into
+C … — from collapsing through the lineage union into one impossible 300-edit row
+on a one-node fragment with replay points scattered over dozens of neurons that
+the link never loads. Ops whose supervoxels cannot be resolved stay with the row.
+
 Privacy note: the public files contain pseudonyms and root ids only. Root ids
 are not personal data, but anyone with CAVE access could look a root's change
 log up and learn who a pseudonym is — weaker than the counts-only snapshot.

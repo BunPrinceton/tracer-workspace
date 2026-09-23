@@ -265,7 +265,15 @@ def score_pieces(cg, roots, touched, desc, orig, main_root=None, edits=None):
     return main, kept[:MAX_PIECES], len(away)
 
 
-def cell_states(cg, cell):
+def publish_edits(cell):
+    """Published edit sequence: chronological, one entry per operation, capped (the viewer numbers
+       them #1..#N so the order the tracer worked in can be replayed). Supervoxels stay private."""
+    ops = cell.pop('_ops_all', None) or []
+    cell['editsTotal'] = len(ops)
+    cell['edits'] = [{k: v for k, v in o.items() if k != 'sv'} for o in ops[:MAX_EDITS]]
+
+
+def cell_states(cg, cell, spawn=True):
     """Fill the cell with:
        - root/roots/pieces/mergedAway  = the cell AS THE TRACER LEFT IT (pinned at tNow = last edit + 1 s)
        - before                        = the TRUNK: the pre-session root that contributes the most
@@ -288,8 +296,9 @@ def cell_states(cg, cell):
             log('  latest-roots@t1 failed for', b, str(e)[:80])
     # touched1 = roots at tNow of every edit's edge supervoxels; edits[root] = how many of the
     # tracer's ops touch that root (an op counts once per side of its edge)
-    touched1, edits = set(), Counter()
-    edges = [[int(x) for x in e] for e in (cell.get('_op_svs') or [])]
+    touched1, edits, sv_root = set(), Counter(), {}
+    all_ops = cell.get('_ops_all') or []
+    edges = [[int(x) for x in (o.get('sv') or [])] for o in all_ops]
     svs = sorted({sv for e in edges for sv in e})
     if svs:
         try:
@@ -303,11 +312,13 @@ def cell_states(cg, cell):
     orig_first = set()
     for b in first_before:
         orig_first |= _l2set(cg, b)
-    main1, _, _ = score_pieces(cg, desc1 | touched1, touched1, desc1, orig_first, edits=edits)
+    # most-voted roots first: score_pieces only sizes the first 2*MAX_PIECES candidates
+    cand_roots = sorted(desc1 | touched1, key=lambda r: (-edits.get(r, 0), r))
+    main1, _, _ = score_pieces(cg, cand_roots, touched1, desc1, orig_first, edits=edits)
     if not main1:
         cell['tNow'] = t_now
         cell['today'] = cell.get('root')
-        for k in ('_edit_roots', '_desc', '_op_svs'):
+        for k in ('_edit_roots', '_desc'):
             cell.pop(k, None)
         return cell
     main_l2 = main1['_l2']
@@ -333,13 +344,38 @@ def cell_states(cg, cell):
     else:
         orig, desc = orig_first, desc1
     # --- 3. cut-offs: fragments of the trunk + small far sides of the tracer's splits
-    main, kept, away = score_pieces(cg, desc | touched1 | {main1['root']}, touched1, desc, orig, main_root=main1['root'])
+    # main first, then the trunk's fragments, then the most-touched roots (score_pieces sizes only 2*MAX_PIECES)
+    cand2 = [main1['root']] + sorted(desc - {main1['root']}) + sorted(touched1 - desc - {main1['root']}, key=lambda r: (-edits.get(r, 0), r))
+    main, kept, away = score_pieces(cg, cand2, touched1, desc, orig, main_root=main1['root'])
     cell['root'] = main['root']
     cell['roots'] = [p['root'] for p in kept]
     cell['pieces'] = [{'root': p['root'], 'l2': p['l2']} for p in kept]
     if away:
         cell['mergedAway'] = away
     cell['tNow'] = t_now
+    # --- 3b. stray ops: an op none of whose supervoxels sit on the cell (or its cut-offs) at tNow was
+    #         an edit on a DIFFERENT neuron. They leave this row: spun off as rows of their own by
+    #         build_dataset (spawn=True), or dropped from an already spun-off row (spawn=False).
+    #         (ops whose supervoxels could not be resolved stay with the cell)
+    own = {p['root'] for p in kept}
+    mine, stray = [], []
+    for o, e in zip(all_ops, edges):
+        rs = [str(sv_root[sv]) for sv in e if sv_root.get(sv)]
+        if not rs or own.intersection(rs):
+            mine.append(o)
+        else:
+            stray.append((rs[0], o))   # rs[0] = the source-side root
+    if stray and mine:
+        cell['_ops_all'] = mine
+        cell['ops'] = len(mine)
+        cell['merges'] = sum(1 for o in mine if o['k'] == 'm')
+        cell['splits'] = sum(1 for o in mine if o['k'] == 's')
+        cell['t0'], cell['t1'] = mine[0]['t'], mine[-1]['t']
+        cell['xyzNm'] = (mine[-1]['b'] or mine[-1]['a'] or [cell.get('xyzNm')])[0]
+        if spawn:
+            cell['_stray'] = stray
+    elif stray:
+        log('  all', len(stray), 'ops of', main['root'], 'resolved elsewhere - row kept as is')
     # --- 4. today: the live descendant of the cell as they left it (largest shared material)
     live = []
     try:
@@ -356,7 +392,7 @@ def cell_states(cg, cell):
                 best, best_n = r, n
         cell['today'] = best or main['root']
     cell['_live'] = sorted(set(live) | {cell['today']})
-    for k in ('_edit_roots', '_desc', '_op_svs'):
+    for k in ('_edit_roots', '_desc'):
         cell.pop(k, None)
     return cell
 
@@ -424,12 +460,12 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
             'xyzNm': (to_nm(last['sink'] or last['src']) or [None])[0],
             # every edit the tracer made on this cell, in the order they made them: id, time,
             # kind (m = merge, s = split) and the click points (nm) on each side
+            # (sv = both edge supervoxels of the op: at the last edit, the fragment holding the most
+            # of them is the tracer's cell ("most edits", not "largest"), and an op whose supervoxels
+            # all end up in OTHER neurons is a stray - see cell_states step 3b)
             '_ops': [{'id': o['id'], 't': o['ts'], 'k': 'm' if o['merge'] else 's',
-                      'a': to_nm(o['src']), 'b': to_nm(o['sink'])} for o in gops],
+                      'a': to_nm(o['src']), 'b': to_nm(o['sink']), 'sv': o['svs'][:2]} for o in gops],
             '_first_svs': first['svs'][:4],
-            # both edge supervoxels of EVERY op: at the last edit, the fragment holding the most
-            # of them is the tracer's cell ("most edits", not "largest")
-            '_op_svs': [o['svs'][:2] for o in gops if o['svs']],
         })
     for user, cells in users.items():
         cells.sort(key=lambda c: c['t1'], reverse=True)
@@ -510,7 +546,6 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
                     'roots': sorted({r for c in members for r in c['roots']}),
                     '_desc': sorted({d for c in members for d in c.get('_desc', [])}),
                     '_touched': sorted({t for c in members for t in c.get('_touched', [])}),
-                    '_op_svs': [e for c in members for e in c.get('_op_svs', [])],
                     't0': earliest['t0'], 't1': latest['t1'],
                     'ops': sum(c['ops'] for c in members),
                     'merges': sum(c['merges'] for c in members),
@@ -554,20 +589,60 @@ def build_dataset(ds_key, datastack, window_days, per_user, state):
     kept = [c for cells in users.values() for c in cells]
     for c in kept:
         c['_edit_roots'] = sorted(set(c.get('roots') or []) | set(c.pop('_touched', [])))
-        # Published edit sequence: chronological, one entry per operation, capped (the viewer
-        # numbers them #1..#N so the order the tracer worked in can be replayed).
-        seen, edits = set(), []
+        # Full edit sequence: chronological, one entry per operation (published by publish_edits).
+        seen, all_ops = set(), []
         for o in sorted(c.pop('_ops', []) or [], key=lambda o: (o['t'], o['id'])):
             if o['id'] in seen or not (o['a'] or o['b']):
                 continue
-            seen.add(o['id']); edits.append(o)
-        c['editsTotal'] = len(edits)
-        c['edits'] = edits[:MAX_EDITS]
+            seen.add(o['id']); all_ops.append(o)
+        c['_ops_all'] = all_ops
     log(f'  lineage grouping: {len(cand)} candidates -> {len(kept)} cells ({len(regroup)} merged groups re-resolved)')
     # State as the tracer left it (pinned at last edit + 1 s), trunk "before" and live "today" root (parallel).
     t0 = time.time()
     with ThreadPoolExecutor(max_workers=PIECE_WORKERS) as ex:
         list(ex.map(lambda c: cell_states(cg, c), kept))
+    # Stray ops: a "sweep" session (cut a bit off neuron A, merge it into B, cut a bit off B, ...)
+    # chains through the lineage union as ONE cell with hundreds of edits on a tiny fragment. Every
+    # op that landed on a neuron other than the cell (or its cut-offs) is now spun off into its own
+    # row for that neuron, so a row's edit points always sit on a segment the link loads.
+    n_stray_cells = sum(1 for c in kept if c.get('_stray'))
+    n_stray_ops = sum(len(c.get('_stray') or []) for c in kept)
+    spawned, resolved = 0, 0
+    if n_stray_ops:
+        for user, cells in users.items():
+            by_root = defaultdict(list)
+            for c in cells:
+                for root, o in c.pop('_stray', None) or []:
+                    by_root[root].append(o)
+            new = []
+            for root, sops in by_root.items():
+                sops.sort(key=lambda o: (o['t'], o['id']))
+                first, last = sops[0], sops[-1]
+                new.append({
+                    'root': root, 'roots': [root], 'before': [], 'tBefore': first['t'] - 1000,
+                    't0': first['t'], 't1': last['t'],
+                    'ops': len(sops), 'merges': sum(1 for o in sops if o['k'] == 'm'),
+                    'splits': sum(1 for o in sops if o['k'] == 's'),
+                    'xyzNm': (last['b'] or last['a'] or [None])[0],
+                    '_ops_all': sops, '_first_svs': list(first.get('sv') or []), '_spawned': True,
+                })
+            spawned += len(new)
+            # only the rows that make the per-user cut (most recent last touch) are worth resolving
+            cells.extend(new)
+            cells.sort(key=lambda c: c['t1'], reverse=True)
+            del cells[per_user:]
+            todo = [c for c in cells if c.pop('_spawned', False)]
+            resolved += len(todo)
+            with ThreadPoolExecutor(max_workers=BEFORE_WORKERS) as ex:
+                list(ex.map(resolve_before, todo))
+            for c in todo:
+                c['_edit_roots'] = sorted(set(c.get('roots') or []))
+            with ThreadPoolExecutor(max_workers=PIECE_WORKERS) as ex:
+                list(ex.map(lambda c: cell_states(cg, c, spawn=False), todo))
+        kept = [c for cells in users.values() for c in cells]
+    log(f'  stray ops: {n_stray_ops} ops on other neurons in {n_stray_cells} cells -> {spawned} rows spun off, {resolved} kept after the per-user cut')
+    for c in kept:
+        publish_edits(c)
     # Edits by OTHER users on the same cell (any op whose current root is one of this cell's
     # own fragments, live or as-left, by a different user) -> "changed hands" signal. Only the
     # cell's own roots count: the neighbours a tracer took pieces from are not their cell.
