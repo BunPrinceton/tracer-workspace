@@ -114,8 +114,11 @@ profile with `?person=T059&metric=edits`. The profile's **Recent Cells** section
 `datasets/data/recent-cells/<DATASET>.json` (built by `worker/build_recent_cells.py` + `build-recent-cells.mjs`,
 see `worker/README.md`) and builds Spelunker before/now overlay links client-side, plus one `local://annotations`
 "edits" layer per cell that replays the tracer's operations as numbered cyan (merge) / magenta (split) points and
-source→sink lines (coords published in nm; op coords come back in seg-base voxels, see README). Chart y-axis gutters size
-themselves from the widest label (`yGutter`).
+source→sink lines (coords published in nm; op coords come back in seg-base voxels, see README). The same panel can
+**check proofreading status live from CAVE** with the viewer's own token (`RC_PROOF` per-dataset table config; token in
+localStorage `cave_token`, shared with `/link-restore/`, whose page is also the sign-in popup receiver; BANC =
+`backbone_proofread`, MINNIE = `vortex_proofreading_status` + `proofreading_status_and_strategy`, RETINA/CA3 = none). Chart
+y-axis gutters size themselves from the widest label (`yGutter`).
 
 ### Search System (`/search.js`)
 

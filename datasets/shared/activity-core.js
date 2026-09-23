@@ -1121,7 +1121,8 @@
         (c.others ? ' · <span class="rc-flag" title="' + c.others + ' edit' + (c.others > 1 ? 's' : '') + ' by ' + c.otherUsers + ' other tracer' + (c.otherUsers > 1 ? 's' : '') + ' AFTER the last touch by this tracer; the overlay is pinned to that touch, toggle the today layer to see their work">' + c.others + ' edit' + (c.others > 1 ? 's' : '') + ' by others since</span>' : '') +
         (c.othersBefore ? ' · <span title="' + c.othersBefore + ' edit' + (c.othersBefore > 1 ? 's' : '') + ' by ' + c.otherUsersBefore + ' other tracer' + (c.otherUsersBefore > 1 ? 's' : '') + ' earlier in the window, before the last touch by this tracer (already part of before and after)">' + c.othersBefore + ' earlier by others</span>' : '') +
         (c.today && c.today !== c.root ? ' · <span class="rc-flag" title="The cell has been edited since this tracer\'s last touch; the today layer shows its current state">changed since</span>' : '') +
-        (c.before && c.before.length ? ' · trunk: ' + c.before.map(shortRoot).map(escapeHtml).join(', ') : '') + '</div>';
+        (c.before && c.before.length ? ' · trunk: ' + c.before.map(shortRoot).map(escapeHtml).join(', ') : '') + '</div>' +
+        '<div class="rc-status-line" data-i="' + i + '" hidden></div>';
       const open = document.createElement('a');
       open.className = 'rc-open'; open.textContent = 'Open ↗'; open.target = '_blank'; open.rel = 'noopener noreferrer';
       open.href = buildOverlayLink(data, person, [c]);
@@ -1148,6 +1149,7 @@
     });
     bar.appendChild(all); bar.appendChild(openSel);
     host.appendChild(bar);
+    renderRcCaveBar(host, data, cells, list);
     updateRcOpenBtn();
   }
   function updateRcOpenBtn() {
@@ -1161,6 +1163,196 @@
   function viewerName(data) {
     const site = (data && data.viewer && data.viewer.site) || '';
     return /flywire/i.test(site) ? 'FlyWire' : 'Spelunker';
+  }
+
+  /* ---- Proofreading status, live from CAVE with the viewer's own token ----
+     "Tie the dataset tracker to CAVE authentication tokens": the viewer signs in to CAVE once
+     (token kept only in this browser's localStorage under 'cave_token', the same slot the
+     /link-restore/ tool uses), then "Check proofreading status" asks the dataset's CAVE
+     materialization server, live at "now", which of the listed cells are marked proofread.
+     The token goes only to that dataset's CAVE server and to global.daf-apis.com (to confirm
+     who it belongs to). Nothing is stored anywhere but this browser. The status tables carry
+     the CAVE user id of whoever marked a cell; it is deliberately NOT rendered (pseudonyms only).
+     Root ids exceed 2^53, so request bodies are built as text and responses parsed with long
+     digit runs quoted first. */
+  const RC_PROOF = {
+    BANC: { datastack: 'brain_and_nerve_cord', tables: [
+      { name: 'backbone_proofread', kind: 'bool', label: 'backbone proofread',
+        hint: 'backbone_proofread: no major false merges and all major branches extended' } ] },
+    MINNIE: { datastack: 'minnie65_phase3_v1', tables: [
+      { name: 'vortex_proofreading_status', kind: 'bool', label: 'proofread (VORTEX / 611)',
+        hint: 'vortex_proofreading_status: proofread flag for the cells assigned to 611' },
+      { name: 'proofreading_status_and_strategy', kind: 'compartment', label: 'axon / dendrite',
+        hint: 'proofreading_status_and_strategy: compartment status and extension strategy' } ] },
+    RETINA: { none: 'CAVE has no live proofreading-status table for this dataset (only 2025 test tables and EyeWire II completion tags), so there is nothing to check yet.' },
+    CA3: { none: 'CAVE has no proofreading-status table for this dataset.' },
+    FAFB: { none: 'Not available for FlyWire from here.' },
+  };
+  const RC_AUTH_REALM = 'https://global.daf-apis.com/sticky_auth/api/v1/authorize';
+  const RC_WHOAMI = 'https://global.daf-apis.com/auth/api/v1/user/me';
+  function rcGetToken() { try { return localStorage.getItem('cave_token') || ''; } catch (e) { return ''; } }
+  function rcSetToken(t) {
+    try { if (t) localStorage.setItem('cave_token', t); else localStorage.removeItem('cave_token'); } catch (e) {}
+    RC.who = null;
+  }
+  function rcSiteRoot() {
+    const s = document.querySelector('script[src*="activity-core.js"]');
+    return s ? s.src.replace(/datasets\/shared\/activity-core\.js.*$/, '') : new URL('../../', location.href).href;
+  }
+  function rcSignIn() {
+    // /link-restore/ doubles as the popup receiver: it posts the token back to the opener (same origin only)
+    const receiver = rcSiteRoot() + 'link-restore/?cave_auth_return=1';
+    window.open(RC_AUTH_REALM + '?redirect=' + encodeURIComponent(receiver), 'cave_signin', 'width=520,height=660');
+  }
+  window.addEventListener('message', (ev) => {
+    if (ev.origin !== location.origin) return;
+    if (ev.data && typeof ev.data.caveToken === 'string' && ev.data.caveToken) { rcSetToken(ev.data.caveToken); rcRenderAuth(); }
+  });
+  function rcParseBig(text) {
+    // quote any 16+ digit integer value before JSON.parse so root ids survive intact
+    return JSON.parse(text.replace(/([\[:,]\s*)(-?\d{16,})(?=\s*[,\]}])/g, '$1"$2"'));
+  }
+  function rcIds(list) { return [...new Set(list.map(String).filter((r) => /^\d+$/.test(r)))]; }
+  function rcAuthHeaders(tok) { return { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok }; }
+  function rcAuthError(r) { const e = new Error('CAVE rejected the token (HTTP ' + r.status + ')'); e.auth = true; return e; }
+  async function rcWhoAmI(tok) {
+    const r = await fetch(RC_WHOAMI, { headers: { Authorization: 'Bearer ' + tok } });
+    if (r.status === 401 || r.status === 403) throw rcAuthError(r);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  }
+  async function rcLiveQuery(server, datastack, table, roots, tok) {
+    const url = 'https://' + server + '/materialize/api/v3/datastack/' + datastack + '/query?return_pyarrow=False&arrow_format=False&split_positions=True';
+    const body = '{"table":"' + table + '","timestamp":"' + new Date().toISOString() + '","filter_in_dict":{"' + table + '":{"pt_root_id":[' + rcIds(roots).join(',') + ']}}}';
+    const r = await fetch(url, { method: 'POST', headers: rcAuthHeaders(tok), body });
+    if (r.status === 401 || r.status === 403) throw rcAuthError(r);
+    if (!r.ok) throw new Error(table + ': HTTP ' + r.status);
+    return rcParseBig(await r.text());
+  }
+  async function rcIsLatest(server, segTable, roots, tok) {
+    const ids = rcIds(roots);
+    const r = await fetch('https://' + server + '/segmentation/api/v1/table/' + segTable + '/is_latest_roots', { method: 'POST', headers: rcAuthHeaders(tok), body: '{"node_ids":[' + ids.join(',') + ']}' });
+    if (r.status === 401 || r.status === 403) throw rcAuthError(r);
+    if (!r.ok) throw new Error('is_latest_roots: HTTP ' + r.status);
+    const j = await r.json();
+    const out = {};
+    ids.forEach((id, i) => { out[id] = !!(j.is_latest || [])[i]; });
+    return out;
+  }
+  function rcTruthy(v) { return v === true || v === 't' || v === 'true' || v === 1 || v === '1'; }
+  function rcPill(cls, text, title) {
+    return '<span class="rc-pill ' + cls + '"' + (title ? ' title="' + escapeHtml(title) + '"' : '') + '>' + escapeHtml(text) + '</span>';
+  }
+  // Fetch status for the listed cells and fill each row's status line. Returns a summary string.
+  async function rcCheckStatus(dsKey, data, cells, list) {
+    const cfg = RC_PROOF[dsKey];
+    if (!cfg || !cfg.tables) throw new Error((cfg && cfg.none) || 'No proofreading-status table configured for ' + dsKey + '.');
+    const tok = rcGetToken();
+    if (!tok) { const e = new Error('Sign in to CAVE first.'); e.auth = true; throw e; }
+    const m = String((data.viewer && data.viewer.seg) || '').match(/https:\/\/([^/]+)\/segmentation\/table\/([^/?#]+)/);
+    if (!m) throw new Error('This feed has no CAVE segmentation source.');
+    const server = m[1], segTable = m[2];
+    // The live query refuses any root that is not current at "now", so first ask which of the
+    // roots on file still are (one batched call); only those are looked up, in chunks of 100.
+    const latest = await rcIsLatest(server, segTable, cells.flatMap((c) => [c.today, c.root]), tok);
+    const keyRoots = rcIds(cells.flatMap((c) => [c.today, c.root])).filter((r) => latest[r]);
+    const chunks = []; for (let i = 0; i < keyRoots.length; i += 100) chunks.push(keyRoots.slice(i, i + 100));
+    const tables = await Promise.all(cfg.tables.map(async (t) => {
+      const parts = await Promise.all(chunks.map((ch) => rcLiveQuery(server, cfg.datastack, t.name, ch, tok)));
+      return parts.flat();
+    }));
+    const byRoot = cfg.tables.map((t, ti) => {
+      const idx = {};
+      (tables[ti] || []).forEach((row) => { if (row.deleted) return; const k = String(row.pt_root_id); (idx[k] = idx[k] || []).push(row); });
+      return idx;
+    });
+    let marked = 0, stale = 0;
+    cells.forEach((c, i) => {
+      const line = list.querySelector('.rc-status-line[data-i="' + i + '"]');
+      if (!line) return;
+      const live = String(c.today || c.root);
+      const pills = [];
+      if (latest[live] === false) {
+        stale++;
+        pills.push(rcPill('rc-pill-stale', 'changed since update · status unknown', 'This cell has been edited since the nightly update, so its current root differs from the one on file; reload after the next update.'));
+      } else {
+        let any = false;
+        cfg.tables.forEach((t, ti) => {
+          const rows = (byRoot[ti][live] || byRoot[ti][String(c.root)] || []).slice().sort((a, b) => (b.created || 0) - (a.created || 0));
+          if (!rows.length) return;
+          const r = rows[0];
+          const when = r.created ? ' · ' + fmtDateLong(new Date(Number(r.created))) : '';
+          if (t.kind === 'bool') {
+            const yes = rcTruthy(r.proofread);
+            if (yes) any = true;
+            pills.push(rcPill(yes ? 'rc-pill-yes' : 'rc-pill-no', (yes ? '✓ ' : '✗ ') + t.label + when, t.hint));
+          } else {
+            const ax = rcTruthy(r.status_axon), dx = rcTruthy(r.status_dendrite);
+            if (ax || dx) any = true;
+            const sa = (r.strategy_axon || '').replace(/^axon_/, '').replace(/_/g, ' ') || (ax ? 'done' : 'none');
+            const sd = (r.strategy_dendrite || '').replace(/^dendrite_/, '').replace(/_/g, ' ') || (dx ? 'done' : 'none');
+            pills.push(rcPill(ax || dx ? 'rc-pill-yes' : 'rc-pill-no', 'axon: ' + sa + ' · dendrite: ' + sd + when, t.hint));
+          }
+        });
+        if (any) marked++;
+        if (!pills.length) pills.push(rcPill('rc-pill-no', 'not marked', 'No row for this cell in ' + cfg.tables.map((t) => t.name).join(' / ')));
+      }
+      line.innerHTML = pills.join(' ');
+      line.hidden = false;
+    });
+    return marked + ' of ' + cells.length + ' marked proofread' + (stale ? ' · ' + stale + ' changed since the update' : '') + ' · checked ' + new Date().toLocaleTimeString();
+  }
+  function rcRenderAuth() {
+    const bar = document.getElementById('rc-cave'); if (!bar) return;
+    const st = bar.querySelector('.rc-cave-status'); const tok = rcGetToken();
+    const signBtn = bar.querySelector('.rc-cave-signin'); const chk = bar.querySelector('.rc-cave-check');
+    if (!tok) {
+      st.textContent = 'Not signed in to CAVE.';
+      signBtn.textContent = 'Sign in to CAVE';
+    } else {
+      signBtn.textContent = 'Sign out';
+      if (RC.who) st.textContent = 'Signed in to CAVE as user #' + RC.who;
+      else {
+        st.textContent = 'Signed in (token saved in this browser)…';
+        rcWhoAmI(tok).then((u) => { RC.who = u && u.id; rcRenderAuth(); }).catch((e) => {
+          if (e.auth) { st.textContent = 'The saved CAVE token was rejected; sign in again.'; }
+          else { st.textContent = 'Signed in (token saved; could not confirm who: ' + e.message + ')'; }
+        });
+      }
+    }
+    if (chk) chk.disabled = !tok || !(RC_PROOF[STATE.dataset] && RC_PROOF[STATE.dataset].tables);
+  }
+  function renderRcCaveBar(host, data, cells, list) {
+    const cfg = RC_PROOF[STATE.dataset] || {};
+    const bar = document.createElement('div'); bar.className = 'rc-cave'; bar.id = 'rc-cave';
+    const st = document.createElement('div'); st.className = 'rc-cave-status';
+    const chk = document.createElement('button'); chk.type = 'button'; chk.className = 'rc-btn rc-cave-check'; chk.textContent = 'Check proofreading status';
+    chk.title = cfg.tables ? 'Ask CAVE (live) which of these cells are marked proofread: ' + cfg.tables.map((t) => t.name).join(', ') : (cfg.none || 'Not available');
+    const signBtn = document.createElement('button'); signBtn.type = 'button'; signBtn.className = 'rc-btn rc-btn-ghost rc-cave-signin';
+    const pasteBtn = document.createElement('button'); pasteBtn.type = 'button'; pasteBtn.className = 'rc-btn rc-btn-ghost'; pasteBtn.textContent = 'Paste a token';
+    const paste = document.createElement('div'); paste.className = 'rc-cave-paste'; paste.hidden = true;
+    const inp = document.createElement('input'); inp.type = 'password'; inp.className = 'rc-token'; inp.placeholder = 'CAVE token'; inp.autocomplete = 'off';
+    const save = document.createElement('button'); save.type = 'button'; save.className = 'rc-btn'; save.textContent = 'Save token';
+    const pasteHint = document.createElement('div'); pasteHint.className = 'rc-hint';
+    pasteHint.innerHTML = 'If the sign-in popup does not hand back a token, paste one: in Python, <code>from caveclient import CAVEclient; print(CAVEclient().auth.token)</code>, or read <code>~/.cloudvolume/secrets/cave-secret.json</code>.';
+    paste.appendChild(inp); paste.appendChild(save); paste.appendChild(pasteHint);
+    const out = document.createElement('div'); out.className = 'rc-hint rc-cave-out';
+    out.textContent = cfg.tables
+      ? 'Live from CAVE with your own login. The token is kept only in this browser and sent only to ' + ((data.viewer && (String(data.viewer.seg).match(/https:\/\/([^/]+)/) || [])[1]) || 'the dataset\'s CAVE server') + ' and global.daf-apis.com.'
+      : (cfg.none || 'Not available for this dataset.');
+    signBtn.addEventListener('click', () => { if (rcGetToken()) { rcSetToken(''); rcRenderAuth(); } else rcSignIn(); });
+    pasteBtn.addEventListener('click', () => { paste.hidden = !paste.hidden; if (!paste.hidden) inp.focus(); });
+    save.addEventListener('click', () => { const t = inp.value.trim(); inp.value = ''; if (t) { rcSetToken(t); paste.hidden = true; rcRenderAuth(); } });
+    inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') save.click(); });
+    chk.addEventListener('click', async () => {
+      chk.disabled = true; const was = chk.textContent; chk.textContent = 'Checking…';
+      try { out.textContent = await rcCheckStatus(STATE.dataset, data, cells, list); }
+      catch (e) { out.textContent = (e.auth ? 'CAVE login needed: ' : 'Could not check: ') + e.message; if (e.auth && /rejected/.test(e.message)) { rcSetToken(''); } }
+      finally { chk.textContent = was; rcRenderAuth(); }
+    });
+    bar.appendChild(st); bar.appendChild(chk); bar.appendChild(signBtn); bar.appendChild(pasteBtn);
+    host.appendChild(bar); host.appendChild(paste); host.appendChild(out);
+    rcRenderAuth();
   }
 
   // Build a self-contained viewer state: EM + pinned "before"/"after"/"cut off" layers per cell + a hidden live "today" layer.

@@ -651,3 +651,16 @@
 #activity-app .rc-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-top: 0.75rem; }
 #activity-app .rc-more { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.6875rem; color: var(--aa-ink-3); margin-left: 0.25rem; }
 #activity-app .rc-flag { color: #8a4500; background: #FFE7CF; border-radius: 3px; padding: 0 0.3em; font-size: 0.6875rem; }
+
+/* Recent Cells: live proofreading status from CAVE (viewer's own token) */
+#activity-app .rc-cave { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-top: 0.75rem; padding: 0.5rem 0.625rem; border: 1px solid var(--aa-rule-2); border-radius: 6px; background: var(--aa-card); }
+#activity-app .rc-cave-status { flex: 1 1 12rem; font-size: 0.75rem; color: var(--aa-ink-2); }
+#activity-app .rc-cave-paste { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; margin-top: 0.5rem; }
+#activity-app .rc-token { flex: 1 1 16rem; min-height: 44px; font-family: var(--aa-mono); font-size: 0.75rem; padding: 0.4rem 0.5rem; border: 1px solid var(--aa-rule); border-radius: 4px; color: var(--aa-ink); background: var(--aa-card); }
+#activity-app .rc-cave-paste .rc-hint { flex: 1 1 100%; margin: 0; }
+#activity-app .rc-status-line { display: flex; flex-wrap: wrap; gap: 0.25rem; margin-top: 3px; }
+#activity-app .rc-status-line[hidden] { display: none; }
+#activity-app .rc-pill { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; font-size: 0.6875rem; line-height: 1.5; border-radius: 3px; padding: 0 0.4em; background: var(--aa-rule-2); color: var(--aa-ink-2); }
+#activity-app .rc-pill-yes { background: #DCEBFA; color: #0F4C81; }   /* blue = marked proofread (site palette is blue/amber; no red/green semantics) */
+#activity-app .rc-pill-no { background: var(--aa-rule-2); color: var(--aa-ink-3); }
+#activity-app .rc-pill-stale { background: #FFE7CF; color: #8a4500; }

@@ -212,6 +212,35 @@ C … — from collapsing through the lineage union into one impossible 300-edit
 on a one-node fragment with replay points scattered over dozens of neurons that
 the link never loads. Ops whose supervoxels cannot be resolved stay with the row.
 
+### Proofreading status, live from CAVE (added 2026-09-23)
+
+The Recent Cells list has a **Check proofreading status** button that asks CAVE, with the
+*viewer's own* token, which of the listed cells are marked proofread. This is the
+"tie the dataset tracker to CAVE authentication tokens" request, reading 2 (live status;
+sign-in-to-see-names can be layered on later since the token plumbing is now there).
+
+- **Sign-in:** the token lives only in the browser's `localStorage['cave_token']`, the same
+  slot `/link-restore/` uses, and that page (`?cave_auth_return=1`) doubles as the popup
+  receiver for the `global.daf-apis.com/sticky_auth` flow. A paste-a-token fallback exists.
+  The token is validated with `GET global.daf-apis.com/auth/api/v1/user/me` (CORS allows
+  borkbook.com) and shown as "user #id" only.
+- **Lookup:** `RC_PROOF` in `activity-core.js` maps each dataset to its status tables:
+  BANC `backbone_proofread` (bool); MINNIE `vortex_proofreading_status` (bool, the 611
+  assignment table) + `proofreading_status_and_strategy` (axon/dendrite status + strategy);
+  RETINA and CA3 have no live status table (RETINA only has 2025 `test0N_sstroeh_table_proofstatus`
+  tests and EyeWire II tags) so the button explains that instead.
+  Calls: `POST <server>/segmentation/api/v1/table/<seg>/is_latest_roots` (which roots on file
+  are still current), then `POST <server>/materialize/api/v3/datastack/<ds>/query?return_pyarrow=False&arrow_format=False`
+  with `{table, timestamp: now, filter_in_dict: {table: {pt_root_id: [...]}}}` in chunks of
+  100 (the server 500s on any root that is not current at the timestamp, so the is-latest
+  filter comes first; 200 ids ≈ 7 s, 100 ≈ 2.5 s). Materialize CORS is `*`; the segmentation
+  and auth servers echo `https://borkbook.com` only.
+- **Root ids exceed 2^53:** bodies are built as text and responses go through `rcParseBig`
+  (quotes 16+ digit integers before `JSON.parse`).
+- **Rendering:** blue pill = marked (site palette is blue/amber, no red/green semantics),
+  grey = not marked / false, amber = "changed since update · status unknown" (root no
+  longer current). The tables' `user_id` (who marked it) is never rendered.
+
 Privacy note: the public files contain pseudonyms and root ids only. Root ids
 are not personal data, but anyone with CAVE access could look a root's change
 log up and learn who a pseudonym is — weaker than the counts-only snapshot.
