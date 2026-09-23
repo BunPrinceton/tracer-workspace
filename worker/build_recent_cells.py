@@ -21,7 +21,7 @@ The public, pseudonymized files are produced by worker/build-recent-cells.mjs.
 
 Usage:  python worker/build_recent_cells.py [--days 7] [--per-user 15] [--only BANC,RETINA]
 """
-import argparse, datetime as dt, json, os, random, sys, time
+import argparse, datetime as dt, json, os, random, sys, threading, time
 from collections import Counter, defaultdict
 from concurrent.futures import ThreadPoolExecutor
 
@@ -54,8 +54,22 @@ PIECE_WORKERS = 8    # get_latest_roots / get_leaves are chunkedgraph calls (not
 MAX_EDITS = 400      # edit points published per cell (chronological; editsTotal keeps the true count)
 
 
+# Datasets are crawled one CAVE server at a time: the l2cache rate limit (600 req/min) is per
+# server, so datasets that share one queue behind each other, while different servers run
+# concurrently (BANC on cave.fanc-fly.com next to the minnie.microns-daf.com trio). Keep in
+# sync with DATASTACKS.
+SERVER_GROUPS = {
+    'minnie':  ['RETINA', 'MINNIE', 'CA3'],
+    'fanc':    ['BANC'],
+    'flywire': ['FAFB'],
+}
+
+_tls = threading.local()   # per-thread log prefix so concurrent datasets stay readable
+
+
 def log(*a):
-    print(time.strftime('%H:%M:%S'), *a, flush=True)
+    prefix = getattr(_tls, 'prefix', '')
+    print(time.strftime('%H:%M:%S'), *((prefix,) + a if prefix else a), flush=True)
 
 
 def parse_ts(s):
@@ -697,17 +711,27 @@ def main():
         with open(RAW_PATH) as f:
             raw = json.load(f)
     out = raw.get('datasets', {})
-    for ds_key, datastack in DATASTACKS.items():
-        if only and ds_key not in only:
-            continue
-        log(f'== {ds_key} ({datastack})')
-        t0 = time.time()
-        try:
-            out[ds_key] = build_dataset(ds_key, datastack, args.days, args.per_user, state)
-            out[ds_key]['generatedAt'] = dt.datetime.utcnow().isoformat() + 'Z'
-            log(f'  done in {time.time()-t0:.1f}s')
-        except Exception as e:
-            log(f'  FAILED: {str(e)[:300]}')
+
+    def run_group(keys):
+        for ds_key in keys:
+            datastack = DATASTACKS[ds_key]
+            _tls.prefix = f'[{ds_key}]'
+            log(f'== {ds_key} ({datastack})')
+            t0 = time.time()
+            try:
+                out[ds_key] = build_dataset(ds_key, datastack, args.days, args.per_user, state)
+                out[ds_key]['generatedAt'] = dt.datetime.utcnow().isoformat() + 'Z'
+                log(f'  done in {time.time()-t0:.1f}s')
+            except Exception as e:
+                log(f'  FAILED: {str(e)[:300]}')
+        _tls.prefix = ''
+
+    groups = [[k for k in keys if k in DATASTACKS and (not only or k in only)] for keys in SERVER_GROUPS.values()]
+    groups = [g for g in groups if g]
+    t_all = time.time()
+    with ThreadPoolExecutor(max_workers=len(groups) or 1) as ex:
+        list(ex.map(run_group, groups))
+    log(f'all datasets done in {time.time()-t_all:.1f}s ({len(groups)} server groups in parallel)')
     with open(STATE_PATH, 'w') as f:
         json.dump(state, f, indent=1)
     with open(RAW_PATH, 'w') as f:

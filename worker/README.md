@@ -170,9 +170,12 @@ Spelunker link that overlays *before* (amber, pinned to a past timestamp) agains
    its **current** root (`get_roots` at now, batched) and the first-edit
    supervoxels to their roots one second **before** that edit (`get_roots` at
    `t0 - 1s`). Writes `worker/recent-cells-raw.json` (git-ignored: keyed by REAL
-   CAVE user ids) and `worker/recent-cells-state.json`. Whole run ≈ 5 min.
-   Datastacks: RETINA=`stroeh_mouse_retina`, MINNIE=`minnie65_phase3_v1`,
+   CAVE user ids) and `worker/recent-cells-state.json`. Datastacks: RETINA=`stroeh_mouse_retina`, MINNIE=`minnie65_phase3_v1`,
    CA3=`zheng_ca3`, BANC=`brain_and_nerve_cord`, FAFB=`flywire_fafb_production`.
+   Datasets are crawled per CAVE **server group** (`SERVER_GROUPS`): RETINA/MINNIE/CA3
+   share minnie.microns-daf.com and run one after another (its l2cache limit of
+   600 req/min is per server), while BANC (cave.fanc-fly.com) runs concurrently in
+   its own thread. Log lines carry a `[DATASET]` prefix. Whole run ≈ 9 min.
 2. `node worker/build-recent-cells.mjs`
    Maps user id → `Tracer NN` with the SAME `pseudonymMap()` the snapshot uses
    (sheet headers are `<CAVE user id> <name>`), drops users not in the sheet, and
