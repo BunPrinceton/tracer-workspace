@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEC Soma Crater &amp; Spine Annotation Protocol v1.0 - Princeton Tracers</title>
+    <link rel="stylesheet" href="../print.css" media="print">
+    <link rel="stylesheet" href="../sidebar.css">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { font-size: 18px; line-height: 1.6; }
+        body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background-color: #f5f5f5; color: #1a1a1a; min-height: 100vh; }
+
+        /* Navigation */
+        nav { background-color: #1a1a1a; padding: 0.75rem 1.5rem; }
+        nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.25rem 1.5rem; justify-content: center; max-width: 1200px; margin: 0 auto; }
+        nav a { color: #e5e5e5; text-decoration: none; font-size: 0.875rem; padding: 0.5rem 0; display: inline-block; }
+        nav a:hover, nav a:focus { text-decoration: underline; text-underline-offset: 4px; }
+        nav a[aria-current="page"] { color: #ffffff; font-weight: 600; }
+
+        /* More dropdown */
+        .nav-more {
+            position: relative;
+        }
+
+        .nav-more-btn {
+            background: none;
+            border: none;
+            color: #e5e5e5;
+            font-size: 0.875rem;
+            padding: 0.5rem 0;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .nav-more-btn:hover,
+        .nav-more-btn:focus {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .nav-more-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            border-radius: 4px;
+            padding: 0.25rem 0;
+            min-width: 160px;
+            z-index: 1000;
+            list-style: none;
+        }
+
+        .nav-more-menu li {
+            padding: 0;
+        }
+
+        .nav-more-menu a {
+            display: block;
+            padding: 0.5rem 1rem;
+            white-space: nowrap;
+        }
+
+        .nav-more-menu a:hover,
+        .nav-more-menu a:focus {
+            background-color: #333;
+        }
+
+        .nav-more:hover .nav-more-menu,
+        .nav-more:focus-within .nav-more-menu {
+            display: block;
+        }
+
+
+        /* Main content */
+        main { max-width: 1200px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+        /* Page header */
+        .page-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 2px solid #d4d4d4; }
+        .page-header h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .page-header p { color: #525252; font-size: 1.0625rem; }
+
+        .sop-meta { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-top: 0.75rem; font-size: 0.8125rem; color: #737373; }
+        .sop-meta strong { color: #525252; }
+
+        .version-badge { display: inline-block; font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; padding: 0.25rem 0.5rem; border-radius: 3px; background-color: #059669; color: #ffffff; margin-left: 0.5rem; vertical-align: middle; }
+
+        /* Semantic class table */
+        .class-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .class-table th, .class-table td { padding: 0.625rem 0.75rem; text-align: left; border-bottom: 1px solid #e5e5e5; font-size: 0.875rem; }
+        .class-table th { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #525252; background-color: #f9fafb; }
+        .class-table td:first-child { font-weight: 600; white-space: nowrap; }
+        .class-table tbody tr:hover { background-color: #fafafa; }
+        .layer-table td:nth-child(2) { white-space: nowrap; }
+
+        /* Important callouts */
+        .callout { background-color: #fef3c7; border-left: 4px solid #d97706; padding: 0.75rem 1rem; margin: 0.75rem 0; border-radius: 0 4px 4px 0; font-size: 0.9375rem; }
+        .callout strong { color: #92400e; }
+
+        /* Footer */
+        footer { max-width: 1000px; margin: 0 auto; padding: 2rem 1.5rem; border-top: 1px solid #e5e5e5; font-size: 0.875rem; color: #737373; }
+        footer a { color: #525252; }
+        footer a:hover { color: #1a1a1a; }
+        .footer-nav { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+        .suggest-edit { color: #737373; font-size: 0.8125rem; }
+        .suggest-edit:hover { color: #2563eb; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            html { font-size: 16px; }
+            main { padding: 1.5rem 1rem; }
+            .class-table { display: block; overflow-x: auto; }
+        }
+
+        :focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+        .skip-link { position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+        .skip-link:focus { position: fixed; top: 0; left: 0; width: auto; height: auto; padding: 1rem; background: #2563eb; color: #ffffff; z-index: 10000; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<nav aria-label="Main navigation">
+    <ul>
+        <li><a href="../../">Dashboard</a></li>
+        <li><a href="../../gallery/">Gallery</a></li>
+        <li><a href="../../sop/" aria-current="page">SOPs</a></li>
+        <li><a href="../../pipeline/">Pipeline</a></li>
+        <li><a href="../../task-history/">Task History</a></li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">Datasets &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../../datasets/">Dataset Dashboard</a></li>
+                <li><a href="../../datasets/retina/">RETINA</a></li>
+                <li><a href="../../datasets/minnie/">MINNIE</a></li>
+                <li><a href="../../datasets/ca3/">CA3</a></li>
+                <li><a href="../../datasets/banc/">BANC</a></li>
+                <li><a href="../../datasets/fafb/">FAFB</a></li>
+            </ul>
+        </li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">Experimental &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../../experimental/">Experimental tracertools Catalog</a></li>
+                <li><a href="../../link-restore/">Link Restorer</a></li>
+                <li><a href="../../tracertools-catalog/">tracertools Catalog</a></li>
+            </ul>
+        </li>
+        <li class="nav-more">
+            <button class="nav-more-btn" aria-expanded="false" aria-haspopup="true">More &#9662;</button>
+            <ul class="nav-more-menu">
+                <li><a href="../../publications/">Publications</a></li>
+                <li><a href="../../links/">Curated Links</a></li>
+                <li><a href="../../cave-local/">CAVE Local</a></li>
+                <li><a href="../../archive/">Archive</a></li>
+                <li><a href="../../glossary/">Glossary</a></li>
+                <li><a href="../../games/sandy-pong/">Sandy Pong</a></li>
+                <li><a href="../../thoughts/">Thoughts</a></li>
+                <li><a href="../../thanks/">Thanks</a></li>
+                <li><a href="https://github.com/BunPrinceton/tracer-workspace" target="_blank" rel="noopener noreferrer">GitHub</a></li>
+            </ul>
+        </li>
+    </ul>
+</nav>
+
+<div class="sop-shell">
+<aside id="sop-sidebar" class="sop-sidebar" aria-label="SOP section navigation"></aside>
+<main id="main-content" role="main">
+
+    <header class="page-header">
+        <h1>MEC Soma Crater &amp; Spine Annotation Protocol <span class="version-badge">v1.0</span></h1>
+        <p>Point-annotating synapse-associated craters and somatic spines on the somas of 15 MEC cells in Neuroglancer (Spelunker), to build a manually reviewed reference for automated detection.</p>
+        <div class="sop-meta">
+            <span><strong>Status:</strong> Working protocol (Sep 2026)</span>
+            <span><strong>Tool:</strong> Neuroglancer / Spelunker</span>
+            <span><strong>Tracking:</strong> <a href="https://docs.google.com/spreadsheets/d/1wAhxrhgg1CnVhqJduTGWqg5aIOJOFtoO9qGs81rKysg/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer">annotation spreadsheet (Google Sheet)</a></span>
+        </div>
+    </header>
+
+    <!-- PROCEDURE (default view) -->
+    <div class="sop-view sop-card active" data-view="procedure" data-view-label="Procedure">
+        <h2>General task</h2>
+        <p>Annotate soma-surface craters and spines in 15 cells: five pyramidal, five stellate, and five inhibitory. Each cell has its own row in the <a href="https://docs.google.com/spreadsheets/d/1wAhxrhgg1CnVhqJduTGWqg5aIOJOFtoO9qGs81rKysg/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer">annotation spreadsheet</a> with a starting Neuroglancer link and columns for claiming, saving progress, and marking completion.</p>
+        <p>These annotations become a manually reviewed reference for developing and evaluating automated detection of perisomatic synapse-associated craters and somatic spines. They will be used to find missed structures, assess false detections, and improve how the code separates neighboring craters.</p>
+
+        <div class="callout">
+            <strong>Save often:</strong> the annotation layers are <code>local://annotations</code> layers that live only in the Neuroglancer state. Nothing is stored until you press <strong>Share</strong> and paste the resulting link into the spreadsheet. Save a link to <code>ng_link_temp</code> whenever you pause, and again before closing the tab.
+        </div>
+
+        <h2 id="layers">Annotation layers</h2>
+        <p>Every starting link comes with the image, the segmentation showing the single assigned cell, and three empty point-annotation layers. Use them as-is; do not rename them or add layers, because the evaluation matches points by layer name.</p>
+        <table class="class-table layer-table">
+            <thead><tr><th>Layer</th><th>Color</th><th>What goes in it</th></tr></thead>
+            <tbody>
+                <tr><td>craters</td><td>red</td><td>One point per confirmed synapse-associated crater, near the center of the depression on the soma surface.</td></tr>
+                <tr><td>not_a_crater</td><td>yellow</td><td>Optional: indentations you checked and ruled out (e.g. a passing myelinated axon), so you don't revisit them.</td></tr>
+                <tr><td>spines</td><td>cyan</td><td>Points directly on somatic spine protrusions. Several points on one extended or complex spine are fine.</td></tr>
+            </tbody>
+        </table>
+        <p>To place a point: select the layer in the top layer bar, then <strong>Ctrl+click</strong> on the location in a 2D panel or on the mesh in the 3D panel. Points placed on the mesh land on the surface, which is where crater centers and spines should sit.</p>
+
+        <figure class="sop-figure">
+            <img src="images/neuroglancer-layout.png" alt="Neuroglancer with the 2D image panel on the left, the 3D soma mesh covered in red, yellow and cyan points on the right, and the not_a_crater annotation list open in the side panel" style="max-width:100%;height:auto;border:1px solid #d4d4d4;border-radius:4px;">
+            <figcaption>The working setup: 2D image on the left for verifying each candidate, the 3D mesh on the right for finding them, and the selected annotation layer's point list in the side panel. The layer bar across the top holds img, seg, craters, not_a_crater, and spines.</figcaption>
+        </figure>
+
+        <h2 id="step-by-step">Step-by-step</h2>
+        <ol>
+            <li><strong>Claim and open the cell.</strong> Pick an unclaimed row in the spreadsheet, put your name in the <code>user</code> column, and open the link in <code>ng_link_start</code>. Inspect the soma systematically: rotate the 3D mesh to examine every side, including surfaces hidden in the starting view. Focus on the soma and the broad transitions into major processes, including the apical neck. Exclude thin branches extending away from the soma.</li>
+            <li><strong>Find candidate craters and verify them in 2D.</strong> When you find a depression in the mesh, navigate to that location in the image volume. Examine adjacent sections and, where helpful, another viewing plane to decide whether the depression corresponds to a synaptic contact. <em>A surface indentation alone is not enough for a positive label.</em></li>
+            <li><strong>Mark confirmed craters.</strong> In the <code>craters</code> layer, place the point near the center of the depression on the soma surface so it can be matched spatially to a detected region. Aim for one representative point per distinct crater. If several clearly distinguishable craters lie close together, mark each one separately.</li>
+            <li><strong>Rule out other indentations.</strong> Passing structures, such as myelinated axons, can deform the soma without forming the synaptic contact being sought. Do not label these as craters. When useful, drop a yellow point in <code>not_a_crater</code> to record that the spot has been checked. Keep uncertain sites out of <em>both</em> confirmed layers and note them for review (see <a href="#uncertain">Uncertain sites</a>).</li>
+            <li><strong>Mark somatic spines.</strong> In the <code>spines</code> layer, place points directly on recognizable spine protrusions arising from the soma or the included neck region. Spatial coverage matters more than an exact one-point-per-spine count: multiple points on an extended or complex spine are acceptable, since the evaluation checks whether a detected structure overlaps one or more annotations rather than requiring one-to-one correspondence. Do not label ordinary mesh roughness or departing branches as spines.</li>
+            <li><strong>Review and record completion.</strong> Make a final pass around the soma for missed surfaces and mislabeled structures. Press <strong>Share</strong> in Neuroglancer, copy the Spelunker link, paste it into <code>ng_link_final</code>, and set the <code>status</code> column to <strong>DONE</strong>. If you stop before the review is complete, paste the latest link into <code>ng_link_temp</code> instead and leave <code>status</code> blank.</li>
+        </ol>
+
+        <h2 id="decision-rules">Quick decision rules</h2>
+        <table class="class-table">
+            <thead><tr><th>You see</th><th>Do this</th></tr></thead>
+            <tbody>
+                <tr><td>Depression in the mesh + synaptic contact confirmed in 2D</td><td>Red point in <code>craters</code>, centered on the depression.</td></tr>
+                <tr><td>Two or more distinguishable craters side by side</td><td>One red point per crater.</td></tr>
+                <tr><td>Depression caused by a passing axon or other structure, no synapse</td><td>No crater point. Optionally a yellow point in <code>not_a_crater</code>.</td></tr>
+                <tr><td>Depression you can't resolve either way</td><td>No point in either crater layer. Note the location for review.</td></tr>
+                <tr><td>Protrusion from the soma or included neck region</td><td>Cyan point(s) in <code>spines</code>, on the protrusion itself.</td></tr>
+                <tr><td>Mesh roughness or a branch leaving the soma</td><td>Nothing.</td></tr>
+                <tr><td>Thin branch away from the soma</td><td>Out of scope, nothing.</td></tr>
+            </tbody>
+        </table>
+
+        <h2 id="uncertain">Uncertain sites</h2>
+        <p>Sites you cannot confidently call either way must not go into <code>craters</code> or <code>not_a_crater</code>. Record them for review instead: note the cell's segment ID and the coordinates from the Neuroglancer position box, and pass them along with your DONE update so they can be looked at together.</p>
+
+        <h2 id="example">Working example</h2>
+        <p>The first annotated cell in the spreadsheet (the first stellate row, marked DONE) illustrates the intended labeling approach. Open its <code>ng_link_final</code> to see how densely craters and spines were marked and where the not_a_crater points were used. It is a working example, not an exhaustive reference: it likely captures many prominent crater-forming contacts but should not be treated as the ground truth for what counts.</p>
+
+        <figure class="sop-figure">
+            <img src="images/example-soma-annotated.png" alt="3D mesh of a soma with red crater points across its surface, cyan spine points on protrusions, and a few yellow not_a_crater points" style="max-width:100%;height:auto;border:1px solid #d4d4d4;border-radius:4px;">
+            <figcaption>A finished soma: red = craters, cyan = spines, yellow = not_a_crater. Note that crater points sit in the depressions on the soma body, spine points sit on protrusions, and the thin departing branches are left unannotated.</figcaption>
+        </figure>
+    </div>
+
+    <!-- DETAILS -->
+    <div class="sop-view sop-card" data-view="details" data-view-label="Details">
+        <h2>Purpose</h2>
+        <p>Automated detection of perisomatic synapse-associated craters and somatic spines is under development for the MEC volume. A manually reviewed set of 15 somas, balanced across pyramidal, stellate, and inhibitory cells, gives the developers a reference to identify missed structures, assess false detections, and tune how neighboring craters are separated.</p>
+
+        <h2>Scope</h2>
+        <ul>
+            <li><strong>In:</strong> the soma surface and broad transitions into major processes, including the apical neck.</li>
+            <li><strong>Out:</strong> thin branches extending away from the soma; spines on dendrites proper; anything not on the assigned cell.</li>
+        </ul>
+
+        <h2>Data</h2>
+        <ul>
+            <li><strong>Volume:</strong> MEC alignment 2025-09 image (16 &times; 16 &times; 45 nm voxels) with the July 2026 stage-2 extended segmentation.</li>
+            <li><strong>Viewer:</strong> Spelunker (the lab's Neuroglancer), with the assigned cell pre-selected in the segmentation layer.</li>
+            <li><strong>Spreadsheet columns:</strong> <code>segid</code>, <code>cell type</code>, <code>ng_link_start</code>, <code>ng_link_temp</code>, <code>ng_link_final</code>, <code>user</code>, <code>status</code>.</li>
+        </ul>
+
+        <h2>How the annotations are evaluated</h2>
+        <ul>
+            <li>Crater points are matched spatially to detected regions, which is why each point should sit near the center of its depression.</li>
+            <li>Spine points are checked for overlap: a detected structure counts if it overlaps one or more annotated points. Coverage beats exact counts.</li>
+            <li>Yellow <code>not_a_crater</code> points are for the annotator's own bookkeeping and as negative examples; they are not required.</li>
+        </ul>
+
+        <h2>Related documents</h2>
+        <ul>
+            <li><a href="https://docs.google.com/spreadsheets/d/1wAhxrhgg1CnVhqJduTGWqg5aIOJOFtoO9qGs81rKysg/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer">Annotation spreadsheet</a> &mdash; assignments, starting links, and completion tracking</li>
+            <li><a href="../mec-synapse-annotation/">SOP-007: MEC Synapse Annotation Protocol</a> &mdash; the synapse-level annotation task in the same volumes</li>
+            <li><a href="../../task-history/#mec">Task History &middot; MEC &amp; Hippocampus era</a></li>
+            <li><a href="../../glossary/">Glossary</a> &mdash; synapse, spine, soma definitions</li>
+        </ul>
+
+        <h2>Revision history</h2>
+        <ul>
+            <li><strong>v1.0</strong> (2026-09-25) &mdash; initial SOP, written from the task instructions and the layer setup in the starting Neuroglancer links.</li>
+        </ul>
+    </div>
+
+</main>
+</div>
+
+<footer>
+    <div class="footer-nav">
+        <div>
+            <a href="../">SOP Index</a>
+        </div>
+        <a href="#" id="suggest-edit-link" class="suggest-edit" target="_blank" rel="noopener noreferrer">Please Suggest Edits</a>
+    </div>
+</footer>
+
+<script>
+(function() {
+    var link = document.getElementById('suggest-edit-link');
+    if (link) {
+        var title = encodeURIComponent('[SOP] ' + document.title.replace(' - Princeton Tracers', ''));
+        link.href = 'https://github.com/BunPrinceton/tracer-workspace/issues/new?template=sop-update.yml&title=' + title + '&body=' + encodeURIComponent('**SOP:** ' + window.location.href + '\n\n**Reason for update:**\n');
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+    }
+})();
+</script>
+<script src="../sidebar.js" defer></script>
+<script src="../../search.js" defer></script>
+</body>
+</html>

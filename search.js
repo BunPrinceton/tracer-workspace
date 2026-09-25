@@ -431,6 +431,15 @@
             text: "mec synapse annotation protocol sop-007 medial entorhinal cortex zheng hippocampus validate ai generated synapses painted cleft line annotations to_check checked layers new tracer synapses presynaptic postsynaptic axo-axonic bouton bouton shaft psd axo-somatic monadic zhihao nico shader jay gager webknossos save changes autosave"
         },
         {
+            title: "MEC Soma Crater & Spine Annotation Protocol",
+            url: "sop/soma-crater-spine-annotation/",
+            section: "SOPs · Current procedures",
+            description: "SOP-008: point-annotating synapse-associated craters and somatic spines on 15 MEC somas in Neuroglancer (Spelunker) — craters / not_a_crater / spines layers, verifying each mesh depression in 2D, excluding passing axons and thin branches, and recording ng links + DONE status in the assignment spreadsheet.",
+            aliases: ["soma craters", "crater annotation", "somatic spines", "sop-008", "crater sop", "spine annotation", "soma crater spine annotation"],
+            keywords: ["mec", "medial entorhinal cortex", "soma", "crater", "craters", "spine", "spines", "somatic spine", "perisomatic", "synapse", "point annotation", "neuroglancer", "spelunker", "not_a_crater", "pyramidal", "stellate", "inhibitory", "apical neck", "myelinated axon", "mesh", "automated detection", "spreadsheet", "ng_link_final"],
+            text: "mec soma crater spine annotation protocol sop-008 medial entorhinal cortex 15 cells five pyramidal five stellate five inhibitory neuroglancer spelunker share link spreadsheet ng_link_start ng_link_temp ng_link_final user status done craters not_a_crater spines layers red yellow cyan point annotations rotate 3d mesh depression verify 2d adjacent sections synaptic contact one point per crater passing structures myelinated axons deform soma uncertain sites review somatic spine protrusions apical neck exclude thin branches mesh roughness automated detection perisomatic synapse-associated craters false detections neighboring craters working example"
+        },
+        {
             title: "Task History",
             url: "task-history/",
             section: "Task History",

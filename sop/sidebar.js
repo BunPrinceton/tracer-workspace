@@ -28,7 +28,8 @@
         { label: 'Current procedures', items: [
             { id: 'SOP-001', title: 'WebKnossos - GT Segmentation Task Handling', dir: 'gt-task-handling/' },
             { id: 'SOP-006', title: 'WebKnossos - GT Semantic Segmentation Protocol', dir: 'voxel-painting/' },
-            { id: 'SOP-007', title: 'MEC Synapse Annotation Protocol', dir: 'mec-synapse-annotation/' }
+            { id: 'SOP-007', title: 'MEC Synapse Annotation Protocol', dir: 'mec-synapse-annotation/' },
+            { id: 'SOP-008', title: 'MEC Soma Crater & Spine Annotation', dir: 'soma-crater-spine-annotation/' }
         ] },
         { label: 'Recent procedures', items: [
             { id: 'SOP-005', title: 'WebKnossos - General GT Protocol Guidelines', dir: 'gt-protocol-guidelines/' }
