@@ -95,6 +95,10 @@
         .class-table td:first-child { font-weight: 600; white-space: nowrap; }
         .class-table tbody tr:hover { background-color: #fafafa; }
         .layer-table td:nth-child(2) { white-space: nowrap; }
+        /* sidebar.css lets .sop-card cells break anywhere; keep normal wrapping and unbroken headers here */
+        .class-table th, .class-table td { overflow-wrap: normal; word-break: normal; }
+        .class-table th { white-space: nowrap; }
+        .rules-table td:first-child { white-space: normal; width: 45%; }
 
         /* Important callouts */
         .callout { background-color: #fef3c7; border-left: 4px solid #d97706; padding: 0.75rem 1rem; margin: 0.75rem 0; border-radius: 0 4px 4px 0; font-size: 0.9375rem; }
@@ -219,7 +223,7 @@
         </ol>
 
         <h2 id="decision-rules">Quick decision rules</h2>
-        <table class="class-table">
+        <table class="class-table rules-table">
             <thead><tr><th>You see</th><th>Do this</th></tr></thead>
             <tbody>
                 <tr><td>Depression in the mesh + synaptic contact confirmed in 2D</td><td>Red point in <code>craters</code>, centered on the depression.</td></tr>
