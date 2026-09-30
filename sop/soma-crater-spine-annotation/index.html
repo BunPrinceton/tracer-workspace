@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MEC Soma Crater &amp; Spine Annotation Protocol v1.0 - Princeton Tracers</title>
+    <title>MEC Soma Crater &amp; Spine Annotation Protocol v1.1 - Princeton Tracers</title>
     <link rel="stylesheet" href="../print.css" media="print">
     <link rel="stylesheet" href="../sidebar.css">
     <style>
@@ -103,6 +103,10 @@
         /* Important callouts */
         .callout { background-color: #fef3c7; border-left: 4px solid #d97706; padding: 0.75rem 1rem; margin: 0.75rem 0; border-radius: 0 4px 4px 0; font-size: 0.9375rem; }
         .callout strong { color: #92400e; }
+        .clarification { border: 1px solid #e5e5e5; border-left: 4px solid #2563eb; border-radius: 0 4px 4px 0; padding: 0.75rem 1rem; margin: 1rem 0; font-size: 0.9375rem; background-color: #fafafa; }
+        .clarification p { margin: 0.375rem 0; }
+        .clarification .q { color: #525252; }
+        .clarification .who { font-weight: 600; color: #1e3a8a; }
 
         /* Footer */
         footer { max-width: 1000px; margin: 0 auto; padding: 2rem 1.5rem; border-top: 1px solid #e5e5e5; font-size: 0.875rem; color: #737373; }
@@ -176,7 +180,7 @@
 <main id="main-content" role="main">
 
     <header class="page-header">
-        <h1>MEC Soma Crater &amp; Spine Annotation Protocol <span class="version-badge">v1.0</span></h1>
+        <h1>MEC Soma Crater &amp; Spine Annotation Protocol <span class="version-badge">v1.1</span></h1>
         <p>Point-annotating synapse-associated craters and somatic spines on the somas of 15 MEC cells in Neuroglancer (Spelunker), to build a manually reviewed reference for automated detection.</p>
         <div class="sop-meta">
             <span><strong>Status:</strong> Working protocol (Sep 2026)</span>
@@ -228,6 +232,7 @@
             <tbody>
                 <tr><td>Depression in the mesh + synaptic contact confirmed in 2D</td><td>Red point in <code>craters</code>, centered on the depression.</td></tr>
                 <tr><td>Two or more distinguishable craters side by side</td><td>One red point per crater.</td></tr>
+                <tr><td>Shallow or subtle indentation that lines up with a synapse in 2D (common on inhibitory cells)</td><td>Red point in <code>craters</code>. Depth is not the criterion, the synapse is. See <a href="#shallow-craters">Shallow craters on inhibitory cells</a>.</td></tr>
                 <tr><td>Depression caused by a passing axon or other structure, no synapse</td><td>No crater point. Optionally a yellow point in <code>not_a_crater</code>.</td></tr>
                 <tr><td>Depression you can't resolve either way</td><td>No point in either crater layer. Note the location for review.</td></tr>
                 <tr><td>Protrusion from the soma or included neck region</td><td>Cyan point(s) in <code>spines</code>, on the protrusion itself.</td></tr>
@@ -235,6 +240,24 @@
                 <tr><td>Thin branch away from the soma</td><td>Out of scope, nothing.</td></tr>
             </tbody>
         </table>
+
+        <h2 id="shallow-craters">Shallow craters on inhibitory cells</h2>
+        <p>Inhibitory somas tend to have much shallower craters than pyramidal cells, so the team asked whether shallow ones should be marked at all, or only sites that make an obvious crater. The answer from Eric (who requested the task): <strong>mark them</strong>. Any indentation that corresponds to a synapse location counts, however subtle. Depth is not the criterion; the synapse is.</p>
+        <p>The detection code is expected to find the shallow craters on inhibitory cells and measure them as smaller than those on pyramidal cells, so including them does not corrupt the results. What matters is being <strong>consistent within each cell</strong> about what you accept as a crater: pyramidal cells should genuinely end up with deeper, more pronounced craters, and inhibitory cells with small, shallow ones.</p>
+
+        <div class="clarification">
+            <p class="q"><span class="who">Question (2026-09-30):</span> Are we sure shallow craters are wanted? Should every synapse on the cell body be marked, or only ones that make an obvious crater?</p>
+            <p><span class="who">Eric:</span> Shallow ones should be okay for inhibitory cells if they do seem to correspond with synapse locations.</p>
+            <p class="q"><span class="who">Follow-up:</span> So as long as it corresponds to a synaptic location, more subtle craters are fine to include and won't corrupt the results?</p>
+            <p><span class="who">Eric:</span> It should be fine. The hope is the actual code will find shallow ones in inhibitory cells and measure them as smaller than those found on pyramidal cells, for example. I would just try to stay consistent with what is an acceptable crater per cell, so pyramidal do genuinely have deeper and more impactful ones where inhibitory really only have small, shallow ones.</p>
+            <p class="q"><span class="who">Follow-up:</span> Is the location below too shallow to mark?</p>
+            <p><span class="who">Eric:</span> No, that looks fine. It's an indent that corresponds with a synapse, so mark it as a crater.</p>
+        </div>
+
+        <figure class="sop-figure">
+            <img src="images/shallow-crater-inhibitory.png" alt="Left: 2D image of an inhibitory soma surface with a slight indentation at a synaptic contact, marked with a green check and the word Good. Right: the 3D mesh of the same soma with a green arrow pointing to the barely visible dip where the crater point was placed." style="max-width:100%;height:auto;border:1px solid #d4d4d4;border-radius:4px;">
+            <figcaption>The site Eric confirmed as a valid crater on an inhibitory cell. In 2D (left) the soma surface only dips slightly under the synaptic contact; in 3D (right, green arrow) the depression is barely visible on the mesh. It still gets a red <code>craters</code> point because it is an indentation that corresponds with a synapse.</figcaption>
+        </figure>
 
         <h2 id="uncertain">Uncertain sites</h2>
         <p>Sites you cannot confidently call either way must not go into <code>craters</code> or <code>not_a_crater</code>. Record them for review instead: note the cell's segment ID and the coordinates from the Neuroglancer position box, and pass them along with your DONE update so they can be looked at together.</p>
@@ -283,6 +306,7 @@
 
         <h2>Revision history</h2>
         <ul>
+            <li><strong>v1.1</strong> (2026-09-30) &mdash; added <a href="#shallow-craters">Shallow craters on inhibitory cells</a> (Eric's clarification that subtle indentations count when they correspond to a synapse, with an example) and a matching decision-rule row. <a href="v1.0.html">v1.0</a> preserved.</li>
             <li><strong>v1.0</strong> (2026-09-25) &mdash; initial SOP, written from the task instructions and the layer setup in the starting Neuroglancer links.</li>
         </ul>
     </div>
