@@ -1,12 +1,12 @@
 /* Local snapshot refresher: fetch all 9 tabs from the sheet, anonymize, and
-   overwrite datasets/data/activity-snapshot.json (the committed public fallback).
+   overwrite <DATASETS_DIR>/data/activity-snapshot.json (served by the gated Worker; see DATASETS_DIR below).
    RAW responses (with real names) are held only in memory here and are never
    written to disk. Run: `SHEET_ID=<id> node worker/build-snapshot.mjs`
    (or drop the id into a git-ignored worker/.dev.vars as `SHEET_ID=<id>`).
 
    The Google Sheet ID is a secret and MUST NOT be committed — it is read from
    the environment or worker/.dev.vars, never hardcoded. */
-import { writeFileSync, readFileSync, existsSync } from 'node:fs';
+import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import { anonymizeSheet, ALL_TABS } from './anonymize.mjs';
@@ -25,7 +25,12 @@ function loadSheetId() {
   process.exit(1);
 }
 const SHEET_ID = loadSheetId();
-const OUT_SNAPSHOT = join(HERE, '..', 'datasets', 'data', 'activity-snapshot.json');
+// Where the served datasets/ tree lives. Since 2026-10-01 it is NOT in this (public) repo:
+// it is the gated Worker's assets folder in the private borkbook-datasets repo. daily-refresh.ps1
+// sets DATASETS_DIR to that folder; the fallback keeps `node worker/build-snapshot.mjs` working
+// for an ad-hoc local build.
+const DATASETS_DIR = process.env.DATASETS_DIR || join(HERE, '..', 'datasets');
+const OUT_SNAPSHOT = join(DATASETS_DIR, 'data', 'activity-snapshot.json');
 
 function stripJsonp(text) {
   const start = text.indexOf('{');
@@ -108,6 +113,7 @@ if (leaks.length || idLeaks.length || sheetLeak) {
 if (!dataChanged) {
   console.log('no data change since last run - snapshot left as-is (last updated ' + generatedAt + ')');
 } else {
+  mkdirSync(join(DATASETS_DIR, 'data'), { recursive: true });
   writeFileSync(OUT_SNAPSHOT, JSON.stringify(snapshot, null, 0));
   console.log('wrote', OUT_SNAPSHOT, '(last updated ' + generatedAt + ')');
 }

@@ -179,7 +179,8 @@ Spelunker link that overlays *before* (amber, pinned to a past timestamp) agains
 2. `node worker/build-recent-cells.mjs`
    Maps user id → `Tracer NN` with the SAME `pseudonymMap()` the snapshot uses
    (sheet headers are `<CAVE user id> <name>`), drops users not in the sheet, and
-   writes `datasets/data/recent-cells/<DATASET>.json` (~20–100 KB each). Refuses
+   writes `<DATASETS_DIR>/data/recent-cells/<DATASET>.json` (~20–100 KB each; since 2026-10-01
+   `DATASETS_DIR` = the private borkbook-datasets checkout's `site/datasets`, see CLAUDE.md). Refuses
    to write on any tracked id / real name / sheet id leak (exit 2).
 
 The site fetches a dataset's file **only when the viewer clicks "Load recent

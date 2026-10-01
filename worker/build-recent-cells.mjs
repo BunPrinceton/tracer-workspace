@@ -2,7 +2,7 @@
 
    Input  (git-ignored, REAL CAVE user ids):  worker/recent-cells-raw.json
            written by worker/build_recent_cells.py (local CAVE crawl).
-   Output (public, pseudonyms only):          datasets/data/recent-cells/<DATASET>.json
+   Output (gated, pseudonyms only):           <DATASETS_DIR>/data/recent-cells/<DATASET>.json
 
    The user id -> "Tracer NN" mapping is the SAME one the activity snapshot uses
    (anonymize.mjs#pseudonymMap over the live sheet headers), so a profile's recent
@@ -19,7 +19,9 @@ import { ALL_TABS, DATASETS, pseudonymMap } from './anonymize.mjs';
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(HERE, '..');
 const RAW = join(HERE, 'recent-cells-raw.json');
-const OUT_DIR = join(ROOT, 'datasets', 'data', 'recent-cells');
+// Served datasets/ tree: lives in the private borkbook-datasets repo since 2026-10-01 (daily-refresh.ps1
+// sets DATASETS_DIR); fallback = the old in-repo location for ad-hoc local builds.
+const OUT_DIR = join(process.env.DATASETS_DIR || join(ROOT, 'datasets'), 'data', 'recent-cells');
 
 function loadSheetId() {
   if (process.env.SHEET_ID) return process.env.SHEET_ID.trim();

@@ -125,3 +125,8 @@ worker/daily-refresh.ps1
 # Recent-cells crawler: raw feed keyed by REAL CAVE user ids + crawl state. Never publish.
 worker/recent-cells-raw.json
 worker/recent-cells-state.json
+
+# Datasets section moved OUT of this public repo (2026-10-01): it is served by the Cloudflare
+# Worker in the private BunPrinceton/borkbook-datasets repo behind Cloudflare Access. Ignore a
+# stray local build so the gated content can never be re-committed here by accident.
+datasets/

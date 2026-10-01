@@ -103,7 +103,18 @@ All pages follow these principles (documented in `index.html` comments):
 /search.js           # Site-wide search system — INDEX is the canonical page registry
 ```
 
-### Datasets tab (`/datasets/`)
+### Datasets tab (`/datasets/`) — GATED, lives in a separate private repo
+
+**The `datasets/` folder is no longer in this repo (moved 2026-10-01).** `borkbook.com/datasets/*` is
+served by the Cloudflare Worker `borkbook-datasets` (private repo `BunPrinceton/borkbook-datasets`, local
+checkout `Desktoporkbook-datasets`, assets in `site/datasets/`) behind a **Cloudflare Access** email
+allowlist (One-time PIN login; Zero Trust team `square-frost-1214`). URLs are unchanged, so the nav links
+and `search.js` entries here still point at `datasets/...` and keep working; the Datasets pages still load
+`/search.js` and the shared nav from GitHub Pages. `datasets/` is git-ignored here so a stray build can't be
+re-committed. Manage who gets in: Zero Trust dashboard > Access controls > Applications > borkbook Datasets.
+The build tooling stays in `worker/` here (it needs the git-ignored `worker/.dev.vars`): the build scripts
+write to `$env:DATASETS_DIR` (set by `daily-refresh.ps1` to the private checkout) and the refresh script
+commits there and runs `wrangler deploy`, instead of committing to this repo.
 
 Anonymized activity dashboards (cross-dataset springboard + one page per dataset) driven by
 `datasets/shared/activity-core.js` + `activity.css`. Data = `datasets/data/activity-snapshot.json`,
