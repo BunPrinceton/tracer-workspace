@@ -63,7 +63,9 @@ All pages follow these principles (documented in `index.html` comments):
                      # point into /tasks/ — they still resolve; not yet repointed to the SOP versions.
 /sop/                # SOPs — left-rail layout (sidebar.js/.css): Overview landing + per-SOP
                      # Procedure/Details views; versioned subdirs. See "SOP Section" below.
-/gallery/            # Single unified gallery (~245 figures, 9 stacked sections): BANC, FAFB 2019,
+/gallery/            # Single unified gallery (~1,290 figures, 18 stacked sections incl. ~900 auto-imported
+                     # contribution cards with no figure id; every figure is search-indexed via
+                     # search-index.js): BANC, FAFB 2019,
                      # Reference Materials, Visual Glossary, OL Cell Name Guide, Fly Synapses,
                      # FlyWire Cheatsheet, Optic Lobe Diagrams, Image Bounty. Sticky section jump-nav.
                      # Category filter <select> (all/synapse/structure/defect/segmentation/funny/training/
@@ -100,7 +102,8 @@ All pages follow these principles (documented in `index.html` comments):
                      # deployed on Render free as sandy-pong-server.onrender.com). Linked from
                      # the More dropdown. See "Sandy Pong" below.
 /drive_docs_output/  # Curated archived Google Docs (FlyWire-Training, Triage-Additions, etc.)
-/search.js           # Site-wide search system — INDEX is the canonical page registry
+/search.js           # Site-wide search engine + curated INDEX (page registry); /search-index.js is the
+                     # generated half (gallery figures, glossary terms, page text) — see "Search System"
 ```
 
 ### Datasets tab (`/datasets/`) — GATED, lives in a separate private repo
@@ -135,11 +138,12 @@ y-axis gutters size themselves from the widest label (`yGutter`).
 
 `/search.js` is loaded by every HTML page as `<script src=".../search.js" defer></script>` with depth-correct relative path. It is the heart of the site:
 
-- **`INDEX` array** at the top of search.js is the **canonical registry of every page and every searchable artifact** (currently ~116 entries: pages + 44 BANC gallery images + per-collection reference-gallery entries + archived docs + per-item archive pages). The 185 merged reference figures are indexed at the **collection level** (one entry each → `gallery/#<section-anchor>`), not per-figure, to avoid flooding the dropdown. **Adding a page = adding an INDEX entry**, in the same commit. No other data source.
-- **Entry schema**: `{title, url, section, description, aliases, keywords}`. Field weights for scoring: title=10, aliases=8, keywords=6, section=4, description=2 (exact word; fuzzy/transposition variants score 60-80% of these).
-- **Matcher**: hand-rolled (no Fuse.js dep). Substring → prefix → 1-edit-distance → 1-transposition. Plus Google-style operators: `+word` required, `-word` excluded, `"exact phrase"`, `section:name` field filter.
-- **Public API**: `window.SiteSearch = {INDEX, search, scoreEntry, highlight, parseQuery, SITE_ROOT}` — `/archive/` uses these to render its All Documents listing and search-results view from the same source.
-- **Top-nav search bar** auto-injects into every page's `<nav>` (creates a `<ul>` if missing — robust to leaf docs with minimal nav). Dropdown shows up to 8 ranked results; Enter goes to `/archive/?q=...`; arrow + Enter opens highlighted result directly.
+- **`INDEX` array** at the top of search.js is the **curated registry** (~167 entries: pages, 71 hand-described gallery figures, archived docs, per-item archive pages). **Adding a page = adding an INDEX entry**, in the same commit.
+- **`/search-index.js` is the GENERATED half** (2026-10-13), written by `node work-files/build-search-index.mjs` (force-added: `work-files/` is git-ignored). It harvests every gallery `<figure>` (~1,220 beyond the curated ones, deep-linked to the figure id or its description id), every `glossary/` term (`glossary/#term`), uncovered pages (older SOP versions), and a **word bag of each curated page's body text** (`patches`), plus `groups` (gallery sections) for dropdown collapsing. search.js injects it at runtime (`SiteSearch.addGenerated`), fires `sitesearch:ready`, and works without it. **Re-run the build after editing the gallery, the glossary, or any page body, and commit `search-index.js` with it.** Orphaned pages (tasks/, ground-truth/, the two sub-galleries) are excluded on purpose.
+- **Entry schema**: `{title, url, section, description, aliases, keywords, text?, boost?, weight?, group?}`. Field weights: title=10, aliases=8, keywords=6, section=4, description=3, text=1.5. `boost` multiplies curated entries up; `weight` (0.7 auto-imported contribution cards, 0.9 generated figures, 0.95 generated pages) nudges generated ones down; `group` keys into `search-index.js` groups.
+- **Matcher (rewritten 2026-10-13 to behave like a web search engine)**: every non-stopword query word **must** match (AND), so adding a word can only narrow; if nothing has every word, entries missing exactly one word are shown with a "Missing: word" label (`results.fallback`). Words match on a plural-only stem; the word still being typed matches as a prefix; fuzzy (1 edit / transposition) is allowed only for words the index has never seen, so real words never pull in look-alikes. BM25-style IDF over the live index weights rare words up. Bonuses: query == whole title ×2, words adjacent in order in title ×1.6 / alias ×1.4 / description or keywords ×1.2. Operators unchanged: `+word`, `-word`, `"exact phrase"`, `section:name`. Test: `node work-files/test_search.js` (hard assertions incl. narrowing, coverage, typo and fallback cases).
+- **Public API**: `window.SiteSearch = {INDEX, search, scoreEntry, highlight, parseQuery, SITE_ROOT, addGenerated, onGenerated, groups, stem}`. `search(q)` returns `[{score, entry, missing}]` with `.fallback`, `.terms`, `.total`. `/archive/` renders its All Documents listing (curated, non-anchor entries only) and search-results view from it and re-renders on `sitesearch:ready`.
+- **Top-nav search bar** auto-injects into every page's `<nav>` (creates a `<ul>` if missing — robust to leaf docs with minimal nav). Dropdown shows up to 8 rows; after two hits from the same generated group the rest collapse into one "+N more in <section>" row placed right under them; rows matched only via harvested text say "found in the page text". Enter goes to `/archive/?q=...`; arrow + Enter opens the highlighted row.
 - **Landing handler**: every result link carries `#q=<term>` (combined with `#anchor` as `#anchor&q=term` when applicable). On landing, the handler opens any containing `<details>`, scrolls to the match, and pulse-highlights for ~3s before fading. When an anchor target is present, the highlight search is **scoped to that element** so gallery-image results jump to the right figure.
 - **Redirect stubs preserve the hash** on their way through the meta refresh (tiny inline script before the `<meta http-equiv="refresh">`). Affects `tasks/<name>/`, `sop/.../v2.0.html`, etc.
 
