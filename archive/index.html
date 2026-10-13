@@ -818,6 +818,9 @@
             if (main) main.classList.add('has-search-query');
             document.title = 'Search: ' + q + ' - Princeton Tracers';
             renderSearchResults(q);
+            // search-index.js (gallery figures, glossary terms, page text) lands a moment
+            // after search.js: re-render so the full-results view matches the dropdown.
+            document.addEventListener('sitesearch:ready', function () { renderSearchResults(q); });
         }
         // All-docs always renders so it's ready when the user clears their search.
         renderAllDocuments();
@@ -834,7 +837,7 @@
         // The All Documents listing is for documents/pages only. Gallery images
         // are in INDEX so they stay searchable, but they live in the Gallery —
         // exclude them here (their urls are gallery anchors like "gallery/#fig-...").
-        function isDocument(e) { return e.url.indexOf('#fig-') === -1; }
+        function isDocument(e) { return e.url.indexOf('#') === -1 && !e.generated; }
 
         var sorted = SS.INDEX.filter(isDocument).slice().sort(alphaSort);
 
@@ -899,7 +902,8 @@
         var refineInput = document.getElementById('search-refine-input');
         var refineForm = document.getElementById('search-refine-form');
         if (refineInput) refineInput.value = q;
-        if (refineForm) {
+        if (refineForm && !refineForm.dataset.bound) {       // this function re-runs when the generated index lands
+            refineForm.dataset.bound = '1';
             refineForm.addEventListener('submit', function (e) {
                 e.preventDefault();
                 var v = (refineInput.value || '').trim();
@@ -910,14 +914,15 @@
 
         var results = SS.search(q);
         if (countEl) {
-            countEl.textContent = results.length + ' document' + (results.length === 1 ? '' : 's') + ' matched';
+            countEl.textContent = results.fallback
+                ? 'Nothing has every word — ' + results.length + ' closest match' + (results.length === 1 ? '' : 'es') + ', each missing one word'
+                : results.length + ' match' + (results.length === 1 ? '' : 'es');
         }
 
         if (!listEl) return;
-        if (!results.length) {
-            if (noResultsEl) noResultsEl.hidden = false;
-            return;
-        }
+        listEl.innerHTML = '';
+        if (noResultsEl) noResultsEl.hidden = results.length > 0;
+        if (!results.length) return;
 
         var frag = document.createDocumentFragment();
         var hl = SS.highlight || function (t) { return escapeHTML(t); };
@@ -930,11 +935,13 @@
         }
         for (var i = 0; i < results.length; i++) {
             var e = results[i].entry;
+            var missing = results[i].missing || [];
             var li = document.createElement('li');
             li.innerHTML =
                 '<a class="result-title" href="' + appendHash(SS.SITE_ROOT + e.url) + '">' + hl(e.title, q) + '</a>' +
                 '<span class="result-section">' + escapeHTML(e.section) + '</span>' +
                 '<div class="result-desc">' + hl(e.description, q) + '</div>' +
+                (missing.length ? '<div class="result-desc">Missing: <s>' + escapeHTML(missing.join(', ')) + '</s></div>' : '') +
                 '<div class="result-url">/' + escapeHTML(e.url) + '</div>';
             frag.appendChild(li);
         }

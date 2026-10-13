@@ -31,6 +31,12 @@ new Function(code)();
 const S = global.window.SiteSearch;
 if (!S) { console.error('SiteSearch not exposed'); process.exit(1); }
 
+// Load the generated index exactly as the browser does (search-index.js calls addGenerated).
+const CURATED = S.INDEX.length;
+const genPath = path.join(__dirname, '..', 'search-index.js');
+if (fs.existsSync(genPath)) new Function(fs.readFileSync(genPath, 'utf8'))();
+console.log(`index: ${CURATED} curated + ${S.INDEX.length - CURATED} generated = ${S.INDEX.length} entries`);
+
 const INDEX = S.INDEX;
 let hardFail = 0;
 const rank = (q, url, k) => {
@@ -113,6 +119,59 @@ console.log(`\n=== smoke probes (informational) ===`);
 for (const q of ['Pyramidal', 'General Morphology', 'depolarizing']) {
   const r = S.search(q, 2);
   console.log(`  ${q}: ` + (r.length ? r.map(x => x.entry.title).join(' | ') : '(none)'));
+}
+
+/* ---- 5. SEARCH-ENGINE BEHAVIOUR (hard) — the 2026-10-13 rewrite ---- */
+console.log(`\n=== 5. ENGINE BEHAVIOUR: narrowing, coverage, typos, fallback ===`);
+function check(label, ok, detail) {
+  console.log(`  ${ok ? '✓' : '✗'} ${label}${detail ? '  (' + detail + ')' : ''}`);
+  if (!ok) hardFail++;
+}
+{
+  // More words can only narrow. The classic complaint: "Soma Region" (7) -> "Soma Region BANC" (18).
+  const a = S.search('Soma Region').length, b = S.search('Soma Region BANC').length;
+  check('adding a word never widens the result set', b <= a && b > 0, `"Soma Region"=${a}, "+BANC"=${b}`);
+  const top = S.search('Soma Region BANC', 2).map(x => x.entry.title).join(' | ');
+  check('"Soma Region BANC" puts the BANC soma-region figures first', /Dense Soma Region/.test(top) && /Sparse Soma Region/.test(top), top);
+  // Every word must match: a 3-word query cannot return something matching only "BANC".
+  const bad = S.search('Soma Region BANC').find(x => !x.missing.length && !/soma/i.test(JSON.stringify(x.entry)));
+  check('no result lacks one of the query words (AND)', !bad, bad ? bad.entry.title : '');
+}
+{
+  // Gallery captions are searchable: 15 "neuropil" mentions in the gallery, previously 4 hits.
+  const n = S.search('neuropil').length;
+  check('"neuropil" reaches the gallery captions', n >= 9, `${n} results`);
+  const g = S.search('mitochondria', 1)[0];
+  check('a glossary term outranks the glossary page for its own word', g && g.entry.url === 'glossary/#mitochondria', g && g.entry.url);
+}
+{
+  // Junk queries fall back with explicit "missing" labels instead of a wall of weak hits.
+  const r = S.search('yellow dog');
+  check('"yellow dog" is a labelled fallback, not a wall of junk', r.fallback === true && r.every(x => x.missing.length === 1) && r.length < 15, `${r.length} results, fallback=${r.fallback}`);
+  const zero = S.search('qzxvw plorth');
+  check('gibberish returns nothing', zero.length === 0, `${zero.length}`);
+}
+{
+  // Typos: fuzzy only for words the index has never seen; real words never match look-alikes.
+  const t = S.search('synaspe layer', 1)[0];
+  check('typo "synaspe layer" still finds the layer stack', t && /Synapse Annotation Layer Stack/.test(t.entry.title), t && t.entry.title);
+  const dog = S.search('dog');
+  check('"dog" does not fuzzy-match "do"/"dot"/"log"', dog.every(x => /dog|dalmatian|puppy|canine/i.test(JSON.stringify(x.entry))), `${dog.length} results`);
+}
+{
+  // Plural stemming + stopwords + prefix-while-typing.
+  check('"synapses" finds "synapse" entries', S.search('synapses').length >= S.search('synapse').length * 0.9);
+  check('"how to vesicle" ignores the stopwords', S.search('how to vesicle').length > 0 && S.search('how to vesicle').terms.join(' ') === 'vesicle');
+  check('"som" (still typing) prefix-matches soma', S.search('som', 3).some(x => /soma/i.test(x.entry.title)));
+  check('trailing space disables the prefix bonus but still matches', S.search('soma ', 1)[0] && /soma/i.test(S.search('soma ', 1)[0].entry.title));
+}
+{
+  // Flood control: 337 "Individuals" cards must not bury the collection page.
+  const r = S.search('individual cell reconstruction');
+  check('collection page outranks its own 300+ cards', r[0] && /Individual Cell Reconstructions/.test(r[0].entry.title), r[0] && r[0].entry.title);
+  // Page-body words that live only in the harvested text bag are findable.
+  const nm = S.search('nomachine', 1)[0];
+  check('harvested page text is searchable ("nomachine")', nm && /NoMachine/i.test(nm.entry.title), nm && nm.entry.title);
 }
 
 /* ---- summary ---- */
