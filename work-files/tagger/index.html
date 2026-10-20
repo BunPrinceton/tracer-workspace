@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Figure Tagger</title>
+<!--
+  Figure Tagger — local tool for hand-tagging gallery figures with multiple tags.
+  Open this file directly in the browser (file://). Data comes from figures.js
+  (regenerate with: node work-files/tagger/extract-figures.mjs).
+
+  Keys:  tag hotkeys 1-6 q w e r t  7-0 a s d f g  z x c v b  y u i o p  h j k l
+         Enter = mark done + next · Shift+Enter / ← = previous · → = next (no mark)
+         ] = next untagged · n = new tag · Delete = clear tags on this image · ? = help
+
+  Saving: every change goes to localStorage at once. "Link save file" (Chrome/Brave/Edge)
+  additionally writes figure-tags.json to disk after every change; the file is the
+  thing to hand to the apply script later. Export/Import are the fallback.
+-->
+<style>
+  :root { --bg:#f5f5f5; --fg:#1a1a1a; --muted:#525252; --faint:#737373; --line:#d4d4d4; --blue:#2563eb; --blue-bg:#dbeafe; --amber:#b45309; --amber-bg:#fef3c7; --green:#047857; --green-bg:#d1fae5; }
+  * { box-sizing: border-box; }
+  html { font-size: 16px; }
+  body { margin:0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background: var(--bg); color: var(--fg); line-height:1.45; }
+  button, input, select { font: inherit; }
+  button { cursor: pointer; }
+  a { color: var(--blue); }
+
+  header { display:flex; flex-wrap:wrap; align-items:center; gap:0.5rem 1rem; padding:0.6rem 1rem; background:#fff; border-bottom:1px solid var(--line); position:sticky; top:0; z-index:10; }
+  header h1 { font-size:1.05rem; margin:0; }
+  .progress { display:flex; align-items:center; gap:0.6rem; font-size:0.85rem; color:var(--muted); min-width:260px; }
+  .progress .bar { flex:1; height:8px; background:#e5e5e5; border-radius:999px; overflow:hidden; }
+  .progress .bar i { display:block; height:100%; background:var(--blue); width:0; }
+  .spacer { flex:1; }
+  .btn { border:1px solid var(--line); background:#fff; border-radius:6px; padding:0.35rem 0.7rem; font-size:0.85rem; color:var(--fg); }
+  .btn:hover { border-color:var(--blue); color:var(--blue); }
+  .btn.primary { background:var(--blue); border-color:var(--blue); color:#fff; }
+  .btn.primary:hover { background:#1d4ed8; color:#fff; }
+  .status { font-size:0.8rem; color:var(--faint); }
+  .status.ok { color:var(--green); }
+  .status.warn { color:var(--amber); }
+
+  main { display:grid; grid-template-columns: minmax(0, 1fr) 380px; gap:1rem; padding:1rem; max-width:1700px; margin:0 auto; }
+  @media (max-width: 1000px) { main { grid-template-columns: 1fr; } }
+
+  .stage { background:#111; border-radius:8px; display:flex; align-items:center; justify-content:center; min-height:320px; height: calc(100vh - 330px); max-height: 78vh; overflow:hidden; position:relative; }
+  .stage img { max-width:100%; max-height:100%; object-fit:contain; cursor: zoom-in; }
+  .stage.zoom { overflow:auto; align-items:flex-start; justify-content:flex-start; }
+  .stage.zoom img { max-width:none; max-height:none; cursor: zoom-out; }
+  .stage .counter { position:absolute; top:0.5rem; left:0.6rem; font-size:0.8rem; color:#eee; background:rgba(0,0,0,0.6); padding:0.15rem 0.5rem; border-radius:4px; }
+  .stage .doneflag { position:absolute; top:0.5rem; right:0.6rem; font-size:0.75rem; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; padding:0.2rem 0.5rem; border-radius:4px; background:var(--green-bg); color:var(--green); display:none; }
+  .stage.done .doneflag { display:block; }
+
+  .caption { margin-top:0.75rem; }
+  .caption .from { font-size:0.8rem; color:var(--faint); text-transform:uppercase; letter-spacing:0.05em; }
+  .caption .from b { color:var(--muted); }
+  .caption h2 { font-size:1.15rem; margin:0.15rem 0 0.3rem; }
+  .caption p { margin:0 0 0.4rem; color:var(--muted); font-size:0.95rem; }
+  .caption .meta { font-size:0.8rem; color:var(--faint); }
+  .caption .meta span + span::before { content:" · "; }
+  .caption .oldcat { display:inline-block; margin-left:0.5rem; font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; background:#e5e5e5; color:var(--muted); padding:0.1rem 0.4rem; border-radius:3px; }
+
+  .panel { background:#fff; border:1px solid var(--line); border-radius:8px; padding:0.9rem; display:flex; flex-direction:column; gap:0.9rem; align-self:start; position:sticky; top:62px; max-height: calc(100vh - 80px); overflow:auto; }
+  .panel h3 { font-size:0.8rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--faint); margin:0 0 0.4rem; }
+
+  .current { min-height:2.2rem; display:flex; flex-wrap:wrap; gap:0.35rem; }
+  .current .empty { font-size:0.85rem; color:var(--faint); font-style:italic; }
+  .chip { display:inline-flex; align-items:center; gap:0.35rem; background:var(--blue-bg); color:#1e3a8a; border-radius:999px; padding:0.15rem 0.6rem; font-size:0.85rem; cursor:pointer; border:1px solid transparent; }
+  .chip:hover { border-color:var(--blue); }
+  .chip:hover::after { content:"×"; font-weight:700; }
+
+  .palette { display:grid; grid-template-columns: repeat(2, 1fr); gap:0.35rem; }
+  .tagbtn { display:flex; align-items:center; gap:0.5rem; border:1px solid var(--line); background:#fff; border-radius:6px; padding:0.35rem 0.5rem; text-align:left; min-height:40px; }
+  .tagbtn:hover { border-color:var(--blue); }
+  .tagbtn.on { background:var(--blue); border-color:var(--blue); color:#fff; }
+  .tagbtn kbd { flex:0 0 auto; display:inline-block; min-width:1.5rem; text-align:center; font-family: ui-monospace, Consolas, monospace; font-size:0.75rem; background:#f3f4f6; color:var(--muted); border:1px solid var(--line); border-radius:4px; padding:0.05rem 0.3rem; }
+  .tagbtn.on kbd { background:rgba(255,255,255,0.2); color:#fff; border-color:rgba(255,255,255,0.4); }
+  .tagbtn kbd.none { visibility:hidden; }
+  .tagbtn .name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:0.9rem; }
+
+  .newtag { display:flex; gap:0.4rem; }
+  .newtag input { flex:1; padding:0.4rem 0.6rem; border:1px solid var(--line); border-radius:6px; }
+  .newtag input:focus { outline:2px solid var(--blue); outline-offset:-1px; }
+  .hint { font-size:0.75rem; color:var(--faint); }
+
+  .navrow { display:flex; gap:0.4rem; flex-wrap:wrap; }
+  .navrow .btn { flex:1; text-align:center; }
+  .keys { font-size:0.75rem; color:var(--faint); line-height:1.7; }
+  .keys kbd { font-family: ui-monospace, Consolas, monospace; background:#f3f4f6; border:1px solid var(--line); border-radius:3px; padding:0 0.3rem; color:var(--muted); }
+
+  .jump select { width:100%; padding:0.35rem; border:1px solid var(--line); border-radius:6px; background:#fff; }
+
+  dialog { border:1px solid var(--line); border-radius:8px; padding:1rem 1.2rem; max-width:560px; width:92vw; }
+  dialog::backdrop { background:rgba(0,0,0,0.35); }
+  dialog h2 { margin:0 0 0.6rem; font-size:1.05rem; }
+  .taglist { display:flex; flex-direction:column; gap:0.3rem; max-height:60vh; overflow:auto; }
+  .taglist .row { display:flex; align-items:center; gap:0.5rem; font-size:0.9rem; padding:0.2rem 0; border-bottom:1px solid #eee; }
+  .taglist .row .n { flex:1; }
+  .taglist .row .cnt { color:var(--faint); font-size:0.8rem; }
+  .taglist .row .btn { padding:0.15rem 0.5rem; font-size:0.78rem; }
+  .taglist .row .btn.danger:hover { border-color:#b91c1c; color:#b91c1c; }
+  .finished { padding:2rem; text-align:center; color:var(--muted); }
+  .toast { position:fixed; bottom:1rem; left:50%; transform:translateX(-50%); background:#1a1a1a; color:#fff; padding:0.5rem 0.9rem; border-radius:6px; font-size:0.85rem; opacity:0; transition:opacity .15s; pointer-events:none; }
+  .toast.show { opacity:1; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Figure Tagger</h1>
+  <div class="progress"><span id="prog-text">0 / 0 done</span><div class="bar"><i id="prog-bar"></i></div></div>
+  <span class="status" id="save-status">Saved in this browser only</span>
+  <div class="spacer"></div>
+  <button class="btn" id="btn-link" title="Write figure-tags.json to disk after every change (Chrome / Brave / Edge)">Link save file…</button>
+  <button class="btn" id="btn-export" title="Download figure-tags.json">Export JSON</button>
+  <button class="btn" id="btn-import" title="Merge a previously exported figure-tags.json">Import JSON…</button>
+  <input type="file" id="import-file" accept=".json,application/json" hidden>
+  <button class="btn" id="btn-manage">Manage tags</button>
+  <button class="btn" id="btn-help" title="Keyboard shortcuts (?)">?</button>
+</header>
+
+<main>
+  <section>
+    <div class="stage" id="stage">
+      <span class="counter" id="counter"></span>
+      <span class="doneflag">Done</span>
+      <img id="img" alt="">
+    </div>
+    <div class="caption">
+      <div class="from">From <b id="cap-gallery"></b></div>
+      <h2><span id="cap-title"></span><span class="oldcat" id="cap-oldcat"></span></h2>
+      <p id="cap-desc"></p>
+      <div class="meta" id="cap-meta"></div>
+    </div>
+  </section>
+
+  <aside class="panel">
+    <div>
+      <h3>Tags on this image <span class="hint">(click a chip to remove)</span></h3>
+      <div class="current" id="current"></div>
+    </div>
+    <div>
+      <h3>Tag palette <span class="hint">(key toggles)</span></h3>
+      <div class="palette" id="palette"></div>
+    </div>
+    <div>
+      <div class="newtag">
+        <input id="newtag" placeholder="New tag… (n)  — Enter adds it to this image" autocomplete="off" spellcheck="false">
+        <button class="btn" id="btn-addtag">Add</button>
+      </div>
+      <div class="hint">New tags get the next free hotkey and stay in the palette for every later image.</div>
+    </div>
+    <div class="navrow">
+      <button class="btn" id="btn-prev" title="Shift+Enter or ←">← Prev</button>
+      <button class="btn" id="btn-next" title="→">Next →</button>
+      <button class="btn primary" id="btn-done" title="Enter">Done + next ⏎</button>
+    </div>
+    <div class="navrow">
+      <button class="btn" id="btn-untagged" title="]">Jump to next not-done</button>
+      <button class="btn" id="btn-clear" title="Delete">Clear tags</button>
+    </div>
+    <div class="jump"><select id="jump"></select></div>
+    <div class="keys">
+      <kbd>Enter</kbd> done + next · <kbd>Shift+Enter</kbd>/<kbd>←</kbd> prev · <kbd>→</kbd> next (no mark)<br>
+      <kbd>]</kbd> next not-done · <kbd>n</kbd> new tag · <kbd>Del</kbd> clear · click image to zoom
+    </div>
+  </aside>
+</main>
+
+<dialog id="dlg-manage">
+  <h2>Manage tags</h2>
+  <div class="taglist" id="taglist"></div>
+  <p class="hint">Renaming updates every image that has the tag. Deleting removes it from every image. Hotkeys follow palette order.</p>
+  <div class="navrow"><button class="btn" onclick="document.getElementById('dlg-manage').close()">Close</button></div>
+</dialog>
+
+<dialog id="dlg-help">
+  <h2>Keys</h2>
+  <div class="keys" style="font-size:0.9rem">
+    Tag hotkeys, in palette order: <kbd>1</kbd>–<kbd>6</kbd> <kbd>q</kbd> <kbd>w</kbd> <kbd>e</kbd> <kbd>r</kbd> <kbd>t</kbd>, then <kbd>7</kbd>–<kbd>0</kbd> <kbd>a</kbd> <kbd>s</kbd> <kbd>d</kbd> <kbd>f</kbd> <kbd>g</kbd>, then <kbd>z x c v b</kbd>, <kbd>y u i o p</kbd>, <kbd>h j k l</kbd>.<br>
+    <kbd>Enter</kbd> mark this image done and go to the next one.<br>
+    <kbd>Shift+Enter</kbd> or <kbd>←</kbd> previous image · <kbd>→</kbd> next image without marking it.<br>
+    <kbd>]</kbd> jump to the next image that is not done yet.<br>
+    <kbd>n</kbd> focus the new-tag box; <kbd>Enter</kbd> there creates the tag and adds it to this image; <kbd>Esc</kbd> leaves the box.<br>
+    <kbd>Delete</kbd> clear all tags on this image. Click the image to toggle full-size zoom.<br><br>
+    Everything is saved in this browser immediately. "Link save file…" also writes <code>figure-tags.json</code> to disk after every change, so the tags survive clearing browser data and can be handed to the site build. Export/Import JSON do the same by hand.
+  </div>
+  <div class="navrow" style="margin-top:0.8rem"><button class="btn" onclick="document.getElementById('dlg-help').close()">Close</button></div>
+</dialog>
+
+<div class="toast" id="toast"></div>
+
+<script src="figures.js"></script>
+<script>
+(function () {
+  'use strict';
+  var FIGS = window.FIGURES || [];
+  var STORE = 'figure-tagger-v1';
+  var KEYS = '1 2 3 4 5 6 q w e r t 7 8 9 0 a s d f g z x c v b y u i o p h j k l'.split(' ');
+  var STARTER_TAGS = ['Synapse', 'Structure', 'Defect', 'Segmentation', 'EM', 'LM', 'Mitochondria', 'Glia', 'Training', 'Funny'];
+  // Existing hand-assigned gallery categories worth carrying in as a first tag
+  // (the per-collection "reference" catch-all is deliberately NOT carried in).
+  var PREFILL = { synapse: 'Synapse', structure: 'Structure', defect: 'Defect', training: 'Training', funny: 'Funny' };
+
+  var state = load();
+  var idx = clamp(state.idx || 0);
+  var fileHandle = null;
+  var writeTimer = null;
+
+  // ---------- persistence ----------
+  function load() {
+    var s = null;
+    try { s = JSON.parse(localStorage.getItem(STORE) || 'null'); } catch (e) {}
+    if (!s || !Array.isArray(s.tags)) s = { tags: STARTER_TAGS.slice(), figures: {}, idx: 0 };
+    if (!s.figures) s.figures = {};
+    return s;
+  }
+  function snapshot() {
+    return { version: 1, updated: new Date().toISOString(), tags: state.tags.slice(), figures: state.figures };
+  }
+  function save() {
+    state.idx = idx;
+    try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) { setStatus('Browser save failed: ' + e.message, 'warn'); }
+    if (fileHandle) { clearTimeout(writeTimer); writeTimer = setTimeout(writeFile, 400); }
+    renderProgress();
+  }
+  function setStatus(text, cls) { var el = document.getElementById('save-status'); el.textContent = text; el.className = 'status ' + (cls || ''); }
+
+  // Merge another snapshot (imported file / linked file) into the local state.
+  // Per figure the newer record wins; the tag list becomes the union (local order first).
+  function mergeIn(data) {
+    if (!data || typeof data !== 'object') return 0;
+    var changed = 0;
+    (data.tags || []).forEach(function (t) { if (state.tags.indexOf(t) === -1) { state.tags.push(t); changed++; } });
+    var figs = data.figures || {};
+    Object.keys(figs).forEach(function (id) {
+      var inc = figs[id], cur = state.figures[id];
+      if (!inc || !Array.isArray(inc.tags)) return;
+      if (!cur || (inc.updated || '') > (cur.updated || '')) {
+        state.figures[id] = { tags: inc.tags.slice(), done: !!inc.done, updated: inc.updated || new Date().toISOString() };
+        inc.tags.forEach(function (t) { if (state.tags.indexOf(t) === -1) state.tags.push(t); });
+        changed++;
+      }
+    });
+    return changed;
+  }
+
+  // --- File System Access API (Chrome / Brave / Edge): the linked file is rewritten after every change ---
+  var DB = 'figure-tagger-fs';
+  function idb(mode, fn) {
+    return new Promise(function (res, rej) {
+      var open = indexedDB.open(DB, 1);
+      open.onupgradeneeded = function () { open.result.createObjectStore('kv'); };
+      open.onerror = function () { rej(open.error); };
+      open.onsuccess = function () {
+        var tx = open.result.transaction('kv', mode), st = tx.objectStore('kv');
+        var req = fn(st);
+        req.onsuccess = function () { res(req.result); };
+        req.onerror = function () { rej(req.error); };
+      };
+    });
+  }
+  function idbGet(k) { return idb('readonly', function (st) { return st.get(k); }); }
+  function idbSet(k, v) { return idb('readwrite', function (st) { return st.put(v, k); }); }
+
+  async function writeFile() {
+    if (!fileHandle) return;
+    try {
+      var w = await fileHandle.createWritable();
+      await w.write(JSON.stringify(snapshot(), null, 1));
+      await w.close();
+      setStatus('Saved to ' + fileHandle.name + ' · ' + new Date().toLocaleTimeString(), 'ok');
+    } catch (e) { setStatus('File write failed (' + e.message + ') — browser copy is still saved', 'warn'); }
+  }
+  async function linkFile() {
+    if (!window.showSaveFilePicker) { toast('This browser cannot write files directly. Use Export JSON instead.'); return; }
+    try {
+      var h = await window.showSaveFilePicker({ suggestedName: 'figure-tags.json', types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }] });
+      await adoptHandle(h, true);
+    } catch (e) { if (e.name !== 'AbortError') toast('Could not link file: ' + e.message); }
+  }
+  async function adoptHandle(h, fresh) {
+    fileHandle = h;
+    try { await idbSet('handle', h); } catch (e) {}
+    // An existing file may hold work from another day/browser: merge it in first.
+    try {
+      var txt = await (await h.getFile()).text();
+      if (txt.trim()) { var n = mergeIn(JSON.parse(txt)); if (n) toast('Merged ' + n + ' record(s) from ' + h.name); }
+    } catch (e) { if (!fresh) toast('Could not read ' + h.name + ': ' + e.message); }
+    document.getElementById('btn-link').textContent = 'Linked: ' + h.name;
+    await writeFile();
+    save(); render();
+  }
+  async function tryReconnect() {
+    var h = null;
+    try { h = await idbGet('handle'); } catch (e) {}
+    if (!h) return;
+    var btn = document.getElementById('btn-link');
+    btn.textContent = 'Reconnect ' + h.name;
+    setStatus('Saved in this browser · click "Reconnect" to resume writing ' + h.name, 'warn');
+    btn.onclick = async function () {
+      try {
+        var perm = await h.requestPermission({ mode: 'readwrite' });
+        if (perm === 'granted') { btn.onclick = linkFile; await adoptHandle(h, false); }
+        else toast('Permission not granted');
+      } catch (e) { toast('Reconnect failed: ' + e.message); btn.onclick = linkFile; }
+    };
+  }
+
+  function exportJson() {
+    var blob = new Blob([JSON.stringify(snapshot(), null, 1)], { type: 'application/json' });
+    var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'figure-tags.json'; a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+  }
+  function importJson(file) {
+    var r = new FileReader();
+    r.onload = function () {
+      try { var n = mergeIn(JSON.parse(r.result)); save(); render(); toast('Imported: ' + n + ' record(s) merged'); }
+      catch (e) { toast('Import failed: ' + e.message); }
+    };
+    r.readAsText(file);
+  }
+
+  // ---------- model helpers ----------
+  function clamp(i) { return Math.max(0, Math.min(FIGS.length - 1, i)); }
+  function rec(fig, create) {
+    var r = state.figures[fig.id];
+    if (!r && create) {
+      r = { tags: [], done: false, updated: '' };
+      var pre = PREFILL[fig.category];
+      if (pre && state.tags.indexOf(pre) !== -1) r.tags.push(pre);
+      state.figures[fig.id] = r;
+    }
+    return r;
+  }
+  function touch(r) { r.updated = new Date().toISOString(); }
+  function toggleTag(name) {
+    var fig = FIGS[idx], r = rec(fig, true);
+    var i = r.tags.indexOf(name);
+    if (i === -1) r.tags.push(name); else r.tags.splice(i, 1);
+    touch(r); save(); renderTags();
+  }
+  function addNewTag(name) {
+    name = (name || '').trim().replace(/\s+/g, ' ');
+    if (!name) return;
+    var existing = state.tags.filter(function (t) { return t.toLowerCase() === name.toLowerCase(); })[0];
+    if (!existing) { state.tags.push(name); existing = name; }
+    var r = rec(FIGS[idx], true);
+    if (r.tags.indexOf(existing) === -1) { r.tags.push(existing); touch(r); }
+    save(); render();
+    toast('"' + existing + '" ' + (KEYS[state.tags.indexOf(existing)] ? 'is on key ' + KEYS[state.tags.indexOf(existing)] : 'added (no free hotkey left — click it)'));
+  }
+  function markDone() { var r = rec(FIGS[idx], true); r.done = true; touch(r); save(); }
+  function go(i) { idx = clamp(i); state.idx = idx; save(); render(); }
+  function nextNotDone(from) {
+    for (var k = 1; k <= FIGS.length; k++) {
+      var j = (from + k) % FIGS.length, r = state.figures[FIGS[j].id];
+      if (!r || !r.done) return j;
+    }
+    return -1;
+  }
+  function doneCount() { return FIGS.reduce(function (n, f) { var r = state.figures[f.id]; return n + (r && r.done ? 1 : 0); }, 0); }
+  function usage(tag) { return Object.keys(state.figures).filter(function (id) { return state.figures[id].tags.indexOf(tag) !== -1; }).length; }
+  function renameTag(oldName, newName) {
+    newName = (newName || '').trim(); if (!newName || newName === oldName) return;
+    if (state.tags.indexOf(newName) !== -1) { toast('A tag with that name already exists'); return; }
+    state.tags[state.tags.indexOf(oldName)] = newName;
+    Object.keys(state.figures).forEach(function (id) { var t = state.figures[id].tags, i = t.indexOf(oldName); if (i !== -1) t[i] = newName; });
+    save(); render(); renderManage();
+  }
+  function deleteTag(name) {
+    var n = usage(name);
+    if (!confirm('Delete tag "' + name + '"' + (n ? ' and remove it from ' + n + ' image(s)' : '') + '?')) return;
+    state.tags.splice(state.tags.indexOf(name), 1);
+    Object.keys(state.figures).forEach(function (id) { var t = state.figures[id].tags, i = t.indexOf(name); if (i !== -1) t.splice(i, 1); });
+    save(); render(); renderManage();
+  }
+
+  // ---------- rendering ----------
+  function render() {
+    var fig = FIGS[idx];
+    if (!fig) { document.querySelector('main').innerHTML = '<div class="finished">No figures found. Run <code>node work-files/tagger/extract-figures.mjs</code> first.</div>'; return; }
+    var r = state.figures[fig.id];
+    var img = document.getElementById('img'), stage = document.getElementById('stage');
+    stage.classList.remove('zoom');
+    img.src = '../../gallery/' + fig.src; img.alt = fig.alt || '';
+    stage.classList.toggle('done', !!(r && r.done));
+    document.getElementById('counter').textContent = (idx + 1) + ' / ' + FIGS.length;
+    document.getElementById('cap-gallery').textContent = fig.gallery;
+    document.getElementById('cap-title').textContent = fig.title || fig.id;
+    document.getElementById('cap-oldcat').textContent = 'was: ' + fig.category;
+    document.getElementById('cap-desc').textContent = fig.description || '';
+    document.getElementById('cap-meta').innerHTML = (fig.meta || []).map(function (m) { return '<span>' + esc(m) + '</span>'; }).join('');
+    var nxt = FIGS[idx + 1]; if (nxt) { var pre = new Image(); pre.src = '../../gallery/' + nxt.src; }
+    renderTags(); renderJump(); renderProgress();
+    document.title = (idx + 1) + '/' + FIGS.length + ' · Figure Tagger';
+  }
+  function renderTags() {
+    var fig = FIGS[idx], r = rec(fig, true), cur = document.getElementById('current'), pal = document.getElementById('palette');
+    cur.innerHTML = r.tags.length ? r.tags.map(function (t) { return '<span class="chip" data-tag="' + esc(t) + '">' + esc(t) + '</span>'; }).join('')
+                                  : '<span class="empty">no tags yet</span>';
+    pal.innerHTML = state.tags.map(function (t, i) {
+      var k = KEYS[i];
+      return '<button class="tagbtn' + (r.tags.indexOf(t) !== -1 ? ' on' : '') + '" data-tag="' + esc(t) + '" title="' + esc(t) + '">' +
+        '<kbd class="' + (k ? '' : 'none') + '">' + (k || '·') + '</kbd><span class="name">' + esc(t) + '</span></button>';
+    }).join('');
+    save();
+  }
+  function renderProgress() {
+    var d = doneCount();
+    document.getElementById('prog-text').textContent = d + ' / ' + FIGS.length + ' done';
+    document.getElementById('prog-bar').style.width = (FIGS.length ? 100 * d / FIGS.length : 0) + '%';
+  }
+  function renderJump() {
+    var sel = document.getElementById('jump'), html = '', g = null;
+    FIGS.forEach(function (f, i) {
+      if (f.gallery !== g) { if (g !== null) html += '</optgroup>'; g = f.gallery; html += '<optgroup label="' + esc(g) + '">'; }
+      var r = state.figures[f.id];
+      html += '<option value="' + i + '"' + (i === idx ? ' selected' : '') + '>' + (r && r.done ? '✓ ' : (r && r.tags.length ? '… ' : '   ')) + (i + 1) + '. ' + esc(f.title || f.id) + '</option>';
+    });
+    sel.innerHTML = html + (g !== null ? '</optgroup>' : '');
+  }
+  function renderManage() {
+    var list = document.getElementById('taglist');
+    list.innerHTML = state.tags.map(function (t, i) {
+      return '<div class="row"><kbd>' + (KEYS[i] || '·') + '</kbd><span class="n">' + esc(t) + '</span><span class="cnt">' + usage(t) + ' image(s)</span>' +
+        '<button class="btn" data-rename="' + esc(t) + '">Rename</button><button class="btn danger" data-delete="' + esc(t) + '">Delete</button></div>';
+    }).join('') || '<div class="hint">No tags yet.</div>';
+  }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+  var toastTimer;
+  function toast(msg) { var t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.classList.remove('show'); }, 1800); }
+
+  // ---------- actions ----------
+  function doneAndNext() {
+    markDone();
+    if (idx < FIGS.length - 1) { go(idx + 1); return; }
+    var j = nextNotDone(idx);
+    if (j === -1) { render(); toast('All ' + FIGS.length + ' figures are done 🎉'); } else { go(j); toast('Reached the end — jumping back to the next not-done figure'); }
+  }
+  function jumpNotDone() { var j = nextNotDone(idx); if (j === -1) toast('Everything is marked done'); else go(j); }
+
+  // ---------- wiring ----------
+  document.getElementById('palette').addEventListener('click', function (e) { var b = e.target.closest('[data-tag]'); if (b) toggleTag(b.getAttribute('data-tag')); });
+  document.getElementById('current').addEventListener('click', function (e) { var b = e.target.closest('[data-tag]'); if (b) toggleTag(b.getAttribute('data-tag')); });
+  document.getElementById('btn-addtag').addEventListener('click', function () { var i = document.getElementById('newtag'); addNewTag(i.value); i.value = ''; i.blur(); });
+  document.getElementById('newtag').addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); addNewTag(this.value); this.value = ''; this.blur(); }
+    if (e.key === 'Escape') { this.value = ''; this.blur(); }
+    e.stopPropagation();
+  });
+  document.getElementById('btn-prev').addEventListener('click', function () { go(idx - 1); });
+  document.getElementById('btn-next').addEventListener('click', function () { go(idx + 1); });
+  document.getElementById('btn-done').addEventListener('click', doneAndNext);
+  document.getElementById('btn-untagged').addEventListener('click', jumpNotDone);
+  document.getElementById('btn-clear').addEventListener('click', function () { var r = rec(FIGS[idx], true); r.tags = []; touch(r); save(); renderTags(); });
+  document.getElementById('jump').addEventListener('change', function () { go(parseInt(this.value, 10)); this.blur(); });
+  document.getElementById('stage').addEventListener('click', function () { this.classList.toggle('zoom'); });
+  document.getElementById('btn-link').addEventListener('click', linkFile);
+  document.getElementById('btn-export').addEventListener('click', exportJson);
+  document.getElementById('btn-import').addEventListener('click', function () { document.getElementById('import-file').click(); });
+  document.getElementById('import-file').addEventListener('change', function () { if (this.files[0]) importJson(this.files[0]); this.value = ''; });
+  document.getElementById('btn-manage').addEventListener('click', function () { renderManage(); document.getElementById('dlg-manage').showModal(); });
+  document.getElementById('btn-help').addEventListener('click', function () { document.getElementById('dlg-help').showModal(); });
+  document.getElementById('taglist').addEventListener('click', function (e) {
+    var rn = e.target.closest('[data-rename]'), dl = e.target.closest('[data-delete]');
+    if (rn) { var v = prompt('Rename tag', rn.getAttribute('data-rename')); if (v !== null) renameTag(rn.getAttribute('data-rename'), v); }
+    if (dl) deleteTag(dl.getAttribute('data-delete'));
+  });
+
+  document.addEventListener('keydown', function (e) {
+    var t = e.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA')) return;
+    if (document.querySelector('dialog[open]')) return;
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    var k = e.key;
+    if (k === 'Enter') { e.preventDefault(); if (e.shiftKey) go(idx - 1); else doneAndNext(); return; }
+    if (k === 'ArrowLeft') { e.preventDefault(); go(idx - 1); return; }
+    if (k === 'ArrowRight') { e.preventDefault(); go(idx + 1); return; }
+    if (k === ']') { e.preventDefault(); jumpNotDone(); return; }
+    if (k === 'n' || k === 'N') { e.preventDefault(); document.getElementById('newtag').focus(); return; }
+    if (k === 'Delete') { e.preventDefault(); document.getElementById('btn-clear').click(); return; }
+    if (k === '?') { e.preventDefault(); document.getElementById('dlg-help').showModal(); return; }
+    var i = KEYS.indexOf(k.toLowerCase());
+    if (i !== -1 && state.tags[i]) { e.preventDefault(); toggleTag(state.tags[i]); }
+  });
+
+  // Start on the first not-done figure if the saved position is already done.
+  (function () { var r = FIGS[idx] && state.figures[FIGS[idx].id]; if (r && r.done) { var j = nextNotDone(idx - 1); if (j !== -1) idx = j; } })();
+  render();
+  tryReconnect();
+})();
+</script>
+</body>
+</html>
