@@ -34,7 +34,7 @@ python3 -m http.server 8799            # from repo root
 CHROME="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 "$CHROME" --headless --disable-gpu --hide-scrollbars --window-size=1400,1600 \
   --screenshot=out.png "http://localhost:8799/glossary/"
-# Query-string deep-links work too, e.g. .../gallery/?filter=defect
+# Query-string deep-links work too, e.g. .../gallery/?filter=defect&view=flat
 node --check search.js                 # only real "lint" — search.js is the one big JS file
 ```
 
@@ -69,9 +69,15 @@ All pages follow these principles (documented in `index.html` comments):
                      # Reference Materials, Visual Glossary, OL Cell Name Guide, Fly Synapses,
                      # FlyWire Cheatsheet, Optic Lobe Diagrams, Image Bounty. Sticky section jump-nav.
                      # Category filter <select> (all/synapse/structure/defect/segmentation/funny/training/
-                     # figure) drives filterGallery() by toggling .filtered-out. Deep-linkable: a ?filter=<cat>
-                     # query on the URL auto-applies that filter + scrolls the first match into view (e.g. the
-                     # SOP defect section links to gallery/?filter=defect).
+                     # figure) drives filterGallery() by toggling .filtered-out; sections left with no visible
+                     # figure get .section-empty (hidden, jump-nav chip too). "View: By gallery | Combined"
+                     # toggle (setGalleryView) adds body.gallery-flat: all sections are wrapped in
+                     # .gallery-sections, which becomes ONE grid (sections/grids -> display:contents, headers
+                     # hidden) and each card shows a JS-added "From: <gallery>" link (.gallery-origin, built
+                     # from the section's <h2> at load; click = back to By gallery + jump). Deep-linkable:
+                     # ?filter=<cat>&view=flat auto-applies (filter alone also scrolls the first match into
+                     # view, e.g. the SOP defect section links to gallery/?filter=defect); both are kept in
+                     # the URL via replaceState so the current view is shareable.
 /gallery/reference-figures/   # ORPHANED standalone page (185 figs) — merged into /gallery/ (2026-05-27);
                      # left intact (preserve-originals), unlinked. Image files still served from here.
 /gallery/optic-lobe-diagrams/ # ORPHANED standalone page (16 diagrams) — likewise merged + unlinked.

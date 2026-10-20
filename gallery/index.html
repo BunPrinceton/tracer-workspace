@@ -9,7 +9,7 @@
 
          Features:
          - Dataset-based grouping (FAFB 2019, BANC, Reference)
-         - CSS-only category filtering (no heavy JS)
+         - Dropdown category filtering (hides empty galleries) + By gallery / Combined view toggle
          - Responsive image grid
          - Accessible with alt text and captions
 
@@ -468,9 +468,60 @@
             display: flex;
         }
 
-        /* Hide empty dataset sections when filtering */
-        .dataset-section:has(.gallery-item:not([style*="display: none"])) {
-            display: block;
+        /* Sections with no visible figures (filter active) are hidden entirely,
+           and their chip in the sticky jump-nav goes with them. Both classes are
+           maintained by filterGallery() below. */
+        .dataset-section.section-empty { display: none; }
+        .section-jump a.jump-hidden { display: none; }
+
+        /* ============================================================
+           VIEW TOGGLE: "By gallery" (default) vs "Combined"
+           Combined view pools every visible figure into ONE grid, drops the
+           per-gallery headers, and shows a "From: <gallery>" tag on each card
+           instead so the provenance is never lost. Driven by body.gallery-flat.
+           ============================================================ */
+        .filter-bar { flex-wrap: wrap; gap: 0.5rem 1.5rem; }
+        .view-toggle { display: inline-flex; align-items: center; gap: 0.5rem; }
+        .view-toggle-label { font-size: 0.875rem; color: #525252; }
+        .view-toggle-group { display: inline-flex; border: 2px solid #d4d4d4; border-radius: 6px; overflow: hidden; background: #fff; }
+        .view-toggle-group button {
+            font: inherit; font-size: 0.875rem; font-weight: 500; color: #525252;
+            background: #fff; border: 0; padding: 0.5rem 0.85rem; cursor: pointer;
+        }
+        .view-toggle-group button + button { border-left: 2px solid #d4d4d4; }
+        .view-toggle-group button:hover { color: #1a1a1a; background: #f5f5f5; }
+        .view-toggle-group button[aria-pressed="true"] { background: #2563eb; color: #fff; }
+        .view-toggle-group button:focus-visible { outline: 2px solid #2563eb; outline-offset: -2px; }
+
+        /* The "From: <gallery>" tag -- hidden in the default grouped view */
+        .gallery-origin { display: none; }
+        body.gallery-flat .gallery-origin {
+            display: inline-flex; align-items: center; gap: 0.3rem;
+            margin-top: 0.6rem; font-size: 0.75rem; color: #737373; text-decoration: none;
+        }
+        body.gallery-flat .gallery-origin b { font-weight: 600; color: #525252; }
+        body.gallery-flat .gallery-origin:hover b { color: #2563eb; text-decoration: underline; }
+
+        /* Combined layout: the wrapper becomes the single grid, sections and
+           their inner grids dissolve (display: contents) so every card sits in
+           one continuous flow. Header + blurb per section are dropped. */
+        body.gallery-flat .gallery-sections {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        body.gallery-flat .dataset-section,
+        body.gallery-flat .gallery-grid { display: contents; }
+        body.gallery-flat .dataset-header,
+        body.gallery-flat .dataset-description,
+        body.gallery-flat .dataset-section.no-figures,
+        body.gallery-flat .dataset-section.section-empty { display: none; }
+        @media (max-width: 768px) {
+            body.gallery-flat .gallery-sections { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+        }
+        @media (max-width: 480px) {
+            body.gallery-flat .gallery-sections { grid-template-columns: 1fr; }
         }
 
         /* ============================================================
@@ -921,8 +972,17 @@
             <option value="training">Training</option>
             <option value="figure">Figure</option>
         </select>
+        <div class="view-toggle">
+            <span class="view-toggle-label" id="view-toggle-label">View:</span>
+            <div class="view-toggle-group" role="group" aria-labelledby="view-toggle-label">
+                <button type="button" data-view="grouped" aria-pressed="true" onclick="setGalleryView('grouped')" title="Figures grouped under their gallery headings">By gallery</button>
+                <button type="button" data-view="flat" aria-pressed="false" onclick="setGalleryView('flat')" title="All figures in one grid; each card says which gallery it came from">Combined</button>
+            </div>
+        </div>
     </div>
 
+
+    <div class="gallery-sections" id="gallery-sections">
 
     <!-- ============================================================
          DATASET: BANC
@@ -24169,6 +24229,8 @@
         </div>
     </section>
 
+    </div><!-- /.gallery-sections -->
+
 </main>
 
 <footer>
@@ -24197,6 +24259,8 @@ function buildGalleryList() {
             var desc = figure.querySelector('.gallery-description');
             if (title) captionText = title.textContent.trim();
             if (desc) captionText += ' \u2014 ' + desc.textContent.trim();
+            var origin = figure.getAttribute('data-origin');
+            if (origin) captionText += '  (' + origin + ')';
         }
         galleryItems.push({
             src: link.href,
@@ -24300,7 +24364,10 @@ document.addEventListener('keydown', function(e) {
 </script>
 
 <script>
+var VALID_FILTERS = ['all', 'synapse', 'structure', 'defect', 'segmentation', 'funny', 'training', 'figure'];
+
 function filterGallery(category) {
+    if (VALID_FILTERS.indexOf(category) === -1) category = 'all';
     var items = document.querySelectorAll('.gallery-item');
     items.forEach(function(item) {
         if (category === 'all' || item.getAttribute('data-category') === category) {
@@ -24309,16 +24376,78 @@ function filterGallery(category) {
             item.classList.add('filtered-out');
         }
     });
+    // Hide galleries that end up with nothing to show (and their jump-nav chip).
+    // With no filter active every section is shown, including figure-less ones
+    // like "More on Drive" and the Image Bounty list.
+    document.querySelectorAll('.dataset-section').forEach(function(section) {
+        var empty = category !== 'all' && !section.querySelector('.gallery-item:not(.filtered-out)');
+        section.classList.toggle('section-empty', empty);
+        var chip = section.id && document.querySelector('.section-jump a[href="#' + section.id + '"]');
+        if (chip) chip.classList.toggle('jump-hidden', empty);
+    });
+    updateGalleryUrl('filter', category === 'all' ? null : category);
 }
 
-// Deep-link support: gallery/?filter=defect applies the category filter and scrolls to the first match.
+// View toggle: 'grouped' (default, figures under their gallery headings) or
+// 'flat' (every visible figure pooled into one grid, "From: <gallery>" on each card).
+function setGalleryView(view) {
+    if (view !== 'flat') view = 'grouped';
+    document.body.classList.toggle('gallery-flat', view === 'flat');
+    document.querySelectorAll('.view-toggle-group button').forEach(function(btn) {
+        btn.setAttribute('aria-pressed', btn.getAttribute('data-view') === view ? 'true' : 'false');
+    });
+    updateGalleryUrl('view', view === 'flat' ? 'flat' : null);
+}
+
+// Keep ?filter=...&view=... in the address bar so the current view is shareable.
+function updateGalleryUrl(key, value) {
+    if (!window.history || !window.history.replaceState) return;
+    try {
+        var url = new URL(window.location.href);
+        if (value) url.searchParams.set(key, value); else url.searchParams.delete(key);
+        window.history.replaceState(null, '', url.pathname + url.search + url.hash);
+    } catch (e) { /* ignore */ }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
-    var VALID = ['all', 'synapse', 'structure', 'defect', 'segmentation', 'funny', 'training', 'figure'];
-    var value = new URLSearchParams(window.location.search).get('filter');
-    if (!value || VALID.indexOf(value) === -1) return;
+    // Tag every figure with the gallery it belongs to, and add the "From: <gallery>"
+    // link shown in Combined view. Clicking it switches back to By-gallery view and
+    // jumps to that gallery's heading.
+    document.querySelectorAll('.dataset-section').forEach(function(section) {
+        var heading = section.querySelector('.dataset-header h2');
+        var name = heading ? heading.textContent.trim() : '';
+        var figures = section.querySelectorAll('.gallery-item');
+        if (!figures.length) { section.classList.add('no-figures'); return; }
+        figures.forEach(function(fig) {
+            if (name) fig.setAttribute('data-origin', name);
+            var cap = fig.querySelector('.gallery-caption');
+            if (!cap || !name) return;
+            var tag = document.createElement('a');
+            tag.className = 'gallery-origin';
+            tag.href = '#' + section.id;
+            tag.title = 'Show this figure in its gallery';
+            tag.innerHTML = 'From: <b></b>';
+            tag.querySelector('b').textContent = name;
+            tag.addEventListener('click', function() { setGalleryView('grouped'); });
+            cap.appendChild(tag);
+        });
+    });
+    // Jump-nav chips make no sense without headings: in Combined view they switch back first.
+    document.querySelectorAll('.section-jump a').forEach(function(a) {
+        a.addEventListener('click', function() {
+            if (document.body.classList.contains('gallery-flat')) setGalleryView('grouped');
+        });
+    });
+
+    // Deep-link support: gallery/?filter=defect&view=flat
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('view') === 'flat') setGalleryView('flat');
+    var value = params.get('filter');
+    if (!value || VALID_FILTERS.indexOf(value) === -1) return;
     var select = document.getElementById('category-filter');
     if (select) select.value = value;
     filterGallery(value);
+    if (window.location.hash) return; // a #fig-.../#section link wins over "scroll to first match"
     var first = document.querySelector('.gallery-item:not(.filtered-out)');
     if (!first) return;
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
