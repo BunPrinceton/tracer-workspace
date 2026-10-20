@@ -52,7 +52,7 @@
   main { display:grid; grid-template-columns: minmax(0, 1fr) 380px; gap:1rem; padding:1rem; max-width:1700px; margin:0 auto; }
   @media (max-width: 1000px) { main { grid-template-columns: 1fr; } }
   body.nostart main { display:none; }
-  body.nostart .toolbar { display:none; }
+  body.nostart .toolbar { display:none !important; } /* beats the inline display:contents */
 
   /* start screen */
   .start { max-width:760px; margin:2rem auto; padding:0 1rem; }
