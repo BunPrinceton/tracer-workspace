@@ -570,6 +570,14 @@
             keywords: ['dust', 'merger', 'supervoxel', 'segment', 'spine', 'volume', 'brush', 'label', 'omni terminology', 'vast terminology']
         },
         {
+            title: 'Figure Tagger',
+            url: 'tools/figure-tagger/',
+            section: 'Tools',
+            description: 'Keyboard-driven tool for hand-tagging a pile of images with multiple tags (hotkeys 1-6 q w e r t …, Enter = done + next). Tag the borkbook gallery figures, or open your own image folder; nothing is uploaded. Export JSON/CSV and send the images + tags back to the maintainer.',
+            aliases: ['figure tagger', 'image tagger', 'tagger', 'tagging tool', 'tag images', 'bulk tagging'],
+            keywords: ['tags', 'tagging', 'hotkeys', 'review images', 'delegate tagging', 'figure-tags.json', 'export json', 'export csv', 'image folder', 'gallery tags', 'local tool']
+        },
+        {
             title: 'Experimental tracertools Catalog',
             url: 'experimental/',
             section: 'Experimental',

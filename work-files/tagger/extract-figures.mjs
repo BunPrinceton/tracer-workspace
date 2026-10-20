@@ -1,6 +1,6 @@
 /* extract-figures.mjs — pull every gallery card EXCEPT the auto-imported
    "Figure" contributions out of gallery/index.html and write them to
-   work-files/tagger/figures.js (window.FIGURES = [...]) for the Figure Tagger.
+   tools/figure-tagger/figures.js (window.FIGURES = [...]) for the Figure Tagger.
    A .js file (not .json) so the tagger works straight from file:// with no server.
    Re-run whenever cards are added to the gallery:
      node work-files/tagger/extract-figures.mjs
@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..', '..');
 const GALLERY = path.join(ROOT, 'gallery', 'index.html');
-const OUT = path.join(HERE, 'figures.js');
+const OUT = path.join(ROOT, 'tools', 'figure-tagger', 'figures.js');
 
 const html = fs.readFileSync(GALLERY, 'utf8');
 const unesc = s => String(s || '')
