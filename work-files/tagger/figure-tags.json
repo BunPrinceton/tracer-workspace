@@ -1,0 +1,2626 @@
+{
+ "version": 1,
+ "updated": "2026-10-20T20:02:20.419Z",
+ "tags": [
+  "Synapse",
+  "Structure",
+  "Defect",
+  "Segmentation",
+  "EM",
+  "LM",
+  "Mitochondria",
+  "Glia",
+  "Training",
+  "Funny",
+  "Soma",
+  "Golgi Apparatus",
+  "Weird",
+  "Organelles",
+  "AxonBundle",
+  "Myelin",
+  "Figure",
+  "Blood Vessel",
+  "Bald Spot",
+  "Axons",
+  "Vesicles",
+  "Path Swap"
+ ],
+ "figures": {
+  "fig-soma-arrangement-color-overlay": {
+   "tags": [
+    "Structure",
+    "Soma",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:29:56.870Z"
+  },
+  "fig-single-soma-color-overlay": {
+   "tags": [
+    "Structure",
+    "Soma",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:30:11.476Z"
+  },
+  "fig-dense-soma-region": {
+   "tags": [
+    "Structure",
+    "EM",
+    "Soma",
+    "Golgi Apparatus"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:30:50.714Z"
+  },
+  "fig-sparse-soma-region": {
+   "tags": [
+    "Structure",
+    "EM",
+    "Soma"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:30:56.634Z"
+  },
+  "fig-dark-soma-possible-glia": {
+   "tags": [
+    "Structure",
+    "EM",
+    "Soma",
+    "Glia"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:31:22.076Z"
+  },
+  "fig-large-soma-with-organelles": {
+   "tags": [
+    "Structure",
+    "Soma",
+    "EM",
+    "Golgi Apparatus"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:31:41.561Z"
+  },
+  "fig-large-soma-with-organelles-view-2": {
+   "tags": [
+    "Structure",
+    "EM",
+    "Soma",
+    "Golgi Apparatus"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:31:46.998Z"
+  },
+  "fig-large-soma-with-organelles-view-3": {
+   "tags": [
+    "Structure",
+    "EM",
+    "Soma",
+    "Golgi Apparatus"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:31:48.896Z"
+  },
+  "fig-possibly-myelinated-soma": {
+   "tags": [
+    "Structure",
+    "EM",
+    "Soma",
+    "Defect",
+    "Glia",
+    "Weird"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:32:39.954Z"
+  },
+  "fig-thick-membrane-border": {
+   "tags": [
+    "Structure",
+    "Weird",
+    "EM",
+    "Defect",
+    "Soma"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:33:06.165Z"
+  },
+  "fig-golgi-apparatus-and-organelles": {
+   "tags": [
+    "Structure",
+    "Soma",
+    "EM",
+    "Golgi Apparatus"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:33:18.167Z"
+  },
+  "fig-golgi-apparatus-detail": {
+   "tags": [
+    "Structure",
+    "Soma",
+    "EM",
+    "Golgi Apparatus",
+    "Mitochondria"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:33:49.431Z"
+  },
+  "fig-membrane-whorls-and-golgi-apparatus": {
+   "tags": [
+    "Structure",
+    "Soma",
+    "EM",
+    "Weird",
+    "Organelles"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:34:32.094Z"
+  },
+  "fig-dense-organelle-cluster-near-soma": {
+   "tags": [
+    "Structure",
+    "Organelles",
+    "EM",
+    "Soma",
+    "Mitochondria",
+    "Weird"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:34:55.654Z"
+  },
+  "fig-membrane-whorl": {
+   "tags": [
+    "Structure",
+    "Defect",
+    "EM",
+    "Weird"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:35:15.158Z"
+  },
+  "fig-membrane-spirals-close-up": {
+   "tags": [
+    "Structure",
+    "Weird",
+    "Organelles",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:35:31.048Z"
+  },
+  "fig-orphan-mitochondria-cluster": {
+   "tags": [
+    "Structure",
+    "EM",
+    "Weird"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:35:49.624Z"
+  },
+  "fig-orphan-mitochondria-cluster-with-context": {
+   "tags": [
+    "Structure",
+    "EM",
+    "Weird"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:36:06.758Z"
+  },
+  "fig-heavily-stained-dark-organelles": {
+   "tags": [
+    "Structure",
+    "EM",
+    "Weird"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:36:31.236Z"
+  },
+  "fig-unidentified-dense-body": {
+   "tags": [
+    "Structure",
+    "EM",
+    "Weird"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:36:34.234Z"
+  },
+  "fig-lipid-droplets": {
+   "tags": [
+    "Structure",
+    "EM",
+    "Defect"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:36:40.218Z"
+  },
+  "fig-staining-anomaly-with-micro-tear": {
+   "tags": [
+    "Structure",
+    "EM",
+    "Weird"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:36:44.108Z"
+  },
+  "fig-parallel-axon-bundle": {
+   "tags": [
+    "Structure",
+    "AxonBundle",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:37:18.206Z"
+  },
+  "fig-section-damage": {
+   "tags": [
+    "Defect",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:37:25.997Z"
+  },
+  "fig-missing-section": {
+   "tags": [
+    "Defect",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:37:30.716Z"
+  },
+  "fig-membrane-blowout": {
+   "tags": [
+    "Defect",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:37:31.952Z"
+  },
+  "fig-section-pinch": {
+   "tags": [
+    "Defect",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:37:33.184Z"
+  },
+  "fig-section-stretch": {
+   "tags": [
+    "Defect",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:37:34.560Z"
+  },
+  "fig-section-tear": {
+   "tags": [
+    "Defect",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:37:35.581Z"
+  },
+  "fig-resin-tear": {
+   "tags": [
+    "Defect",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:37:44.577Z"
+  },
+  "fig-section-folds-overview": {
+   "tags": [
+    "Defect",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:37:47.704Z"
+  },
+  "fig-folds-with-rippling": {
+   "tags": [
+    "Defect",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:37:48.346Z"
+  },
+  "fig-severe-section-folds": {
+   "tags": [
+    "Defect",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:37:49.350Z"
+  },
+  "fig-staining-artifact": {
+   "tags": [
+    "Defect",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:37:52.800Z"
+  },
+  "fig-splotch-artifact": {
+   "tags": [
+    "Defect",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:37:53.991Z"
+  },
+  "fig-combined-defects-staining-fold-lipid-droplets": {
+   "tags": [
+    "Defect",
+    "EM",
+    "AxonBundle"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:37:59.710Z"
+  },
+  "fig-lipid-droplets-section-artifact": {
+   "tags": [
+    "Defect",
+    "EM",
+    "AxonBundle"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:38:01.427Z"
+  },
+  "fig-multiple-section-errors-central-chiasm": {
+   "tags": [
+    "Defect",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:38:05.706Z"
+  },
+  "fig-section-cracks-aka-lightningtrade": {
+   "tags": [
+    "Defect",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:38:07.254Z"
+  },
+  "fig-multiple-section-errors-overview": {
+   "tags": [
+    "Defect",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:38:08.747Z"
+  },
+  "fig-t-bar-synapse": {
+   "tags": [
+    "Synapse",
+    "Defect",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:38:24.424Z"
+  },
+  "fig-elongated-t-bar": {
+   "tags": [
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:38:26.356Z"
+  },
+  "fig-multiple-t-bars-smudge": {
+   "tags": [
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:38:29.978Z"
+  },
+  "fig-gt-protocol-reference-6": {
+   "tags": [
+    "Training",
+    "Segmentation"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:39:02.142Z"
+  },
+  "fig-gt-task-description-mec": {
+   "tags": [
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:39:10.154Z"
+  },
+  "fig-wk-ai-segmentation-panel": {
+   "tags": [
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:39:12.284Z"
+  },
+  "fig-visual-glossary-001": {
+   "tags": [
+    "Training",
+    "Segmentation"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:39:16.396Z"
+  },
+  "fig-visual-glossary-002": {
+   "tags": [
+    "Training",
+    "Segmentation"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:39:17.615Z"
+  },
+  "fig-visual-glossary-003": {
+   "tags": [
+    "Training",
+    "Segmentation"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:39:18.899Z"
+  },
+  "fig-visual-glossary-004": {
+   "tags": [
+    "Training",
+    "Segmentation"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:39:20.410Z"
+  },
+  "fig-visual-glossary-005": {
+   "tags": [
+    "Myelin",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:39:59.138Z"
+  },
+  "fig-visual-glossary-006": {
+   "tags": [
+    "EM",
+    "Defect",
+    "Training",
+    "Segmentation"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:40:19.216Z"
+  },
+  "fig-visual-glossary-007": {
+   "tags": [
+    "Defect",
+    "Segmentation",
+    "EM",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:40:22.506Z"
+  },
+  "fig-visual-glossary-008": {
+   "tags": [
+    "EM",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:40:44.186Z"
+  },
+  "fig-visual-glossary-009": {
+   "tags": [
+    "EM",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:40:46.522Z"
+  },
+  "fig-visual-glossary-010": {
+   "tags": [
+    "EM",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:40:49.596Z"
+  },
+  "fig-visual-glossary-011": {
+   "tags": [
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:40:51.216Z"
+  },
+  "fig-visual-glossary-012": {
+   "tags": [
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:40:54.018Z"
+  },
+  "fig-visual-glossary-013": {
+   "tags": [
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:40:55.602Z"
+  },
+  "fig-visual-glossary-014": {
+   "tags": [
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:40:57.460Z"
+  },
+  "fig-visual-glossary-015": {
+   "tags": [
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:40:58.500Z"
+  },
+  "fig-visual-glossary-016": {
+   "tags": [
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:41:05.522Z"
+  },
+  "fig-visual-glossary-017": {
+   "tags": [
+    "EM",
+    "AxonBundle"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:41:14.902Z"
+  },
+  "fig-visual-glossary-018": {
+   "tags": [
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:41:28.750Z"
+  },
+  "fig-visual-glossary-019": {
+   "tags": [
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:41:33.786Z"
+  },
+  "fig-visual-glossary-020": {
+   "tags": [
+    "Training",
+    "EM",
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:41:43.756Z"
+  },
+  "fig-visual-glossary-021": {
+   "tags": [
+    "Myelin",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:41:56.446Z"
+  },
+  "fig-visual-glossary-022": {
+   "tags": [
+    "EM",
+    "Myelin"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:42:02.880Z"
+  },
+  "fig-visual-glossary-023": {
+   "tags": [
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:42:25.601Z"
+  },
+  "fig-visual-glossary-024": {
+   "tags": [
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:42:27.777Z"
+  },
+  "fig-visual-glossary-025": {
+   "tags": [
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:42:28.972Z"
+  },
+  "fig-visual-glossary-026": {
+   "tags": [
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:43:22.096Z"
+  },
+  "fig-visual-glossary-027": {
+   "tags": [
+    "EM",
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:43:03.316Z"
+  },
+  "fig-visual-glossary-028": {
+   "tags": [
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:43:20.105Z"
+  },
+  "fig-visual-glossary-029": {
+   "tags": [
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:43:13.108Z"
+  },
+  "fig-visual-glossary-030": {
+   "tags": [
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:43:35.266Z"
+  },
+  "fig-visual-glossary-031": {
+   "tags": [
+    "EM",
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:43:49.837Z"
+  },
+  "fig-visual-glossary-032": {
+   "tags": [
+    "Structure",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:43:51.632Z"
+  },
+  "fig-visual-glossary-033": {
+   "tags": [
+    "EM",
+    "Synapse",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:44:09.338Z"
+  },
+  "fig-visual-glossary-034": {
+   "tags": [
+    "Synapse",
+    "EM",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:44:10.870Z"
+  },
+  "fig-visual-glossary-035": {
+   "tags": [
+    "Synapse",
+    "EM",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:44:16.206Z"
+  },
+  "fig-visual-glossary-036": {
+   "tags": [
+    "Synapse",
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:44:19.448Z"
+  },
+  "fig-visual-glossary-037": {
+   "tags": [
+    "Synapse",
+    "Structure",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:44:45.412Z"
+  },
+  "fig-visual-glossary-038": {
+   "tags": [
+    "Synapse",
+    "EM",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:44:51.310Z"
+  },
+  "fig-visual-glossary-039": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:44:55.766Z"
+  },
+  "fig-visual-glossary-040": {
+   "tags": [
+    "EM",
+    "Synapse"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:45:00.450Z"
+  },
+  "fig-visual-glossary-041": {
+   "tags": [
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:45:03.294Z"
+  },
+  "fig-visual-glossary-042": {
+   "tags": [
+    "EM",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:04.067Z"
+  },
+  "fig-visual-glossary-043": {
+   "tags": [
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:05.439Z"
+  },
+  "fig-visual-glossary-044": {
+   "tags": [
+    "Training",
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:07.329Z"
+  },
+  "fig-visual-glossary-045": {
+   "tags": [
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:15.681Z"
+  },
+  "fig-visual-glossary-046": {
+   "tags": [
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:16.577Z"
+  },
+  "fig-visual-glossary-047": {
+   "tags": [
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:18.281Z"
+  },
+  "fig-visual-glossary-048": {
+   "tags": [
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:19.037Z"
+  },
+  "fig-visual-glossary-049": {
+   "tags": [
+    "EM",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:23.163Z"
+  },
+  "fig-visual-glossary-050": {
+   "tags": [
+    "Synapse",
+    "EM",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:24.207Z"
+  },
+  "fig-visual-glossary-051": {
+   "tags": [
+    "Soma",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:27.211Z"
+  },
+  "fig-visual-glossary-052": {
+   "tags": [
+    "Soma",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:28.985Z"
+  },
+  "fig-visual-glossary-053": {
+   "tags": [
+    "EM",
+    "Soma",
+    "Golgi Apparatus",
+    "Mitochondria"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:30.747Z"
+  },
+  "fig-visual-glossary-054": {
+   "tags": [
+    "EM",
+    "Soma",
+    "Mitochondria",
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:31.911Z"
+  },
+  "fig-visual-glossary-055": {
+   "tags": [
+    "Training",
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:33.625Z"
+  },
+  "fig-visual-glossary-056": {
+   "tags": [
+    "EM",
+    "Soma"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:35.651Z"
+  },
+  "fig-visual-glossary-057": {
+   "tags": [
+    "EM",
+    "Soma"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:39.987Z"
+  },
+  "fig-visual-glossary-058": {
+   "tags": [
+    "EM",
+    "Structure",
+    "Glia"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:41.267Z"
+  },
+  "fig-visual-glossary-059": {
+   "tags": [
+    "Glia",
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:47:18.174Z"
+  },
+  "fig-visual-glossary-060": {
+   "tags": [
+    "Glia",
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:47:23.338Z"
+  },
+  "fig-visual-glossary-061": {
+   "tags": [
+    "Glia",
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:47:24.915Z"
+  },
+  "fig-visual-glossary-062": {
+   "tags": [
+    "Glia",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:47:29.404Z"
+  },
+  "fig-visual-glossary-063": {
+   "tags": [
+    "EM",
+    "Glia",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:47:41.598Z"
+  },
+  "fig-visual-glossary-064": {
+   "tags": [
+    "Glia",
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:47:44.174Z"
+  },
+  "fig-visual-glossary-065": {
+   "tags": [
+    "Glia",
+    "Training",
+    "EM",
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:48:18.847Z"
+  },
+  "fig-visual-glossary-066": {
+   "tags": [
+    "Glia",
+    "Training",
+    "EM",
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:48:22.760Z"
+  },
+  "fig-visual-glossary-067": {
+   "tags": [
+    "Figure",
+    "Glia",
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:48:28.769Z"
+  },
+  "fig-visual-glossary-068": {
+   "tags": [
+    "Glia",
+    "Training",
+    "EM",
+    "Structure",
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:48:38.139Z"
+  },
+  "fig-visual-glossary-069": {
+   "tags": [
+    "Myelin",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:48:44.901Z"
+  },
+  "fig-visual-glossary-070": {
+   "tags": [
+    "Myelin",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:48:49.502Z"
+  },
+  "fig-visual-glossary-071": {
+   "tags": [
+    "Myelin",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:48:51.205Z"
+  },
+  "fig-visual-glossary-072": {
+   "tags": [
+    "Blood Vessel",
+    "EM",
+    "Defect"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:49:24.580Z"
+  },
+  "fig-visual-glossary-073": {
+   "tags": [
+    "Defect",
+    "EM",
+    "Blood Vessel"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:49:34.111Z"
+  },
+  "fig-visual-glossary-074": {
+   "tags": [
+    "Glia",
+    "Organelles",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:49:48.193Z"
+  },
+  "fig-visual-glossary-075": {
+   "tags": [
+    "EM",
+    "Weird"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:50:42.883Z"
+  },
+  "fig-visual-glossary-076": {
+   "tags": [
+    "EM",
+    "Weird"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:50:43.823Z"
+  },
+  "fig-visual-glossary-077": {
+   "tags": [
+    "Mitochondria",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:50:50.644Z"
+  },
+  "fig-visual-glossary-078": {
+   "tags": [
+    "Mitochondria",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:50:51.761Z"
+  },
+  "fig-visual-glossary-079": {
+   "tags": [
+    "Mitochondria",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:50:52.876Z"
+  },
+  "fig-visual-glossary-080": {
+   "tags": [
+    "Mitochondria",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:50:54.069Z"
+  },
+  "fig-visual-glossary-081": {
+   "tags": [
+    "Mitochondria",
+    "EM",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:50:57.428Z"
+  },
+  "fig-visual-glossary-082": {
+   "tags": [
+    "EM",
+    "Defect",
+    "Myelin"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:51:07.515Z"
+  },
+  "fig-ol-cell-name-guide-001": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:51:16.221Z"
+  },
+  "fig-ol-cell-name-guide-002": {
+   "tags": [
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:51:28.187Z"
+  },
+  "fig-ol-cell-name-guide-003": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:51:38.890Z"
+  },
+  "fig-ol-cell-name-guide-004": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:51:41.578Z"
+  },
+  "fig-ol-cell-name-guide-005": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:51:42.935Z"
+  },
+  "fig-ol-cell-name-guide-006": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:51:43.958Z"
+  },
+  "fig-ol-cell-name-guide-007": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:51:45.692Z"
+  },
+  "fig-ol-cell-name-guide-008": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:51:46.662Z"
+  },
+  "fig-ol-cell-name-guide-009": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:51:47.407Z"
+  },
+  "fig-ol-cell-name-guide-010": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:51:49.099Z"
+  },
+  "fig-ol-cell-name-guide-011": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:51:49.698Z"
+  },
+  "fig-ol-cell-name-guide-012": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:51:50.184Z"
+  },
+  "fig-ol-cell-name-guide-013": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:51:50.609Z"
+  },
+  "fig-ol-cell-name-guide-014": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:51:51.026Z"
+  },
+  "fig-ol-cell-name-guide-015": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:51:51.575Z"
+  },
+  "fig-ol-cell-name-guide-016": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:51:52.238Z"
+  },
+  "fig-ol-cell-name-guide-017": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:51:52.692Z"
+  },
+  "fig-ol-cell-name-guide-018": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:51:53.128Z"
+  },
+  "fig-ol-cell-name-guide-019": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:51:53.506Z"
+  },
+  "fig-ol-cell-name-guide-020": {
+   "tags": [
+    "Structure",
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:00.942Z"
+  },
+  "fig-ol-cell-name-guide-021": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:02.344Z"
+  },
+  "fig-ol-cell-name-guide-022": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:02.961Z"
+  },
+  "fig-ol-cell-name-guide-023": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:03.396Z"
+  },
+  "fig-ol-cell-name-guide-024": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:03.797Z"
+  },
+  "fig-ol-cell-name-guide-025": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:04.760Z"
+  },
+  "fig-ol-cell-name-guide-026": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:05.270Z"
+  },
+  "fig-ol-cell-name-guide-027": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:06.024Z"
+  },
+  "fig-ol-cell-name-guide-028": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:06.861Z"
+  },
+  "fig-ol-cell-name-guide-029": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:07.319Z"
+  },
+  "fig-ol-cell-name-guide-030": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:07.767Z"
+  },
+  "fig-ol-cell-name-guide-031": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:08.395Z"
+  },
+  "fig-ol-cell-name-guide-032": {
+   "tags": [
+    "Figure",
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:12.878Z"
+  },
+  "fig-ol-cell-name-guide-033": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:13.994Z"
+  },
+  "fig-ol-cell-name-guide-034": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:14.596Z"
+  },
+  "fig-ol-cell-name-guide-035": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:15.170Z"
+  },
+  "fig-ol-cell-name-guide-036": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:15.698Z"
+  },
+  "fig-ol-cell-name-guide-037": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:16.412Z"
+  },
+  "fig-ol-cell-name-guide-038": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:16.863Z"
+  },
+  "fig-ol-cell-name-guide-039": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:17.573Z"
+  },
+  "fig-ol-cell-name-guide-040": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:18.124Z"
+  },
+  "fig-ol-cell-name-guide-041": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:18.575Z"
+  },
+  "fig-ol-cell-name-guide-042": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:19.060Z"
+  },
+  "fig-ol-cell-name-guide-043": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:19.546Z"
+  },
+  "fig-ol-cell-name-guide-044": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:20.064Z"
+  },
+  "fig-ol-cell-name-guide-045": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:20.593Z"
+  },
+  "fig-ol-cell-name-guide-046": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:21.032Z"
+  },
+  "fig-ol-cell-name-guide-047": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:21.480Z"
+  },
+  "fig-ol-cell-name-guide-048": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:21.958Z"
+  },
+  "fig-ol-cell-name-guide-049": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:22.388Z"
+  },
+  "fig-ol-cell-name-guide-050": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:22.817Z"
+  },
+  "fig-ol-cell-name-guide-051": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:23.284Z"
+  },
+  "fig-ol-cell-name-guide-052": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:23.740Z"
+  },
+  "fig-ol-cell-name-guide-053": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:24.140Z"
+  },
+  "fig-ol-cell-name-guide-054": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:24.554Z"
+  },
+  "fig-ol-cell-name-guide-055": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:24.972Z"
+  },
+  "fig-ol-cell-name-guide-056": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:25.398Z"
+  },
+  "fig-ol-cell-name-guide-057": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:25.821Z"
+  },
+  "fig-ol-cell-name-guide-058": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:26.264Z"
+  },
+  "fig-kyle-r1-6-chiasmic": {
+   "tags": [
+    "Figure",
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:27.777Z"
+  },
+  "fig-kyle-r1-6-medullar": {
+   "tags": [
+    "Figure",
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:28.962Z"
+  },
+  "fig-kyle-r1-6-lobular": {
+   "tags": [
+    "Figure",
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:52:30.933Z"
+  },
+  "fig-kyle-tm21-population": {
+   "tags": [
+    "Figure",
+    "Structure",
+    "Bald Spot"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:53:02.444Z"
+  },
+  "fig-kyle-tm5c-population": {
+   "tags": [
+    "Figure",
+    "Structure",
+    "Bald Spot"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:53:03.796Z"
+  },
+  "fig-kyle-dm8-population": {
+   "tags": [
+    "Figure",
+    "Structure",
+    "Bald Spot"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:53:04.948Z"
+  },
+  "fig-kyle-mti2-population": {
+   "tags": [
+    "Figure",
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:53:05.957Z"
+  },
+  "fig-kyle-similar2y12": {
+   "tags": [
+    "Figure",
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:53:16.688Z"
+  },
+  "fig-kyle-unknown-type-population": {
+   "tags": [
+    "Figure",
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:53:17.808Z"
+  },
+  "fig-fly-synapses-001": {
+   "tags": [
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:53:27.912Z"
+  },
+  "fig-fly-synapses-002": {
+   "tags": [
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:53:30.024Z"
+  },
+  "fig-fly-synapses-003": {
+   "tags": [
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:53:30.726Z"
+  },
+  "fig-fly-synapses-004": {
+   "tags": [
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:53:33.252Z"
+  },
+  "fig-fly-synapses-005": {
+   "tags": [
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:53:34.137Z"
+  },
+  "fig-fly-synapses-006": {
+   "tags": [
+    "EM",
+    "Axons",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:54:09.423Z"
+  },
+  "fig-fly-synapses-007": {
+   "tags": [
+    "Synapse",
+    "EM",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:54:11.571Z"
+  },
+  "fig-fly-synapses-008": {
+   "tags": [
+    "Synapse",
+    "EM",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:54:13.481Z"
+  },
+  "fig-fly-synapses-009": {
+   "tags": [
+    "Synapse",
+    "EM",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:54:14.637Z"
+  },
+  "fig-fly-synapses-010": {
+   "tags": [
+    "Synapse",
+    "EM",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:54:15.763Z"
+  },
+  "fig-fly-synapses-011": {
+   "tags": [
+    "Synapse",
+    "Training",
+    "EM",
+    "Vesicles"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:55:03.641Z"
+  },
+  "fig-fly-synapses-012": {
+   "tags": [
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:55:13.279Z"
+  },
+  "fig-fly-synapses-013": {
+   "tags": [
+    "Synapse",
+    "EM",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:55:53.094Z"
+  },
+  "fig-fly-synapses-014": {
+   "tags": [
+    "Synapse",
+    "EM",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:55:51.987Z"
+  },
+  "fig-fly-synapses-015": {
+   "tags": [
+    "Synapse",
+    "EM",
+    "Defect",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:55:51.180Z"
+  },
+  "fig-fly-synapses-016": {
+   "tags": [
+    "Synapse",
+    "EM",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:56:01.437Z"
+  },
+  "fig-fly-synapses-017": {
+   "tags": [
+    "Synapse",
+    "EM",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:56:03.903Z"
+  },
+  "fig-fly-synapses-018": {
+   "tags": [
+    "Synapse",
+    "EM",
+    "Defect",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:56:06.260Z"
+  },
+  "fig-fly-synapses-019": {
+   "tags": [
+    "Synapse",
+    "EM",
+    "Defect",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:56:07.978Z"
+  },
+  "fig-fly-synapses-020": {
+   "tags": [
+    "Synapse",
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:51.001Z"
+  },
+  "fig-fly-synapses-021": {
+   "tags": [
+    "Synapse",
+    "EM",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:52.644Z"
+  },
+  "fig-fly-synapses-022": {
+   "tags": [
+    "Synapse",
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:54.014Z"
+  },
+  "fig-fly-synapses-023": {
+   "tags": [
+    "Synapse",
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:54.828Z"
+  },
+  "fig-fly-synapses-024": {
+   "tags": [
+    "Synapse",
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:55.622Z"
+  },
+  "fig-fly-synapses-025": {
+   "tags": [
+    "Synapse",
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:56.649Z"
+  },
+  "fig-fly-synapses-026": {
+   "tags": [
+    "Synapse",
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:57.750Z"
+  },
+  "fig-fly-synapses-027": {
+   "tags": [
+    "Synapse",
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:58.520Z"
+  },
+  "fig-fly-synapses-028": {
+   "tags": [
+    "Synapse",
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:59.023Z"
+  },
+  "fig-fly-synapses-029": {
+   "tags": [
+    "Synapse",
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:01:59.482Z"
+  },
+  "fig-flywire-cheatsheet-001": {
+   "tags": [
+    "Structure",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:02:00.453Z"
+  },
+  "fig-flywire-cheatsheet-002": {
+   "tags": [
+    "Structure",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:02:01.228Z"
+  },
+  "fig-flywire-cheatsheet-003": {
+   "tags": [
+    "EM",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:02:01.903Z"
+  },
+  "fig-flywire-cheatsheet-004": {
+   "tags": [
+    "Training",
+    "EM",
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:02:02.520Z"
+  },
+  "fig-flywire-cheatsheet-005": {
+   "tags": [
+    "Training",
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:02:03.149Z"
+  },
+  "fig-flywire-cheatsheet-006": {
+   "tags": [
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:02:03.540Z"
+  },
+  "fig-flywire-cheatsheet-007": {
+   "tags": [
+    "Training",
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:02:03.958Z"
+  },
+  "fig-flywire-cheatsheet-008": {
+   "tags": [
+    "Training",
+    "EM",
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:02:04.850Z"
+  },
+  "fig-flywire-cheatsheet-009": {
+   "tags": [
+    "Structure",
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:02:05.249Z"
+  },
+  "fig-flywire-cheatsheet-010": {
+   "tags": [
+    "Figure",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:02:05.838Z"
+  },
+  "fig-flywire-cheatsheet-011": {
+   "tags": [
+    "EM",
+    "Structure",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:02:06.265Z"
+  },
+  "fig-flywire-cheatsheet-012": {
+   "tags": [
+    "EM",
+    "Structure",
+    "Training"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:05.047Z"
+  },
+  "fig-flywire-cheatsheet-013": {
+   "tags": [
+    "Structure",
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:06.845Z"
+  },
+  "fig-flywire-cheatsheet-014": {
+   "tags": [
+    "Structure",
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:08.205Z"
+  },
+  "fig-flywire-cheatsheet-015": {
+   "tags": [
+    "Structure",
+    "Training",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:09.365Z"
+  },
+  "fig-flywire-cheatsheet-016": {
+   "tags": [
+    "Training",
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:14.215Z"
+  },
+  "fig-dm102b-6": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:17.897Z"
+  },
+  "fig-dm2a": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:19.321Z"
+  },
+  "fig-dm2b": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:19.914Z"
+  },
+  "fig-dm3p": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:20.431Z"
+  },
+  "fig-dm4": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:21.000Z"
+  },
+  "fig-dm9": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:21.421Z"
+  },
+  "fig-lpi-t5b-dch-lpi2-1f": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:21.920Z"
+  },
+  "fig-mti123-37-anterior": {
+   "tags": [
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:29.756Z"
+  },
+  "fig-mti123-37-side": {
+   "tags": [
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:30.367Z"
+  },
+  "fig-mti123-37-ventral": {
+   "tags": [
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:30.948Z"
+  },
+  "fig-mti123-37": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:33.094Z"
+  },
+  "fig-mti124-67": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:33.787Z"
+  },
+  "fig-sdm100c-67": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:34.318Z"
+  },
+  "fig-sdm103-34567": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:34.803Z"
+  },
+  "fig-tm8b": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:35.396Z"
+  },
+  "fig-y11": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:35.949Z"
+  },
+  "fig-contrib-wolverine-claws": {
+   "tags": [
+    "Funny",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:40.765Z"
+  },
+  "fig-contrib-ghost-face": {
+   "tags": [
+    "Funny",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:42.121Z"
+  },
+  "fig-contrib-dalmatian-running": {
+   "tags": [
+    "Funny",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:42.712Z"
+  },
+  "fig-contrib-eggman": {
+   "tags": [
+    "Funny",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:43.336Z"
+  },
+  "fig-contrib-hippo": {
+   "tags": [
+    "Funny",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:44.494Z"
+  },
+  "fig-contrib-sad-face-mitochondrion": {
+   "tags": [
+    "Funny",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:45.084Z"
+  },
+  "fig-contrib-hippocampus-ghost": {
+   "tags": [
+    "Funny",
+    "EM",
+    "Organelles"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:49.099Z"
+  },
+  "fig-contrib-icy-thumbs-up": {
+   "tags": [
+    "Funny",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:51.343Z"
+  },
+  "fig-contrib-screaming-face": {
+   "tags": [
+    "Funny",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:52.548Z"
+  },
+  "fig-contrib-big-nose-animal": {
+   "tags": [
+    "Funny",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:53.194Z"
+  },
+  "fig-contrib-crying-face": {
+   "tags": [
+    "Funny",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:53.753Z"
+  },
+  "fig-contrib-zombie-thumbs-up": {
+   "tags": [
+    "Funny",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:54.763Z"
+  },
+  "fig-contrib-big-dipper-cell": {
+   "tags": [
+    "Funny",
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:58:57.854Z"
+  },
+  "fig-contrib-screenshot-2026-05-22-at-4-40-59-pm": {
+   "tags": [
+    "Funny",
+    "EM",
+    "Defect"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:04.014Z"
+  },
+  "fig-contrib-screenshot-2026-02-25-at-6-49-04-pm": {
+   "tags": [
+    "Funny",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:06.742Z"
+  },
+  "fig-contrib-screenshot-2026-02-25-at-6-42-43-pm": {
+   "tags": [
+    "Funny",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:07.703Z"
+  },
+  "fig-contrib-screenshot-2026-02-25-at-6-20-41-pm": {
+   "tags": [
+    "Funny",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:08.960Z"
+  },
+  "fig-contrib-red-hat": {
+   "tags": [
+    "Funny",
+    "EM",
+    "Segmentation"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:16.953Z"
+  },
+  "fig-contrib-synapse-great-1": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:22.509Z"
+  },
+  "fig-contrib-synapse-great-7": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:23.314Z"
+  },
+  "fig-contrib-synapse-fair-1": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:24.109Z"
+  },
+  "fig-contrib-synapse-fair-12": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:24.874Z"
+  },
+  "fig-contrib-synapse-annotation-layers": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM",
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:28.459Z"
+  },
+  "fig-contrib-synapse-fp-fn-counts": {
+   "tags": [
+    "Training",
+    "Synapse"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:35.878Z"
+  },
+  "fig-contrib-synapse-labeling-sets": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:37.631Z"
+  },
+  "fig-contrib-synapse-fair-24": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:39.491Z"
+  },
+  "fig-contrib-synapse-fair-23": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:40.379Z"
+  },
+  "fig-contrib-synapse-fair-22": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:41.153Z"
+  },
+  "fig-contrib-synapse-fair-21": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:41.885Z"
+  },
+  "fig-contrib-synapse-fair-20": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:42.602Z"
+  },
+  "fig-contrib-synapse-fair-19": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:43.313Z"
+  },
+  "fig-contrib-synapse-fair-18": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:44.012Z"
+  },
+  "fig-contrib-synapse-fair-17": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:44.676Z"
+  },
+  "fig-contrib-synapse-fair-16": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:45.301Z"
+  },
+  "fig-contrib-synapse-fair-15": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:45.902Z"
+  },
+  "fig-contrib-synapse-fair-14": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:46.500Z"
+  },
+  "fig-contrib-synapse-fair-13": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:47.031Z"
+  },
+  "fig-contrib-synapse-fair-11": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:47.558Z"
+  },
+  "fig-contrib-synapse-fair-10": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:48.039Z"
+  },
+  "fig-contrib-synapse-fair-9": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:48.533Z"
+  },
+  "fig-contrib-synapse-fair-8": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:49.018Z"
+  },
+  "fig-contrib-synapse-fair-7": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:49.585Z"
+  },
+  "fig-contrib-synapse-fair-6": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:50.186Z"
+  },
+  "fig-contrib-synapse-fair-5": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:50.742Z"
+  },
+  "fig-contrib-synapse-fair-4": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:51.233Z"
+  },
+  "fig-contrib-synapse-fair-3": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:51.761Z"
+  },
+  "fig-contrib-synapse-fair-2": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:52.239Z"
+  },
+  "fig-contrib-synapse-great-10": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:52.755Z"
+  },
+  "fig-contrib-synapse-great-9": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:53.319Z"
+  },
+  "fig-contrib-synapse-great-8": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:53.807Z"
+  },
+  "fig-contrib-synapse-great-6": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:54.334Z"
+  },
+  "fig-contrib-synapse-great-5": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:54.931Z"
+  },
+  "fig-contrib-synapse-great-4": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:55.464Z"
+  },
+  "fig-contrib-synapse-great-3": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:55.988Z"
+  },
+  "fig-contrib-synapse-great-2": {
+   "tags": [
+    "Training",
+    "Synapse",
+    "EM"
+   ],
+   "done": true,
+   "updated": "2026-10-20T19:59:56.518Z"
+  },
+  "fig-contrib-screenshot-2026-05-27-at-3-28-34-pm": {
+   "tags": [
+    "Figure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:00:09.435Z"
+  },
+  "fig-kyle-omni-capture": {
+   "tags": [
+    "Funny"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:00:13.810Z"
+  },
+  "fig-kyle-omni-overview": {
+   "tags": [
+    "Training",
+    "Structure"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:00:21.448Z"
+  },
+  "fig-kyle-omni-example8": {
+   "tags": [
+    "Training",
+    "EM",
+    "Path Swap"
+   ],
+   "done": true,
+   "updated": "2026-10-20T20:00:58.919Z"
+  }
+ }
+}

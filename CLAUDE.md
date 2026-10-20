@@ -70,8 +70,15 @@ All pages follow these principles (documented in `index.html` comments):
                      # FlyWire Cheatsheet, Optic Lobe Diagrams, Image Bounty. One sticky control strip (.filter-bar):
                      # Filter <select> | "Jump to" <select> (#section-jump, jumpToSection(); replaced the old
                      # chip row 2026-10-20) | View toggle.
-                     # Category filter <select> (all/synapse/structure/defect/segmentation/funny/training/
-                     # figure) drives filterGallery() by toggling .filtered-out; sections left with no visible
+                     # TAGS (2026-10-20): every card has data-tags="A|B|C" + a caption line of #hashtag links
+                     # (.gallery-tags; overlay badges are GONE). 315 non-"Figure" cards were hand multi-tagged
+                     # in work-files/tagger/ (Figure Tagger app; source of truth = work-files/tagger/
+                     # figure-tags.json); the ~976 auto-imported cards fall back to data-category ("Figure").
+                     # `node work-files/tagger/apply-tags.mjs` writes tags + regenerates the Filter <select>
+                     # options (tag set with counts) — RE-RUN IT after any gallery generator, then rebuild
+                     # search-index.js (tags feed figure keywords). data-category is kept for the generators.
+                     # Filter <select> drives filterGallery() (case-insensitive over itemTags(), so old
+                     # ?filter=defect links work; clicking a #tag applies it) by toggling .filtered-out; sections left with no visible
                      # figure get .section-empty (hidden, Jump-to option disabled too). "View: By gallery | Combined"
                      # toggle (setGalleryView) adds body.gallery-flat: all sections are wrapped in
                      # .gallery-sections, which becomes ONE grid (sections/grids -> display:contents, headers

@@ -121,7 +121,8 @@ function harvestGallery(curatedUrls) {
       if (bag.length) patches.push({ url, text: bag.join(' ') });
       continue;
     }
-    const keywords = [...new Set([...meta, category].filter(Boolean))];
+    const tags = (first(/data-tags="([^"]+)"/, attrs) || '').split('|').map((x) => x.trim()).filter(Boolean);
+    const keywords = [...new Set([...meta, category, ...tags].filter(Boolean))];
     const e = { title, url, section: 'Gallery · ' + (sec ? sec.label : 'Gallery'), description, keywords, group: sec ? 'gallery:' + sec.id : undefined };
     if (alt && alt !== title && alt !== description) e.text = words(alt).join(' ');
     // Auto-imported contribution cards (no id, boilerplate caption) rank a notch below curated figures.
