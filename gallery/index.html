@@ -300,7 +300,7 @@
             position: relative;
             aspect-ratio: 16 / 11;
             overflow: hidden;
-            background-color: #1a1a1a;
+            background-color: #e5e5e5; /* light placeholder: no black flash while images stream in */
         }
 
         .gallery-image-container img {
@@ -468,7 +468,7 @@
            VIEW TOGGLE: "By gallery" (default) vs "Combined"
            Combined view pools every visible figure into ONE grid, drops the
            per-gallery headers, and shows a "From: <gallery>" tag on each card
-           instead so the provenance is never lost. Driven by body.gallery-flat.
+           instead so the provenance is never lost. Driven by html.gallery-flat.
            ============================================================ */
         .filter-bar { flex-wrap: wrap; gap: 0.5rem 1.5rem; }
         .view-toggle { display: inline-flex; align-items: center; gap: 0.5rem; }
@@ -485,33 +485,33 @@
 
         /* The "From: <gallery>" tag -- hidden in the default grouped view */
         .gallery-origin { display: none; }
-        body.gallery-flat .gallery-origin {
+        html.gallery-flat .gallery-origin {
             display: inline-flex; align-items: center; gap: 0.3rem;
             margin-top: 0.6rem; font-size: 0.75rem; color: #737373; text-decoration: none;
         }
-        body.gallery-flat .gallery-origin b { font-weight: 600; color: #525252; }
-        body.gallery-flat .gallery-origin:hover b { color: #2563eb; text-decoration: underline; }
+        html.gallery-flat .gallery-origin b { font-weight: 600; color: #525252; }
+        html.gallery-flat .gallery-origin:hover b { color: #2563eb; text-decoration: underline; }
 
         /* Combined layout: the wrapper becomes the single grid, sections and
            their inner grids dissolve (display: contents) so every card sits in
            one continuous flow. Header + blurb per section are dropped. */
-        body.gallery-flat .gallery-sections {
+        html.gallery-flat .gallery-sections {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 1.5rem;
             margin-bottom: 3rem;
         }
-        body.gallery-flat .dataset-section,
-        body.gallery-flat .gallery-grid { display: contents; }
-        body.gallery-flat .dataset-header,
-        body.gallery-flat .dataset-description,
-        body.gallery-flat .dataset-section.no-figures,
-        body.gallery-flat .dataset-section.section-empty { display: none; }
+        html.gallery-flat .dataset-section,
+        html.gallery-flat .gallery-grid { display: contents; }
+        html.gallery-flat .dataset-header,
+        html.gallery-flat .dataset-description,
+        html.gallery-flat .dataset-section.no-figures,
+        html.gallery-flat .dataset-section.section-empty { display: none; }
         @media (max-width: 768px) {
-            body.gallery-flat .gallery-sections { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+            html.gallery-flat .gallery-sections { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
         }
         @media (max-width: 480px) {
-            body.gallery-flat .gallery-sections { grid-template-columns: 1fr; }
+            html.gallery-flat .gallery-sections { grid-template-columns: 1fr; }
         }
 
         /* ============================================================
@@ -866,6 +866,42 @@
         .featured-collection .featured-link:hover { background: #1d4ed8; }
             /* Sticky in-page section navigation for the long merged gallery */
     </style>
+    <script>
+    /* Runs before any card is parsed (the page is ~1.8 MB; the lightbox script at the
+       bottom can take seconds to arrive on a slow connection).
+       1. Any click on a card's image OR title is caught here and either opens the
+          lightbox (if it has loaded) or is parked in window.__pendingLightbox for the
+          lightbox script to pick up — so a click never falls through to the raw image.
+          Modified clicks (Ctrl/Cmd/Shift/middle) are left alone so "open in new tab" works.
+       2. ?view=flat and ?filter=<tag> are applied before first paint (html class + a
+          temporary <style> using case-insensitive attribute matches on data-tags), so a
+          refresh doesn't flash all 1,291 cards before collapsing to the filtered set.
+          filterGallery() removes the temporary style once it has applied the real classes. */
+    (function () {
+        document.addEventListener('click', function (e) {
+            if (e.defaultPrevented || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+            var a = e.target.closest && e.target.closest('.gallery-image-container a, .gallery-title a');
+            if (!a) return;
+            var fig = a.closest('.gallery-item');
+            if (!fig || !fig.querySelector('.gallery-image-container img')) return;
+            e.preventDefault();
+            if (window.openLightboxFor) window.openLightboxFor(a.href); else window.__pendingLightbox = a.href;
+        });
+        var p;
+        try { p = new URLSearchParams(window.location.search); } catch (err) { return; }
+        if (p.get('view') === 'flat') document.documentElement.classList.add('gallery-flat');
+        var f = (p.get('filter') || '').trim();
+        if (!f || f.toLowerCase() === 'all') return;
+        var v = f.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+        var match = ['[data-tags="' + v + '" i]', '[data-tags^="' + v + '|" i]', '[data-tags$="|' + v + '" i]', '[data-tags*="|' + v + '|" i]']
+            .map(function (sel) { return '.gallery-item' + sel; }).join(',');
+        var st = document.createElement('style');
+        st.id = 'early-filter';
+        st.textContent = '.gallery-item:not(:is(' + match + ')){display:none}' +
+                         '.dataset-section:not(:has(' + match + ')){display:none}';
+        document.head.appendChild(st);
+    })();
+    </script>
 </head>
 <body>
 
@@ -24340,23 +24376,25 @@ function lightboxClick(e) {
     }
 }
 
-// Attach click handlers to all gallery images
-(function() {
-    document.querySelectorAll('.gallery-image-container a').forEach(function(link) {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            buildGalleryList();
-            var src = this.href;
-            for (var i = 0; i < galleryItems.length; i++) {
-                if (galleryItems[i].src === src) {
-                    currentIndex = i;
-                    break;
-                }
-            }
-            showImage(currentIndex);
-        });
-    });
-})();
+// Open the lightbox on a given image URL. Card clicks (image or title) are routed here
+// by the early click handler in <head>; a click that happened before this script loaded
+// is waiting in window.__pendingLightbox.
+window.openLightboxFor = function(src) {
+    if (!document.getElementById('lightbox')) { window.__pendingLightbox = src; return; } // overlay markup not parsed yet
+    buildGalleryList();
+    for (var i = 0; i < galleryItems.length; i++) {
+        if (galleryItems[i].src === src) { showImage(i); return; }
+    }
+    window.location.href = src; // not a lightbox image after all: follow the link
+};
+// The overlay <div id="lightbox"> sits at the end of <body>, so a parked click is
+// replayed once the whole document has been parsed.
+document.addEventListener('DOMContentLoaded', function() {
+    if (!window.__pendingLightbox) return;
+    var pendingSrc = window.__pendingLightbox;
+    window.__pendingLightbox = null;
+    window.openLightboxFor(pendingSrc);
+});
 
 // Keyboard navigation
 document.addEventListener('keydown', function(e) {
@@ -24411,13 +24449,15 @@ function filterGallery(category) {
         if (opt) { opt.disabled = empty; opt.hidden = empty; }
     });
     updateGalleryUrl('filter', category === 'all' ? null : category);
+    var early = document.getElementById('early-filter');
+    if (early) early.parentNode.removeChild(early);
 }
 
 // View toggle: 'grouped' (default, figures under their gallery headings) or
 // 'flat' (every visible figure pooled into one grid, "From: <gallery>" on each card).
 function setGalleryView(view) {
     if (view !== 'flat') view = 'grouped';
-    document.body.classList.toggle('gallery-flat', view === 'flat');
+    document.documentElement.classList.toggle('gallery-flat', view === 'flat');
     document.querySelectorAll('.view-toggle-group button').forEach(function(btn) {
         btn.setAttribute('aria-pressed', btn.getAttribute('data-view') === view ? 'true' : 'false');
     });
@@ -24430,7 +24470,7 @@ function setGalleryView(view) {
 function jumpToSection(id) {
     var select = document.getElementById('section-jump');
     if (!id) return;
-    if (document.body.classList.contains('gallery-flat')) setGalleryView('grouped');
+    if (document.documentElement.classList.contains('gallery-flat')) setGalleryView('grouped');
     var target = document.getElementById(id);
     if (target) {
         if (window.history && window.history.replaceState) {
@@ -24489,7 +24529,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     var value = normalizeFilter(params.get('filter'));
-    if (!value || value === 'all') return;
+    if (!value || value === 'all') {
+        var early = document.getElementById('early-filter');
+        if (early) early.parentNode.removeChild(early);
+        return;
+    }
     filterGallery(value);
     if (window.location.hash) return; // a #fig-.../#section link wins over "scroll to first match"
     var first = document.querySelector('.gallery-item:not(.filtered-out)');

@@ -87,6 +87,14 @@ All pages follow these principles (documented in `index.html` comments):
                      # ?filter=<cat>&view=flat auto-applies (filter alone also scrolls the first match into
                      # view, e.g. the SOP defect section links to gallery/?filter=defect); both are kept in
                      # the URL via replaceState so the current view is shareable.
+                     # EARLY <script> in <head> (2026-10-21): (1) delegated click handler for card image AND
+                     # title links -> window.openLightboxFor(href), or parks the href in __pendingLightbox
+                     # until the lightbox script (bottom of body) + overlay markup (end of body) exist —
+                     # fixes clicks during the multi-second parse of the 1.8 MB page and title-text clicks
+                     # that used to open the raw PNG; (2) applies ?view=flat (class on <html>, selectors
+                     # are html.gallery-flat) and ?filter= (temporary #early-filter <style> using
+                     # [data-tags … i] matches + :has) BEFORE first paint, so a refresh doesn't flash all
+                     # cards. Image boxes are light grey (#e5e5e5), not black, while pictures stream in.
 /gallery/reference-figures/   # ORPHANED standalone page (185 figs) — merged into /gallery/ (2026-05-27);
                      # left intact (preserve-originals), unlinked. Image files still served from here.
 /gallery/optic-lobe-diagrams/ # ORPHANED standalone page (16 diagrams) — likewise merged + unlinked.
