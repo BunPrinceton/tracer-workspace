@@ -67,10 +67,12 @@ All pages follow these principles (documented in `index.html` comments):
                      # contribution cards with no figure id; every figure is search-indexed via
                      # search-index.js): BANC, FAFB 2019,
                      # Reference Materials, Visual Glossary, OL Cell Name Guide, Fly Synapses,
-                     # FlyWire Cheatsheet, Optic Lobe Diagrams, Image Bounty. Sticky section jump-nav.
+                     # FlyWire Cheatsheet, Optic Lobe Diagrams, Image Bounty. One sticky control strip (.filter-bar):
+                     # Filter <select> | "Jump to" <select> (#section-jump, jumpToSection(); replaced the old
+                     # chip row 2026-10-20) | View toggle.
                      # Category filter <select> (all/synapse/structure/defect/segmentation/funny/training/
                      # figure) drives filterGallery() by toggling .filtered-out; sections left with no visible
-                     # figure get .section-empty (hidden, jump-nav chip too). "View: By gallery | Combined"
+                     # figure get .section-empty (hidden, Jump-to option disabled too). "View: By gallery | Combined"
                      # toggle (setGalleryView) adds body.gallery-flat: all sections are wrapped in
                      # .gallery-sections, which becomes ONE grid (sections/grids -> display:contents, headers
                      # hidden) and each card shows a JS-added "From: <gallery>" link (.gallery-origin, built

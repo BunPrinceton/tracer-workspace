@@ -165,10 +165,18 @@
            Simple dropdown filter
            ============================================================ */
         .filter-bar {
+            position: sticky; top: 0; z-index: 50;
             display: flex;
             align-items: center;
-            margin-bottom: 2rem;
+            padding: 0.6rem 0;
+            margin-bottom: 1.5rem;
+            background: rgba(245,245,245,0.97);
+            backdrop-filter: blur(4px);
+            border-bottom: 1px solid #e5e5e5;
         }
+        .filter-control { display: inline-flex; align-items: center; gap: 0.5rem; }
+        .filter-control-label { font-size: 0.875rem; color: #525252; }
+        @media print { .filter-bar { display: none; } }
 
         .filter-select {
             padding: 0.5rem 0.75rem;
@@ -241,6 +249,7 @@
            ============================================================ */
         .dataset-section {
             margin-bottom: 3rem;
+            scroll-margin-top: 70px;
         }
 
         .dataset-header {
@@ -469,10 +478,9 @@
         }
 
         /* Sections with no visible figures (filter active) are hidden entirely,
-           and their chip in the sticky jump-nav goes with them. Both classes are
+           and their entry in the "Jump to" dropdown is disabled+hidden. Both are
            maintained by filterGallery() below. */
         .dataset-section.section-empty { display: none; }
-        .section-jump a.jump-hidden { display: none; }
 
         /* ============================================================
            VIEW TOGGLE: "By gallery" (default) vs "Combined"
@@ -875,10 +883,6 @@
         }
         .featured-collection .featured-link:hover { background: #1d4ed8; }
             /* Sticky in-page section navigation for the long merged gallery */
-        .section-jump { position: sticky; top: 0; z-index: 50; display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 0.6rem 0; margin: 0 0 1.25rem; background: rgba(245,245,245,0.97); backdrop-filter: blur(4px); border-bottom: 1px solid #e5e5e5; }
-        .section-jump a { flex: 0 0 auto; font-size: 0.8125rem; font-weight: 600; color: #374151; background: #fff; border: 1px solid #d4d4d4; border-radius: 999px; padding: 0.3rem 0.75rem; text-decoration: none; white-space: nowrap; }
-        .section-jump a:hover { border-color: #2563eb; color: #2563eb; }
-        @media print { .section-jump { display: none; } }
     </style>
 </head>
 <body>
@@ -937,41 +941,46 @@
 
 
 
-        <nav class="section-jump" aria-label="Jump to gallery section">
-        <a href="#banc">BANC</a>
-        <a href="#fafb-2019">FAFB 2019</a>
-        <a href="#reference">Reference</a>
-        <a href="#visual-glossary">Visual Glossary</a>
-        <a href="#ol-cell-name-guide">OL Cell Names</a>
-        <a href="#fly-synapses">Fly Synapses</a>
-        <a href="#flywire-cheatsheet">FlyWire Cheatsheet</a>
-        <a href="#optic-lobe-diagrams">OL Diagrams</a>
-        <a href="#contrib-funny">Funny</a>
-        <a href="#contrib-training">Training</a>
-        <a href="#contrib-figures">Figures</a>
-        <a href="#contrib-lm">EM vs LM</a>
-        <a href="#contrib-lmfinal">LM Final</a>
-        <a href="#contrib-lmfinal-real">Final Figures</a>
-        <a href="#contrib-individuals">Individuals</a>
-        <a href="#contrib-codex">Codex EM</a>
-        <a href="#image-bounty">Image Bounty</a>
-    </nav>
-
     <!-- ============================================================
-         FILTER CONTROLS
+         FILTER / VIEW / JUMP CONTROLS (sticky strip)
          ============================================================ -->
     <div class="filter-bar">
-        <label for="category-filter" style="font-size:0.875rem; color:#525252; margin-right:0.5rem;">Filter:</label>
-        <select id="category-filter" class="filter-select" onchange="filterGallery(this.value)">
-            <option value="all">All Categories</option>
-            <option value="synapse">Synapses</option>
-            <option value="structure">Structures</option>
-            <option value="defect">Defects</option>
-            <option value="segmentation">Segmentation</option>
-            <option value="funny">Funny</option>
-            <option value="training">Training</option>
-            <option value="figure">Figure</option>
-        </select>
+        <div class="filter-control">
+            <label for="category-filter" class="filter-control-label">Filter:</label>
+            <select id="category-filter" class="filter-select" onchange="filterGallery(this.value)">
+                <option value="all">All Categories</option>
+                <option value="synapse">Synapses</option>
+                <option value="structure">Structures</option>
+                <option value="defect">Defects</option>
+                <option value="segmentation">Segmentation</option>
+                <option value="funny">Funny</option>
+                <option value="training">Training</option>
+                <option value="figure">Figure</option>
+            </select>
+        </div>
+        <div class="filter-control">
+            <label for="section-jump" class="filter-control-label">Jump to:</label>
+            <select id="section-jump" class="filter-select" onchange="jumpToSection(this.value)" aria-label="Jump to gallery section">
+                <option value="">Gallery&hellip;</option>
+                <option value="banc">BANC</option>
+                <option value="fafb-2019">FAFB 2019</option>
+                <option value="reference">Reference</option>
+                <option value="visual-glossary">Visual Glossary</option>
+                <option value="ol-cell-name-guide">OL Cell Names</option>
+                <option value="fly-synapses">Fly Synapses</option>
+                <option value="flywire-cheatsheet">FlyWire Cheatsheet</option>
+                <option value="optic-lobe-diagrams">OL Diagrams</option>
+                <option value="contrib-funny">Funny</option>
+                <option value="contrib-training">Training</option>
+                <option value="contrib-figures">Figures</option>
+                <option value="contrib-lm">EM vs LM</option>
+                <option value="contrib-lmfinal">LM Final</option>
+                <option value="contrib-lmfinal-real">Final Figures</option>
+                <option value="contrib-individuals">Individuals</option>
+                <option value="contrib-codex">Codex EM</option>
+                <option value="image-bounty">Image Bounty</option>
+            </select>
+        </div>
         <div class="view-toggle">
             <span class="view-toggle-label" id="view-toggle-label">View:</span>
             <div class="view-toggle-group" role="group" aria-labelledby="view-toggle-label">
@@ -24382,8 +24391,8 @@ function filterGallery(category) {
     document.querySelectorAll('.dataset-section').forEach(function(section) {
         var empty = category !== 'all' && !section.querySelector('.gallery-item:not(.filtered-out)');
         section.classList.toggle('section-empty', empty);
-        var chip = section.id && document.querySelector('.section-jump a[href="#' + section.id + '"]');
-        if (chip) chip.classList.toggle('jump-hidden', empty);
+        var opt = section.id && document.querySelector('#section-jump option[value="' + section.id + '"]');
+        if (opt) { opt.disabled = empty; opt.hidden = empty; }
     });
     updateGalleryUrl('filter', category === 'all' ? null : category);
 }
@@ -24397,6 +24406,24 @@ function setGalleryView(view) {
         btn.setAttribute('aria-pressed', btn.getAttribute('data-view') === view ? 'true' : 'false');
     });
     updateGalleryUrl('view', view === 'flat' ? 'flat' : null);
+}
+
+// "Jump to" dropdown: scroll to a gallery heading. Headings don't exist in
+// Combined view, so it switches back to By gallery first. The select snaps
+// back to its placeholder so the same gallery can be picked again.
+function jumpToSection(id) {
+    var select = document.getElementById('section-jump');
+    if (!id) return;
+    if (document.body.classList.contains('gallery-flat')) setGalleryView('grouped');
+    var target = document.getElementById(id);
+    if (target) {
+        if (window.history && window.history.replaceState) {
+            try { window.history.replaceState(null, '', window.location.pathname + window.location.search + '#' + id); } catch (e) {}
+        }
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        target.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    }
+    if (select) select.value = '';
 }
 
 // Keep ?filter=...&view=... in the address bar so the current view is shareable.
@@ -24432,13 +24459,6 @@ document.addEventListener('DOMContentLoaded', function() {
             cap.appendChild(tag);
         });
     });
-    // Jump-nav chips make no sense without headings: in Combined view they switch back first.
-    document.querySelectorAll('.section-jump a').forEach(function(a) {
-        a.addEventListener('click', function() {
-            if (document.body.classList.contains('gallery-flat')) setGalleryView('grouped');
-        });
-    });
-
     // Deep-link support: gallery/?filter=defect&view=flat
     var params = new URLSearchParams(window.location.search);
     if (params.get('view') === 'flat') setGalleryView('flat');
