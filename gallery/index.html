@@ -506,6 +506,7 @@
         html.gallery-flat .dataset-header,
         html.gallery-flat .dataset-description,
         html.gallery-flat .dataset-section.no-figures,
+        html.gallery-flat .dataset-section.gallery-hidden,
         html.gallery-flat .dataset-section.section-empty { display: none; }
         @media (max-width: 768px) {
             html.gallery-flat .gallery-sections { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
@@ -889,16 +890,23 @@
         });
         var p;
         try { p = new URLSearchParams(window.location.search); } catch (err) { return; }
-        if (p.get('view') === 'flat') document.documentElement.classList.add('gallery-flat');
+        var flat = p.get('view') === 'flat';
+        if (flat) document.documentElement.classList.add('gallery-flat');
+        var css = '';
+        var g = (p.get('gallery') || '').trim();
+        if (flat && g && /^[A-Za-z0-9_-]+$/.test(g)) css += '.dataset-section:not([id="' + g + '"]){display:none}';
         var f = (p.get('filter') || '').trim();
-        if (!f || f.toLowerCase() === 'all') return;
-        var v = f.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-        var match = ['[data-tags="' + v + '" i]', '[data-tags^="' + v + '|" i]', '[data-tags$="|' + v + '" i]', '[data-tags*="|' + v + '|" i]']
-            .map(function (sel) { return '.gallery-item' + sel; }).join(',');
+        if (f && f.toLowerCase() !== 'all') {
+            var v = f.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+            var match = ['[data-tags="' + v + '" i]', '[data-tags^="' + v + '|" i]', '[data-tags$="|' + v + '" i]', '[data-tags*="|' + v + '|" i]']
+                .map(function (sel) { return '.gallery-item' + sel; }).join(',');
+            css += '.gallery-item:not(:is(' + match + ')){display:none}' +
+                   '.dataset-section:not(:has(' + match + ')){display:none}';
+        }
+        if (!css) return;
         var st = document.createElement('style');
         st.id = 'early-filter';
-        st.textContent = '.gallery-item:not(:is(' + match + ')){display:none}' +
-                         '.dataset-section:not(:has(' + match + ')){display:none}';
+        st.textContent = css;
         document.head.appendChild(st);
     })();
     </script>
@@ -24449,6 +24457,8 @@ function filterGallery(category) {
         if (opt) { opt.disabled = empty; opt.hidden = empty; }
     });
     updateGalleryUrl('filter', category === 'all' ? null : category);
+}
+function removeEarlyStyle() {
     var early = document.getElementById('early-filter');
     if (early) early.parentNode.removeChild(early);
 }
@@ -24457,11 +24467,43 @@ function filterGallery(category) {
 // 'flat' (every visible figure pooled into one grid, "From: <gallery>" on each card).
 function setGalleryView(view) {
     if (view !== 'flat') view = 'grouped';
+    var wasFlat = document.documentElement.classList.contains('gallery-flat');
+    var restricted = currentGalleryRestriction();
     document.documentElement.classList.toggle('gallery-flat', view === 'flat');
     document.querySelectorAll('.view-toggle-group button').forEach(function(btn) {
         btn.setAttribute('aria-pressed', btn.getAttribute('data-view') === view ? 'true' : 'false');
     });
     updateGalleryUrl('view', view === 'flat' ? 'flat' : null);
+    if (view === 'flat' && window.location.hash && window.history && window.history.replaceState) {
+        try { window.history.replaceState(null, '', window.location.pathname + window.location.search); } catch (e) {} // a #section anchor means nothing in one pooled grid
+    }
+    // The same <select> is "Jump to" in By-gallery view and a gallery filter in Combined view.
+    var label = document.querySelector('label[for="section-jump"]');
+    var placeholder = document.querySelector('#section-jump option[value=""]');
+    if (label) label.textContent = view === 'flat' ? 'Gallery:' : 'Jump to:';
+    if (placeholder) placeholder.textContent = view === 'flat' ? 'All galleries' : 'Gallery\u2026';
+    if (view !== 'flat' && wasFlat && restricted) {
+        setGalleryRestriction('');
+        var target = document.getElementById(restricted); // keep the reader where they were: at that gallery
+        if (target) target.scrollIntoView({ behavior: 'auto', block: 'start' });
+    }
+}
+
+// Combined view: restrict the single grid to one gallery (the select keeps its value).
+function currentGalleryRestriction() {
+    var s = document.querySelector('.dataset-section.gallery-hidden');
+    if (!s) return '';
+    var shown = document.querySelector('.dataset-section:not(.gallery-hidden)');
+    return shown ? shown.id : '';
+}
+function setGalleryRestriction(id) {
+    if (id && !document.getElementById(id)) id = '';
+    document.querySelectorAll('.dataset-section').forEach(function(section) {
+        section.classList.toggle('gallery-hidden', !!id && section.id !== id);
+    });
+    var select = document.getElementById('section-jump');
+    if (select) select.value = id || '';
+    updateGalleryUrl('gallery', id || null);
 }
 
 // "Jump to" dropdown: scroll to a gallery heading. Headings don't exist in
@@ -24469,8 +24511,8 @@ function setGalleryView(view) {
 // back to its placeholder so the same gallery can be picked again.
 function jumpToSection(id) {
     var select = document.getElementById('section-jump');
+    if (document.documentElement.classList.contains('gallery-flat')) { setGalleryRestriction(id); return; }
     if (!id) return;
-    if (document.documentElement.classList.contains('gallery-flat')) setGalleryView('grouped');
     var target = document.getElementById(id);
     if (target) {
         if (window.history && window.history.replaceState) {
@@ -24515,7 +24557,7 @@ document.addEventListener('DOMContentLoaded', function() {
             cap.appendChild(tag);
         });
     });
-    // Deep-link support: gallery/?filter=defect&view=flat
+    // Deep-link support: gallery/?filter=defect&view=flat&gallery=visual-glossary (gallery= only in Combined view)
     var params = new URLSearchParams(window.location.search);
     if (params.get('view') === 'flat') setGalleryView('flat');
     // Clicking a #tag in a caption applies it as the filter (no reload) and scrolls to the top of the grid.
@@ -24528,14 +24570,18 @@ document.addEventListener('DOMContentLoaded', function() {
         if (grid) grid.scrollIntoView({ behavior: 'auto', block: 'start' });
     });
 
+    var gal = params.get('gallery');
+    if (gal && document.documentElement.classList.contains('gallery-flat')) setGalleryRestriction(gal); else updateGalleryUrl('gallery', null);
     var value = normalizeFilter(params.get('filter'));
-    if (!value || value === 'all') {
-        var early = document.getElementById('early-filter');
-        if (early) early.parentNode.removeChild(early);
-        return;
-    }
-    filterGallery(value);
+    if (value && value !== 'all') filterGallery(value);
+    removeEarlyStyle();
+    if (!value || value === 'all') return;
     if (window.location.hash) return; // a #fig-.../#section link wins over "scroll to first match"
+    // Scroll the first match into view only when arriving from another page (e.g. the SOP
+    // defect link). On a reload or back/forward the browser restores the previous position.
+    var navEntry = window.performance && performance.getEntriesByType && performance.getEntriesByType('navigation')[0];
+    var navType = navEntry ? navEntry.type : (performance.navigation ? ['navigate', 'reload', 'back_forward'][performance.navigation.type] : 'navigate');
+    if (navType !== 'navigate') return;
     var first = document.querySelector('.gallery-item:not(.filtered-out)');
     if (!first) return;
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
